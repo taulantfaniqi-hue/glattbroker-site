@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steuererklärung beauftragen · Glatt Broker AG</title>
+  <meta name="description" content="Steuererklärung in 3 Minuten online beauftragen. Wir senden dir die Bestätigung, den Vertrag und die Beleg-Checkliste innert einem Werktag." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'ui-monospace', 'monospace'] },
+      colors: {
+        ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+        brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+      },
+      letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+    } } };
+  </script>
+  <style>
+    @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    :root { --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif; --font-mono: "JetBrains Mono", ui-monospace, monospace; --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936; }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .btn-primary { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 500; font-size: .95rem; transition: all .25s ease; cursor: pointer; border: none; }
+    .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #D4D4D4; cursor: not-allowed; transform: none; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: transparent; color: var(--ink); font-weight: 500; font-size: .95rem; border: 1px solid rgba(10,10,10,.15); transition: all .25s ease; cursor: pointer; }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .ulink { position: relative; }
+    .ulink::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .4s cubic-bezier(.7,0,.3,1); }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    @supports (padding: max(0px)) { header { padding-top: max(0px, env(safe-area-inset-top)); } footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); } }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+    ::selection { background: var(--red); color: #fff; }
+    .grid-bg { background-image: linear-gradient(to right, rgba(10,10,10,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(10,10,10,.03) 1px, transparent 1px); background-size: 56px 56px; }
+
+    .field { width: 100%; padding: .85rem 1rem; border-radius: 10px; border: 1px solid #E5E5E5; background: #fff; font-family: var(--font-display); font-size: .95rem; color: var(--ink); transition: border-color .2s ease, box-shadow .2s ease; }
+    .field:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,10,10,.05); }
+    .field.is-invalid { border-color: var(--red); }
+    @media (max-width: 640px) { .field, input, select, textarea { font-size: 16px !important; } }
+    .hp-input { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; pointer-events: none; }
+
+    /* Brand-Logo */
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+
+    /* Mobile-App-Bar */
+    .mobile-app-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none; gap: .75rem; align-items: center; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid #E5E5E5; backdrop-filter: blur(16px); box-shadow: 0 -12px 30px rgba(0,0,0,.08); }
+    .mobile-app-bar a { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 14px; font-weight: 600; font-size: .95rem; }
+    .mobile-app-bar .call { color: var(--ink); background: #F0F0F0; }
+    .mobile-app-bar .consult { color: #fff; background: var(--red); }
+    @media (max-width: 640px) {
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+      header > div { margin-top: .5rem; }
+      .mobile-app-bar { display: flex; }
+    }
+
+    /* Wizard */
+    .wizard-progress { display: flex; gap: 0.5rem; }
+    .wizard-step-pill { flex: 1; height: 4px; background: #E5E5E5; border-radius: 999px; overflow: hidden; }
+    .wizard-step-pill.is-current,
+    .wizard-step-pill.is-done { background: var(--red); }
+
+    .step-section { display: none; }
+    .step-section.is-active { display: block; animation: stepFade .35s ease; }
+    @keyframes stepFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .package-radio { cursor: pointer; position: relative; padding: 1.5rem 1.25rem; border: 2px solid #E5E5E5; border-radius: 16px; background: #fff; transition: all .2s ease; display: block; }
+    .package-radio:hover { border-color: #A3A3A3; }
+    .package-radio input { position: absolute; opacity: 0; pointer-events: none; }
+    .package-radio.is-selected { border-color: var(--red); background: rgba(204,41,54,0.04); }
+    .package-radio .pkg-check { position: absolute; top: 1rem; right: 1rem; width: 22px; height: 22px; border-radius: 999px; border: 2px solid #D4D4D4; background: #fff; display: grid; place-items: center; transition: all .2s ease; }
+    .package-radio.is-selected .pkg-check { border-color: var(--red); background: var(--red); }
+    .package-radio .pkg-check::after { content: ""; width: 8px; height: 8px; border-radius: 999px; background: #fff; opacity: 0; transition: opacity .2s ease; }
+    .package-radio.is-selected .pkg-check::after { opacity: 1; }
+
+    .check-card { display: flex; gap: 0.75rem; padding: 0.85rem 1rem; border: 1px solid #E5E5E5; border-radius: 10px; cursor: pointer; transition: all .2s ease; background: #fff; }
+    .check-card:hover { border-color: #A3A3A3; }
+    .check-card input { width: 18px; height: 18px; accent-color: var(--red); flex-shrink: 0; margin-top: 2px; }
+    .check-card.is-checked { border-color: var(--red); background: rgba(204,41,54,0.04); }
+    .check-card .ck-label { font-weight: 500; font-size: 0.93rem; }
+    .check-card .ck-hint { font-size: 0.8rem; color: #737373; margin-top: 0.15rem; }
+
+    .review-row { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid #F0F0F0; font-size: 0.92rem; }
+    .review-row .review-key { color: #737373; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .review-row .review-val { color: var(--ink); font-weight: 500; }
+    @media (max-width: 640px) { .review-row { grid-template-columns: 1fr; gap: 0.2rem; } }
+
+    /* Auto-Switch Toast */
+    .auto-toast {
+      position: fixed; top: 5.5rem; right: 1rem; z-index: 60;
+      max-width: 360px;
+      background: var(--ink); color: #fff;
+      border-radius: 14px; padding: 0.85rem 1rem;
+      box-shadow: 0 12px 40px -8px rgba(0,0,0,0.3);
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      transform: translateX(120%); opacity: 0;
+      transition: transform 0.35s cubic-bezier(.16,1,.3,1), opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .auto-toast.is-shown { transform: translateX(0); opacity: 1; pointer-events: auto; }
+    .auto-toast .toast-icon {
+      width: 28px; height: 28px; border-radius: 999px;
+      background: var(--red); display: grid; place-items: center; flex-shrink: 0;
+    }
+    .auto-toast .toast-body { font-size: 0.88rem; line-height: 1.4; }
+    .auto-toast .toast-body strong { display: block; margin-bottom: 0.15rem; }
+    @media (max-width: 640px) {
+      .auto-toast { left: 1rem; right: 1rem; max-width: none; top: 5rem; }
+      .auto-toast.is-shown { transform: translateY(0); }
+      .auto-toast { transform: translateY(-120%); }
+    }
+  </style>
+</head>
+<body>
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <a href="steuern.html" class="text-sm text-ink-700 hover:text-brand-600 font-medium flex items-center gap-1.5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span class="hidden sm:inline">Zurück zu Steuern</span>
+          <span class="sm:hidden">Abbrechen</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="pt-28 lg:pt-32 pb-16">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+
+      <!-- HERO + PROGRESS (visible until success) -->
+      <div id="wizardHeader">
+        <div class="mb-6">
+          <div class="label text-brand-600 mb-3" id="stepLabel">Schritt 1 von 4 · Paket</div>
+          <h1 class="display text-[7vw] sm:text-[4.5vw] lg:text-[3.4vw] tracking-tightest mb-3" id="stepTitle">Welches Paket passt zu dir?</h1>
+          <p class="text-ink-700 leading-relaxed" id="stepIntro">Wähle das Paket, das deiner Lebenssituation entspricht. Du kannst später jederzeit upgraden.</p>
+        </div>
+
+        <div class="wizard-progress mb-10" id="wizardProgress">
+          <div class="wizard-step-pill is-current" data-step-pill="1"></div>
+          <div class="wizard-step-pill" data-step-pill="2"></div>
+          <div class="wizard-step-pill" data-step-pill="3"></div>
+          <div class="wizard-step-pill" data-step-pill="4"></div>
+        </div>
+      </div>
+
+      <!-- WIZARD FORM -->
+      <form id="taxForm" novalidate>
+        <!-- Honeypot -->
+        <input type="text" name="website" class="hp-input" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <!-- ───────── STEP 1: PAKET ───────── -->
+        <section class="step-section is-active" data-step="1">
+          <div class="grid gap-3 mb-8">
+            <label class="package-radio" data-paket-radio="student">
+              <input type="radio" name="paket" value="student" />
+              <div class="pkg-check"></div>
+              <div class="pr-10">
+                <div class="label text-brand-600 mb-1">Student</div>
+                <div class="flex items-baseline gap-2 mb-1.5">
+                  <span class="display text-2xl">CHF 69</span>
+                  <span class="text-xs text-ink-500">bis CHF 20'000 Jahreseinkommen</span>
+                </div>
+                <div class="text-sm text-ink-700">Steuererklärung · 1h Beratung alle 3 J · 2 Bankkonten · Belegprüfung · Optimierungs-Check</div>
+              </div>
+            </label>
+            <label class="package-radio" data-paket-radio="einzel">
+              <input type="radio" name="paket" value="einzel" />
+              <div class="pkg-check"></div>
+              <div class="pr-10">
+                <div class="label text-brand-600 mb-1">Einzelperson <span style="background: var(--red); color: #fff; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.55rem; margin-left: 0.4rem; vertical-align: middle;">Empfohlen</span></div>
+                <div class="flex items-baseline gap-2 mb-1.5">
+                  <span class="display text-2xl">CHF 99</span>
+                  <span class="text-xs text-ink-500">Standard-Komplett-Paket</span>
+                </div>
+                <div class="text-sm text-ink-700">+ 4 Bankkonten/Wertschriften + <strong>Gratis Vorsorgeanalyse</strong></div>
+              </div>
+            </label>
+            <label class="package-radio" data-paket-radio="familie">
+              <input type="radio" name="paket" value="familie" />
+              <div class="pkg-check"></div>
+              <div class="pr-10">
+                <div class="label text-brand-600 mb-1">Familie</div>
+                <div class="flex items-baseline gap-2 mb-1.5">
+                  <span class="display text-2xl">CHF 139</span>
+                  <span class="text-xs text-ink-500">Eltern mit Kindern · verheiratet oder nicht</span>
+                </div>
+                <div class="text-sm text-ink-700">Inkl. Kinderabzüge, Drittbetreuungs- und Ausbildungskosten. Auch für unverheiratete Eltern, Konkubinatspaare oder Alleinerziehende.</div>
+              </div>
+            </label>
+
+            <p class="text-xs text-ink-500 mt-2 px-1">
+              <strong>Hinweis:</strong> Sobald du in Schritt 3 angibst, dass du <strong>1 oder mehr Kinder</strong> hast, wird automatisch der Familien-Tarif aktiviert.
+            </p>
+          </div>
+
+          <!-- Student-Income-Check: nur sichtbar wenn Student gewählt -->
+          <div id="studentIncomeCheck" class="mt-5 rounded-2xl border border-ink-300 p-5" style="display: none; background: #FFFBEB;">
+            <div class="flex items-start gap-3">
+              <div class="shrink-0 w-9 h-9 rounded-full grid place-items-center" style="background: rgba(217,119,6,0.15);">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="flex-1">
+                <div class="font-semibold mb-1">Student-Tarif: Einkommens-Check</div>
+                <p class="text-sm text-ink-700 mb-3 leading-relaxed">
+                  Der Student-Tarif (CHF 69) gilt nur bei einem Jahreseinkommen bis maximal <strong>CHF 20'000</strong>. Bei mehr wechseln wir automatisch auf den passenden Tarif.
+                </p>
+                <div>
+                  <label class="label text-ink-500 block mb-1.5" for="studentIncome">Dein Jahreseinkommen (CHF)</label>
+                  <input type="number" id="studentIncome" name="studentIncome" class="field num-tabular" min="0" max="500000" step="500" placeholder="z.B. 12'000" />
+                  <div class="text-xs text-ink-500 mt-1.5" id="studentIncomeHint">Brutto inkl. Nebenerwerb, Stipendien, Praktika.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ───────── STEP 2: PERSONALIEN ───────── -->
+        <section class="step-section" data-step="2">
+          <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="vorname">Vorname *</label>
+              <input id="vorname" name="vorname" type="text" class="field" required autocomplete="given-name" />
+            </div>
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="nachname">Nachname *</label>
+              <input id="nachname" name="nachname" type="text" class="field" required autocomplete="family-name" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="label text-ink-500 block mb-1.5" for="email">E-Mail *</label>
+              <input id="email" name="email" type="email" class="field" required autocomplete="email" placeholder="anna@beispiel.ch" />
+              <div class="text-xs text-ink-500 mt-1.5">Hier senden wir dir die Bestätigung, den Vertrag und die Beleg-Checkliste.</div>
+            </div>
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="telefon">Telefon *</label>
+              <input id="telefon" name="telefon" type="tel" class="field num-tabular" required autocomplete="tel" placeholder="079 ..." />
+            </div>
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="geburtsdatum">Geburtsdatum</label>
+              <input id="geburtsdatum" name="geburtsdatum" type="date" class="field" autocomplete="bday" min="1925-01-01" max="2010-12-31" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="label text-ink-500 block mb-1.5" for="adresse">Adresse</label>
+              <input id="adresse" name="adresse" type="text" class="field" autocomplete="street-address" placeholder="Strasse Nr." />
+            </div>
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="plz">PLZ</label>
+              <input id="plz" name="plz" type="text" inputmode="numeric" class="field num-tabular" autocomplete="postal-code" maxlength="4" />
+            </div>
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="ort">Ort</label>
+              <input id="ort" name="ort" type="text" class="field" autocomplete="address-level2" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ───────── STEP 3: SITUATION ───────── -->
+        <section class="step-section" data-step="3">
+          <div class="space-y-6 mb-8">
+            <div>
+              <label class="label text-ink-500 block mb-2">Zivilstand</label>
+              <div class="grid sm:grid-cols-3 gap-2">
+                <label class="check-card"><input type="radio" name="zivilstand" value="ledig" checked /><div><div class="ck-label">Ledig</div></div></label>
+                <label class="check-card"><input type="radio" name="zivilstand" value="verheiratet" /><div><div class="ck-label">Verheiratet</div></div></label>
+                <label class="check-card"><input type="radio" name="zivilstand" value="geschieden" /><div><div class="ck-label">Geschieden / Verwitwet</div></div></label>
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="label text-ink-500 block mb-1.5" for="kinder">Anzahl Kinder im Haushalt</label>
+                <input id="kinder" name="kinder" type="number" min="0" max="10" value="0" class="field num-tabular" />
+              </div>
+              <div>
+                <label class="label text-ink-500 block mb-1.5" for="anzahlKonten">Anzahl Bankkonten / Depots</label>
+                <input id="anzahlKonten" name="anzahlKonten" type="number" min="0" max="20" value="2" class="field num-tabular" />
+                <div class="text-xs mt-1" id="kontenHint">Inklusiv im Paket: 4. Zusätzlich CHF 10/Konto.</div>
+              </div>
+            </div>
+
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="konfession">Konfession (für Kirchensteuer)</label>
+              <select id="konfession" name="konfession" class="field">
+                <option value="keine">Keine</option>
+                <option value="reformiert">Reformiert</option>
+                <option value="katholisch">Katholisch</option>
+                <option value="andere">Andere / vorzieht-keine-Angabe</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="label text-ink-500 block mb-2">Was trifft zu? (Mehrfachauswahl)</label>
+              <div class="grid gap-2">
+                <div>
+                  <label class="check-card"><input type="checkbox" name="situation" value="wohneigentum" id="checkWohn" /><div><div class="ck-label">Wohneigentum</div><div class="ck-hint">Eigentumswohnung oder Haus — Hypothek, Eigenmietwert, Unterhalt. CHF 50 pro Objekt zusätzlich.</div></div></label>
+                  <div id="wohnCountWrap" class="mt-2 ml-9 hidden">
+                    <label class="label text-ink-500 block mb-1.5" for="wohnCount">Anzahl Liegenschaften</label>
+                    <input type="number" id="wohnCount" name="wohnCount" min="1" max="20" value="1" class="field num-tabular" style="max-width: 160px;" />
+                  </div>
+                </div>
+                <label class="check-card"><input type="checkbox" name="situation" value="wertschriften" /><div><div class="ck-label">Wertschriften-Depot</div><div class="ck-hint">Aktien, Fonds, ETFs — wir prüfen Verrechnungssteuer und Pauschalbesteuerung.</div></div></label>
+                <label class="check-card"><input type="checkbox" name="situation" value="selbststaendig" /><div><div class="ck-label">Selbständige Erwerbstätigkeit</div><div class="ck-hint">Einzelfirma / Nebenerwerb — Hinweis: bei Hauptberuf kontaktieren wir dich für individuelles Angebot.</div></div></label>
+                <label class="check-card"><input type="checkbox" name="situation" value="3a" /><div><div class="ck-label">Säule 3a / freiwillige PK-Einkäufe</div><div class="ck-hint">Wir verifizieren die Steuerbescheinigungen und maximieren den Abzug.</div></div></label>
+                <label class="check-card"><input type="checkbox" name="situation" value="ausland" /><div><div class="ck-label">Einkommen oder Vermögen im Ausland</div><div class="ck-hint">Z.B. Ferienwohnung, Konto im Ausland — wir kümmern uns um die Anrechnung.</div></div></label>
+                <label class="check-card"><input type="checkbox" name="situation" value="vorjahr" /><div><div class="ck-label">Vorjahres-Steuererklärung verfügbar</div><div class="ck-hint">Beschleunigt unsere Arbeit deutlich. Du kannst sie nach der Anmeldung per E-Mail nachreichen.</div></div></label>
+              </div>
+            </div>
+
+            <div>
+              <label class="label text-ink-500 block mb-1.5" for="bemerkungen">Besondere Situation / Bemerkungen</label>
+              <textarea id="bemerkungen" name="bemerkungen" class="field" rows="3" placeholder="Z.B. Erbschaft im letzten Jahr, Umzug aus anderem Kanton, längere Auslandsreise, Heirat / Scheidung im Steuerjahr, …"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ───────── STEP 4: ÜBERSICHT ───────── -->
+        <section class="step-section" data-step="4">
+          <div class="rounded-2xl bg-white border border-ink-200 p-6 lg:p-8 mb-6">
+            <div class="label text-brand-600 mb-4">Übersicht deiner Anfrage</div>
+            <div id="reviewBox"></div>
+          </div>
+
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-6 mb-6">
+            <div class="label text-brand-600 mb-3">Was passiert nach Abschicken?</div>
+            <ol class="space-y-3 text-[0.95rem]">
+              <li class="flex gap-3"><span class="font-mono font-medium text-brand-600 shrink-0">01</span><span><strong>Sofort:</strong> Du erhältst eine Bestätigung per E-Mail mit deiner Referenznummer.</span></li>
+              <li class="flex gap-3"><span class="font-mono font-medium text-brand-600 shrink-0">02</span><span><strong>Innert 1 Werktag:</strong> Wir senden dir den <strong>Vertrag (digital signierbar)</strong> sowie die personalisierte <strong>Beleg-Checkliste</strong> für deine Situation.</span></li>
+              <li class="flex gap-3"><span class="font-mono font-medium text-brand-600 shrink-0">03</span><span><strong>Du sendest uns die Belege</strong> via verschlüsseltem Upload-Link (Schweizer Server).</span></li>
+              <li class="flex gap-3"><span class="font-mono font-medium text-brand-600 shrink-0">04</span><span><strong>Wir füllen aus &amp; optimieren.</strong> Du erhältst die fertige Steuererklärung zur Freigabe und Versand ans Steueramt.</span></li>
+            </ol>
+          </div>
+
+          <label class="check-card mb-2">
+            <input type="checkbox" id="agbAccept" name="agbAccept" />
+            <div>
+              <div class="ck-label">Ich akzeptiere die <a href="agb.html" target="_blank" class="ulink text-brand-600">AGB &amp; Datenschutz</a> *</div>
+              <div class="ck-hint">Glatt Broker AG verarbeitet deine Daten ausschliesslich zur Bearbeitung deiner Anfrage. Hosting in der Schweiz, kein Verkauf an Dritte.</div>
+            </div>
+          </label>
+        </section>
+
+        <!-- Error display -->
+        <div id="formError" class="hidden mb-4 rounded-lg bg-brand-50 border border-brand-200 p-4 text-sm">
+          <strong class="text-brand-700">Hoppla.</strong> <span id="formErrorMsg">Bitte fülle die markierten Felder aus.</span>
+        </div>
+
+        <!-- Step Navigation -->
+        <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-between">
+          <button type="button" id="btnBack" class="btn-ghost !text-base" style="display: none;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            Zurück
+          </button>
+          <button type="button" id="btnNext" class="btn-primary !text-base sm:ml-auto !px-6 !py-4" disabled>
+            Weiter
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <button type="button" id="btnSubmit" class="btn-primary !text-base sm:ml-auto !px-6 !py-4" style="display: none;" disabled>
+            Anfrage abschicken
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- ───────── SUCCESS STATE ───────── -->
+      <section id="successState" class="hidden">
+        <div class="rounded-3xl bg-ink-950 text-white p-8 lg:p-12 mb-6 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none"></div>
+          <div class="relative">
+            <div class="w-14 h-14 rounded-full bg-brand-600 grid place-items-center mb-5">
+              <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div class="label text-brand-200 mb-3">Anfrage erhalten</div>
+            <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-5">Danke, <span id="successName">—</span>!</h2>
+            <p class="text-ink-300 lg:text-lg leading-relaxed mb-2">
+              Wir haben deine Steuererklärungs-Anfrage erhalten. Eine Bestätigung mit Referenznummer ist auf dem Weg an <strong class="text-white" id="successEmail">—</strong>.
+            </p>
+            <p class="text-ink-400 text-sm" id="successRefBox">Referenz: <span id="successRef" class="num-tabular text-white font-medium">—</span></p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-white border border-ink-200 p-6 lg:p-8 mb-6">
+          <div class="label text-brand-600 mb-4">Nächste Schritte</div>
+          <ol class="space-y-4">
+            <li class="flex gap-4">
+              <span class="font-mono font-medium text-brand-600 shrink-0 mt-0.5">01</span>
+              <div>
+                <div class="font-semibold mb-0.5">Bestätigungs-Mail prüfen</div>
+                <div class="text-ink-700 text-[0.93rem]">Falls keine Mail in 5 Min: Spam-Ordner checken oder unter <a href="mailto:online@glattbroker.ch" class="ulink text-brand-600">online@glattbroker.ch</a> melden.</div>
+              </div>
+            </li>
+            <li class="flex gap-4">
+              <span class="font-mono font-medium text-brand-600 shrink-0 mt-0.5">02</span>
+              <div>
+                <div class="font-semibold mb-0.5">Vertrag &amp; Beleg-Checkliste in 1 Werktag</div>
+                <div class="text-ink-700 text-[0.93rem]">Wir senden dir die personalisierte Liste der benötigten Dokumente plus den digital signierbaren Vertrag.</div>
+              </div>
+            </li>
+            <li class="flex gap-4">
+              <span class="font-mono font-medium text-brand-600 shrink-0 mt-0.5">03</span>
+              <div>
+                <div class="font-semibold mb-0.5">Belege hochladen</div>
+                <div class="text-ink-700 text-[0.93rem]">Über einen verschlüsselten Upload-Link (Schweizer Server). Du musst nichts ausdrucken, nichts versenden.</div>
+              </div>
+            </li>
+            <li class="flex gap-4">
+              <span class="font-mono font-medium text-brand-600 shrink-0 mt-0.5">04</span>
+              <div>
+                <div class="font-semibold mb-0.5">Wir füllen aus, du gibst frei</div>
+                <div class="text-ink-700 text-[0.93rem]">Fertige Steuererklärung zur Prüfung. Nach deiner Freigabe übernehmen wir die Einreichung.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="steuern.html" class="btn-ghost !text-base">Zurück zu Steuern</a>
+          <a href="tel:+41774090519" class="btn-ghost !text-base ml-auto"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg><span class="num-tabular">+41 77 409 05 19</span></a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-ink-200 py-12 mt-12">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-ink-500">
+      <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4 · FINMA 35821</p>
+      <div class="flex gap-4">
+        <a href="kontakt.html" class="ulink">Kontakt</a>
+        <a href="steuern.html" class="ulink">Steuern</a>
+        <a href="index.html" class="ulink">Start</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auto-Switch-Toast -->
+  <div id="autoToast" class="auto-toast" role="status" aria-live="polite">
+    <div class="toast-icon">
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <div class="toast-body">
+      <strong>Familien-Tarif aktiviert</strong>
+      <span id="toastBody">Mit 1 oder mehr Kindern gilt der Familien-Tarif (CHF 139).</span>
+    </div>
+  </div>
+
+  <nav class="mobile-app-bar" aria-label="Schnelle Aktionen">
+    <a href="tel:+41774090519" class="call"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg><span>Anrufen</span></a>
+    <a href="mailto:online@glattbroker.ch" class="consult"><span>E-Mail</span></a>
+  </nav>
+
+  <script>
+    // ════════════════════════════════════════════════════════
+    // FORM-CONFIG (gleicher Pattern wie kontakt.html)
+    // ════════════════════════════════════════════════════════
+    const FORM_CONFIG = {
+      formspreeId: '',  // ← bei Produktivbetrieb: Formspree-ID einsetzen, z.B. 'xrgwzpdb'
+      mailtoFallback: 'online@glattbroker.ch',
+    };
+
+    const PAKET_LABELS = {
+      student: 'Student (CHF 69)',
+      einzel: 'Einzelperson (CHF 99)',
+      familie: 'Familie (CHF 139)',
+    };
+
+    const STEP_TITLES = [
+      { label: 'Schritt 1 von 4 · Paket', title: 'Welches Paket passt zu dir?', intro: 'Wähle das Paket, das deiner Lebenssituation entspricht. Du kannst später jederzeit upgraden.' },
+      { label: 'Schritt 2 von 4 · Personalien', title: 'Wie können wir dich erreichen?', intro: 'Wir brauchen Name, E-Mail und Telefon, um dir die Bestätigung und den Vertrag zuzustellen. Adresse ist optional, hilft aber bei der Vorbereitung.' },
+      { label: 'Schritt 3 von 4 · Situation', title: 'Deine Steuersituation.', intro: 'Je genauer deine Angaben, desto besser können wir die Beleg-Checkliste personalisieren. Du kannst alles auch später noch ergänzen.' },
+      { label: 'Schritt 4 von 4 · Übersicht', title: 'Alles korrekt?', intro: 'Prüfe deine Angaben und schicke die Anfrage ab. Du erhältst sofort eine Bestätigung per E-Mail.' },
+    ];
+
+    let currentStep = 1;
+    const TOTAL_STEPS = 4;
+
+    function $(sel) { return document.querySelector(sel); }
+    function $$(sel) { return Array.from(document.querySelectorAll(sel)); }
+
+    // URL-Param ?paket=einzel
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialPaket = urlParams.get('paket');
+    if (initialPaket && ['student', 'einzel', 'familie'].includes(initialPaket)) {
+      const radio = document.querySelector(`input[name="paket"][value="${initialPaket}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    // Package-Radio-Cards visuell synchronisieren
+    function syncPackageRadios() {
+      $$('.package-radio').forEach((card) => {
+        const input = card.querySelector('input');
+        card.classList.toggle('is-selected', input.checked);
+      });
+      validateCurrentStep();
+    }
+    $$('.package-radio input').forEach(input => input.addEventListener('change', () => {
+      syncPackageRadios();
+      toggleStudentIncomeBox();
+      // Wenn User manuell Einzel/Student wählt obwohl Kinder > 0: zurück zu Familie
+      enforceFamilieIfKids();
+      // Wenn Student gewählt + Einkommen schon > 20k: weiter-rotieren
+      enforceStudentIncomeRule();
+      updatePriceUI();
+    }));
+    syncPackageRadios();
+    toggleStudentIncomeBox();
+
+    // Toast-Helper
+    let _toastTimer = null;
+    function showAutoToast(message) {
+      const toast = $('#autoToast');
+      $('#toastBody').textContent = message;
+      toast.classList.add('is-shown');
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 4500);
+    }
+
+    // Familien-Tarif erzwingen wenn Kinder >= 1
+    function enforceFamilieIfKids() {
+      const kids = parseInt($('#kinder')?.value || '0', 10) || 0;
+      const currentPaket = $('input[name="paket"]:checked')?.value;
+      if (kids >= 1 && currentPaket !== 'familie') {
+        const fam = document.querySelector('input[name="paket"][value="familie"]');
+        if (fam) {
+          fam.checked = true;
+          // Visual sync ohne erneuten enforce-Loop
+          $$('.package-radio').forEach((card) => {
+            const input = card.querySelector('input');
+            card.classList.toggle('is-selected', input.checked);
+          });
+          // Student-Income-Box ausblenden falls offen
+          $('#studentIncomeCheck').style.display = 'none';
+          validateCurrentStep();
+          const previous = currentPaket === 'student' ? 'Student-Tarif' : 'Einzelperson-Tarif';
+          showAutoToast(`Wechsel von ${previous} zu Familien-Tarif (CHF 139) — bei 1+ Kindern automatisch zugewiesen.`);
+        }
+      }
+    }
+
+    // ──────────────────────────────────────────────────────
+    // Dynamische Preis-Berechnung
+    // ──────────────────────────────────────────────────────
+    const PAKET_PRICES = { student: 69, einzel: 99, familie: 139 };
+    const PAKET_INCLUDED_KONTEN = { student: 2, einzel: 4, familie: 4 };
+    const PRICE_PER_EXTRA_KONTO = 10;
+    const PRICE_PER_LIEGENSCHAFT = 50;
+
+    function getCurrentPrice() {
+      const paket = $('input[name="paket"]:checked')?.value || 'einzel';
+      const basePrice = PAKET_PRICES[paket] || 99;
+      const includedKonten = PAKET_INCLUDED_KONTEN[paket] || 4;
+      const totalKonten = Math.max(0, parseInt($('#anzahlKonten').value, 10) || 0);
+      const extraKonten = Math.max(0, totalKonten - includedKonten);
+      const extraKontenPrice = extraKonten * PRICE_PER_EXTRA_KONTO;
+      const wohnChecked = $('#checkWohn')?.checked || false;
+      const wohnCount = wohnChecked ? Math.max(1, parseInt($('#wohnCount')?.value, 10) || 1) : 0;
+      const wohnPrice = wohnCount * PRICE_PER_LIEGENSCHAFT;
+      const total = basePrice + extraKontenPrice + wohnPrice;
+      return { paket, basePrice, includedKonten, totalKonten, extraKonten, extraKontenPrice, wohnChecked, wohnCount, wohnPrice, total };
+    }
+
+    function updatePriceUI() {
+      const p = getCurrentPrice();
+
+      // Konten-Hint dynamisch
+      const kontenHint = $('#kontenHint');
+      if (kontenHint) {
+        if (p.totalKonten <= p.includedKonten) {
+          kontenHint.innerHTML = `<span style="color: #059669;">✓ Inklusiv im Paket: ${p.includedKonten} Konten.</span>`;
+        } else {
+          const word = p.extraKonten === 1 ? 'zusätzliches Konto' : `zusätzliche Konten`;
+          kontenHint.innerHTML = `<strong style="color: var(--red);">+ CHF ${p.extraKontenPrice}</strong> für ${p.extraKonten} ${word} <span class="text-ink-500">(Inklusiv: ${p.includedKonten}, du hast ${p.totalKonten}).</span>`;
+        }
+      }
+
+      // Wohn-Counter zeigen/ausblenden
+      const wohnWrap = $('#wohnCountWrap');
+      if (wohnWrap) wohnWrap.classList.toggle('hidden', !p.wohnChecked);
+
+      // Review aktualisieren wenn Step 4 sichtbar
+      if (currentStep === 4) renderReview();
+    }
+
+    // Student-Tarif Einkommens-Check: max. CHF 20'000
+    const STUDENT_INCOME_LIMIT = 20000;
+    function toggleStudentIncomeBox() {
+      const studentSelected = document.querySelector('input[name="paket"][value="student"]')?.checked;
+      $('#studentIncomeCheck').style.display = studentSelected ? '' : 'none';
+    }
+    function enforceStudentIncomeRule() {
+      const studentRadio = document.querySelector('input[name="paket"][value="student"]');
+      if (!studentRadio || !studentRadio.checked) return;
+      const incomeRaw = $('#studentIncome').value.trim();
+      if (incomeRaw === '') return;
+      const income = parseInt(incomeRaw, 10);
+      if (isNaN(income) || income <= STUDENT_INCOME_LIMIT) return;
+
+      // Über Limit → wechseln auf Familie wenn Kinder, sonst Einzelperson
+      const kids = parseInt($('#kinder')?.value || '0', 10) || 0;
+      const target = kids >= 1 ? 'familie' : 'einzel';
+      const targetRadio = document.querySelector(`input[name="paket"][value="${target}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+        $$('.package-radio').forEach((card) => {
+          const input = card.querySelector('input');
+          card.classList.toggle('is-selected', input.checked);
+        });
+        $('#studentIncomeCheck').style.display = 'none';
+        const targetLabel = target === 'familie' ? 'Familien-Tarif (CHF 139)' : 'Einzelperson-Tarif (CHF 99)';
+        showAutoToast(`Wechsel zu ${targetLabel} — Student-Tarif gilt nur bis CHF 20'000 Jahreseinkommen.`);
+        validateCurrentStep();
+      }
+    }
+
+    // Check-Card visuelles Feedback
+    function syncCheckCards() {
+      $$('.check-card').forEach((card) => {
+        const input = card.querySelector('input');
+        card.classList.toggle('is-checked', input && input.checked);
+      });
+      validateCurrentStep();
+      updatePriceUI();
+    }
+    $$('.check-card input').forEach(input => input.addEventListener('change', syncCheckCards));
+    syncCheckCards();
+
+    // Step-Validation
+    function validateCurrentStep() {
+      let valid = false;
+      if (currentStep === 1) {
+        const paketChecked = $('input[name="paket"]:checked');
+        if (!paketChecked) {
+          valid = false;
+        } else if (paketChecked.value === 'student') {
+          // Student braucht Einkommens-Eingabe ≤ 20'000
+          const incomeRaw = $('#studentIncome').value.trim();
+          const income = incomeRaw === '' ? NaN : parseInt(incomeRaw, 10);
+          valid = !isNaN(income) && income >= 0 && income <= STUDENT_INCOME_LIMIT;
+        } else {
+          valid = true;
+        }
+      } else if (currentStep === 2) {
+        const required = ['vorname', 'nachname', 'email', 'telefon'];
+        valid = required.every(id => $(`#${id}`).value.trim().length > 0)
+              && /\S+@\S+\.\S+/.test($('#email').value.trim());
+      } else if (currentStep === 3) {
+        valid = true;  // alles optional
+      } else if (currentStep === 4) {
+        valid = $('#agbAccept').checked;
+      }
+      const btn = currentStep === TOTAL_STEPS ? $('#btnSubmit') : $('#btnNext');
+      btn.disabled = !valid;
+      return valid;
+    }
+    $$('#taxForm input, #taxForm select, #taxForm textarea').forEach(el => el.addEventListener('input', () => {
+      validateCurrentStep();
+      updatePriceUI();
+    }));
+
+    // Kinder-Input: Auto-Familien-Tarif
+    $('#kinder')?.addEventListener('input', enforceFamilieIfKids);
+
+    // Student-Income-Input: Auto-Wechsel bei > 20k
+    $('#studentIncome')?.addEventListener('input', enforceStudentIncomeRule);
+
+    // Initial-Check (falls URL-Param schon gesetzt)
+    enforceFamilieIfKids();
+    updatePriceUI();
+
+    // Step-Navigation
+    function showStep(n) {
+      currentStep = n;
+      $$('.step-section').forEach(sec => sec.classList.toggle('is-active', +sec.dataset.step === n));
+      $$('[data-step-pill]').forEach(pill => {
+        const s = +pill.dataset.stepPill;
+        pill.classList.toggle('is-current', s === n);
+        pill.classList.toggle('is-done', s < n);
+      });
+      const meta = STEP_TITLES[n - 1];
+      $('#stepLabel').textContent = meta.label;
+      $('#stepTitle').textContent = meta.title;
+      $('#stepIntro').textContent = meta.intro;
+
+      $('#btnBack').style.display = n > 1 ? 'inline-flex' : 'none';
+      $('#btnNext').style.display = n < TOTAL_STEPS ? 'inline-flex' : 'none';
+      $('#btnSubmit').style.display = n === TOTAL_STEPS ? 'inline-flex' : 'none';
+
+      if (n === TOTAL_STEPS) renderReview();
+      validateCurrentStep();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    $('#btnNext').addEventListener('click', () => {
+      if (!validateCurrentStep()) {
+        $('#formError').classList.remove('hidden');
+        $('#formErrorMsg').textContent = 'Bitte fülle alle markierten Felder korrekt aus.';
+        return;
+      }
+      $('#formError').classList.add('hidden');
+      if (currentStep < TOTAL_STEPS) showStep(currentStep + 1);
+    });
+    $('#btnBack').addEventListener('click', () => {
+      if (currentStep > 1) showStep(currentStep - 1);
+    });
+
+    // Übersicht rendern (Step 4)
+    function renderReview() {
+      const get = (n) => ($(`[name="${n}"]:checked`)?.value || $(`#${n}`)?.value || '').trim();
+      const paket = $('input[name="paket"]:checked')?.value;
+      const situations = $$('input[name="situation"]:checked').map(c => c.value);
+      const situationLabels = {
+        wohneigentum: 'Wohneigentum',
+        wertschriften: 'Wertschriften-Depot',
+        selbststaendig: 'Selbständige Erwerbstätigkeit',
+        '3a': 'Säule 3a / PK-Einkäufe',
+        ausland: 'Einkommen / Vermögen im Ausland',
+        vorjahr: 'Vorjahres-Steuererklärung verfügbar',
+      };
+
+      const studentIncome = paket === 'student' && $('#studentIncome').value.trim()
+        ? `CHF ${parseInt($('#studentIncome').value, 10).toLocaleString('de-CH').replace(/,/g, "'")}`
+        : null;
+
+      const rows = [
+        ['Paket', PAKET_LABELS[paket] || '—'],
+        ...(studentIncome ? [['Jahreseinkommen (Student)', studentIncome]] : []),
+        ['Name', `${get('vorname')} ${get('nachname')}`.trim() || '—'],
+        ['E-Mail', get('email') || '—'],
+        ['Telefon', get('telefon') || '—'],
+        ['Geburtsdatum', get('geburtsdatum') || '—'],
+        ['Adresse', [get('adresse'), [get('plz'), get('ort')].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—'],
+        ['Zivilstand', get('zivilstand') || '—'],
+        ['Kinder im Haushalt', $('#kinder').value || '0'],
+        ['Bankkonten / Depots', $('#anzahlKonten').value || '0'],
+        ['Konfession', $('#konfession').value || 'keine'],
+        ['Situation', situations.length ? situations.map(s => situationLabels[s] || s).join(', ') : '—'],
+        ['Bemerkungen', $('#bemerkungen').value.trim() || '—'],
+      ];
+      // Preis-Breakdown
+      const p = getCurrentPrice();
+      const fmtCHF = (n) => 'CHF ' + n.toLocaleString('de-CH').replace(/,/g, "'");
+      const priceLines = [
+        `<div class="flex justify-between py-2 border-b border-ink-100"><span class="text-ink-700">${PAKET_LABELS[p.paket] || p.paket} — Basis</span><span class="num-tabular font-medium">${fmtCHF(p.basePrice)}</span></div>`
+      ];
+      if (p.extraKonten > 0) {
+        priceLines.push(`<div class="flex justify-between py-2 border-b border-ink-100"><span class="text-ink-700">+ ${p.extraKonten} zusätzliches Konto/Depot <span class="text-ink-500 text-xs">(${p.extraKonten} × CHF 10)</span></span><span class="num-tabular font-medium">${fmtCHF(p.extraKontenPrice)}</span></div>`);
+      }
+      if (p.wohnCount > 0) {
+        priceLines.push(`<div class="flex justify-between py-2 border-b border-ink-100"><span class="text-ink-700">+ Wohneigentum <span class="text-ink-500 text-xs">(${p.wohnCount} Liegenschaft${p.wohnCount !== 1 ? 'en' : ''} × CHF 50)</span></span><span class="num-tabular font-medium">${fmtCHF(p.wohnPrice)}</span></div>`);
+      }
+      priceLines.push(`<div class="flex justify-between py-3 mt-1 border-t-2 border-ink-200"><span class="display text-lg tracking-tight">Total</span><span class="display text-2xl text-brand-600 num-tabular tracking-tightest">${fmtCHF(p.total)}</span></div>`);
+
+      const priceBox = `
+        <div class="rounded-xl bg-brand-50 border border-brand-100 p-5 mb-6">
+          <div class="label text-brand-600 mb-3">Preis-Übersicht</div>
+          ${priceLines.join('')}
+          ${(p.extraKonten === 0 && p.wohnCount === 0) ? '<p class="text-xs text-ink-500 mt-2">Keine Zusatzleistungen — du zahlst nur den Paket-Festpreis.</p>' : ''}
+        </div>
+      `;
+
+      $('#reviewBox').innerHTML = priceBox + rows.map(([k, v]) => `
+        <div class="review-row">
+          <div class="review-key">${k}</div>
+          <div class="review-val">${v.replace(/</g, '&lt;')}</div>
+        </div>
+      `).join('');
+    }
+
+    // Submit
+    function generateRef() {
+      const dt = new Date();
+      const y = dt.getFullYear().toString().slice(-2);
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      const rand = Math.floor(Math.random() * 9000 + 1000);
+      return `STX-${y}${m}${d}-${rand}`;
+    }
+
+    async function submitForm() {
+      // Honeypot check
+      if ($('input[name="website"]').value !== '') return;
+
+      const get = (n) => ($(`[name="${n}"]:checked`)?.value || $(`#${n}`)?.value || '').trim();
+      const paket = $('input[name="paket"]:checked')?.value;
+      const situations = $$('input[name="situation"]:checked').map(c => c.value);
+      const ref = generateRef();
+
+      const studentIncomeVal = paket === 'student' ? ($('#studentIncome').value.trim() || '—') : null;
+      const priceCalc = getCurrentPrice();
+
+      const payload = {
+        _subject: `Steuererklärung-Anfrage [${ref}] — ${PAKET_LABELS[paket]} — CHF ${priceCalc.total}`,
+        _replyto: get('email'),
+        referenz: ref,
+        paket: PAKET_LABELS[paket] || paket,
+        ...(studentIncomeVal !== null ? { jahreseinkommen_student: studentIncomeVal } : {}),
+        preis_basis_chf: priceCalc.basePrice,
+        preis_extra_konten_chf: priceCalc.extraKontenPrice,
+        preis_wohneigentum_chf: priceCalc.wohnPrice,
+        preis_total_chf: priceCalc.total,
+        anzahl_liegenschaften: priceCalc.wohnCount,
+        vorname: get('vorname'),
+        nachname: get('nachname'),
+        email: get('email'),
+        telefon: get('telefon'),
+        geburtsdatum: get('geburtsdatum'),
+        adresse: get('adresse'),
+        plz: get('plz'),
+        ort: get('ort'),
+        zivilstand: get('zivilstand'),
+        kinder: $('#kinder').value,
+        anzahl_konten: $('#anzahlKonten').value,
+        konfession: $('#konfession').value,
+        situation: situations.join(', ') || '—',
+        bemerkungen: $('#bemerkungen').value.trim(),
+        agb_akzeptiert: $('#agbAccept').checked ? 'ja' : 'nein',
+      };
+
+      // Lokales Backup
+      try {
+        const list = JSON.parse(localStorage.getItem('glatt-leads-steuererklaerung') || '[]');
+        list.push({ ...payload, _ts: new Date().toISOString() });
+        localStorage.setItem('glatt-leads-steuererklaerung', JSON.stringify(list));
+      } catch {}
+
+      // Formspree wenn konfiguriert
+      let result = { ok: false, mode: 'unknown' };
+      if (FORM_CONFIG.formspreeId && FORM_CONFIG.formspreeId !== 'YOUR_FORM_ID') {
+        try {
+          const res = await fetch(`https://formspree.io/f/${FORM_CONFIG.formspreeId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          result = res.ok ? { ok: true, mode: 'formspree' } : { ok: false, mode: 'formspree', error: `HTTP ${res.status}` };
+        } catch (e) {
+          result = { ok: false, mode: 'formspree', error: e.message };
+        }
+      }
+
+      // Mailto-Fallback (immer wenn Formspree nicht konfiguriert oder fehlgeschlagen)
+      if (!result.ok) {
+        const body = [
+          `Referenz: ${ref}`,
+          `Paket: ${PAKET_LABELS[paket]}`,
+          ...(studentIncomeVal !== null ? [`Jahreseinkommen (Student): CHF ${studentIncomeVal}`] : []),
+          ``,
+          `── Preis ──`,
+          `Basis: CHF ${priceCalc.basePrice}`,
+          ...(priceCalc.extraKonten > 0 ? [`Zusatzkonten: ${priceCalc.extraKonten} × CHF 10 = CHF ${priceCalc.extraKontenPrice}`] : []),
+          ...(priceCalc.wohnCount > 0 ? [`Wohneigentum: ${priceCalc.wohnCount} × CHF 50 = CHF ${priceCalc.wohnPrice}`] : []),
+          `Total: CHF ${priceCalc.total}`,
+          ``,
+          `── Personalien ──`,
+          `Name: ${get('vorname')} ${get('nachname')}`,
+          `E-Mail: ${get('email')}`,
+          `Telefon: ${get('telefon')}`,
+          `Geburtsdatum: ${get('geburtsdatum') || '—'}`,
+          `Adresse: ${get('adresse') || '—'}, ${get('plz')} ${get('ort')}`.trim(),
+          ``,
+          `── Situation ──`,
+          `Zivilstand: ${get('zivilstand')}`,
+          `Kinder: ${$('#kinder').value}`,
+          `Bankkonten / Depots: ${$('#anzahlKonten').value}`,
+          `Konfession: ${$('#konfession').value}`,
+          `Besondere Punkte: ${situations.join(', ') || '—'}`,
+          `Bemerkungen: ${$('#bemerkungen').value.trim() || '—'}`,
+          ``,
+          `AGB akzeptiert: ja`,
+        ].join('\n');
+        const subject = `Steuererklärung-Anfrage [${ref}] — ${PAKET_LABELS[paket]}`;
+        const mailto = `mailto:${FORM_CONFIG.mailtoFallback}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailto;
+        result = { ok: true, mode: 'mailto' };
+      }
+
+      // Success-State zeigen
+      if (result.ok) {
+        $('#wizardHeader').style.display = 'none';
+        $('#taxForm').style.display = 'none';
+        $('#successState').classList.remove('hidden');
+        $('#successName').textContent = get('vorname') || 'erstmal';
+        $('#successEmail').textContent = get('email');
+        $('#successRef').textContent = ref;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        $('#formError').classList.remove('hidden');
+        $('#formErrorMsg').textContent = `Übermittlung fehlgeschlagen (${result.error || 'unbekannter Fehler'}). Schick uns die Anfrage gerne direkt an online@glattbroker.ch.`;
+      }
+    }
+
+    $('#btnSubmit').addEventListener('click', async () => {
+      if (!validateCurrentStep()) return;
+      $('#btnSubmit').disabled = true;
+      $('#btnSubmit').textContent = 'Wird gesendet…';
+      try {
+        await submitForm();
+      } catch (e) {
+        $('#formError').classList.remove('hidden');
+        $('#formErrorMsg').textContent = `Fehler: ${e.message || 'Bitte versuche es nochmals.'}`;
+      } finally {
+        $('#btnSubmit').disabled = false;
+        $('#btnSubmit').innerHTML = 'Anfrage abschicken<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+      }
+    });
+
+    // Form-Submit verhindern (kein Default-Reload)
+    $('#taxForm').addEventListener('submit', e => e.preventDefault());
+
+    // Initial-State
+    validateCurrentStep();
+  </script>
+</body>
+</html>

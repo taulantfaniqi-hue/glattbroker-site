@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGB &amp; Datenschutz · Glatt Broker AG</title>
+  <meta name="description" content="Allgemeine Geschäftsbedingungen und Datenschutz-Bestimmungen der Glatt Broker AG. Pakete, Preise, Zusatzleistungen und Stornoregelungen für Steuererklärungs-Mandate." />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'ui-monospace', 'monospace'] },
+      colors: {
+        ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+        brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+      },
+      letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+    } } };
+  </script>
+  <style>
+    @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    :root { --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif; --font-mono: "JetBrains Mono", ui-monospace, monospace; --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936; }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .ulink { position: relative; color: inherit; }
+    .ulink::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .4s cubic-bezier(.7,0,.3,1); }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    @supports (padding: max(0px)) { header { padding-top: max(0px, env(safe-area-inset-top)); } footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); } }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+    ::selection { background: var(--red); color: #fff; }
+
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+
+    /* Legal-Page typography */
+    .legal-prose h2 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em; font-size: 1.45rem; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--ink); }
+    .legal-prose h2:first-child { margin-top: 0; }
+    .legal-prose h3 { font-weight: 600; font-size: 1.05rem; margin-top: 1.6rem; margin-bottom: 0.5rem; color: var(--ink); }
+    .legal-prose p, .legal-prose li { color: #404040; line-height: 1.65; font-size: 0.96rem; }
+    .legal-prose p { margin-bottom: 0.85rem; }
+    .legal-prose ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 0.85rem; }
+    .legal-prose ul li { margin-bottom: 0.35rem; }
+    .legal-prose strong { color: var(--ink); font-weight: 600; }
+    .legal-prose .§ { color: var(--red); font-family: var(--font-mono); font-weight: 500; margin-right: 0.45rem; }
+    .legal-prose hr { border: none; border-top: 1px solid #E5E5E5; margin: 2.5rem 0; }
+
+    .price-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 14px;
+      padding: 1.25rem 1.4rem; transition: all 0.2s ease;
+    }
+    .price-card.is-recommended { border-color: var(--red); border-width: 2px; position: relative; }
+    .price-card .pkg-meta { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.3rem 0 0.7rem; }
+    .price-card .pkg-amount { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; letter-spacing: -0.02em; }
+    .price-card .pkg-cond { font-size: 0.78rem; color: #737373; }
+
+    .toc-list { list-style: none; padding: 0; margin: 0; }
+    .toc-list li { margin-bottom: 0.45rem; }
+    .toc-list a { font-size: 0.95rem; color: #404040; }
+    .toc-list .§ { display: inline-block; min-width: 28px; }
+  </style>
+</head>
+<body>
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <a href="javascript:history.back()" class="text-sm text-ink-700 hover:text-brand-600 font-medium flex items-center gap-1.5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <span class="hidden sm:inline">Zurück</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-28 lg:pt-32 pb-16">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+
+      <!-- HERO -->
+      <div class="mb-10">
+        <div class="label text-brand-600 mb-3">Glatt Broker AG · Stand 2024</div>
+        <h1 class="display text-[8vw] sm:text-[5vw] lg:text-[3.5vw] tracking-tightest mb-3">
+          AGB / Datenschutz /<br>Informationspflicht gemäss Artikel 45 VAG
+        </h1>
+        <p class="text-ink-500 leading-relaxed text-sm mt-3">
+          Kundenberater: Taulant Faniqi, Mühlestrasse 29, 8803 Rüschlikon
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <div class="rounded-2xl bg-white border border-ink-200 p-5 lg:p-6 mb-10">
+        <div class="label text-brand-600 mb-3">Inhalt</div>
+        <ol class="toc-list grid sm:grid-cols-3 gap-x-6">
+          <li><a class="ulink" href="#agb">Allgemeine Geschäftsbedingungen</a></li>
+          <li><a class="ulink" href="#datenschutz">Datenschutzerklärung</a></li>
+          <li><a class="ulink" href="#vag45">Informationspflicht Art. 45 VAG</a></li>
+        </ol>
+      </div>
+
+      <!-- ───────── ALLGEMEINE GESCHÄFTSBEDINGUNGEN ───────── -->
+      <article class="legal-prose" id="agb">
+        <h2 class="display text-2xl lg:text-3xl tracking-tightest mt-0 mb-6 text-center">Allgemeine Geschäftsbedingungen</h2>
+
+        <h3>1. Geltungsbereich</h3>
+        <p>1.1. Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Kunden, die unsere Dienstleistungen in Anspruch nehmen.</p>
+
+        <h3>2. Leistungsumfang</h3>
+        <p>2.1. Wir bieten Dienstleistungen im Bereich der Steuer-, Kredit- und Versicherungsberatung an und agieren als eigenständiger Versicherungsbroker.</p>
+
+        <h3>3. Honorar</h3>
+        <p>3.1. Die Gebühren für unsere Dienstleistungen sind in unserer Preisliste aufgeführt und schliessen die Mehrwertsteuer ein, sofern nicht anders angegeben.</p>
+        <p>3.2. Unsere Preise können sich jederzeit ändern. Änderungen werden jedoch nicht auf bereits vereinbarte Verträge angewendet.</p>
+
+        <h3>4. Zahlungsbedingungen</h3>
+        <p>4.1. Die Zahlung der Gebühren erfolgt gemäss den in unserer Rechnung angegebenen Bedingungen.</p>
+        <p>4.2. Wir akzeptieren Zahlungen per Banküberweisung, Kreditkarte oder Bar.</p>
+        <p>4.3. Bei Zahlungsverzug behalten wir uns das Recht vor, Verzugszinsen zu berechnen.</p>
+
+        <h3>5. Pflichten und Haftung des Auftraggebers Steuern Dienstleistungen</h3>
+        <p>5.1. Der Auftraggeber verpflichtet sich:</p>
+        <ul>
+          <li>a) alle für die Steuererklärung relevanten Unterlagen vollständig, korrekt und fristgerecht bereitzustellen;</li>
+          <li>b) bei Rückfragen des Auftragnehmers zeitnah und umfassend zu antworten;</li>
+          <li>c) die inhaltliche Richtigkeit und Vollständigkeit sämtlicher übermittelter Angaben zu gewährleisten;</li>
+          <li>d) die fertiggestellte Steuererklärung vor der Einreichung selbst auf Vollständigkeit und Richtigkeit zu prüfen.</li>
+        </ul>
+        <p>5.1.1. Der Auftraggeber trägt die volle Verantwortung für die Richtigkeit und Vollständigkeit der übermittelten Informationen. Ihm ist bekannt, dass unvollständige, unrichtige oder verspätete Angaben zu steuerlichen Konsequenzen (Nachsteuern, Bussen, Verzugszinsen) führen können.</p>
+        <p>5.2. Zusatzaufwand durch nachträgliche Lieferung von Unterlagen, umfangreiche Korrekturen oder mehrfache Überarbeitungen wird separat in Rechnung gestellt. Das Honorar ist nach Rechnungsstellung fällig.</p>
+        <p>5.3. Die Haftung des Auftragnehmers ist ausgeschlossen für Schäden oder steuerliche Folgen, die entstehen durch:</p>
+        <ul>
+          <li>a) unvollständige, verspätete, falsche oder irreführende Unterlagen des Auftraggebers;</li>
+          <li>b) fehlende oder verspätete Mitwirkung des Auftraggebers.</li>
+        </ul>
+        <p>5.3.1. Der Auftragnehmer haftet insbesondere nicht für Nachsteuern, Bussen, Verzugszinsen oder andere steuerliche Konsequenzen, die auf unvollständige oder unrichtige Angaben des Auftraggebers zurückzuführen sind.</p>
+        <p>5.3.2. Der Auftraggeber ist sich bewusst, dass er gegenüber den Steuerbehörden die alleinige Verantwortung für seine Steuererklärung trägt.</p>
+
+        <h3>6. Haftung</h3>
+        <p>6.1. Wir haften nur für Schäden, die auf grobe Fahrlässigkeit oder Vorsatz zurückzuführen sind.</p>
+        <p>6.2. Unsere Haftung ist auf den Wert der erbrachten Dienstleistungen beschränkt.</p>
+        <p>6.3. Wir haften nicht für Schäden, die aufgrund von Informationen entstehen, die uns vom Kunden zur Verfügung gestellt wurden.</p>
+
+        <h3>7. Kündigung</h3>
+        <p>7.1. Wir behalten uns das Recht vor, Verträge aus wichtigem Grund jederzeit zu kündigen.</p>
+        <p>7.2. Der Kunde kann den Vertrag jederzeit kündigen, sofern die Kündigung schriftlich und unter Einhaltung der angemessenen Kündigungsfrist erfolgt.</p>
+
+        <h3>8. Schlussbestimmungen</h3>
+        <p><strong>Anwendbares Recht:</strong> Für diesen Vertrag gilt ausschliesslich Schweizer Recht.</p>
+        <p><strong>Gerichtsstand:</strong> Ausschliesslicher Gerichtsstand ist der Sitz des Auftragnehmers.</p>
+        <p><strong>Salvatorische Klausel:</strong> Sollten einzelne Bestimmungen dieser Vereinbarung unwirksam sein oder werden, bleibt die Gültigkeit der übrigen Bestimmungen davon unberührt. Die unwirksame Bestimmung wird durch eine wirksame ersetzt, die dem wirtschaftlichen Zweck der unwirksamen Bestimmung möglichst nahekommt.</p>
+      </article>
+
+      <hr class="my-12 border-ink-200" />
+
+      <!-- ───────── DATENSCHUTZERKLÄRUNG ───────── -->
+      <article class="legal-prose" id="datenschutz">
+        <h2 class="display text-2xl lg:text-3xl tracking-tightest mt-0 mb-6 text-center">Datenschutzerklärung</h2>
+
+        <h3>1. Verantwortliche Stelle</h3>
+        <p>Die verantwortliche Stelle für die Verarbeitung Ihrer Daten ist: Glatt Broker AG, Staubstrasse 15, 8038 Zürich.</p>
+
+        <h3>2. Zwecke der Datenverarbeitung</h3>
+        <p>Wir verarbeiten Ihre personenbezogenen Daten zum Zwecke der Vertragsabwicklung, der Prüfung von Kreditanfragen, der Erfüllung gesetzlicher Pflichten im Rahmen von Steuererklärungen und zur Unternehmungs- und Privatkundenbetreuung.</p>
+
+        <h3>3. Welche Daten verarbeiten wir?</h3>
+        <p>Die verarbeiteten Daten können persönliche Identifikationsdaten, Kontaktinformationen, finanzielle Informationen, Gesundheitsdaten und andere relevante Informationen umfassen, die für die jeweiligen Tätigkeitsbereiche notwendig sind.</p>
+
+        <h3>4. Datensicherheit</h3>
+        <p>Wir setzen angemessene technische und organisatorische Massnahmen ein, um Ihre Daten vor unbefugtem Zugriff, Verlust oder Missbrauch zu schützen. Unsere Sicherheitsmassnahmen werden regelmässig überprüft und aktualisiert.</p>
+
+        <h3>5. Übermittlung an Dritte</h3>
+        <p>Ihre Daten werden nur im Rahmen der Vertragsabwicklung, der Kreditprüfung, der Erfüllung gesetzlicher Steuerpflichten und für betriebswirtschaftliche Zwecke an Dritte weitergegeben. Eine darüber hinausgehende Weitergabe erfolgt nur mit Ihrer Zustimmung oder wenn dies gesetzlich erforderlich ist.</p>
+
+        <h3>6. Risiken des Datenaustausches und Einverständniserklärung</h3>
+        <p>Ich bin mir möglicher Risiken des Datenaustausches, insbesondere die mögliche Einsicht von unberechtigten Dritten bei unsicheren Kommunikationswegen, bewusst. Durch Ihre Nutzung unserer Dienstleistungen erklären Sie sich mit dem Datenaustausch und der Verarbeitung im Rahmen der oben genannten Zwecke einverstanden.</p>
+
+        <h3>7. Aufbewahrung der Daten</h3>
+        <p>Wir bewahren Ihre Daten so lange auf, wie dies für die Vertragserfüllung, die Erfüllung gesetzlicher Pflichten und die Durchsetzung unserer berechtigten Interessen erforderlich ist.</p>
+
+        <h3>8. Ihre Rechte</h3>
+        <p>Sie haben das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten, das Recht auf Berichtigung, Löschung oder Sperrung Ihrer Daten sowie das Widerspruchsrecht gegen die Verarbeitung.</p>
+
+        <h3>9. Einverständniserklärung für den Datenaustausch</h3>
+        <p>Ich gebe hiermit mein Einverständnis für den gegenseitigen Kontakt zwischen der Glatt Broker AG und mir als Kunden durch die oben angegebene Kontaktinformation. Ich bin einverstanden, dass administrative Anliegen mit unverschlüsselter E-Mail-Kommunikation sowie über Tel. erfolgen.</p>
+      </article>
+
+      <hr class="my-12 border-ink-200" />
+
+      <!-- ───────── INFORMATIONSPFLICHT VAG ───────── -->
+      <article class="legal-prose" id="vag45">
+        <h2 class="display text-2xl lg:text-3xl tracking-tightest mt-0 mb-6 text-center">Informationspflicht gemäss Artikel 45 VAG</h2>
+
+        <p>Das neue Versicherungsaufsichtsgesetz (VAG) sorgt für mehr Transparenz bei Versicherungsgeschäften. Gemäss Art. 45 VAG verpflichten sich die Vermittler, Auskunft über ihre Identität, die angebotenen Versicherungen, die Haftung sowie den Umgang mit Personendaten zu geben. Gerne informieren wir Sie nachfolgend über die folgenden Punkte:</p>
+
+        <h3>1. Kundenberater / Entschädigungen</h3>
+        <p>Ihr Kundenberater ist arbeitsvertraglich ein freier Vermittler und reicht seine Anträge bei der Firma Glatt Broker AG ein. Informationen über die Ausbildung des Kundenberaters finden wir <a class="ulink" href="https://www.finma.ch/de/bewilligung/versicherungsvermittlung/registersuche/F01397063" target="_blank" rel="noopener">finma.ch</a> oder <a class="ulink" href="https://www.linkedin.com/in/taulant-faniqi-351375a7/" target="_blank" rel="noopener">linkedin.com/in/taulant-faniqi-351375a7</a>. Glatt Broker AG wird von den Versicherern mit den marktüblichen Courtagen (5–15 % der Nettoprämie bei Prämienzahlung) und Abschlussprovisionen (einmalig: Krankenversicherung: KVG: max. CHF 70.– pro Abschluss, VVG: 12–20 Monatsprämien; Motorfahrzeuge: 10–40 % der Jahresnettoprämie; Vorsorge: Prämie x Laufzeit x (0.044–0.054); Haushaltversicherung: 50–80 % der Jahresnettoprämie entschädigt. Der Kunde verzichtet hiermit auf die Provision.</p>
+
+        <h3>2. Zusammenarbeit / Vertragsbeziehungen mit den Versicherungsunternehmen</h3>
+        <p>Glatt Broker AG ist ein ungebundener Vermittler und verfügt über Zusammenarbeitsverträge mit folgenden Partnergesellschaften bzw. arbeitet mit folgenden Versicherungsgesellschaften – je nach Versicherungsbedarf des Kunden – in allen Versicherungszweigen zusammen: Allianz, Atupri, Arcosana, Assura, Avenir, Avanex, Axa Winterthur, Basler, CAP, Concordia, CSS, Easysana, Europäische Reiseversicherung, Generali, GMA SA, Groupe Mutuel, Helsana, Helvetia, Innova, Intras, Kolping, KPT, Liechtenstein Life, Mobiliar, Mutuel Assurances, ORION, PAX, Philos, Progrès, Protecta, Sana 24, Sanagate, Sanitas, Supra, Swica, Swisslife, Sympany, Visana, Vivacare, Zürich.</p>
+
+        <h3>3. Sorgfalt / Datenschutz</h3>
+        <p>Für Fehler, Nachlässigkeiten oder unrichtige Auskünfte durch den Berater im Zusammenhang mit der Vermittlung von Versicherungsverträgen haftet der Kundenberater bzw. und/oder die Haftpflichtversicherung des Unternehmens oder die Versicherung selbst für die durch sie geführten Produkte. Alle erhaltenen Personendaten werden zu Beratungszwecken, für die Antragsprüfung, Risikobeurteilung, Vertragsabwicklung, Policierung, Vertragsverwaltung durch die oben genannten Versicherungsträger, soweit deren Produkte abgeschlossen werden, verwendet. Alle Informationen werden gemäss den gesetzlichen Vorschriften des Datenschutzes (Bundesgesetz über den Datenschutz) gesichert und vor dem Zugriff Dritten geschützt. Nicht mehr benötigte Angaben werden sofort gelöscht.</p>
+      </article>
+
+      <!-- BESTÄTIGUNGS-TEXT -->
+      <div class="mt-12 rounded-2xl bg-brand-50 border border-brand-100 p-6 lg:p-8">
+        <p class="text-ink-700 leading-relaxed text-[0.95rem]">
+          Hiermit bestätige ich diese gesetzlich vorgeschriebenen Informationen gelesen und verstanden zu haben. Zudem bestätige ich alle Fragen verstanden, sowie wahrheitsgetreu und selbständig ausgefüllt zu haben. Schliesslich bin ich davon in Kenntnis gesetzt worden, dass die Versicherungsanträge zu deren Verarbeitung über die Glatt Broker AG eingereicht werden. Dieses Formular bildet ein integrierender Bestandteil des Auftrages, resp. der Vollmacht.
+        </p>
+        <p class="text-xs text-ink-500 mt-4">
+          Die Bestätigung erfolgt durch Setzen des AGB-Häkchens im <a class="ulink text-brand-600 font-medium" href="steueranmeldung.html">Online-Anmeldeformular</a> bzw. durch die Inanspruchnahme unserer Dienstleistungen.
+        </p>
+      </div>
+
+      <!-- KONTAKT-BLOCK -->
+      <div class="mt-10 rounded-2xl bg-white border border-ink-200 p-6 lg:p-8">
+        <div class="label text-brand-600 mb-3">Bei Fragen zu diesen Bedingungen</div>
+        <h3 class="display text-2xl tracking-tightest mb-4">Wir antworten innert eines Werktags.</h3>
+        <div class="grid sm:grid-cols-3 gap-4 text-sm">
+          <div>
+            <div class="text-ink-500 text-xs mb-1">Telefon</div>
+            <a href="tel:+41774090519" class="ulink num-tabular">+41 77 409 05 19</a>
+          </div>
+          <div>
+            <div class="text-ink-500 text-xs mb-1">E-Mail</div>
+            <a href="mailto:online@glattbroker.ch" class="ulink">online@glattbroker.ch</a>
+          </div>
+          <div>
+            <div class="text-ink-500 text-xs mb-1">Adresse</div>
+            <span class="text-ink-700">Staubstrasse 15, 8038 Zürich</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-ink-200 py-12 mt-12">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-ink-500">
+      <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4 · FINMA 35821 · Cicero zertifiziert</p>
+      <div class="flex gap-4">
+        <a href="kontakt.html" class="ulink">Kontakt</a>
+        <a href="steuern.html" class="ulink">Steuern</a>
+        <a href="index.html" class="ulink">Start</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

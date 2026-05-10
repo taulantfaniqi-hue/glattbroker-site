@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steuererklärung ab CHF 69 · Steuern · Glatt Broker AG</title>
+  <meta name="description" content="Steuererklärung professionell ausfüllen lassen — drei Festpreis-Pakete ab CHF 69. Plus kostenlose Live-Rechner für Kapitalleistungs- und Grundstückgewinnsteuer Kanton Zürich." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Schweizer Steuerdaten (~6'400 Gemeinden, ESTV) — identisch zum internen Vorsorgetool -->
+  <script src="./assets/steuerdaten.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'ui-monospace', 'monospace'] },
+        colors: {
+          ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+          brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+        },
+        letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+      } },
+    };
+  </script>
+  <style>
+    @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    :root { --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif; --font-mono: "JetBrains Mono", ui-monospace, monospace; --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936; }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--ink); display: grid; place-items: center; transition: opacity .4s ease; }
+    .loader.done { opacity: 0; pointer-events: none; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .btn-primary { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 500; font-size: .95rem; transition: all .25s ease; cursor: pointer; }
+    .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: transparent; color: var(--ink); font-weight: 500; font-size: .95rem; border: 1px solid rgba(10,10,10,.15); transition: all .25s ease; cursor: pointer; }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .ulink { position: relative; }
+    .ulink::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .4s cubic-bezier(.7,0,.3,1); }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    .card { background: #fff; border: 1px solid #EEE; border-radius: 16px; transition: all .3s ease; }
+    .pulse-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: pulseRing 2s infinite; }
+    @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); } 70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+    @supports (padding: max(0px)) { header { padding-top: max(0px, env(safe-area-inset-top)); } footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); } }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+    /* Form */
+    .field { width: 100%; padding: .85rem 1rem; border-radius: 10px; border: 1px solid #E5E5E5; background: #fff; font-family: var(--font-display); font-size: .95rem; color: var(--ink); transition: border-color .2s ease, box-shadow .2s ease; }
+    .field:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,10,10,.05); }
+    @media (max-width: 640px) { .field, input[type="text"], input[type="number"], input[type="date"] { font-size: 16px !important; } }
+    input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; width: 100%; }
+    input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: #E5E5E5; border-radius: 999px; }
+    input[type="range"]::-moz-range-track { height: 4px; background: #E5E5E5; border-radius: 999px; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: var(--ink); border-radius: 999px; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); margin-top: -9px; cursor: pointer; transition: background .25s ease; }
+    input[type="range"]:hover::-webkit-slider-thumb { background: var(--red); }
+    input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; background: var(--ink); border-radius: 999px; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); cursor: pointer; }
+    @media (hover: none) and (pointer: coarse) { input[type="range"] { padding: 12px 0; } input[type="range"]::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -12px; } input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; } }
+    ::selection { background: var(--red); color: #fff; }
+    .grid-bg { background-image: linear-gradient(to right, rgba(10,10,10,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(10,10,10,.03) 1px, transparent 1px); background-size: 56px 56px; }
+    /* Mobile-Menü Overlay */
+    #mobileMenu { position: fixed; inset: 0; z-index: 50; background: #fff; transform: translateY(-100%); transition: transform .3s cubic-bezier(.16,1,.3,1); padding-top: env(safe-area-inset-top); }
+    #mobileMenu.open { transform: translateY(0); }
+    @media (min-width: 1024px) { #mobileMenu { display: none; } }
+    body.menu-open { overflow: hidden; }
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    .mobile-app-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none; gap: .75rem; align-items: center; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid #E5E5E5; backdrop-filter: blur(16px); box-shadow: 0 -12px 30px rgba(0,0,0,.08); }
+    .mobile-app-bar a { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 14px; font-weight: 600; font-size: .95rem; }
+    .mobile-app-bar .call { color: var(--ink); background: #F0F0F0; }
+    .mobile-app-bar .consult { color: #fff; background: var(--red); }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+    @media (max-width: 640px) { body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); } header > div { margin-top: .5rem; } #navInner { padding: .6rem .75rem; border-radius: 1rem; } header .nav-cta { display: none; } .mobile-app-bar { display: flex; } }
+
+    /* Mega-Menü (kondensiert) */
+    #navInner { position: relative; }
+    .nav-main { display: flex; align-items: center; gap: 0.15rem; list-style: none; padding: 0; margin: 0; }
+    .nav-item-mega { position: static; }
+    .nav-item-dd { position: relative; }
+    .nav-trigger { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.55rem 0.9rem; border-radius: 0.65rem; font-size: 0.93rem; font-weight: 500; color: var(--ink); background: transparent; border: none; cursor: pointer; transition: background-color 0.18s ease, color 0.18s ease; font-family: inherit; }
+    .nav-trigger:hover, .nav-trigger[aria-expanded="true"] { background: rgba(10,10,10,0.05); }
+    .nav-trigger.is-active { color: var(--red); }
+    .nav-trigger .nav-chevron { width: 0.7rem; height: 0.7rem; transition: transform 0.2s ease; }
+    .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+    .mega-panel, .dropdown-panel { position: absolute; background: #fff; border: 1px solid #E5E5E5; box-shadow: 0 28px 60px -22px rgba(0,0,0,0.22), 0 4px 12px -4px rgba(0,0,0,0.06); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 50; }
+    .nav-item-mega[data-open="true"] > .mega-panel, .nav-item-dd[data-open="true"] > .dropdown-panel { opacity: 1; pointer-events: auto; transform: none; }
+    .mega-panel { left: 0; right: 0; top: calc(100% + 0.6rem); border-radius: 1.25rem; padding: 1.85rem 2rem 1.6rem; }
+    .mega-grid { display: grid; gap: 1.6rem 2.2rem; }
+    .mega-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .mega-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .mega-col-title { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.7rem; }
+    .mega-col ul { list-style: none; padding: 0; margin: 0; }
+    .mega-col li + li { margin-top: 0.05rem; }
+    .mega-col a { display: block; padding: 0.5rem 0.7rem; margin: 0 -0.7rem; border-radius: 0.55rem; font-size: 0.93rem; line-height: 1.35; color: var(--ink); font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease; }
+    .mega-col a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    .mega-sub { display: block; margin-top: 0.15rem; font-size: 0.76rem; color: #737373; font-weight: 400; }
+    .mega-soon { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem; border-radius: 999px; background: #F0F0F0; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; vertical-align: middle; }
+    .mega-divider { margin: 0.85rem -0.7rem 0.45rem; padding: 0.7rem 0.7rem 0; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #A3A3A3; border-top: 1px dashed #E5E5E5; }
+    .mega-tool-link { font-weight: 600 !important; display: flex !important; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    .mega-tool-link::after { content: "→"; font-weight: 500; color: var(--red); transition: transform 0.2s ease; }
+    .mega-tool-link:hover::after { transform: translateX(2px); }
+    .dropdown-panel { left: 0; top: calc(100% + 0.6rem); min-width: 15rem; border-radius: 1rem; padding: 0.55rem; }
+    .dropdown-panel ul { list-style: none; padding: 0; margin: 0; }
+    .dropdown-panel a { display: block; padding: 0.55rem 0.8rem; border-radius: 0.55rem; font-size: 0.93rem; color: var(--ink); font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease; }
+    .dropdown-panel a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    /* Mobile Accordion */
+    .m-acc { border-bottom: 1px solid #F0F0F0; }
+    .m-acc-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink); background: transparent; border: none; cursor: pointer; text-align: left; font-family: inherit; }
+    .m-acc-trigger .m-chevron { width: 1.05rem; height: 1.05rem; transition: transform 0.2s ease; color: #A3A3A3; }
+    .m-acc[data-open="true"] .m-chevron { transform: rotate(180deg); color: var(--red); }
+    .m-acc-body { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .m-acc[data-open="true"] .m-acc-body { max-height: 1200px; padding-bottom: 0.85rem; }
+    .m-acc-section { margin-top: 0.9rem; }
+    .m-acc-section:first-child { margin-top: 0.25rem; }
+    .m-acc-section-title { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.2rem; }
+    .m-acc-body ul { list-style: none; padding: 0; margin: 0; }
+    .m-acc-body a { display: block; padding: 0.5rem 0; font-size: 0.97rem; font-weight: 500; color: #404040; }
+    .m-acc-body a:hover { color: var(--red); }
+    .m-acc-link { display: block; padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink); border-bottom: 1px solid #F0F0F0; }
+    .m-acc-link:hover { color: var(--red); }
+
+    /* Calculator-spezifisch */
+    .calc-grid { display: grid; gap: 1.5rem; }
+    @media (min-width: 1024px) { .calc-grid { grid-template-columns: 5fr 7fr; } }
+    .calc-input-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 20px; padding: 1.75rem; }
+    .calc-output-card { background: var(--ink); color: #fff; border-radius: 20px; padding: 1.75rem; position: relative; overflow: hidden; }
+    .calc-output-card::before { content: ""; position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: var(--red); border-radius: 50%; opacity: 0.18; filter: blur(60px); pointer-events: none; }
+    .calc-input-row { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.2rem; }
+    .calc-input-row label { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+    .calc-input-row .hint { font-size: 0.78rem; color: #737373; margin-top: 0.15rem; }
+    .stat { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; }
+    .stat:last-child { border-bottom: none; }
+    .stat-label { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 0.35rem; }
+    .stat-value { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; letter-spacing: -0.025em; color: #fff; font-variant-numeric: tabular-nums; }
+    .stat-value.hero { font-size: 2.6rem; color: var(--red); }
+    .stat-value.muted { font-size: 1.2rem; color: rgba(255,255,255,0.85); }
+    .stat-sub { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.15rem; }
+
+    .breakdown-row { display: flex; justify-content: space-between; padding: 0.55rem 0; font-size: 0.9rem; font-variant-numeric: tabular-nums; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-label { color: rgba(255,255,255,0.7); }
+    .breakdown-value { color: #fff; font-weight: 500; }
+    .breakdown-row.total { padding-top: 0.85rem; margin-top: 0.4rem; border-top: 1px dashed rgba(255,255,255,0.25); }
+    .breakdown-row.total .breakdown-label { color: #fff; font-weight: 600; }
+    .breakdown-row.total .breakdown-value { color: var(--red); font-weight: 700; font-size: 1rem; }
+
+    .tariff-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; margin-top: 1rem; }
+    .tariff-table th, .tariff-table td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid #F0F0F0; }
+    .tariff-table th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #737373; font-weight: 500; }
+    .tariff-table td.r { text-align: right; }
+    .tariff-table tr.active td { background: rgba(204,41,54,0.06); color: var(--red); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader" aria-hidden="true"><div class="text-white display text-3xl">Glatt Broker</div></div>
+
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5" id="navInner">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <ul class="nav-main hidden lg:flex">
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger is-active" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-privat">Privatkunden<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="mega-panel" id="mega-privat" role="menu" aria-label="Privatkunden">
+              <div class="mega-grid cols-4">
+                <div class="mega-col"><div class="mega-col-title">Versicherung</div><ul>
+                  <li><a href="krankenkasse.html">Krankenkasse</a></li>
+                  <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+                  <li><a href="krankenkasse.html#sachversicherung">Sachversicherung<span class="mega-sub">Hausrat · Haftpflicht · Auto</span></a></li>
+                  <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+                </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="krankenkasse.html#calculator">Prämien-Rechner</a></li></ul></div>
+                <div class="mega-col"><div class="mega-col-title">Vorsorge</div><ul>
+                  <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+                  <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+                </ul><div class="mega-divider">Tools</div><ul>
+                  <li><a class="mega-tool-link" href="vorsorge.html#strategy">3.-Säule-Strategie</a></li>
+                </ul></div>
+                <div class="mega-col"><div class="mega-col-title">Finanzen</div><ul>
+                  <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                  <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
+                </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul></div>
+                <div class="mega-col"><div class="mega-col-title">Steuern</div><ul>
+                  <li><a href="steuern.html#steuererklaerung">Steuererklärung<span class="mega-sub">ab CHF 69 · Pakete</span></a></li>
+                  <li><a href="steuern.html">Steueroptimierung</a></li>
+                  <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
+                </ul><div class="mega-divider">Tools</div><ul>
+                  <li><a class="mega-tool-link" href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer-Rechner</a></li>
+                  <li><a class="mega-tool-link" href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer-Rechner</a></li>
+                </ul></div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-firma">Firmenkunden<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="mega-panel" id="mega-firma" role="menu" aria-label="Firmenkunden"><div class="mega-grid cols-3">
+              <div class="mega-col"><div class="mega-col-title">Vorsorge</div><ul>
+                <li><a href="firmenkunden.html#pensionskasse">Pensionskasse</a></li>
+                <li><a href="firmenkunden.html#kader">Kadervorsorge</a></li>
+                <li><a href="firmenkunden.html#bvg">BVG-Optimierung</a></li>
+              </ul></div>
+              <div class="mega-col"><div class="mega-col-title">Versicherung</div><ul>
+                <li><a href="firmenkunden.html#sach">Sach &amp; Haftpflicht</a></li>
+                <li><a href="firmenkunden.html#betrieb">Betriebs-Schutz</a></li>
+                <li><a href="firmenkunden.html#personen">Personenversicherung</a></li>
+              </ul></div>
+              <div class="mega-col"><div class="mega-col-title">Beratung</div><ul>
+                <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
+                <li><a href="firmenkunden.html#strategie">Strategie &amp; Setup</a></li>
+                <li><a href="firmenkunden.html#firmengruendung">Firmengründung<span class="mega-sub">ab CHF 599 · Notar zusätzlich</span></a></li>
+              </ul></div>
+            </div></div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-about">Über uns<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="dropdown-panel" id="dd-about" role="menu"><ul>
+              <li><a href="team.html">Team</a></li>
+              <li><a href="team.html#difference">Unser Unterschied</a></li>
+              <li><a href="team.html#voices">Stimmen</a></li>
+              <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="kontakt.html?topic=karriere">Karriere<span class="mega-soon">bald</span></a></li>
+            </ul></div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-partner">Partner<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="dropdown-panel" id="dd-partner" role="menu"><ul>
+              <li><a href="partner.html">Tippgeber-Programm</a></li>
+              <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+            </ul></div>
+          </li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-1 label text-ink-700 bg-ink-100 rounded-full p-1" role="group" aria-label="Sprache">
+            <button data-lang="de" class="px-2.5 py-1 rounded-full bg-white shadow-sm" aria-pressed="true">DE</button>
+            <button data-lang="en" class="px-2.5 py-1 rounded-full" aria-pressed="false">EN</button>
+          </div>
+          <a href="kontakt.html" class="btn-primary nav-cta"><span>Kostenlose Beratung</span><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <button id="mobileMenuToggle" class="lg:hidden p-2 -mr-1 text-ink-950" aria-label="Menü öffnen" aria-expanded="false"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 bg-white">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-5 border-b border-ink-200">
+        <span class="font-semibold tracking-tight">Glatt Broker</span>
+        <button id="mobileMenuClose" class="p-2 -mr-1 text-ink-950" aria-label="Menü schliessen"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-5" id="mobileMenuLinks">
+        <div class="m-acc" data-open="true"><button class="m-acc-trigger" type="button" aria-expanded="true"><span>Privatkunden</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="krankenkasse.html">Krankenkasse</a></li>
+              <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+              <li><a href="krankenkasse.html#sachversicherung">Sachversicherung</a></li>
+              <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+              <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+              <li><a href="vorsorge.html#strategy"><strong>→ 3.-Säule-Strategie</strong></a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
+              <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Steuern</div><ul>
+              <li><a href="steuern.html#steuererklaerung"><strong>Steuererklärung — ab CHF 69</strong></a></li>
+              <li><a href="steuern.html">Steueroptimierung</a></li>
+              <li><a href="steuern.html#kapitalleistungssteuer"><strong>→ Kapitalleistungssteuer</strong></a></li>
+              <li><a href="steuern.html#grundstueckgewinnsteuer"><strong>→ Grundstückgewinnsteuer</strong></a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Firmenkunden</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul>
+            <li><a href="firmenkunden.html#pensionskasse">Pensionskasse</a></li>
+            <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
+            <li><a href="firmenkunden.html">Alle Firmen-Themen</a></li>
+          </ul></div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Über uns</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="team.html#difference">Unser Unterschied</a></li>
+            <li><a href="team.html#voices">Stimmen</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+          </ul></div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Partner</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul>
+            <li><a href="partner.html">Tippgeber-Programm</a></li>
+            <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+          </ul></div>
+        </div>
+        <a href="kontakt.html" class="m-acc-link">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="relative pt-32 pb-12 lg:pt-40 lg:pb-16 overflow-hidden">
+      <div class="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-brand-100 rounded-full blur-3xl opacity-30 pointer-events-none" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white px-3 py-1.5 mb-5 text-sm text-ink-700">
+            <span class="pulse-dot"></span><span class="font-medium">Steuer-Rechner · Kanton Zürich · Stand 2026</span>
+          </div>
+          <h1 class="display text-[8vw] sm:text-[5.5vw] lg:text-[4.5vw] tracking-tightest">
+            <span>Steuererklärung.</span><br><span class="text-brand-600">Ab CHF 69. Du machst nichts.</span>
+          </h1>
+          <p class="mt-6 text-lg lg:text-xl text-ink-700 max-w-2xl leading-relaxed">
+            Wir füllen deine Steuererklärung professionell aus, prüfen jeden Beleg, holen jeden Abzug und übernehmen den Versand ans Steueramt. <strong class="text-ink-950">Drei feste Pakete, keine Stundensätze, keine Überraschungen.</strong>
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="steueranmeldung.html?paket=einzel" class="btn-primary !text-base !px-6 !py-4">Online beauftragen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            <a href="#steuererklaerung" class="btn-ghost !text-base !px-6 !py-4">Pakete vergleichen</a>
+          </div>
+          <div class="mt-6 flex items-center gap-4 text-sm text-ink-500 flex-wrap">
+            <span>Plus Live-Rechner:</span>
+            <a href="#kapitalleistungssteuer" class="ulink text-ink-700 font-medium">Kapitalleistungssteuer</a>
+            <span class="text-ink-300">·</span>
+            <a href="#grundstueckgewinnsteuer" class="ulink text-ink-700 font-medium">Grundstückgewinnsteuer</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEUERERKLÄRUNG (Hauptthema) -->
+    <section id="steuererklaerung" class="py-16 lg:py-24 bg-white border-b border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-12">
+          <div class="label text-brand-600 mb-4">— Steuererklärung · Pakete</div>
+          <h2 class="display text-[7vw] sm:text-[5vw] lg:text-[3.5vw] tracking-tightest mb-5">
+            <span>Drei Pakete.</span> <span class="text-brand-600">Festpreis. Keine Überraschungen.</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed lg:text-lg">
+            Treuhänder verlangen typischerweise CHF 250–400 für eine Standard-Steuererklärung. Bei uns ist es <strong class="text-ink-950">die Hälfte oder weniger</strong> — bei gleichem Resultat, weil wir auf Steuererklärungen spezialisiert sind und die Prozesse digital optimiert haben.
+          </p>
+        </div>
+
+        <!-- Pakete -->
+        <div class="grid md:grid-cols-3 gap-5 mb-10">
+          <!-- Student -->
+          <div class="card !rounded-2xl p-7">
+            <div class="label text-brand-600 mb-3">Student</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">CHF 69</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">Bis CHF 20'000 Jahreseinkommen</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steuererklärung erstellen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>1 Stunde Beratung alle 3 Jahre</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>2 Bankkonten</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Belegprüfung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steueroptimierungs-Check</span></li>
+            </ul>
+            <a href="steueranmeldung.html?paket=student" class="btn-ghost mt-6 w-full justify-center !text-sm">Beauftragen</a>
+          </div>
+          <!-- Einzelperson (highlighted) -->
+          <div class="card !rounded-2xl p-7" style="border-color: var(--red); border-width: 2px; position: relative;">
+            <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 999px;">Empfohlen</div>
+            <div class="label text-brand-600 mb-3">Einzelperson</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">CHF 99</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">Standard-Komplett-Paket</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steuererklärung erstellen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>1 Stunde Beratung alle 3 Jahre</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>4 Bankkonten / Wertschriften</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Belegprüfung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steueroptimierungs-Check</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span><strong>Gratis Vorsorgeanalyse</strong></span></li>
+            </ul>
+            <a href="steueranmeldung.html?paket=einzel" class="btn-primary mt-6 w-full justify-center !text-sm">Beauftragen</a>
+          </div>
+          <!-- Familie -->
+          <div class="card !rounded-2xl p-7">
+            <div class="label text-brand-600 mb-3">Familie</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">CHF 139</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">Eltern mit Kindern · verheiratet oder nicht</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steuererklärung erstellen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>1 Stunde Beratung alle 3 Jahre</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>4 Bankkonten / Wertschriften</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Belegprüfung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Steueroptimierungs-Check</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span><strong>Gratis Vorsorgeanalyse</strong></span></li>
+            </ul>
+            <a href="steueranmeldung.html?paket=familie" class="btn-ghost mt-6 w-full justify-center !text-sm">Beauftragen</a>
+          </div>
+        </div>
+
+        <!-- Add-Ons -->
+        <div class="card !rounded-2xl p-6 lg:p-8">
+          <div class="grid lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-5">
+              <div class="label text-brand-600 mb-3">Optionale Zusatzleistungen</div>
+              <h3 class="display text-2xl lg:text-3xl tracking-tightest mb-3">Bei besonderer Komplexität.</h3>
+              <p class="text-ink-700 text-[0.95rem] leading-relaxed">
+                Was über das Standard-Paket hinausgeht, rechnen wir transparent zu festen Sätzen ab. Keine versteckten Kosten — du weisst vorher, was es kostet.
+              </p>
+            </div>
+            <div class="lg:col-span-7 grid sm:grid-cols-2 gap-3">
+              <div class="rounded-xl border border-ink-200 p-4">
+                <div class="font-mono text-brand-600 text-xs font-medium mb-1.5">Wohneigentum</div>
+                <div class="font-semibold tracking-tight num-tabular">CHF 50 / Objekt</div>
+                <p class="text-ink-700 text-[0.86rem] mt-1.5">Eigenmietwert, Hypothekarzinsen, Unterhaltskosten — pro Liegenschaft.</p>
+              </div>
+              <div class="rounded-xl border border-ink-200 p-4">
+                <div class="font-mono text-brand-600 text-xs font-medium mb-1.5">Weiteres Bankkonto</div>
+                <div class="font-semibold tracking-tight num-tabular">CHF 10 / Konto</div>
+                <p class="text-ink-700 text-[0.86rem] mt-1.5">Über die im Paket inkludierten 2 (Student) bzw. 4 (Einzel/Familie) hinaus.</p>
+              </div>
+              <div class="rounded-xl border border-ink-200 p-4 sm:col-span-2">
+                <div class="font-mono text-brand-600 text-xs font-medium mb-1.5">Veranlagungs-Prüfung &amp; Einsprache</div>
+                <div class="font-semibold tracking-tight num-tabular">CHF 150 / Stunde</div>
+                <p class="text-ink-700 text-[0.86rem] mt-1.5">Wenn das Steueramt Abzüge streicht: wir prüfen die Veranlagung und schreiben fundierte Einsprache.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Value-Props -->
+        <div class="grid md:grid-cols-3 gap-4 mt-8">
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-5">
+            <div class="label text-brand-600 mb-2">Vorteil 01</div>
+            <h4 class="font-semibold tracking-tight mb-1">Du sparst effektiv Steuern.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Wir kennen jeden Abzug, jeden Pauschalsatz, jede Optimierung. Im Schnitt machen wir die Paketkosten mehrfach wieder rein.</p>
+          </div>
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-5">
+            <div class="label text-brand-600 mb-2">Vorteil 02</div>
+            <h4 class="font-semibold tracking-tight mb-1">Spitzenpreis ohne Stundensatz.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">CHF 99 für eine vollständige Steuererklärung Einzelperson. Treuhänder verlangen typisch CHF 250–400 für dieselbe Arbeit.</p>
+          </div>
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-5">
+            <div class="label text-brand-600 mb-2">Vorteil 03</div>
+            <h4 class="font-semibold tracking-tight mb-1">Datenschutz hat Priorität.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Deine Belege bleiben bei uns, sicher gehostet in der Schweiz. Wir verkaufen oder teilen nichts mit Dritten.</p>
+          </div>
+        </div>
+
+        <div class="mt-12 flex flex-col sm:flex-row gap-3">
+          <a href="steueranmeldung.html?paket=einzel" class="btn-primary !px-6 !py-4 !text-base">Jetzt online beauftragen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a href="tel:+41774090519" class="btn-ghost !px-6 !py-4 !text-base"><span class="num-tabular">+41 77 409 05 19</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOL-DIVIDER: Live-Rechner -->
+    <section class="py-12 lg:py-16">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl">
+          <div class="label text-brand-600 mb-3">— Bonus · Live-Rechner</div>
+          <h2 class="display text-[5vw] sm:text-[3.5vw] lg:text-[2.6vw] tracking-tightest mb-3">
+            Plus zwei Tools, die in der Beratung typisch Tausende sparen.
+          </h2>
+          <p class="text-ink-700 leading-relaxed">
+            <strong>Kapitalleistungssteuer-Rechner</strong> für 3.-Säule-/PK-Bezüge mit ESTV-Daten deiner Gemeinde · <strong>Grundstückgewinnsteuer-Rechner</strong> für Liegenschaftsverkauf nach §225 ZH StG. Beide kostenlos, ohne Anmeldung.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- KAPITALLEISTUNGSSTEUER-RECHNER -->
+    <section id="kapitalleistungssteuer" class="py-12 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10" data-reveal>
+          <div class="label text-brand-600 mb-4">— Kapitalleistungssteuer</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-4">
+            <span>Was kostet die Auszahlung</span><br><span class="text-brand-600">deiner 3. Säule oder PK?</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed">
+            Kapitalleistungen aus Vorsorge (3a, 3b, Pensionskasse-Bezug, Freizügigkeit) werden zu einem reduzierten Sondertarif besteuert — getrennt vom übrigen Einkommen, einmalig im Jahr der Auszahlung. ZH wendet die <strong>1/20-Methode</strong> an: die theoretische Jahresrente (Kapital ÷ 20) bestimmt den Steuersatz. Der Bund nutzt einen separaten Vorsorgetarif (1/5 des Normaltarifs).
+          </p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- INPUTS -->
+          <div class="calc-input-card">
+            <div class="label text-brand-600 mb-4">Eingaben</div>
+            <div class="calc-input-row">
+              <label for="klstPlz">Wohnort (PLZ oder Ortschaft)</label>
+              <div class="relative">
+                <input type="text" id="klstPlz" class="field" placeholder="PLZ oder Ortschaft eingeben…" autocomplete="off" />
+                <div id="klstPlzDropdown" class="hidden absolute top-full left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-white border border-ink-200 rounded-lg shadow-lg z-30"></div>
+              </div>
+              <div class="flex items-center gap-2 text-xs mt-1.5 flex-wrap">
+                <span id="klstLocBadge" class="text-ink-500">Stadt Zürich, PLZ 8002 · Kanton ZH</span>
+                <span id="klstDataStatus" class="ml-auto text-ink-400">⏳ lädt…</span>
+              </div>
+              <div class="hint">ESTV-Daten Stand 2026 für ~6'400 Schweizer Gemeinden. Ohne Eingabe: Annäherung via Kantonsfaktor.</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="klstCapital">Kapitalbetrag (CHF)</label>
+              <input type="number" id="klstCapital" class="field num-tabular" min="10000" max="10000000" step="10000" value="500000" />
+              <input type="range" id="klstCapitalRange" min="50000" max="3000000" step="10000" value="500000" />
+              <div class="hint">PK-Bezug, 3a-Konto, Freizügigkeit, gemischte Lebensversicherung. Schieber: 50k bis 3M.</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="klstStatus">Zivilstand</label>
+              <select id="klstStatus" class="field">
+                <option value="single" selected>Alleinstehend (Grundtarif)</option>
+                <option value="married">Verheiratet / Eltern (Verheiratetentarif)</option>
+              </select>
+              <div class="hint">Verheiratete und Alleinerziehende: ~25% tieferer Tarif. Wirkt nur auf Kanton+Gemeinde, nicht auf Bund.</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="klstChurch">Kirchensteuer</label>
+              <select id="klstChurch" class="field">
+                <option value="0" selected>Keine Konfession</option>
+                <option value="0.08">Reformiert / Katholisch (~8% Aufschlag)</option>
+              </select>
+            </div>
+            <p class="text-xs text-ink-500 leading-relaxed mt-2">
+              Berechnung: 1/20-Methode (ZH §22 StG) für Kanton+Gemeinde + 1/5-Vorsorgetarif (DBG Art. 38) für Bund. ESTV-Daten 2026 für die gewählte Gemeinde. Für eine verbindliche Zahl: persönliche Beratung mit konkretem Steuerausweis.
+            </p>
+          </div>
+
+          <!-- OUTPUTS -->
+          <div class="calc-output-card">
+            <div class="label" style="color: rgba(255,255,255,0.55);">Resultat</div>
+            <div class="stat" style="border-bottom-color: rgba(255,255,255,0.1);">
+              <div class="stat-label">Effektiver Steuersatz</div>
+              <div class="stat-value hero num-tabular" id="klstRateOut">—</div>
+              <div class="stat-sub" id="klstRateInfo">der Kapitalleistung</div>
+            </div>
+            <div class="stat">
+              <div class="breakdown-row"><span class="breakdown-label">Theoretische Jahresrente (Kapital ÷ 20)</span><span class="breakdown-value num-tabular" id="klstAnnuityOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Steuer-Quelle</span><span class="breakdown-value" id="klstSourceOut" style="font-size: 0.78rem;">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Basis-Steuer (Single)</span><span class="breakdown-value num-tabular" id="klstBaseOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Zivilstand-Anpassung</span><span class="breakdown-value num-tabular" id="klstStatusOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Kirchensteuer</span><span class="breakdown-value num-tabular" id="klstChurchOut">—</span></div>
+              <div class="breakdown-row total"><span class="breakdown-label">Total Steuer</span><span class="breakdown-value num-tabular" id="klstTotalOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Netto-Auszahlung nach Steuer</span><span class="breakdown-value num-tabular" id="klstNetOut">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Referenz-Tabelle -->
+        <div class="mt-12">
+          <div class="label text-brand-600 mb-3">Referenz-Tabelle Stadt Zürich (Single, ohne Konfession, 2024)</div>
+          <div class="card !rounded-2xl p-5 overflow-x-auto">
+            <table class="tariff-table" id="klstTable">
+              <thead><tr><th>Kapital</th><th class="r">Total-Steuer</th><th class="r">Effektiver Satz</th><th class="r">Netto</th></tr></thead>
+              <tbody id="klstTableBody"></tbody>
+            </table>
+            <p class="text-xs text-ink-500 mt-3 leading-relaxed">
+              Quelle: ZStB §22.1 Weisung des kantonalen Steueramtes Zürich + DBG Art. 38 (Vorsorgetarif Bund). Werte interpoliert; aktuelle Tarife <a href="https://www.zh.ch/de/steuern-finanzen/steuern/treuhaender/steuerbuch/steuerbuch-definition/zstb-22-1.html" target="_blank" class="ulink">zh.ch/zstb-22-1</a>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Optimierungs-Hinweis -->
+        <div class="mt-10 rounded-2xl bg-brand-50 border border-brand-100 p-6 lg:p-8">
+          <div class="label text-brand-600 mb-3">Optimierungs-Hebel</div>
+          <h3 class="display text-xl lg:text-2xl tracking-tightest mb-4">Gestaffelter Bezug spart ~30-50% Steuer.</h3>
+          <p class="text-ink-700 leading-relaxed">
+            Statt CHF 1M auf einen Schlag zu beziehen (~ <span id="klstHintSingle">11%</span> Steuer): drei 3a-Konten plus PK-Bezug auf <strong>4 verschiedene Steuerjahre</strong> verteilt — jeder Tranche profitiert von tieferer Progression. Mit einer durchdachten Bezugs-Staffelung (oft beginnt sie 5+ Jahre vor Pensionierung) lassen sich fünfstellige Beträge sparen. Mehr dazu in unserer <a href="vorsorge.html#pensionsplanung" class="ulink text-brand-600 font-medium">Pensionsplanung</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRUNDSTÜCKGEWINNSTEUER-RECHNER -->
+    <section id="grundstueckgewinnsteuer" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10" data-reveal>
+          <div class="label text-brand-600 mb-4">— Grundstückgewinnsteuer</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-4">
+            <span>Was bleibt nach dem</span><br><span class="text-brand-600">Liegenschaftsverkauf?</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed">
+            Im Kanton Zürich wird der Gewinn aus dem Verkauf einer Liegenschaft separat besteuert (monistisches System, §§ 216 ff. StG). Tarif 10-40% progressiv, Zuschlag bei kurzer Halterperiode (+50% bei <1 Jahr), Reduktion bei langer Halterperiode (-50% nach 20 Jahren). Erhebung zu 100% durch die Gemeinde.
+          </p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- INPUTS -->
+          <div class="calc-input-card">
+            <div class="label text-brand-600 mb-4">Eingaben</div>
+            <div class="calc-input-row">
+              <label for="ggstPurchasePrice">Kaufpreis (CHF)</label>
+              <input type="number" id="ggstPurchasePrice" class="field num-tabular" min="0" step="10000" value="800000" />
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstPurchaseYear">Kaufjahr</label>
+              <input type="number" id="ggstPurchaseYear" class="field num-tabular" min="1950" max="2026" step="1" value="2018" />
+              <div class="hint">Bei Halterperiode &gt; 20 Jahre: optional Verkehrswert vor 20 Jahren statt Kaufpreis (Kaufpreis-Feld entsprechend anpassen).</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstValueAdding">Wertvermehrende Investitionen (CHF)</label>
+              <input type="number" id="ggstValueAdding" class="field num-tabular" min="0" step="5000" value="50000" />
+              <div class="hint">Anbauten, Sanierungen, Energieoptimierungen — nicht der laufende Unterhalt.</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstSalePrice">Verkaufspreis (CHF)</label>
+              <input type="number" id="ggstSalePrice" class="field num-tabular" min="0" step="10000" value="1200000" />
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstSaleYear">Verkaufsjahr</label>
+              <input type="number" id="ggstSaleYear" class="field num-tabular" min="1950" max="2030" step="1" value="2026" />
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstMakler">Mäklerprovision inkl. MWST (CHF)</label>
+              <div class="flex gap-2">
+                <input type="number" id="ggstMakler" class="field num-tabular flex-1" min="0" step="100" value="25920" />
+                <button type="button" id="ggstMaklerAuto" class="btn-ghost !py-2 !px-3 !text-xs whitespace-nowrap">Max. 2% + MWST</button>
+              </div>
+              <div class="hint">Steuerlich anrechenbar: max. <strong>2% des Verkaufspreises</strong> plus 8.1% MWST = <span id="ggstMaklerMaxHint" class="num-tabular">2.162%</span>.</div>
+            </div>
+            <div class="calc-input-row">
+              <label for="ggstSellingCosts">Übrige Verkaufskosten (CHF)</label>
+              <input type="number" id="ggstSellingCosts" class="field num-tabular" min="0" step="1000" value="9000" />
+              <div class="hint">Inserate, Notar, Werbung, ggf. Vorfälligkeitsentschädigung der Hypothek.</div>
+            </div>
+          </div>
+
+          <!-- OUTPUTS -->
+          <div class="calc-output-card">
+            <div class="label" style="color: rgba(255,255,255,0.55);">Resultat</div>
+            <div class="stat" style="border-bottom-color: rgba(255,255,255,0.1);">
+              <div class="stat-label">Grundstückgewinnsteuer</div>
+              <div class="stat-value hero num-tabular" id="ggstTaxOut">—</div>
+              <div class="stat-sub" id="ggstTaxInfo">vom Bruttogewinn</div>
+            </div>
+            <div class="stat">
+              <div class="breakdown-row"><span class="breakdown-label">Verkaufspreis − Anlagekosten</span><span class="breakdown-value num-tabular" id="ggstRawOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">− Mäkler &amp; Verkaufskosten</span><span class="breakdown-value num-tabular" id="ggstCostsOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Steuerbarer Grundstückgewinn</span><span class="breakdown-value num-tabular" id="ggstGrossOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Tarif-Steuer (Art. 225 Abs. 1)</span><span class="breakdown-value num-tabular" id="ggstBaseOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Halterperiode</span><span class="breakdown-value num-tabular" id="ggstHoldingOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Modifikator (Abs. 2/3)</span><span class="breakdown-value num-tabular" id="ggstModifierOut">—</span></div>
+              <div class="breakdown-row total"><span class="breakdown-label">Steuer total (an Gemeinde)</span><span class="breakdown-value num-tabular" id="ggstFinalOut">—</span></div>
+              <div class="breakdown-row"><span class="breakdown-label">Netto-Gewinn nach Steuer</span><span class="breakdown-value num-tabular" id="ggstNetOut">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarif-Tabelle -->
+        <div class="mt-12 grid lg:grid-cols-2 gap-8">
+          <div>
+            <div class="label text-brand-600 mb-3">Tarif §225 StG (Grundtarif)</div>
+            <div class="card !rounded-2xl p-5">
+              <table class="tariff-table" id="ggstBracketTable">
+                <thead><tr><th>Gewinnstufe</th><th class="r">Grenzsatz</th></tr></thead>
+                <tbody>
+                  <tr data-bracket="0"><td>0 – 4'000</td><td class="r">10%</td></tr>
+                  <tr data-bracket="1"><td>4'001 – 10'000</td><td class="r">15%</td></tr>
+                  <tr data-bracket="2"><td>10'001 – 18'000</td><td class="r">20%</td></tr>
+                  <tr data-bracket="3"><td>18'001 – 30'000</td><td class="r">25%</td></tr>
+                  <tr data-bracket="4"><td>30'001 – 50'000</td><td class="r">30%</td></tr>
+                  <tr data-bracket="5"><td>50'001 – 100'000</td><td class="r">35%</td></tr>
+                  <tr data-bracket="6"><td>über 100'000</td><td class="r">40%</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs text-ink-500 mt-3">Gewinne &lt; CHF 5'000 sind steuerfrei.</p>
+            </div>
+          </div>
+          <div>
+            <div class="label text-brand-600 mb-3">Halterperiode-Modifikator §225 StG</div>
+            <div class="card !rounded-2xl p-5">
+              <table class="tariff-table">
+                <thead><tr><th>Halterperiode</th><th class="r">Modifikator</th></tr></thead>
+                <tbody>
+                  <tr><td>&lt; 1 Jahr</td><td class="r" style="color: var(--red); font-weight: 600;">+50%</td></tr>
+                  <tr><td>1 – 2 Jahre</td><td class="r" style="color: var(--red); font-weight: 600;">+25%</td></tr>
+                  <tr><td>2 – 4 Jahre</td><td class="r">±0%</td></tr>
+                  <tr><td>5 Jahre</td><td class="r">−5%</td></tr>
+                  <tr><td>10 Jahre</td><td class="r">−20%</td></tr>
+                  <tr><td>15 Jahre</td><td class="r">−35%</td></tr>
+                  <tr><td>20+ Jahre</td><td class="r" style="color: #16a34a; font-weight: 600;">−50% (Maximum)</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs text-ink-500 mt-3">Ab 5 Jahren: −5%, dann −3% pro weiteres Jahr.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optimierungs-Hinweise -->
+        <div class="mt-8 grid md:grid-cols-3 gap-4">
+          <div class="card !rounded-2xl p-5">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">TIPP 01</div>
+            <h4 class="font-semibold mb-1.5 tracking-tight">5+ Jahre halten</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Ab 5 Jahren startet die Reduktion. Nach 10 Jahren −20%, nach 20 Jahren −50%. Die Halterdauer-Logik ist der grösste Hebel.</p>
+          </div>
+          <div class="card !rounded-2xl p-5">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">TIPP 02</div>
+            <h4 class="font-semibold mb-1.5 tracking-tight">Anlagekosten dokumentieren</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Wertvermehrende Investitionen (Anbau, Heizungs-Ersatz, Umbauten) reduzieren den Gewinn. Quittungen über Jahre aufbewahren.</p>
+          </div>
+          <div class="card !rounded-2xl p-5">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">TIPP 03</div>
+            <h4 class="font-semibold mb-1.5 tracking-tight">Steueraufschub bei Ersatzbeschaffung</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Beim Verkauf einer selbstgenutzten Liegenschaft mit Reinvestition in eine neue: Steueraufschub möglich (§ 216 Abs. 3 StG). Frist und Bedingungen prüfen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 lg:py-28 bg-white border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="rounded-3xl bg-ink-950 text-white p-10 lg:p-16 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative max-w-2xl">
+            <div class="label text-brand-200 mb-5">Persönliche Steuer-Strategie</div>
+            <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-5">Vom Rechner zum konkreten Plan.</h2>
+            <p class="text-ink-300 lg:text-lg leading-relaxed mb-8">
+              Diese Rechner geben Orientierung — die echte Optimierung passiert mit deinen konkreten Zahlen. Wir analysieren deine Pensionsplanung, Liegenschaftsstrategie und Steuersituation in einem 30-minütigen Erstgespräch und zeigen dir die ein, zwei wichtigsten Hebel.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="kontakt.html?topic=steuern" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white !px-6 !py-4 !text-base">Steuer-Beratung buchen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+              <a href="tel:+41774090519" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base"><span class="num-tabular">+41 77 409 05 19</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-ink-200 py-16">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+      <div class="grid lg:grid-cols-12 gap-10 mb-16">
+        <div class="lg:col-span-4">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo-footer mb-5" />
+          <p class="text-ink-700 max-w-xs">Unabhängige Versicherungs-, Vorsorge- und Steuerberatung in der Schweiz. FINMA-registriert seit 2017.</p>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Privatkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="krankenkasse.html" class="ulink">Krankenkasse</a></li>
+            <li><a href="vorsorge.html" class="ulink">3. Säule</a></li>
+            <li><a href="finanzen.html" class="ulink">Vermögensaufbau</a></li>
+            <li><a href="steuern.html" class="ulink">Steuern</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Tools</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="krankenkasse.html#calculator" class="ulink">Prämien-Rechner</a></li>
+            <li><a href="vorsorge.html#strategy" class="ulink">3.-Säule-Strategie</a></li>
+            <li><a href="steuern.html#kapitalleistungssteuer" class="ulink">Kapitalleistungssteuer</a></li>
+            <li><a href="steuern.html#grundstueckgewinnsteuer" class="ulink">Grundstückgewinnsteuer</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-4">
+          <h4 class="label text-ink-500 mb-4">Kontakt</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li class="num-tabular">+41 77 409 05 19</li>
+            <li>online@glattbroker.ch</li>
+            <li class="text-ink-500 mt-2">Glatt Broker AG · Staubstrasse 15 · 8038 Zürich</li>
+          </ul>
+          <div class="mt-5 flex gap-2">
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">FINMA 35821</span>
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">Cicero</span>
+          </div>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-ink-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-ink-500">
+        <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4</p>
+        <p class="num-tabular">Designed in Zürich</p>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-app-bar" aria-label="Schnelle Aktionen">
+    <a href="tel:+41774090519" class="call"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg><span>Anrufen</span></a>
+    <a href="kontakt.html" class="consult"><span>Beratung</span></a>
+  </nav>
+
+  <script>
+    addEventListener('load', () => setTimeout(() => document.getElementById('loader')?.classList.add('done'), 200));
+
+    // Mobile Menu
+    (function mobileMenu() {
+      const toggle = document.getElementById('mobileMenuToggle');
+      const close  = document.getElementById('mobileMenuClose');
+      const menu   = document.getElementById('mobileMenu');
+      if (!toggle || !menu) return;
+      const open = () => { menu.classList.add('open'); document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded', 'true'); };
+      const shut = () => { menu.classList.remove('open'); document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      toggle.addEventListener('click', open);
+      close?.addEventListener('click', shut);
+      document.getElementById('mobileMenuLinks')?.addEventListener('click', (e) => { if (e.target.closest('a[href^="#"]')) shut(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('open')) shut(); });
+    })();
+
+    // Mega Menu
+    (function megaMenu() {
+      const navItems = document.querySelectorAll('[data-nav-item]');
+      if (!navItems.length) return;
+      let openItem = null, leaveTimer = null;
+      function openMenu(item) { if (openItem && openItem !== item) closeMenu(openItem); item.dataset.open = 'true'; item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'true'); openItem = item; }
+      function closeMenu(item) { if (!item) return; item.dataset.open = 'false'; item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'false'); if (openItem === item) openItem = null; }
+      navItems.forEach((item) => {
+        item.addEventListener('mouseenter', () => { clearTimeout(leaveTimer); openMenu(item); });
+        item.addEventListener('mouseleave', () => { clearTimeout(leaveTimer); leaveTimer = setTimeout(() => closeMenu(item), 140); });
+        item.querySelector('[data-mega-trigger]')?.addEventListener('click', (e) => { e.stopPropagation(); if (item.dataset.open === 'true') closeMenu(item); else openMenu(item); });
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openItem) { const item = openItem; closeMenu(item); item.querySelector('[data-mega-trigger]')?.focus(); } });
+      document.addEventListener('click', (e) => { if (openItem && !openItem.contains(e.target)) closeMenu(openItem); });
+    })();
+
+    // Mobile Accordion
+    (function mobileAccordion() {
+      document.querySelectorAll('.m-acc-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const acc = btn.closest('.m-acc'); if (!acc) return;
+          const isOpen = acc.dataset.open === 'true';
+          acc.dataset.open = isOpen ? 'false' : 'true';
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+      });
+    })();
+
+    // ════════════════════════════════════════════════════════
+    // KAPITALLEISTUNGSSTEUER-RECHNER
+    // ════════════════════════════════════════════════════════
+    // Quelle: ZStB 22.1 (ZH 1/20-Methode) + ESTV-Daten 2026 (~6'400 Gemeinden) +
+    // DBG Art. 38 (Bund 1/5-Vorsorgetarif). Logik 1:1 vom internen Vorsorgetool übernommen.
+    const KLST = {
+      // Kantonsfaktor — Fallback ohne PLZ
+      cantonFactor: {
+        ZG: 0.44, NW: 0.62, OW: 0.65, SZ: 0.72, AI: 0.80, UR: 0.82,
+        LU: 0.85, AR: 0.88, GL: 0.90, AG: 0.92, SH: 0.93, GR: 0.94,
+        TG: 0.95, SG: 0.95, SO: 0.98, ZH: 1.00, FR: 1.04, BL: 1.05,
+        VS: 1.06, BS: 1.08, TI: 1.08, NE: 1.12, VD: 1.12, BE: 1.18,
+        JU: 1.20, GE: 1.25,
+      },
+      plzToCanton(plz) {
+        if (!plz) return 'ZH';
+        const p = parseInt(String(plz), 10);
+        if (isNaN(p) || p < 1000 || p > 9999) return 'ZH';
+        if (p >= 1200 && p <= 1299) return 'GE';
+        if (p >= 1000 && p <= 1199) return 'VD';
+        if (p >= 1300 && p <= 1499) return 'VD';
+        if (p >= 1500 && p <= 1799) return 'FR';
+        if (p >= 1800 && p <= 1899) return 'VD';
+        if (p >= 1900 && p <= 1999) return 'VS';
+        if (p >= 2000 && p <= 2799) return 'NE';
+        if (p >= 2800 && p <= 2999) return 'JU';
+        if (p >= 3000 && p <= 3999) return 'BE';
+        if (p >= 4000 && p <= 4099) return 'BS';
+        if (p >= 4100 && p <= 4499) return 'BL';
+        if (p >= 4500 && p <= 4699) return 'SO';
+        if (p >= 4700 && p <= 5999) return 'AG';
+        if (p >= 6000 && p <= 6299) return 'LU';
+        if (p >= 6300 && p <= 6399) return 'ZG';
+        if (p >= 6400 && p <= 6499) return 'SZ';
+        if (p >= 6500 && p <= 6999) return 'TI';
+        if (p >= 7000 && p <= 7999) return 'GR';
+        if (p >= 8000 && p <= 8499) return 'ZH';
+        if (p >= 8500 && p <= 8599) return 'TG';
+        if (p >= 8600 && p <= 8999) return 'ZH';
+        if (p >= 9000 && p <= 9499) return 'SG';
+        if (p >= 9500 && p <= 9599) return 'TG';
+        return 'ZH';
+      },
+      cantonName(c) {
+        return ({ ZH:'Zürich', BE:'Bern', LU:'Luzern', UR:'Uri', SZ:'Schwyz', OW:'Obwalden', NW:'Nidwalden', GL:'Glarus', ZG:'Zug', FR:'Freiburg', SO:'Solothurn', BS:'Basel-Stadt', BL:'Basel-Landschaft', SH:'Schaffhausen', AR:'Appenzell A.Rh.', AI:'Appenzell I.Rh.', SG:'St. Gallen', GR:'Graubünden', AG:'Aargau', TG:'Thurgau', TI:'Tessin', VD:'Waadt', VS:'Wallis', NE:'Neuenburg', GE:'Genf', JU:'Jura' }[c] || c);
+      },
+      // ZH-Basistabelle 2026 (Single, ohne Konfession), effektiver Satz auf gesamte Tranche
+      withdrawalTable: [
+        [50000, 0.0450], [100000, 0.0488], [150000, 0.0528],
+        [200000, 0.0563], [300000, 0.0608], [500000, 0.0716],
+        [1000000, 0.1116], [2000000, 0.1577], [5000000, 0.2204],
+      ],
+      withdrawalRate(amount) {
+        const t = KLST.withdrawalTable;
+        if (amount <= t[0][0]) return t[0][1];
+        if (amount >= t[t.length-1][0]) return t[t.length-1][1];
+        for (let i = 0; i < t.length - 1; i++) {
+          if (amount <= t[i+1][0]) {
+            const [a1, r1] = t[i], [a2, r2] = t[i+1];
+            return r1 + (r2 - r1) * (amount - a1) / (a2 - a1);
+          }
+        }
+        return t[t.length-1][1];
+      },
+      // Effektive Rate: ESTV-Daten wenn Location vorhanden, sonst ZH × Kantonsfaktor
+      effectiveRate(amount, location, canton) {
+        if (location && location.r && window.STEUERDATEN) {
+          const amounts = window.STEUERDATEN.amounts;
+          const rates = location.r;
+          if (amount <= amounts[0]) return rates[0] / 100;
+          if (amount >= amounts[amounts.length-1]) return rates[amounts.length-1] / 100;
+          for (let i = 0; i < amounts.length - 1; i++) {
+            if (amount <= amounts[i+1]) {
+              const a1 = amounts[i], a2 = amounts[i+1];
+              const r1 = rates[i] / 100, r2 = rates[i+1] / 100;
+              return r1 + (r2 - r1) * (amount - a1) / (a2 - a1);
+            }
+          }
+          return rates[rates.length-1] / 100;
+        }
+        const f = KLST.cantonFactor[canton] || 1.0;
+        return KLST.withdrawalRate(amount) * f;
+      },
+      searchPlz(query) {
+        const data = window.STEUERDATEN;
+        if (!data || !data.locations) return [];
+        const q = String(query || '').toLowerCase().trim();
+        if (q.length < 1) return [];
+        const seen = new Set();
+        const results = [];
+        if (/^\d+$/.test(q)) {
+          for (const [plz, ids] of Object.entries(data.plz || {})) {
+            if (!plz.startsWith(q)) continue;
+            for (const id of ids) {
+              if (seen.has(id)) continue;
+              seen.add(id);
+              const loc = data.locations[id];
+              if (!loc) continue;
+              results.push({ id, c: loc.c, k: loc.k, p: loc.p, r: loc.r });
+            }
+          }
+        } else if (q.length >= 2) {
+          for (const [id, loc] of Object.entries(data.locations)) {
+            if (loc.c && loc.c.toLowerCase().includes(q)) {
+              results.push({ id, c: loc.c, k: loc.k, p: loc.p, r: loc.r });
+              if (results.length > 100) break;
+            }
+          }
+        }
+        results.sort((a, b) => {
+          if (a.p === q && b.p !== q) return -1;
+          if (b.p === q && a.p !== q) return 1;
+          return a.c.localeCompare(b.c);
+        });
+        return results.slice(0, 20);
+      },
+    };
+
+    const klstState = { taxLocation: null, plz: '', canton: 'ZH', ort: 'Stadt Zürich' };
+
+    const fmt = (n) => 'CHF ' + Math.round(n).toLocaleString('de-CH');
+    const pct = (r) => (r * 100).toFixed(2) + '%';
+
+    function klstUpdateBadge() {
+      const out = document.getElementById('klstLocBadge');
+      if (klstState.taxLocation) {
+        const loc = klstState.taxLocation;
+        out.textContent = `${loc.p} ${loc.c} · Kanton ${loc.k} · ESTV 2026`;
+      } else {
+        out.textContent = klstState.plz
+          ? `${klstState.plz} · Kanton ${klstState.canton} (Approximation)`
+          : 'Stadt Zürich, PLZ 8002 · Kanton ZH';
+      }
+    }
+
+    function klstUpdateDataStatus() {
+      const el = document.getElementById('klstDataStatus');
+      if (window.STEUERDATEN && window.STEUERDATEN.locations) {
+        const n = Object.keys(window.STEUERDATEN.locations).length;
+        el.innerHTML = `<span style="color: #10b981;">●</span> ${n.toLocaleString('de-CH').replace(/,/g,"'")} Gemeinden geladen`;
+      } else {
+        el.innerHTML = `<span style="color: #f59e0b;">●</span> Approximation aktiv`;
+      }
+    }
+
+    function klstRenderDropdown(results) {
+      const dd = document.getElementById('klstPlzDropdown');
+      if (!results || results.length === 0) {
+        dd.classList.add('hidden'); dd.innerHTML = ''; return;
+      }
+      dd.innerHTML = results.map((r, i) => `
+        <button type="button" data-idx="${i}" class="w-full text-left px-3 py-2 hover:bg-brand-50 border-b border-ink-100 last:border-b-0 flex items-center justify-between gap-3 cursor-pointer transition-colors">
+          <span class="font-medium num-tabular">${r.p}</span>
+          <span class="flex-1 text-sm text-ink-700">${r.c}</span>
+          <span class="text-xs text-ink-500 num-tabular">${r.k}</span>
+        </button>
+      `).join('');
+      dd.querySelectorAll('button[data-idx]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const loc = results[+btn.dataset.idx];
+          klstState.taxLocation = loc;
+          klstState.plz = loc.p; klstState.ort = loc.c; klstState.canton = loc.k;
+          document.getElementById('klstPlz').value = `${loc.p} ${loc.c}`;
+          dd.classList.add('hidden');
+          klstUpdateBadge();
+          calcKLST();
+        });
+      });
+      dd.classList.remove('hidden');
+    }
+
+    function calcKLST() {
+      const capital = +document.getElementById('klstCapital').value || 0;
+      const status = document.getElementById('klstStatus').value;
+      const churchRate = +document.getElementById('klstChurch').value || 0;
+
+      // Basis-Rate für Single, ohne Konfession
+      const baseRate = KLST.effectiveRate(capital, klstState.taxLocation, klstState.canton);
+      const baseTax = capital * baseRate;
+
+      // Zivilstand-Faktor (verheiratet ~85% von Single — auf Total angewendet, vereinfacht)
+      const statusFactor = status === 'married' ? 0.85 : 1.00;
+      const adjustedTax = baseTax * statusFactor;
+      const statusDelta = adjustedTax - baseTax; // negativ wenn married
+
+      // Kirchensteuer als Aufschlag auf adjustedTax
+      const churchTax = adjustedTax * churchRate;
+
+      const totalTax = adjustedTax + churchTax;
+      const effective = capital > 0 ? totalTax / capital : 0;
+
+      document.getElementById('klstRateOut').textContent = pct(effective);
+      document.getElementById('klstRateInfo').textContent = fmt(totalTax) + ' bei ' + fmt(capital);
+      document.getElementById('klstAnnuityOut').textContent = fmt(capital / 20);
+      document.getElementById('klstSourceOut').textContent = klstState.taxLocation
+        ? `ESTV-Daten ${klstState.taxLocation.c}`
+        : `ZH-Tabelle × Faktor ${(KLST.cantonFactor[klstState.canton] || 1).toFixed(2)} (${KLST.cantonName(klstState.canton)})`;
+      document.getElementById('klstBaseOut').textContent = fmt(baseTax);
+      document.getElementById('klstStatusOut').textContent = status === 'married' ? fmt(statusDelta) + ' (−15%)' : '—';
+      document.getElementById('klstChurchOut').textContent = churchRate > 0 ? '+ ' + fmt(churchTax) : '—';
+      document.getElementById('klstTotalOut').textContent = fmt(totalTax);
+      document.getElementById('klstNetOut').textContent = fmt(capital - totalTax);
+
+      // Hint
+      document.getElementById('klstHintSingle').textContent = (KLST.effectiveRate(1000000, klstState.taxLocation, klstState.canton) * 100).toFixed(1) + '%';
+
+      renderKLSTTable(capital);
+    }
+
+    function renderKLSTTable(highlightCapital) {
+      const rows = [50000, 100000, 250000, 500000, 1000000, 2000000, 5000000];
+      const tbody = document.getElementById('klstTableBody');
+      tbody.innerHTML = rows.map(c => {
+        const rate = KLST.effectiveRate(c, klstState.taxLocation, klstState.canton);
+        const tax = c * rate;
+        const isClose = highlightCapital >= c * 0.85 && highlightCapital <= c * 1.15;
+        return `<tr${isClose ? ' class="active"' : ''}><td>${fmt(c)}</td><td class="r">${fmt(tax)}</td><td class="r">${pct(rate)}</td><td class="r">${fmt(c - tax)}</td></tr>`;
+      }).join('');
+    }
+
+    // PLZ-Autocomplete Handlers
+    let _klstPlzTimer = null;
+    document.getElementById('klstPlz').addEventListener('input', (e) => {
+      const raw = e.target.value.trim();
+      if (klstState.taxLocation && raw !== `${klstState.taxLocation.p} ${klstState.taxLocation.c}`) {
+        klstState.taxLocation = null;
+      }
+      klstState.plz = (raw.match(/^(\d{4})/) || ['', ''])[1];
+      klstState.canton = KLST.plzToCanton(klstState.plz);
+      clearTimeout(_klstPlzTimer);
+      _klstPlzTimer = setTimeout(() => {
+        const query = (raw.match(/^(\d+)/) || [null, raw])[1] || raw;
+        // Auto-Select bei eindeutiger PLZ
+        if (klstTryAutoSelect(query)) return;
+        klstRenderDropdown(KLST.searchPlz(query));
+      }, 150);
+      klstUpdateBadge();
+      calcKLST();
+    });
+    document.getElementById('klstPlz').addEventListener('focus', () => {
+      const raw = document.getElementById('klstPlz').value.trim();
+      if (raw) klstRenderDropdown(KLST.searchPlz(raw));
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#klstPlz') && !e.target.closest('#klstPlzDropdown')) {
+        document.getElementById('klstPlzDropdown')?.classList.add('hidden');
+      }
+    });
+
+    // Live-Updates KLST
+    document.getElementById('klstCapital').addEventListener('input', (e) => {
+      document.getElementById('klstCapitalRange').value = Math.min(3000000, Math.max(50000, +e.target.value || 0));
+      calcKLST();
+    });
+    document.getElementById('klstCapitalRange').addEventListener('input', (e) => {
+      document.getElementById('klstCapital').value = e.target.value;
+      calcKLST();
+    });
+    ['klstStatus', 'klstChurch'].forEach(id => document.getElementById(id).addEventListener('input', calcKLST));
+
+    // Auto-Select bei eindeutiger PLZ-Eingabe (4-stellig + nur 1 Treffer)
+    function klstTryAutoSelect(query) {
+      if (!/^\d{4}$/.test(query)) return false;
+      const results = KLST.searchPlz(query);
+      if (results.length === 1) {
+        const loc = results[0];
+        klstState.taxLocation = loc;
+        klstState.plz = loc.p;
+        klstState.ort = loc.c;
+        klstState.canton = loc.k;
+        document.getElementById('klstPlz').value = `${loc.p} ${loc.c}`;
+        document.getElementById('klstPlzDropdown').classList.add('hidden');
+        klstUpdateBadge();
+        calcKLST();
+        return true;
+      }
+      return false;
+    }
+
+    // Default-Init: sobald STEUERDATEN geladen, Stadt Zürich (8002) als Start-Location setzen
+    function klstDefaultZurich() {
+      if (klstState.taxLocation || !window.STEUERDATEN || !window.STEUERDATEN.locations) return;
+      const results = KLST.searchPlz('8002');
+      const zurich = results.find(r => r.k === 'ZH' && /Z[uü]rich/i.test(r.c)) || results[0];
+      if (zurich) {
+        klstState.taxLocation = zurich;
+        klstState.plz = zurich.p;
+        klstState.ort = zurich.c;
+        klstState.canton = zurich.k;
+        klstUpdateBadge();
+      }
+    }
+
+    // Wenn STEUERDATEN async geladen wird, Default setzen + neu berechnen
+    let _klstDataCheck = setInterval(() => {
+      if (window.STEUERDATEN && window.STEUERDATEN.locations) {
+        klstUpdateDataStatus();
+        klstDefaultZurich();
+        calcKLST();
+        clearInterval(_klstDataCheck);
+      }
+    }, 200);
+    klstUpdateDataStatus();
+
+    // ════════════════════════════════════════════════════════
+    // GRUNDSTÜCKGEWINNSTEUER-RECHNER (ZH §225 StG)
+    // ════════════════════════════════════════════════════════
+    const GGST_BRACKETS = [
+      { upTo: 4000,    rate: 0.10 },
+      { upTo: 10000,   rate: 0.15 },
+      { upTo: 18000,   rate: 0.20 },
+      { upTo: 30000,   rate: 0.25 },
+      { upTo: 50000,   rate: 0.30 },
+      { upTo: 100000,  rate: 0.35 },
+      { upTo: Infinity, rate: 0.40 },
+    ];
+
+    function ggstBaseTax(gain) {
+      if (gain < 5000) return { tax: 0, activeBracket: -1 };
+      let tax = 0; let prev = 0; let activeBracket = -1;
+      for (let i = 0; i < GGST_BRACKETS.length; i++) {
+        const br = GGST_BRACKETS[i];
+        if (gain <= br.upTo) {
+          tax += (gain - prev) * br.rate;
+          activeBracket = i;
+          return { tax, activeBracket };
+        }
+        tax += (br.upTo - prev) * br.rate;
+        prev = br.upTo;
+      }
+      return { tax, activeBracket: GGST_BRACKETS.length - 1 };
+    }
+
+    function ggstHoldingModifier(years) {
+      if (years < 1) return { factor: 1.50, label: '+50% Zuschlag' };
+      if (years < 2) return { factor: 1.25, label: '+25% Zuschlag' };
+      if (years < 5) return { factor: 1.00, label: '±0%' };
+      const reduction = Math.min(0.50, 0.05 + (Math.floor(years) - 5) * 0.03);
+      return { factor: 1 - reduction, label: '−' + (reduction * 100).toFixed(0) + '%' };
+    }
+
+    // MWST 2026: 8.1%
+    const MWST_RATE = 0.081;
+    const MAKLER_MAX_PCT = 0.02; // 2% des Verkaufspreises
+
+    function maxMakler(salePrice) {
+      return salePrice * MAKLER_MAX_PCT * (1 + MWST_RATE);
+    }
+
+    function calcGGST() {
+      const purchasePrice = +document.getElementById('ggstPurchasePrice').value || 0;
+      const purchaseYear  = +document.getElementById('ggstPurchaseYear').value || 2018;
+      const valueAdding   = +document.getElementById('ggstValueAdding').value || 0;
+      const salePrice     = +document.getElementById('ggstSalePrice').value || 0;
+      const saleYear      = +document.getElementById('ggstSaleYear').value || 2026;
+      const makler        = Math.min(+document.getElementById('ggstMakler').value || 0, maxMakler(salePrice));
+      const sellingCosts  = +document.getElementById('ggstSellingCosts').value || 0;
+
+      const rawGain = salePrice - purchasePrice - valueAdding;
+      const totalCosts = makler + sellingCosts;
+      const grossGain = rawGain - totalCosts;
+      const holdingYears = Math.max(0, saleYear - purchaseYear);
+
+      const { tax: baseTax, activeBracket } = ggstBaseTax(grossGain);
+      const { factor: modifier, label: modLabel } = ggstHoldingModifier(holdingYears);
+      const finalTax = grossGain < 5000 ? 0 : baseTax * modifier;
+      const netGain = grossGain - finalTax;
+      const effectiveRate = grossGain > 0 ? finalTax / grossGain : 0;
+
+      document.getElementById('ggstTaxOut').textContent = fmt(finalTax);
+      document.getElementById('ggstTaxInfo').textContent = grossGain >= 5000
+        ? pct(effectiveRate) + ' effektive Belastung'
+        : grossGain > 0 ? 'Gewinn unter Freigrenze CHF 5\'000' : 'Kein Gewinn';
+      document.getElementById('ggstRawOut').textContent = fmt(rawGain);
+      document.getElementById('ggstCostsOut').textContent = fmt(totalCosts);
+      document.getElementById('ggstGrossOut').textContent = fmt(grossGain);
+      document.getElementById('ggstBaseOut').textContent = fmt(baseTax);
+      document.getElementById('ggstHoldingOut').textContent = holdingYears + ' Jahre';
+      document.getElementById('ggstModifierOut').textContent = modLabel;
+      document.getElementById('ggstFinalOut').textContent = fmt(finalTax);
+      document.getElementById('ggstNetOut').textContent = fmt(netGain);
+
+      // Mäkler-Hint mit max-Wert
+      document.getElementById('ggstMaklerMaxHint').textContent = fmt(maxMakler(salePrice));
+
+      // Highlight active bracket
+      document.querySelectorAll('#ggstBracketTable tr[data-bracket]').forEach((row, i) => {
+        row.classList.toggle('active', i === activeBracket);
+      });
+    }
+
+    // Auto-Button: setze Mäklerprovision auf Maximum
+    document.getElementById('ggstMaklerAuto').addEventListener('click', () => {
+      const salePrice = +document.getElementById('ggstSalePrice').value || 0;
+      document.getElementById('ggstMakler').value = Math.round(maxMakler(salePrice));
+      calcGGST();
+    });
+
+    ['ggstPurchasePrice', 'ggstPurchaseYear', 'ggstValueAdding', 'ggstSalePrice', 'ggstSaleYear', 'ggstMakler', 'ggstSellingCosts']
+      .forEach(id => document.getElementById(id).addEventListener('input', calcGGST));
+
+    // Initial-Berechnung
+    calcKLST();
+    calcGGST();
+
+    // Sticky nav shadow
+    const nav = document.getElementById('navInner');
+    if (nav) addEventListener('scroll', () => { nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30); }, { passive: true });
+  </script>
+</body>
+</html>

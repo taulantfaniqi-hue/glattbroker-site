@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vermögensaufbau · Glatt Broker AG</title>
+  <meta name="description" content="Wenn zwei Top-Vermögensverwalter konkurrieren — gewinnt unser Kunde. Glatt Broker kombiniert Everon und Zugerberg Finanz, beide BILANZ-Top-Performer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'ui-monospace', 'monospace'] },
+      colors: {
+        ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+        brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+      },
+      letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+    } } };
+  </script>
+  <style>
+    @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    :root { --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif; --font-mono: "JetBrains Mono", ui-monospace, monospace; --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936; --everon: #A89968; --zugerberg: #1F4480; }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--ink); display: grid; place-items: center; transition: opacity .4s ease; }
+    .loader.done { opacity: 0; pointer-events: none; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .btn-primary { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 500; font-size: .95rem; transition: all .25s ease; cursor: pointer; }
+    .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px; background: transparent; color: var(--ink); font-weight: 500; font-size: .95rem; border: 1px solid rgba(10,10,10,.15); transition: all .25s ease; cursor: pointer; }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .ulink { position: relative; }
+    .ulink::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .4s cubic-bezier(.7,0,.3,1); }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    .card { background: #fff; border: 1px solid #EEE; border-radius: 16px; transition: all .3s ease; }
+    .pulse-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: pulseRing 2s infinite; }
+    @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); } 70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+    @supports (padding: max(0px)) { header { padding-top: max(0px, env(safe-area-inset-top)); } footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); } }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+    ::selection { background: var(--red); color: #fff; }
+    .grid-bg { background-image: linear-gradient(to right, rgba(10,10,10,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(10,10,10,.03) 1px, transparent 1px); background-size: 56px 56px; }
+
+    /* Mobile-Menü Overlay */
+    #mobileMenu { position: fixed; inset: 0; z-index: 50; background: #fff; transform: translateY(-100%); transition: transform .3s cubic-bezier(.16,1,.3,1); padding-top: env(safe-area-inset-top); }
+    #mobileMenu.open { transform: translateY(0); }
+    @media (min-width: 1024px) { #mobileMenu { display: none; } }
+    body.menu-open { overflow: hidden; }
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    .mobile-app-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none; gap: .75rem; align-items: center; padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); border-top: 1px solid #E5E5E5; backdrop-filter: blur(16px); box-shadow: 0 -12px 30px rgba(0,0,0,.08); }
+    .mobile-app-bar a { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 14px; font-weight: 600; font-size: .95rem; }
+    .mobile-app-bar .call { color: var(--ink); background: #F0F0F0; }
+    .mobile-app-bar .consult { color: #fff; background: var(--red); }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+    @media (max-width: 640px) { body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); } header > div { margin-top: .5rem; } #navInner { padding: .6rem .75rem; border-radius: 1rem; } header .nav-cta { display: none; } .mobile-app-bar { display: flex; } }
+
+    /* Mega-Menü */
+    #navInner { position: relative; }
+    .nav-main { display: flex; align-items: center; gap: 0.15rem; list-style: none; padding: 0; margin: 0; }
+    .nav-item-mega { position: static; }
+    .nav-item-dd { position: relative; }
+    .nav-trigger { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.55rem 0.9rem; border-radius: 0.65rem; font-size: 0.93rem; font-weight: 500; color: var(--ink); background: transparent; border: none; cursor: pointer; transition: background-color 0.18s ease, color 0.18s ease; font-family: inherit; }
+    .nav-trigger:hover, .nav-trigger[aria-expanded="true"] { background: rgba(10,10,10,0.05); }
+    .nav-trigger.is-active { color: var(--red); }
+    .nav-trigger .nav-chevron { width: 0.7rem; height: 0.7rem; transition: transform 0.2s ease; }
+    .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+    .mega-panel, .dropdown-panel { position: absolute; background: #fff; border: 1px solid #E5E5E5; box-shadow: 0 28px 60px -22px rgba(0,0,0,0.22), 0 4px 12px -4px rgba(0,0,0,0.06); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 50; }
+    .nav-item-mega[data-open="true"] > .mega-panel, .nav-item-dd[data-open="true"] > .dropdown-panel { opacity: 1; pointer-events: auto; transform: none; }
+    .mega-panel { left: 0; right: 0; top: calc(100% + 0.6rem); border-radius: 1.25rem; padding: 1.85rem 2rem 1.6rem; }
+    .mega-grid { display: grid; gap: 1.6rem 2.2rem; }
+    .mega-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .mega-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .mega-col-title { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.7rem; }
+    .mega-col ul { list-style: none; padding: 0; margin: 0; }
+    .mega-col li + li { margin-top: 0.05rem; }
+    .mega-col a { display: block; padding: 0.5rem 0.7rem; margin: 0 -0.7rem; border-radius: 0.55rem; font-size: 0.93rem; line-height: 1.35; color: var(--ink); font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease; }
+    .mega-col a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    .mega-sub { display: block; margin-top: 0.15rem; font-size: 0.76rem; color: #737373; font-weight: 400; }
+    .mega-soon { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem; border-radius: 999px; background: #F0F0F0; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; vertical-align: middle; }
+    .mega-divider { margin: 0.85rem -0.7rem 0.45rem; padding: 0.7rem 0.7rem 0; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #A3A3A3; border-top: 1px dashed #E5E5E5; }
+    .mega-tool-link { font-weight: 600 !important; display: flex !important; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    .mega-tool-link::after { content: "→"; font-weight: 500; color: var(--red); transition: transform 0.2s ease; }
+    .mega-tool-link:hover::after { transform: translateX(2px); }
+    .dropdown-panel { left: 0; top: calc(100% + 0.6rem); min-width: 15rem; border-radius: 1rem; padding: 0.55rem; }
+    .dropdown-panel ul { list-style: none; padding: 0; margin: 0; }
+    .dropdown-panel a { display: block; padding: 0.55rem 0.8rem; border-radius: 0.55rem; font-size: 0.93rem; color: var(--ink); font-weight: 500; transition: background-color 0.15s ease, color 0.15s ease; }
+    .dropdown-panel a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    /* Mobile Accordion */
+    .m-acc { border-bottom: 1px solid #F0F0F0; }
+    .m-acc-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink); background: transparent; border: none; cursor: pointer; text-align: left; font-family: inherit; }
+    .m-acc-trigger .m-chevron { width: 1.05rem; height: 1.05rem; transition: transform 0.2s ease; color: #A3A3A3; }
+    .m-acc[data-open="true"] .m-chevron { transform: rotate(180deg); color: var(--red); }
+    .m-acc-body { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .m-acc[data-open="true"] .m-acc-body { max-height: 1200px; padding-bottom: 0.85rem; }
+    .m-acc-section { margin-top: 0.9rem; }
+    .m-acc-section:first-child { margin-top: 0.25rem; }
+    .m-acc-section-title { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 0.2rem; }
+    .m-acc-body ul { list-style: none; padding: 0; margin: 0; }
+    .m-acc-body a { display: block; padding: 0.5rem 0; font-size: 0.97rem; font-weight: 500; color: #404040; }
+    .m-acc-body a:hover { color: var(--red); }
+    .m-acc-link { display: block; padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink); border-bottom: 1px solid #F0F0F0; }
+    .m-acc-link:hover { color: var(--red); }
+
+    /* Provider-Branding */
+    .provider-everon { color: var(--everon); }
+    .provider-zugerberg { color: var(--zugerberg); }
+    .pill-everon { background: rgba(168,153,104,0.12); color: var(--everon); }
+    .pill-zugerberg { background: rgba(31,68,128,0.12); color: var(--zugerberg); }
+    .border-everon { border-color: rgba(168,153,104,0.4); }
+    .border-zugerberg { border-color: rgba(31,68,128,0.4); }
+
+    /* Risk-Profile Selector */
+    .risk-selector { display: inline-flex; padding: 0.3rem; background: #F0F0F0; border-radius: 999px; gap: 0.2rem; }
+    .risk-btn { padding: 0.5rem 1.1rem; border-radius: 999px; border: none; background: transparent; cursor: pointer; font-family: var(--font-display); font-size: 0.9rem; font-weight: 500; color: #737373; transition: all 0.2s ease; }
+    .risk-btn:hover { color: var(--ink); }
+    .risk-btn.active { background: var(--ink); color: #fff; }
+
+    /* Performance-Card */
+    .perf-card { background: #fff; border: 1px solid #E5E5E5; border-radius: 18px; padding: 1.5rem; }
+    .perf-card .perf-name { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.45rem; }
+    .perf-card .perf-strategy { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.85rem; line-height: 1.25; }
+    .perf-card .perf-rendite { font-family: var(--font-display); font-weight: 600; font-size: 2.2rem; letter-spacing: -0.03em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
+    .perf-card .perf-vola { font-size: 0.82rem; color: #737373; margin-top: 0.4rem; font-variant-numeric: tabular-nums; }
+    .perf-card.everon { border-color: var(--everon); border-top: 3px solid var(--everon); }
+    .perf-card.zugerberg { border-color: var(--zugerberg); border-top: 3px solid var(--zugerberg); }
+
+    /* Annual Bar Chart */
+    .perf-chart { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+    .perf-row { display: grid; grid-template-columns: 60px 1fr 1fr; gap: 0.6rem; align-items: center; }
+    .perf-row .perf-year { font-family: var(--font-mono); font-size: 0.78rem; color: #737373; font-weight: 500; }
+    .perf-bar-wrap { position: relative; height: 22px; background: #F0F0F0; border-radius: 4px; overflow: visible; }
+    .perf-zero { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: #D4D4D4; }
+    .perf-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; transition: width 0.4s ease; }
+    .perf-bar.everon { background: var(--everon); }
+    .perf-bar.zugerberg { background: var(--zugerberg); }
+    .perf-bar-label { position: absolute; top: 50%; transform: translateY(-50%); font-size: 0.72rem; font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 500; }
+    .perf-bar-label.outside-right { left: calc(100% + 4px); color: var(--ink); }
+    .perf-bar-label.outside-left { right: calc(100% + 4px); color: var(--ink); }
+
+    /* Award Badge */
+    .award-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.85rem; border-radius: 999px; background: #fff; border: 1px solid #E5E5E5; font-size: 0.82rem; font-weight: 500; }
+    .award-badge .badge-dot { width: 6px; height: 6px; border-radius: 999px; }
+    .award-badge.everon .badge-dot { background: var(--everon); }
+    .award-badge.zugerberg .badge-dot { background: var(--zugerberg); }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader" aria-hidden="true"><div class="text-white display text-3xl">Glatt Broker</div></div>
+
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5" id="navInner">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <ul class="nav-main hidden lg:flex">
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger is-active" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-privat">Privatkunden<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="mega-panel" id="mega-privat" role="menu" aria-label="Privatkunden">
+              <div class="mega-grid cols-4">
+                <div class="mega-col"><div class="mega-col-title">Versicherung</div><ul>
+                  <li><a href="krankenkasse.html">Krankenkasse</a></li>
+                  <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+                  <li><a href="krankenkasse.html#sachversicherung">Sachversicherung<span class="mega-sub">Hausrat · Haftpflicht · Auto</span></a></li>
+                  <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+                </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="krankenkasse.html#calculator">Prämien-Rechner</a></li></ul></div>
+                <div class="mega-col"><div class="mega-col-title">Vorsorge</div><ul>
+                  <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+                  <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+                </ul><div class="mega-divider">Tools</div><ul>
+                  <li><a class="mega-tool-link" href="vorsorge.html#strategy">3.-Säule-Strategie</a></li>
+                </ul></div>
+                <div class="mega-col"><div class="mega-col-title">Finanzen</div><ul>
+                  <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                  <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
+                </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul></div>
+                <div class="mega-col"><div class="mega-col-title">Steuern</div><ul>
+                  <li><a href="steuern.html#steuererklaerung">Steuererklärung<span class="mega-sub">ab CHF 69 · Pakete</span></a></li>
+                  <li><a href="steuern.html">Steueroptimierung</a></li>
+                  <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
+                </ul><div class="mega-divider">Tools</div><ul>
+                  <li><a class="mega-tool-link" href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer</a></li>
+                  <li><a class="mega-tool-link" href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer</a></li>
+                </ul></div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-firma">Firmenkunden<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="mega-panel" id="mega-firma" role="menu"><div class="mega-grid cols-3">
+              <div class="mega-col"><div class="mega-col-title">Vorsorge</div><ul>
+                <li><a href="firmenkunden.html#pensionskasse">Pensionskasse</a></li>
+                <li><a href="firmenkunden.html#kader">Kadervorsorge</a></li>
+                <li><a href="firmenkunden.html#bvg">BVG-Optimierung</a></li>
+              </ul></div>
+              <div class="mega-col"><div class="mega-col-title">Versicherung</div><ul>
+                <li><a href="firmenkunden.html#sach">Sach &amp; Haftpflicht</a></li>
+                <li><a href="firmenkunden.html#betrieb">Betriebs-Schutz</a></li>
+                <li><a href="firmenkunden.html#personen">Personenversicherung</a></li>
+              </ul></div>
+              <div class="mega-col"><div class="mega-col-title">Beratung</div><ul>
+                <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
+                <li><a href="firmenkunden.html#strategie">Strategie &amp; Setup</a></li>
+                <li><a href="firmenkunden.html#firmengruendung">Firmengründung<span class="mega-sub">ab CHF 599 · Notar zusätzlich</span></a></li>
+              </ul></div>
+            </div></div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-about">Über uns<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="dropdown-panel" id="dd-about" role="menu"><ul>
+              <li><a href="team.html">Team</a></li>
+              <li><a href="team.html#difference">Unser Unterschied</a></li>
+              <li><a href="team.html#voices">Stimmen</a></li>
+              <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="kontakt.html?topic=karriere">Karriere<span class="mega-soon">bald</span></a></li>
+            </ul></div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-partner">Partner<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="dropdown-panel" id="dd-partner" role="menu"><ul>
+              <li><a href="partner.html">Tippgeber-Programm</a></li>
+              <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+            </ul></div>
+          </li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-1 label text-ink-700 bg-ink-100 rounded-full p-1" role="group" aria-label="Sprache">
+            <button data-lang="de" class="px-2.5 py-1 rounded-full bg-white shadow-sm" aria-pressed="true">DE</button>
+            <button data-lang="en" class="px-2.5 py-1 rounded-full" aria-pressed="false">EN</button>
+          </div>
+          <a href="kontakt.html?topic=anlage" class="btn-primary nav-cta"><span>Anlage-Beratung</span><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <button id="mobileMenuToggle" class="lg:hidden p-2 -mr-1 text-ink-950" aria-label="Menü öffnen" aria-expanded="false"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 bg-white">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-5 border-b border-ink-200">
+        <span class="font-semibold tracking-tight">Glatt Broker</span>
+        <button id="mobileMenuClose" class="p-2 -mr-1 text-ink-950" aria-label="Menü schliessen"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-5" id="mobileMenuLinks">
+        <div class="m-acc" data-open="true"><button class="m-acc-trigger" type="button" aria-expanded="true"><span>Privatkunden</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
+              <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
+              <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="krankenkasse.html">Krankenkasse</a></li>
+              <li><a href="krankenkasse.html#vvg">Zusatzversicherung</a></li>
+              <li><a href="krankenkasse.html#sachversicherung">Sachversicherung</a></li>
+              <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="vorsorge.html">3. Säule</a></li>
+              <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Steuern</div><ul>
+              <li><a href="steuern.html#steuererklaerung"><strong>Steuererklärung — ab CHF 69</strong></a></li>
+              <li><a href="steuern.html">Steueroptimierung</a></li>
+              <li><a href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer</a></li>
+              <li><a href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer</a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Firmenkunden</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul><li><a href="firmenkunden.html">Alle Firmen-Themen</a></li></ul></div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Über uns</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul><li><a href="team.html">Team</a></li><li><a href="index.html#faq">FAQ</a></li></ul></div>
+        </div>
+        <div class="m-acc"><button class="m-acc-trigger" type="button" aria-expanded="false"><span>Partner</span><svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="m-acc-body"><ul><li><a href="partner.html">Tippgeber-Programm</a></li></ul></div>
+        </div>
+        <a href="kontakt.html" class="m-acc-link">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden">
+      <div class="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-brand-100 rounded-full blur-3xl opacity-30 pointer-events-none" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-4xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white px-3 py-1.5 mb-6 text-sm text-ink-700">
+            <span class="pulse-dot"></span><span class="font-medium">Vermögensaufbau · zwei BILANZ-Top-Performer</span>
+          </div>
+          <h1 class="display text-[8.5vw] sm:text-[6vw] lg:text-[4.8vw] tracking-tightest">
+            <span>Wenn zwei Top-Vermögensverwalter</span><br><span class="text-brand-600">konkurrieren — gewinnt unser Kunde.</span>
+          </h1>
+          <p class="mt-7 text-lg lg:text-xl text-ink-700 max-w-3xl leading-relaxed">
+            Wir vermitteln nicht <em>einen</em> Anbieter. Wir kombinieren <strong class="text-ink-950">Everon</strong> und <strong class="text-ink-950">Zugerberg Finanz</strong> — beide gehören seit Jahren konstant zu den besten Vermögensverwaltern der Schweiz. Welcher der zwei für dich der richtige ist, hängt von deinem Profil ab. Wir wählen, du gewinnst.
+          </p>
+          <div class="mt-10 flex flex-col sm:flex-row gap-3">
+            <a href="#vergleich" class="btn-primary !text-base">Performance vergleichen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            <a href="kontakt.html?topic=anlage" class="btn-ghost !text-base">Anlage-Erstgespräch buchen</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY BOTH (Glatt-Edge) -->
+    <section class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-5">
+            <div class="label text-brand-600 mb-4">— Unser Edge</div>
+            <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5">
+              <span>Nicht ein Anbieter.</span><br><span class="text-brand-600">Die zwei besten.</span>
+            </h2>
+            <p class="text-ink-700 leading-relaxed">
+              Banken und Versicherungen verkaufen meistens das eigene Hausprodukt. Wir nicht. Wir analysieren deine Situation und ordnen dir den Verwalter zu, der zu deinem Profil passt — Everon oder Zugerberg, oder eine Mischung aus beiden. Beide Häuser müssen sich bei jedem Kunden neu beweisen. Das Konkurrenz-Element wirkt sich direkt auf deine Performance aus.
+            </p>
+          </div>
+          <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+            <div class="card !rounded-2xl p-6">
+              <div class="label text-brand-600 mb-3">01 — Auswahl</div>
+              <h3 class="font-semibold text-lg mb-2 tracking-tight">Beide objektiv geprüft.</h3>
+              <p class="text-ink-700 text-[0.95rem] leading-relaxed">Wir vergleichen jährlich Performance, Volatilität, Gebühren und Service. Wer schwächelt, fliegt aus dem Empfehlungs-Pool.</p>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="label text-brand-600 mb-3">02 — Mix</div>
+              <h3 class="font-semibold text-lg mb-2 tracking-tight">Diversifiziert über Stile.</h3>
+              <p class="text-ink-700 text-[0.95rem] leading-relaxed">Wer zu beiden investiert, profitiert von zwei unterschiedlichen Anlage-Philosophien. Risikostreuung ohne Rendite-Verzicht.</p>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="label text-brand-600 mb-3">03 — Verhandlungsmacht</div>
+              <h3 class="font-semibold text-lg mb-2 tracking-tight">Glatt-Konditionen.</h3>
+              <p class="text-ink-700 text-[0.95rem] leading-relaxed">Als Vermittler mit Volumen handeln wir bessere Konditionen aus, als du als Einzelkunde bekommst.</p>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="label text-brand-600 mb-3">04 — Ein Ansprechpartner</div>
+              <h3 class="font-semibold text-lg mb-2 tracking-tight">Wir koordinieren.</h3>
+              <p class="text-ink-700 text-[0.95rem] leading-relaxed">Du sprichst mit Glatt — wir managen die Kommunikation mit den Anbietern. Steuerausweise, Reporting, Strategiewechsel: alles aus einer Hand.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWARDS WALL -->
+    <section class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Externe Validierung</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest">
+            Beide vielfach ausgezeichnet.
+          </h2>
+          <p class="text-ink-700 mt-4 lg:text-lg leading-relaxed">
+            Wir mussten die Anbieter nicht selbst testen — die Branche und unabhängige Rankings haben das bereits getan. Diese Auszeichnungen sind der Grund, warum wir mit ihnen arbeiten.
+          </p>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="card !rounded-2xl p-7 lg:p-8 border-everon" style="border-top: 4px solid var(--everon);">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="font-mono text-xs uppercase tracking-widest provider-everon font-medium">Anbieter</div>
+              <div class="display text-2xl tracking-tightest">Everon</div>
+            </div>
+            <h3 class="font-semibold text-lg mb-4 tracking-tight">BILANZ — Bester Vermögensverwalter der Schweiz</h3>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="award-badge everon"><span class="badge-dot"></span>2025 — 1. Platz</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>2024 — 2. Platz</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>2023 — Top 5</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>2022 — 1. Platz</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>2021 — 2. Platz</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>2020 — Top 5</span>
+            </div>
+            <p class="text-ink-700 text-[0.95rem] leading-relaxed">
+              <strong>Sechs Jahre in Folge auf dem Podest oder in den Top 5.</strong> Digitaler Vermögensverwalter, gegründet in Zürich, mit Family-Office-Erlebnis und maximaler Gebühren-Transparenz.
+            </p>
+          </div>
+          <div class="card !rounded-2xl p-7 lg:p-8 border-zugerberg" style="border-top: 4px solid var(--zugerberg);">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg font-medium">Anbieter</div>
+              <div class="display text-2xl tracking-tightest">Zugerberg Finanz</div>
+            </div>
+            <h3 class="font-semibold text-lg mb-4 tracking-tight">BILANZ · Morningstar · ZWEI Wealth</h3>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>BILANZ #1 (mehrfach, zuletzt 2024)</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>Morningstar 5★ (2016–2025)</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>Sharpe Ratio #1 dynamisch (2025)</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>ZWEI Wealth „Sehr empfehlenswert"</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>26 Jahre · 5.4 Mrd. AuM</span>
+            </div>
+            <p class="text-ink-700 text-[0.95rem] leading-relaxed">
+              <strong>Inhaber-geführt seit 1999.</strong> Aktive Vermögensverwaltung mit primär Einzeltiteln, Sitz im historischen Lüssihof in Zug. Ranglisten-Konstanz über die letzten zehn Jahre.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERAKTIVER VERGLEICH -->
+    <section id="vergleich" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Performance-Vergleich</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5">
+            <span>Wähle dein</span> <span class="text-brand-600">Risikoprofil.</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed lg:text-lg">
+            Annualisierte Rendite p.a. (netto, nach Gebühren) für jedes Risiko-Level. Everon-Daten 2016–2026, Zugerberg-Daten seit Lancierung der Revo-/R-Linie.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 mb-8">
+          <span class="label text-ink-500 mr-1">Aktienanteil:</span>
+          <div class="risk-selector" role="tablist" aria-label="Risikoprofil">
+            <button class="risk-btn" data-risk="40" type="button">40%</button>
+            <button class="risk-btn active" data-risk="60" type="button">60%</button>
+            <button class="risk-btn" data-risk="80" type="button">80%</button>
+            <button class="risk-btn" data-risk="100" type="button">100%</button>
+          </div>
+          <span class="text-sm text-ink-500 ml-2" id="riskHint">— ausgewogen, der Klassiker für die meisten Anleger.</span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4" id="perfGrid">
+          <!-- gefüllt via JS -->
+        </div>
+
+        <p class="text-xs text-ink-500 mt-6 leading-relaxed">
+          Quelle: Factsheets Stand 30.04.2026 (Everon) / 31.03.2026 (Zugerberg). Vergangene Wertentwicklung ist keine Garantie für die Zukunft. Werte netto, nach Abzug aller laufenden Kosten. Zugerberg Revo-Strategien sind seit 2020 verfügbar; Wertentwicklung davor von der Referenz-Strategie R übernommen.
+        </p>
+      </div>
+    </section>
+
+    <!-- JÄHRLICHE PERFORMANCE -->
+    <section class="py-16 lg:py-24">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Jahresrenditen 2016–2026</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5">
+            Jahr für Jahr im Direktvergleich.
+          </h2>
+          <p class="text-ink-700 leading-relaxed">
+            Beide Anbieter im Vergleich, ausgewogenes Profil <strong>60% Aktienanteil</strong>: Everon Smart Global Markets vs. Zugerberg Finanz Revo3. Korrektur-Jahre (2018, 2022) zeigen die unterschiedlichen Stile, Erholungs-Jahre die Renditestärke.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mb-10">
+          <div class="card !rounded-2xl p-5">
+            <div class="font-mono text-xs uppercase tracking-widest provider-everon mb-2">Everon Smart Global 60</div>
+            <div class="display text-3xl tracking-tightest" style="color: var(--everon);">+6.0% p.a.</div>
+            <div class="text-sm text-ink-500 mt-1">Annualisiert 2016–2026 · Vola 8.6%</div>
+          </div>
+          <div class="card !rounded-2xl p-5">
+            <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Zugerberg Revo3</div>
+            <div class="display text-3xl tracking-tightest" style="color: var(--zugerberg);">+4.4% p.a.</div>
+            <div class="text-sm text-ink-500 mt-1">Seit Lancierung 2009 · max. 60% Aktien</div>
+          </div>
+          <div class="card !rounded-2xl p-5 bg-brand-50 border-brand-100">
+            <div class="font-mono text-xs uppercase tracking-widest text-brand-600 mb-2">Glatt-Mix-Ansatz</div>
+            <div class="display text-3xl tracking-tightest text-brand-600">~5.2% p.a.</div>
+            <div class="text-sm text-ink-700 mt-1">50/50-Allokation · geringere Vola durch Stil-Mix</div>
+          </div>
+        </div>
+
+        <div class="card !rounded-3xl p-6 lg:p-8 overflow-x-auto">
+          <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+            <div class="font-mono text-xs uppercase tracking-widest text-ink-500">Jahresrendite je Anbieter (60% Aktien)</div>
+            <div class="flex items-center gap-4 text-sm">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background: var(--everon);"></span>Everon Smart Global 60</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background: var(--zugerberg);"></span>Zugerberg Revo3</span>
+            </div>
+          </div>
+          <div class="perf-chart" id="annualChart">
+            <!-- gefüllt via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVERON DEEP DIVE -->
+    <section class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-10 mb-12">
+          <div class="lg:col-span-5">
+            <div class="label mb-4" style="color: var(--everon);">— Anbieter 1</div>
+            <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5" style="color: var(--everon);">Everon</h2>
+            <p class="text-ink-700 leading-relaxed lg:text-lg">
+              Digitaler Vermögensverwalter aus Zürich. Vier Strategien, sechs Risikoprofile (10/25/40/60/80/100% Aktien), vollständig App-gesteuert mit Family-Office-Erlebnis. <strong>Total-Gebühr 0.85% p.a. (Vermögensverwaltung)</strong>, 0.90% für Säule 3a + Freizügigkeit.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="award-badge everon"><span class="badge-dot"></span>Aktien, ETFs, Direkttitel</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>Monatliche Investition</span>
+              <span class="award-badge everon"><span class="badge-dot"></span>Liberty 3a Stiftung</span>
+            </div>
+          </div>
+          <div class="lg:col-span-7">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="card !rounded-2xl p-5 border-everon">
+                <div class="font-mono text-xs uppercase tracking-widest provider-everon mb-2">Strategie</div>
+                <h3 class="font-semibold text-lg mb-1.5 tracking-tight">Income Global</h3>
+                <p class="text-sm text-ink-700 leading-relaxed mb-3">Konservativ-Ertrag. Dividenden-Aktien, Immobilien, Obligationen. Höchste Rendite im Vergleich (9.2% p.a. bei 100%).</p>
+                <div class="flex justify-between text-xs num-tabular text-ink-500"><span>40%: 5.5%</span><span>60%: 7.1%</span><span>80%: 8.3%</span><span>100%: 9.2%</span></div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-everon">
+                <div class="font-mono text-xs uppercase tracking-widest provider-everon mb-2">Strategie</div>
+                <h3 class="font-semibold text-lg mb-1.5 tracking-tight">Smart Global Markets</h3>
+                <p class="text-sm text-ink-700 leading-relaxed mb-3">Passiv, ETF-basiert, breit diversifiziert. Geringere Vola, marktfolgend mit leichter Überrendite.</p>
+                <div class="flex justify-between text-xs num-tabular text-ink-500"><span>40%: 4.3%</span><span>60%: 6.0%</span><span>80%: 7.2%</span><span>100%: 7.9%</span></div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-everon">
+                <div class="font-mono text-xs uppercase tracking-widest provider-everon mb-2">Strategie</div>
+                <h3 class="font-semibold text-lg mb-1.5 tracking-tight">Smart Sustainability</h3>
+                <p class="text-sm text-ink-700 leading-relaxed mb-3">Smart Global Markets mit ESG-Fokus. Identische Mechanik, Nachhaltigkeits-Universum.</p>
+                <div class="flex justify-between text-xs num-tabular text-ink-500"><span>40%: 4.9%</span><span>60%: 6.3%</span><span>80%: 7.5%</span><span>100%: 8.1%</span></div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-everon">
+                <div class="font-mono text-xs uppercase tracking-widest provider-everon mb-2">Strategie</div>
+                <h3 class="font-semibold text-lg mb-1.5 tracking-tight">Multifactor Global</h3>
+                <p class="text-sm text-ink-700 leading-relaxed mb-3">Quantitativ, opportunistisch. Direktanlagen nach Faktoren (Momentum, Value, Quality, Risk, Size).</p>
+                <div class="flex justify-between text-xs num-tabular text-ink-500"><span>40%: 3.2%</span><span>60%: 4.8%</span><span>80%: 5.8%</span><span>100%: 7.5%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ZUGERBERG DEEP DIVE -->
+    <section class="py-16 lg:py-24">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-10 mb-12">
+          <div class="lg:col-span-5">
+            <div class="label mb-4" style="color: var(--zugerberg);">— Anbieter 2</div>
+            <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5" style="color: var(--zugerberg);">Zugerberg Finanz</h2>
+            <p class="text-ink-700 leading-relaxed lg:text-lg">
+              Inhaber-geführt aus Zug seit 1999. <strong>Aktive Vermögensverwaltung primär mit Einzeltiteln</strong> — nicht ETF-basiert wie viele Robo-Plattformen. Fünf Risiko-Stufen (Revo1 bis Revo5), plus Dividenden-Variante und DecarbRevo (Impact Investing). Verwaltungsgebühr 1.25% p.a. + MwSt.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>Direkt-Aktien</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>Einmal- oder Aufbauplan</span>
+              <span class="award-badge zugerberg"><span class="badge-dot"></span>ab CHF 5'000 / 100/Monat</span>
+            </div>
+          </div>
+          <div class="lg:col-span-7">
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="card !rounded-2xl p-5 border-zugerberg">
+                <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Konservativ</div>
+                <h3 class="font-semibold text-lg mb-1 tracking-tight">Revo1</h3>
+                <div class="text-xs text-ink-500 mb-3">max. 20% Aktien · Anlagehorizont 5+</div>
+                <div class="display text-2xl tracking-tightest" style="color: var(--zugerberg);">+1.6% p.a.</div>
+                <div class="text-xs text-ink-500 mt-1">seit Lancierung 2009</div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-zugerberg">
+                <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Ausgewogen</div>
+                <h3 class="font-semibold text-lg mb-1 tracking-tight">Revo3</h3>
+                <div class="text-xs text-ink-500 mb-3">max. 60% Aktien · Anlagehorizont 10+</div>
+                <div class="display text-2xl tracking-tightest" style="color: var(--zugerberg);">+4.4% p.a.</div>
+                <div class="text-xs text-ink-500 mt-1">seit Lancierung 2009</div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-zugerberg">
+                <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Wachstumsorientiert</div>
+                <h3 class="font-semibold text-lg mb-1 tracking-tight">Revo5</h3>
+                <div class="text-xs text-ink-500 mb-3">max. 100% Aktien · Anlagehorizont 10+</div>
+                <div class="display text-2xl tracking-tightest" style="color: var(--zugerberg);">+7.1% p.a.</div>
+                <div class="text-xs text-ink-500 mt-1">seit Lancierung 2013</div>
+              </div>
+              <div class="card !rounded-2xl p-5 border-zugerberg sm:col-span-3">
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Spezial-Strategie 1</div>
+                    <h3 class="font-semibold text-lg mb-1 tracking-tight">RevoDividenden</h3>
+                    <p class="text-sm text-ink-700 leading-relaxed">Ausschüttungs-orientiertes Mandat — passives Einkommen für Pensionierte oder Liquiditätssucher.</p>
+                  </div>
+                  <div>
+                    <div class="font-mono text-xs uppercase tracking-widest provider-zugerberg mb-2">Spezial-Strategie 2</div>
+                    <h3 class="font-semibold text-lg mb-1 tracking-tight">DecarbRevo (3/4/5)</h3>
+                    <p class="text-sm text-ink-700 leading-relaxed">Impact Investing in Dekarbonisierungs-Unternehmen. Empfohlen max. 25% des Anlagevermögens.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GEBÜHREN-VERGLEICH -->
+    <section class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Gebühren-Transparenz</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-4">
+            <span>Was du wirklich</span> <span class="text-brand-600">bezahlst.</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed">
+            Beide Anbieter sind transparent — wir zeigen die All-in-Kosten ohne Kleingedrucktes. Bei Gebührenunterschieden ist der Vergleich „Mehrkosten vs. Performance-Plus" entscheidend; oft amortisiert sich eine höhere Gebühr durch konstantere Rendite mehrfach.
+          </p>
+        </div>
+        <div class="card !rounded-3xl p-6 lg:p-8 overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b border-ink-200">
+                <th class="py-3 pr-4 font-medium text-ink-500 label">Service</th>
+                <th class="py-3 px-4 font-medium" style="color: var(--everon);">Everon</th>
+                <th class="py-3 px-4 font-medium" style="color: var(--zugerberg);">Zugerberg Finanz</th>
+              </tr>
+            </thead>
+            <tbody class="num-tabular">
+              <tr class="border-b border-ink-100"><td class="py-3 pr-4">Vermögensverwaltung (frei)</td><td class="py-3 px-4">0.85% (0.50 + 0.35 Depot)</td><td class="py-3 px-4">1.25% + MwSt</td></tr>
+              <tr class="border-b border-ink-100"><td class="py-3 pr-4">Säule 3a</td><td class="py-3 px-4">0.90% (inkl. Stiftung)</td><td class="py-3 px-4">1.25% + MwSt (3a Revo)</td></tr>
+              <tr class="border-b border-ink-100"><td class="py-3 pr-4">Freizügigkeit</td><td class="py-3 px-4">0.90% (inkl. Stiftung)</td><td class="py-3 px-4">1.25% + MwSt (RevoFZ)</td></tr>
+              <tr class="border-b border-ink-100"><td class="py-3 pr-4">Mindestanlage Standard</td><td class="py-3 px-4">ab CHF 5'000 (Smart)</td><td class="py-3 px-4">ab CHF 5'000 / 100 monatlich</td></tr>
+              <tr class="border-b border-ink-100"><td class="py-3 pr-4">Anlageinstrumente</td><td class="py-3 px-4">Direktanlagen + ETFs</td><td class="py-3 px-4">Vorwiegend Einzeltitel</td></tr>
+              <tr><td class="py-3 pr-4">Strategiewechsel-Kosten</td><td class="py-3 px-4">keine</td><td class="py-3 px-4">keine</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-ink-500 mt-4 leading-relaxed">
+            Beim Smart-Global-Markets-Mandat reduziert sich die Everon-Depotbankgebühr auf 0.23% (Total dann 0.73%). Konditionen Stand 2026, vorbehältlich aktueller Anbieter-Reglemente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 lg:py-28">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="rounded-3xl bg-ink-950 text-white p-10 lg:p-16 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative max-w-3xl">
+            <div class="label text-brand-200 mb-5">Anlage-Erstgespräch · 30 Min · kostenlos</div>
+            <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-5">
+              Welcher Anbieter passt zu dir? Wir finden's heraus.
+            </h2>
+            <p class="text-ink-300 lg:text-lg leading-relaxed mb-8">
+              Bring deinen aktuellen Vorsorge-/Anlage-Mix mit. Wir analysieren Risikoprofil, Ziele und Zeithorizont — und schlagen dir vor, ob Everon, Zugerberg oder ein Glatt-Mix der beiden für dich der richtige Weg ist. Keine Verkaufs-Folien, keine Provisions-Verzerrung.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="kontakt.html?topic=anlage" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white !px-6 !py-4 !text-base">Anlage-Erstgespräch buchen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+              <a href="tel:+41774090519" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base"><span class="num-tabular">+41 77 409 05 19</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-ink-200 py-16">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+      <div class="grid lg:grid-cols-12 gap-10 mb-16">
+        <div class="lg:col-span-4">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo-footer mb-5" />
+          <p class="text-ink-700 max-w-xs">Unabhängige Versicherungs-, Vorsorge- und Steuerberatung in der Schweiz. FINMA-registriert seit 2017.</p>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Privatkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="krankenkasse.html" class="ulink">Krankenkasse</a></li>
+            <li><a href="vorsorge.html" class="ulink">3. Säule</a></li>
+            <li><a href="finanzen.html" class="ulink">Vermögensaufbau</a></li>
+            <li><a href="steuern.html" class="ulink">Steuern</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Anbieter</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="https://everon.swiss" target="_blank" class="ulink">Everon ↗</a></li>
+            <li><a href="https://www.zugerberg-finanz.ch" target="_blank" class="ulink">Zugerberg Finanz ↗</a></li>
+            <li><a href="vorsorge.html#strategy" class="ulink">3.-Säule-Mix</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-4">
+          <h4 class="label text-ink-500 mb-4">Kontakt</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li class="num-tabular">+41 77 409 05 19</li>
+            <li>online@glattbroker.ch</li>
+            <li class="text-ink-500 mt-2">Glatt Broker AG · Staubstrasse 15 · 8038 Zürich</li>
+          </ul>
+          <div class="mt-5 flex gap-2">
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">FINMA 35821</span>
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">Cicero</span>
+          </div>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-ink-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-ink-500">
+        <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4</p>
+        <p class="num-tabular">Designed in Zürich</p>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-app-bar" aria-label="Schnelle Aktionen">
+    <a href="tel:+41774090519" class="call"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg><span>Anrufen</span></a>
+    <a href="kontakt.html?topic=anlage" class="consult"><span>Beratung</span></a>
+  </nav>
+
+  <script>
+    addEventListener('load', () => setTimeout(() => document.getElementById('loader')?.classList.add('done'), 200));
+
+    // Mobile Menu
+    (function () {
+      const toggle = document.getElementById('mobileMenuToggle'); const close = document.getElementById('mobileMenuClose'); const menu = document.getElementById('mobileMenu');
+      if (!toggle || !menu) return;
+      const open = () => { menu.classList.add('open'); document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded', 'true'); };
+      const shut = () => { menu.classList.remove('open'); document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      toggle.addEventListener('click', open); close?.addEventListener('click', shut);
+      document.getElementById('mobileMenuLinks')?.addEventListener('click', (e) => { if (e.target.closest('a[href^="#"]')) shut(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('open')) shut(); });
+    })();
+
+    // Mega Menu
+    (function () {
+      const navItems = document.querySelectorAll('[data-nav-item]'); if (!navItems.length) return;
+      let openItem = null, leaveTimer = null;
+      function openMenu(item) { if (openItem && openItem !== item) closeMenu(openItem); item.dataset.open = 'true'; item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'true'); openItem = item; }
+      function closeMenu(item) { if (!item) return; item.dataset.open = 'false'; item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'false'); if (openItem === item) openItem = null; }
+      navItems.forEach((item) => {
+        item.addEventListener('mouseenter', () => { clearTimeout(leaveTimer); openMenu(item); });
+        item.addEventListener('mouseleave', () => { clearTimeout(leaveTimer); leaveTimer = setTimeout(() => closeMenu(item), 140); });
+        item.querySelector('[data-mega-trigger]')?.addEventListener('click', (e) => { e.stopPropagation(); if (item.dataset.open === 'true') closeMenu(item); else openMenu(item); });
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openItem) { const item = openItem; closeMenu(item); item.querySelector('[data-mega-trigger]')?.focus(); } });
+      document.addEventListener('click', (e) => { if (openItem && !openItem.contains(e.target)) closeMenu(openItem); });
+    })();
+
+    // Mobile Accordion
+    (function () {
+      document.querySelectorAll('.m-acc-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const acc = btn.closest('.m-acc'); if (!acc) return;
+          const isOpen = acc.dataset.open === 'true';
+          acc.dataset.open = isOpen ? 'false' : 'true';
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+      });
+    })();
+
+    // ════════════════════════════════════════════════════════
+    // PERFORMANCE-DATEN (aus offiziellen Factsheets)
+    // ════════════════════════════════════════════════════════
+    // Everon: Annualisiert 2016-2026, Rendite p.a. / Volatilität p.a.
+    const EVERON_PERF = {
+      'Income Global':         { 40: { r: 5.5, v: 7.3 }, 60: { r: 7.1, v: 9.0 }, 80: { r: 8.3, v: 10.7 }, 100: { r: 9.2, v: 12.3 } },
+      'Smart Sustainability':  { 40: { r: 4.9, v: 7.4 }, 60: { r: 6.3, v: 9.1 }, 80: { r: 7.5, v: 10.9 }, 100: { r: 8.1, v: 12.3 } },
+      'Smart Global Markets':  { 40: { r: 4.3, v: 6.8 }, 60: { r: 6.0, v: 8.6 }, 80: { r: 7.2, v: 10.3 }, 100: { r: 7.9, v: 12.2 } },
+      'Multifactor Global':    { 40: { r: 3.2, v: 7.9 }, 60: { r: 4.8, v: 10.3 }, 80: { r: 5.8, v: 12.0 }, 100: { r: 7.5, v: 14.4 } },
+    };
+    // Zugerberg Revo: seit Lancierung (R-Linie), p.a. durchschnittlich
+    const ZUGERBERG_PERF = {
+      'Revo1': { aktien: 20, p_a: 1.6, since: 2009, label: 'max. 20% Aktien' },
+      'Revo3': { aktien: 60, p_a: 4.4, since: 2009, label: 'max. 60% Aktien' },
+      'Revo5': { aktien: 100, p_a: 7.1, since: 2013, label: 'max. 100% Aktien' },
+    };
+    // Mapping Aktienanteil → Zugerberg-Strategie für den Vergleich
+    const ZUGERBERG_BY_RISK = { 40: null, 60: 'Revo3', 80: null, 100: 'Revo5' };
+
+    // Jahresrenditen 2016-2026 (60% Aktien)
+    const ANNUAL = {
+      years: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+      everon:    [8.6, 12.6, -6.2, 20.5, 6.2, 13.7, -18.4, 4.2, 13.7, 11.0, 2.3],   // Smart Global 60
+      zugerberg: [4.3, 15.6, -10.5, 13.2, 3.0, 9.0, -20.1, 9.9, 8.4, 4.0, -3.8],   // Revo3
+    };
+
+    const RISK_HINTS = {
+      40: '— defensiv, für stabilitäts-orientierte Anleger.',
+      60: '— ausgewogen, der Klassiker für die meisten Anleger.',
+      80: '— wachstumsorientiert, längerer Horizont.',
+      100: '— maximaler Aktienanteil, Anlagehorizont 10+ Jahre.',
+    };
+
+    // Render Performance-Vergleich
+    function renderRiskComparison(risk) {
+      const grid = document.getElementById('perfGrid');
+      const hint = document.getElementById('riskHint');
+      hint.textContent = RISK_HINTS[risk];
+
+      const cards = [];
+      // 4 Everon-Strategien
+      Object.entries(EVERON_PERF).forEach(([name, data]) => {
+        const d = data[risk];
+        cards.push(`
+          <div class="perf-card everon">
+            <div class="perf-name provider-everon">Everon</div>
+            <div class="perf-strategy">${name} ${risk}</div>
+            <div class="perf-rendite" style="color: var(--everon);">+${d.r.toFixed(1)}%</div>
+            <div class="perf-vola">p.a. · Vola ${d.v.toFixed(1)}%</div>
+          </div>
+        `);
+      });
+      // 1 Zugerberg-Strategie (matched zu Aktienanteil)
+      const zKey = ZUGERBERG_BY_RISK[risk];
+      if (zKey) {
+        const z = ZUGERBERG_PERF[zKey];
+        cards.push(`
+          <div class="perf-card zugerberg">
+            <div class="perf-name provider-zugerberg">Zugerberg</div>
+            <div class="perf-strategy">${zKey}<br><span class="text-ink-500 text-sm font-normal">${z.label}</span></div>
+            <div class="perf-rendite" style="color: var(--zugerberg);">+${z.p_a.toFixed(1)}%</div>
+            <div class="perf-vola">p.a. seit ${z.since}</div>
+          </div>
+        `);
+      } else {
+        cards.push(`
+          <div class="perf-card zugerberg" style="opacity: 0.45;">
+            <div class="perf-name provider-zugerberg">Zugerberg</div>
+            <div class="perf-strategy">Revo bei ${risk}% Aktien</div>
+            <div class="perf-rendite" style="color: var(--zugerberg); font-size: 1.1rem; line-height: 1.3;">interpoliert<br>aus Revo${risk === 40 ? '2' : '4'}</div>
+            <div class="perf-vola">Detail in Beratung</div>
+          </div>
+        `);
+      }
+      grid.innerHTML = cards.join('');
+    }
+
+    document.querySelectorAll('.risk-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderRiskComparison(+btn.dataset.risk);
+      });
+    });
+    renderRiskComparison(60);
+
+    // Render Annual Bar Chart
+    function renderAnnualChart() {
+      const chart = document.getElementById('annualChart');
+      const all = [...ANNUAL.everon, ...ANNUAL.zugerberg];
+      const maxAbs = Math.max(...all.map(Math.abs));
+      const center = 50; // 50% center line
+      const halfWidth = 48; // each side max 48% width
+
+      chart.innerHTML = ANNUAL.years.map((year, i) => {
+        const e = ANNUAL.everon[i];
+        const z = ANNUAL.zugerberg[i];
+
+        const renderBar = (val, who) => {
+          const wPct = Math.abs(val) / maxAbs * halfWidth;
+          const isPos = val >= 0;
+          const left = isPos ? center : (center - wPct);
+          const labelClass = isPos ? 'outside-right' : 'outside-left';
+          return `
+            <div class="perf-bar-wrap">
+              <div class="perf-zero"></div>
+              <div class="perf-bar ${who}" style="left: ${left}%; width: ${wPct}%;"></div>
+              <div class="perf-bar-label ${labelClass}" style="left: ${isPos ? left + wPct : left}%;">${val > 0 ? '+' : ''}${val.toFixed(1)}%</div>
+            </div>
+          `;
+        };
+
+        return `
+          <div class="perf-row">
+            <div class="perf-year">${year}</div>
+            ${renderBar(e, 'everon')}
+            ${renderBar(z, 'zugerberg')}
+          </div>
+        `;
+      }).join('');
+    }
+    renderAnnualChart();
+
+    // Sticky nav shadow
+    const nav = document.getElementById('navInner');
+    if (nav) addEventListener('scroll', () => { nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30); }, { passive: true });
+  </script>
+</body>
+</html>

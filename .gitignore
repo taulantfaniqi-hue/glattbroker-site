@@ -1,0 +1,38 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (falls je Build-Tools dazu kommen)
+node_modules/
+package-lock.json
+.npm
+
+# Python (Build-Skripte)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Lokale Dev-Ausgaben
+*.log
+.cache/
+dist/
+build/
+
+# Sensible Daten / Drafts
+_drop/
+*.local.html
+.env
+.env.local
+
+# Backups
+*.bak
+*.backup
+*~

@@ -1,0 +1,950 @@
+﻿<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firmenkunden · Glatt Broker AG</title>
+  <meta name="description" content="Glatt Broker für KMU — Pensionskasse, Kadervorsorge, Sach- und Personen-Versicherung, Beratung für Firmengründung. In Aufbau, Erstgespräch jederzeit möglich." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+            brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+          },
+          letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+        },
+      },
+    };
+  </script>
+  <style>
+    @font-face {
+      font-family: "Mont";
+      src: url("./assets/Mont-Regular.otf") format("opentype");
+      font-weight: 100 900; font-style: normal; font-display: swap;
+    }
+    :root {
+      --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936;
+    }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--ink); display: grid; place-items: center; transition: opacity .4s ease; }
+    .loader.done { opacity: 0; pointer-events: none; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .btn-primary {
+      position: relative; display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.4rem; border-radius: 12px; background: var(--ink); color: #fff;
+      font-weight: 500; font-size: .95rem; transition: all .25s ease; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px;
+      background: transparent; color: var(--ink); font-weight: 500; font-size: .95rem;
+      border: 1px solid rgba(10,10,10,.15); transition: all .25s ease; cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .ulink { position: relative; }
+    .ulink::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+      background: currentColor; transform: scaleX(0); transform-origin: right;
+      transition: transform .4s cubic-bezier(.7,0,.3,1);
+    }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    .card { background: #fff; border: 1px solid #EEE; border-radius: 16px; transition: all .3s ease; }
+    .card:hover { border-color: rgba(208,33,33,.4); box-shadow: 0 12px 40px -16px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .pulse-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: pulseRing 2s infinite; }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); }
+      70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+    @supports (padding: max(0px)) {
+      header { padding-top: max(0px, env(safe-area-inset-top)); }
+      footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+
+    /* Mobile-Menü Overlay */
+    #mobileMenu {
+      position: fixed; inset: 0; z-index: 50; background: #fff;
+      transform: translateY(-100%);
+      transition: transform .3s cubic-bezier(.16,1,.3,1);
+      padding-top: env(safe-area-inset-top);
+    }
+    #mobileMenu.open { transform: translateY(0); }
+    @media (min-width: 1024px) { #mobileMenu { display: none; } }
+    body.menu-open { overflow: hidden; }
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    .mobile-app-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none;
+      gap: .75rem; align-items: center;
+      padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+      background: rgba(255,255,255,.96); border-top: 1px solid #E5E5E5;
+      backdrop-filter: blur(16px); box-shadow: 0 -12px 30px rgba(0,0,0,.08);
+    }
+    .mobile-app-bar a {
+      flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: .5rem;
+      border-radius: 14px; font-weight: 600; font-size: .95rem;
+    }
+    .mobile-app-bar .call { color: var(--ink); background: #F0F0F0; }
+    .mobile-app-bar .consult { color: #fff; background: var(--red); }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+    @media (max-width: 640px) {
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+      header > div { margin-top: .5rem; }
+      #navInner { padding: .6rem .75rem; border-radius: 1rem; }
+      header .nav-cta { display: none; }
+      .mobile-app-bar { display: flex; }
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(to right, rgba(10,10,10,.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10,10,10,.03) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+    ::selection { background: var(--red); color: #fff; }
+
+    /* ── Desktop Mega-Menü ───────────────────────── */
+    #navInner { position: relative; }
+    .nav-main { display: flex; align-items: center; gap: 0.15rem; list-style: none; padding: 0; margin: 0; }
+    .nav-item-mega { position: static; }
+    .nav-item-dd { position: relative; }
+    .nav-trigger {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.55rem 0.9rem; border-radius: 0.65rem;
+      font-size: 0.93rem; font-weight: 500; color: var(--ink);
+      background: transparent; border: none; cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease;
+      font-family: inherit;
+    }
+    .nav-trigger:hover, .nav-trigger[aria-expanded="true"] { background: rgba(10,10,10,0.05); }
+    .nav-trigger.is-active { color: var(--red); }
+    .nav-trigger .nav-chevron { width: 0.7rem; height: 0.7rem; transition: transform 0.2s ease; }
+    .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+
+    .mega-panel, .dropdown-panel {
+      position: absolute; background: #fff;
+      border: 1px solid #E5E5E5;
+      box-shadow: 0 28px 60px -22px rgba(0,0,0,0.22), 0 4px 12px -4px rgba(0,0,0,0.06);
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 50;
+    }
+    .nav-item-mega[data-open="true"] > .mega-panel,
+    .nav-item-dd[data-open="true"] > .dropdown-panel {
+      opacity: 1; pointer-events: auto; transform: none;
+    }
+    .mega-panel {
+      left: 0; right: 0; top: calc(100% + 0.6rem);
+      border-radius: 1.25rem; padding: 1.85rem 2rem 1.6rem;
+    }
+    .mega-grid { display: grid; gap: 1.6rem 2.2rem; }
+    .mega-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .mega-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .mega-col { min-width: 0; }
+    .mega-col-title {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.7rem;
+    }
+    .mega-col ul { list-style: none; padding: 0; margin: 0; }
+    .mega-col li + li { margin-top: 0.05rem; }
+    .mega-col a {
+      display: block; padding: 0.5rem 0.7rem; margin: 0 -0.7rem;
+      border-radius: 0.55rem;
+      font-size: 0.93rem; line-height: 1.35; color: var(--ink); font-weight: 500;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .mega-col a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    .mega-sub { display: block; margin-top: 0.15rem; font-size: 0.76rem; color: #737373; font-weight: 400; }
+    .mega-soon {
+      display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem;
+      border-radius: 999px; background: #F0F0F0;
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #737373; vertical-align: middle;
+    }
+    .mega-divider {
+      margin: 0.85rem -0.7rem 0.45rem; padding: 0.7rem 0.7rem 0;
+      font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: #A3A3A3;
+      border-top: 1px dashed #E5E5E5;
+    }
+    .mega-tool-link {
+      font-weight: 600 !important;
+      display: flex !important; align-items: center; justify-content: space-between; gap: 0.5rem;
+    }
+    .mega-tool-link::after { content: "→"; font-weight: 500; color: var(--red); transition: transform 0.2s ease; }
+    .mega-tool-link:hover::after { transform: translateX(2px); }
+    .dropdown-panel {
+      left: 0; top: calc(100% + 0.6rem);
+      min-width: 15rem; border-radius: 1rem; padding: 0.55rem;
+    }
+    .dropdown-panel ul { list-style: none; padding: 0; margin: 0; }
+    .dropdown-panel a {
+      display: block; padding: 0.55rem 0.8rem;
+      border-radius: 0.55rem;
+      font-size: 0.93rem; color: var(--ink); font-weight: 500;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .dropdown-panel a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+
+    /* ── Mobile Accordion ────────────────────────── */
+    .m-acc { border-bottom: 1px solid #F0F0F0; }
+    .m-acc-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink);
+      background: transparent; border: none; cursor: pointer; text-align: left;
+      font-family: inherit;
+    }
+    .m-acc-trigger .m-chevron { width: 1.05rem; height: 1.05rem; transition: transform 0.2s ease; color: #A3A3A3; }
+    .m-acc[data-open="true"] .m-chevron { transform: rotate(180deg); color: var(--red); }
+    .m-acc-body { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .m-acc[data-open="true"] .m-acc-body { max-height: 1200px; padding-bottom: 0.85rem; }
+    .m-acc-section { margin-top: 0.9rem; }
+    .m-acc-section:first-child { margin-top: 0.25rem; }
+    .m-acc-section-title {
+      font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.2rem;
+    }
+    .m-acc-body ul { list-style: none; padding: 0; margin: 0; }
+    .m-acc-body a { display: block; padding: 0.5rem 0; font-size: 0.97rem; font-weight: 500; color: #404040; }
+    .m-acc-body a:hover { color: var(--red); }
+    .m-acc-link {
+      display: block; padding: 0.95rem 0;
+      font-size: 1.05rem; font-weight: 600; color: var(--ink);
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .m-acc-link:hover { color: var(--red); }
+
+    /* ── Stub-Page Specific ─────────────────────── */
+    .stub-card { padding: 2rem; }
+    .stub-card .num {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem;
+    }
+    .stub-card h3 { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.025em; margin-bottom: 0.65rem; }
+    .stub-card p { color: #404040; font-size: 0.97rem; line-height: 1.55; }
+    .pillar-eyebrow {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 1rem;
+    }
+    .soon-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.8rem; border-radius: 999px;
+      background: #FDEFF1; color: var(--red);
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="text-white display text-3xl">Glatt Broker</div>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5" id="navInner">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <ul class="nav-main hidden lg:flex">
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-privat">
+              Privatkunden
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="mega-panel" id="mega-privat" role="menu" aria-label="Privatkunden">
+              <div class="mega-grid cols-4">
+                <div class="mega-col">
+                  <div class="mega-col-title">Versicherung</div>
+                  <ul>
+                    <li><a href="krankenkasse.html">Krankenkasse</a></li>
+                    <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+                    <li><a href="krankenkasse.html#sachversicherung">Sachversicherung<span class="mega-sub">Hausrat · Haftpflicht · Auto</span></a></li>
+                    <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul><li><a class="mega-tool-link" href="krankenkasse.html#calculator">Prämien-Rechner</a></li></ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Vorsorge</div>
+                  <ul>
+                    <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+                    <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="vorsorge.html#strategy">3.-Säule-Strategie</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Finanzen</div>
+                  <ul>
+                    <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                    <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Steuern</div>
+                  <ul>
+                    <li><a href="steuern.html#steuererklaerung">Steuererklärung<span class="mega-sub">ab CHF 69 · Pakete</span></a></li>
+                    <li><a href="steuern.html">Steueroptimierung</a></li>
+                    <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer</a></li>
+                    <li><a class="mega-tool-link" href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger is-active" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-firma">
+              Firmenkunden
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="mega-panel" id="mega-firma" role="menu" aria-label="Firmenkunden">
+              <div class="mega-grid cols-3">
+                <div class="mega-col">
+                  <div class="mega-col-title">Vorsorge</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#pensionskasse">Pensionskasse<span class="mega-sub">BVG-Lösungen · Anbieter-Mix</span></a></li>
+                    <li><a href="firmenkunden.html#kader">Kadervorsorge<span class="mega-sub">Bel-Etage · 1e-Pläne</span></a></li>
+                    <li><a href="firmenkunden.html#bvg">BVG-Optimierung</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Versicherung</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#sach">Sach &amp; Haftpflicht</a></li>
+                    <li><a href="firmenkunden.html#betrieb">Betriebs-Schutz<span class="mega-sub">BU · Cyber · Rechtsschutz</span></a></li>
+                    <li><a href="firmenkunden.html#personen">Personenversicherung<span class="mega-sub">KTG · UVG-Zusatz</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Beratung</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
+                    <li><a href="firmenkunden.html#strategie">Strategie &amp; Setup</a></li>
+                    <li><a href="firmenkunden.html#firmengruendung">Firmengründung<span class="mega-sub">ab CHF 599 · Notar zusätzlich</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-about">
+              Über uns
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="dropdown-panel" id="dd-about" role="menu" aria-label="Über uns">
+              <ul>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="team.html#difference">Unser Unterschied</a></li>
+                <li><a href="team.html#voices">Stimmen</a></li>
+                <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html?topic=karriere">Karriere<span class="mega-soon">bald</span></a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-partner">
+              Partner
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="dropdown-panel" id="dd-partner" role="menu" aria-label="Partner">
+              <ul>
+                <li><a href="partner.html">Tippgeber-Programm</a></li>
+                <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-1 label text-ink-700 bg-ink-100 rounded-full p-1" role="group" aria-label="Sprache">
+            <button data-lang="de" class="px-2.5 py-1 rounded-full bg-white shadow-sm" aria-pressed="true">DE</button>
+            <button data-lang="en" class="px-2.5 py-1 rounded-full" aria-pressed="false">EN</button>
+          </div>
+          <a href="kontakt.html?topic=kmu" class="btn-primary nav-cta">
+            <span>KMU-Beratung</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <button id="mobileMenuToggle" class="lg:hidden p-2 -mr-1 text-ink-950" aria-label="Menü öffnen" aria-expanded="false">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 bg-white">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-5 border-b border-ink-200">
+        <span class="font-semibold tracking-tight">Glatt Broker</span>
+        <button id="mobileMenuClose" class="p-2 -mr-1 text-ink-950" aria-label="Menü schliessen">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-5" id="mobileMenuLinks">
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Privatkunden</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="krankenkasse.html">Krankenkasse</a></li>
+              <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+              <li><a href="krankenkasse.html#sachversicherung">Sachversicherung</a></li>
+              <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+              <li><a href="krankenkasse.html#calculator"><strong>→ Prämien-Rechner</strong></a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+              <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+              <li><a href="vorsorge.html#strategy"><strong>→ 3.-Säule-Strategie</strong></a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
+              <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
+              <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Steuern</div><ul>
+              <li><a href="steuern.html#steuererklaerung"><strong>Steuererklärung — ab CHF 69</strong></a></li>
+              <li><a href="steuern.html">Steueroptimierung</a></li>
+              <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
+              <li><a href="steuern.html#kapitalleistungssteuer"><strong>→ Kapitalleistungssteuer</strong></a></li>
+              <li><a href="steuern.html#grundstueckgewinnsteuer"><strong>→ Grundstückgewinnsteuer</strong></a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc" data-open="true">
+          <button class="m-acc-trigger" type="button" aria-expanded="true">
+            <span>Firmenkunden</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="#pensionskasse">Pensionskasse</a></li>
+              <li><a href="#kader">Kadervorsorge</a></li>
+              <li><a href="#bvg">BVG-Optimierung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="#sach">Sach &amp; Haftpflicht</a></li>
+              <li><a href="#betrieb">Betriebs-Schutz</a></li>
+              <li><a href="#personen">Personenversicherung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Beratung</div><ul>
+              <li><a href="#kmu">KMU-Beratung</a></li>
+              <li><a href="#strategie">Strategie &amp; Setup</a></li>
+              <li><a href="#firmengruendung">Firmengründung (bald)</a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Über uns</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <ul>
+              <li><a href="team.html">Team</a></li>
+              <li><a href="team.html#difference">Unser Unterschied</a></li>
+              <li><a href="team.html#voices">Stimmen</a></li>
+              <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="kontakt.html?topic=karriere">Karriere (bald)</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Partner</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <ul>
+              <li><a href="partner.html">Tippgeber-Programm</a></li>
+              <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+            </ul>
+          </div>
+        </div>
+        <a href="kontakt.html" class="m-acc-link">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden">
+      <div class="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -top-40 -right-40 w-[700px] h-[700px] bg-brand-100 rounded-full blur-3xl opacity-40 pointer-events-none" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl">
+          <div class="soon-pill mb-7"><span class="pulse-dot"></span><span>In Aufbau · Erstgespräch jederzeit möglich</span></div>
+          <h1 class="display text-[8.5vw] sm:text-[6.5vw] lg:text-[5.4vw] xl:text-[5vw] tracking-tightest">
+            Glatt Broker<br><span class="text-brand-600">für Firmen.</span>
+          </h1>
+          <p class="mt-7 text-lg lg:text-xl text-ink-700 max-w-2xl leading-relaxed">
+            <strong class="text-ink-950 font-semibold">Pensionskasse, Kadervorsorge, Sach- und Personen-Versicherung — koordiniert aus einer Hand.</strong>
+            Wir bauen unseren KMU-Bereich derzeit aus. Wenn deine Firma eine unabhängige Sicht auf die bestehenden Verträge und Lösungen sucht, melde dich — wir nehmen uns 30 Minuten Zeit, ohne Verkaufsdruck.
+          </p>
+          <div class="mt-10 flex flex-col sm:flex-row gap-3">
+            <a href="kontakt.html?topic=kmu" class="btn-primary !px-6 !py-4 !text-base">
+              KMU-Erstgespräch buchen
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a href="tel:+41774090519" class="btn-ghost !px-6 !py-4 !text-base">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+              <span class="num-tabular">+41 77 409 05 19</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VORSORGE -->
+    <section class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Vorsorge</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Berufliche Vorsorge — neu gedacht.</h2>
+        <p class="text-ink-700 max-w-2xl mb-12 lg:text-lg">
+          Die 2. Säule ist das grösste Vermögen vieler Mitarbeitenden — und der grösste Hebel für KMU-Arbeitgeber. Wir vergleichen, optimieren, koordinieren mit der 3. Säule.
+        </p>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="card stub-card" id="pensionskasse">
+            <div class="num">01 — Pensionskasse</div>
+            <h3>BVG-Anbieter neutral verglichen.</h3>
+            <p>Wir prüfen deine bestehende Pensionskassen-Lösung gegen den Markt — Verzinsung, Risikoprämien, Umwandlungssatz, Service. Mit Anbieter-Mix von Stiftungen bis Voll-Versicherer.</p>
+          </div>
+          <div class="card stub-card" id="kader">
+            <div class="num">02 — Kadervorsorge</div>
+            <h3>Bel-Etage &amp; 1e-Pläne.</h3>
+            <p>Steuerlich optimierte Zusatz-Vorsorge für Geschäftsleitung und Schlüsselpersonen. Eigene Anlagestrategie, klare Trennung vom Basis-Plan.</p>
+          </div>
+          <div class="card stub-card" id="bvg">
+            <div class="num">03 — BVG-Optimierung</div>
+            <h3>Reglement statt Standard.</h3>
+            <p>Lohnschwellen, Koordinationsabzug, Sparbeiträge — kleine Reglements-Anpassungen mit grosser Wirkung auf Leistung und Arbeitgeber-Attraktivität.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERSICHERUNG -->
+    <section class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Versicherung</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Betrieb absichern, ohne Überdeckung.</h2>
+        <p class="text-ink-700 max-w-2xl mb-12 lg:text-lg">
+          Sach- und Personenversicherungen verständlich strukturiert. Wir lesen alle bestehenden Policen, finden Lücken und Doppelungen, verhandeln Konditionen.
+        </p>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="card stub-card" id="sach">
+            <div class="num">04 — Sach &amp; Haftpflicht</div>
+            <h3>Inventar, Gebäude, Betriebsunterbruch.</h3>
+            <p>Sach- und Betriebshaftpflicht-Versicherung an die Realität deines Geschäfts angepasst — nicht an die letzte Bilanz von 2019.</p>
+          </div>
+          <div class="card stub-card" id="betrieb">
+            <div class="num">05 — Betriebs-Schutz</div>
+            <h3>Cyber, Rechtsschutz, D&amp;O.</h3>
+            <p>Die Risiken, die in Standard-Policen oft fehlen oder begraben sind. Wir machen sie sichtbar und priorisieren sinnvoll.</p>
+          </div>
+          <div class="card stub-card" id="personen">
+            <div class="num">06 — Personenversicherung</div>
+            <h3>KTG &amp; UVG-Zusatz.</h3>
+            <p>Krankentaggeld und Unfall-Zusatz für die Belegschaft — sauber abgestimmt auf die Pensionskasse, ohne Über- oder Unterdeckung.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BERATUNG -->
+    <section class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Beratung</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Sparring, nicht Verkauf.</h2>
+        <p class="text-ink-700 max-w-2xl mb-12 lg:text-lg">
+          Wir sind unabhängig und vertreten den Kunden, nicht eine Gesellschaft. Für KMU heisst das: ein Ansprechpartner über alle Sparten, keine Provisions-Verzerrung, klare Empfehlung.
+        </p>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="card stub-card" id="kmu">
+            <div class="num">07 — KMU-Beratung</div>
+            <h3>Eine Person, alle Sparten.</h3>
+            <p>Vorsorge, Versicherung, Steuern und Bankthemen koordiniert. Statt drei Berater, die parallel arbeiten — eine Sicht, eine Strategie.</p>
+          </div>
+          <div class="card stub-card" id="strategie">
+            <div class="num">08 — Strategie &amp; Setup</div>
+            <h3>Erstaufbau für junge Firmen.</h3>
+            <p>Welche Versicherungen ab wann? Pensionskasse mit AHV-Start? Wir bauen das Versicherungs- und Vorsorge-Setup beim Firmen-Aufbau Schritt für Schritt auf.</p>
+          </div>
+          <a href="#firmengruendung" class="card stub-card block hover:border-brand-300 transition-colors">
+            <div class="num">09 — Firmengründung</div>
+            <h3>Du willst gründen — wir kümmern uns.</h3>
+            <p>Einzelfirma ab CHF 599 · GmbH ab CHF 899 · AG ab CHF 999. <strong>Notarkosten kommen zusätzlich</strong> — wir besprechen die genaue Höhe im Erstgespräch. Plus Glatt-Setup für Versicherung &amp; Vorsorge ab Tag 1. <span class="text-brand-600 font-medium">Pakete unten ansehen →</span></p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── FIRMENGRÜNDUNG (Detail) ───────────── -->
+    <section id="firmengruendung" class="py-20 lg:py-28">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+
+        <!-- Hero -->
+        <div class="max-w-3xl mb-12">
+          <div class="pillar-eyebrow">Firmengründung</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">
+            Du willst gründen,<br><span class="text-brand-600">wir kümmern uns um den Rest.</span>
+          </h2>
+          <p class="text-ink-700 leading-relaxed lg:text-lg">
+            Bei Glatt Broker ist die Firmengründung mehr als nur ein Handelsregister-Eintrag. Wir bringen dich von der ersten Idee über die Beurkundung bis zum vollständigen Versicherungs-, Vorsorge- und Steuer-Setup ab Tag 1 — <strong>der Notar kommt zu dir an die gewünschte Adresse</strong>. Frei von Administrationsaufwand, eine Person als Ansprechpartner. <strong>Hinweis:</strong> Notarkosten sind nicht im Glatt-Festpreis enthalten — sie werden im Erstgespräch transparent besprochen.
+          </p>
+        </div>
+
+        <!-- Pakete -->
+        <div class="grid md:grid-cols-3 gap-5 mb-10">
+          <!-- Einzelunternehmen -->
+          <div class="card !rounded-2xl p-7">
+            <div class="label text-brand-600 mb-3">Einzelunternehmen</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">ab CHF 599</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">+ Notarkosten zusätzlich · ab CHF 0 Startkapital</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Persönliche Beratung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Anmeldungs-Prüfung &amp; AHV als Selbständigerwerbender</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Begleitung nach der Gründung</span></li>
+              <li class="flex gap-2"><span class="text-ink-500 shrink-0">+</span><span class="text-ink-500 text-[0.88rem]">Optional: Handelsregister-Eintrag (Pflicht ab CHF 100k Umsatz)</span></li>
+              <li class="flex gap-2"><span class="text-ink-500 shrink-0">+</span><span class="text-ink-500 text-[0.88rem]">Optional: MWST-Anmeldung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0" style="color: var(--red);">+</span><span><strong>Glatt-Mehrwert:</strong> Privat- &amp; BU-Versicherung individuell aufgesetzt</span></li>
+            </ul>
+            <a href="kontakt.html?topic=firmengruendung-einzelfirma" class="btn-ghost mt-6 w-full justify-center !text-sm">Anfragen</a>
+          </div>
+          <!-- GmbH (Empfohlen) -->
+          <div class="card !rounded-2xl p-7" style="border-color: var(--red); border-width: 2px; position: relative;">
+            <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 999px;">Empfohlen</div>
+            <div class="label text-brand-600 mb-3">GmbH</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">ab CHF 899</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">+ Notarkosten zusätzlich · CHF 20'000 Stammkapital</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Persönliche Beratung &amp; Statuten-Erstellung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Gründungsurkunde &amp; öffentliche Beurkundung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Eintrag Handelsregister</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Stampa &amp; Lex Friedrich Erklärungen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Stammanteilbuch &amp; Opting-Out (Revisionsverzicht)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>AHV-Anmeldung &amp; Betriebshaftpflicht-Beratung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0" style="color: var(--red);">+</span><span><strong>Glatt-Mehrwert:</strong> Pensionskasse, KTG, Sach- &amp; Haftpflicht im Setup</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0" style="color: var(--red);">+</span><span><strong>Glatt-Mehrwert:</strong> Steuer-Strategie-Erstgespräch (60 Min)</span></li>
+            </ul>
+            <a href="kontakt.html?topic=firmengruendung-gmbh" class="btn-primary mt-6 w-full justify-center !text-sm">Anfragen</a>
+          </div>
+          <!-- AG -->
+          <div class="card !rounded-2xl p-7">
+            <div class="label text-brand-600 mb-3">AG</div>
+            <div class="flex items-baseline gap-2 mb-1">
+              <span class="display text-4xl tracking-tightest">ab CHF 999</span>
+            </div>
+            <div class="text-xs text-ink-500 mb-5">+ Notarkosten zusätzlich · CHF 100'000 Aktienkapital (min. 50% liberiert)</div>
+            <ul class="space-y-2.5 text-[0.94rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Persönliche Beratung &amp; Statuten-Erstellung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Gründungsurkunde &amp; öffentliche Beurkundung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Eintrag Handelsregister</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Stampa &amp; Lex Friedrich Erklärungen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>Aktionärsregister &amp; Opting-Out (Revisionsverzicht)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">✓</span><span>AHV-Anmeldung &amp; Betriebshaftpflicht-Beratung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0" style="color: var(--red);">+</span><span><strong>Glatt-Mehrwert:</strong> Pensionskasse, Kadervorsorge, D&amp;O, KTG koordiniert</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0" style="color: var(--red);">+</span><span><strong>Glatt-Mehrwert:</strong> Steuer-Strategie-Erstgespräch (60 Min)</span></li>
+            </ul>
+            <a href="kontakt.html?topic=firmengruendung-ag" class="btn-ghost mt-6 w-full justify-center !text-sm">Anfragen</a>
+          </div>
+        </div>
+
+        <p class="text-xs text-ink-500 mb-10">
+          <strong>Spar-Hinweis:</strong> Bei Inanspruchnahme mehrerer Glatt-Dienstleistungen gleichzeitig (z.B. Gründung + Steuererklärung + KK-Optimierung) bieten wir einen Kombi-Rabatt — bitte im Erstgespräch erwähnen.
+        </p>
+
+        <!-- Process Timeline -->
+        <div class="rounded-3xl bg-white border border-ink-200 p-8 lg:p-10 mb-10">
+          <div class="pillar-eyebrow">Ablauf</div>
+          <h3 class="display text-2xl lg:text-3xl tracking-tightest mb-8">Vier Schritte. Eine Person. Ein Festpreis.</h3>
+          <div class="grid md:grid-cols-4 gap-6">
+            <div>
+              <div class="font-mono text-brand-600 text-sm font-medium mb-2">01 · 5 Min</div>
+              <h4 class="font-semibold mb-1.5 tracking-tight">Anfrage &amp; Erstgespräch</h4>
+              <p class="text-ink-700 text-[0.92rem] leading-relaxed">Du sendest uns Firmenname, Sitz, Zweck und Anzahl Gründer. Wir rufen kostenlos zurück und beraten zur passenden Rechtsform — innert 4 Stunden.</p>
+            </div>
+            <div>
+              <div class="font-mono text-brand-600 text-sm font-medium mb-2">02 · 24 Stunden</div>
+              <h4 class="font-semibold mb-1.5 tracking-tight">Dokumente</h4>
+              <p class="text-ink-700 text-[0.92rem] leading-relaxed">Wir bereiten Statuten, Gründungsurkunde, HR-Anmeldung, MWST- und AHV-Formulare vor. Du prüfst digital und gibst frei.</p>
+            </div>
+            <div>
+              <div class="font-mono text-brand-600 text-sm font-medium mb-2">03 · ~5 Tage</div>
+              <h4 class="font-semibold mb-1.5 tracking-tight">Beurkundung &amp; HR</h4>
+              <p class="text-ink-700 text-[0.92rem] leading-relaxed">Der Notar kommt zu dir an die gewünschte Adresse. Anschliessend Eintrag im Handelsregister — deine Firma existiert offiziell.</p>
+            </div>
+            <div>
+              <div class="font-mono text-brand-600 text-sm font-medium mb-2">04 · ab Tag 1</div>
+              <h4 class="font-semibold mb-1.5 tracking-tight">Glatt-Setup</h4>
+              <p class="text-ink-700 text-[0.92rem] leading-relaxed">Wir schliessen Pensionskasse, Krankentaggeld, Sach- und Haftpflicht-Versicherungen ab und führen das Steuer-Strategie-Gespräch — alles aus einer Hand.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drei Vorteile (Glatt-USPs) -->
+        <div class="grid md:grid-cols-3 gap-5 mb-10">
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-6">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">VORTEIL 01</div>
+            <h4 class="font-semibold tracking-tight mb-1">Festpreis ohne Stundensatz.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Unsere Gründungs-Pauschale ist transparent. Notarkosten sind separat und werden im Erstgespräch konkret beziffert — keine Überraschungen.</p>
+          </div>
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-6">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">VORTEIL 02</div>
+            <h4 class="font-semibold tracking-tight mb-1">Notar kommt zu dir.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Die öffentliche Beurkundung erfolgt an deiner Wunsch-Adresse — Büro, Zuhause oder bei uns in Zürich. Du musst nirgends hinfahren.</p>
+          </div>
+          <div class="rounded-2xl bg-brand-50 border border-brand-100 p-6">
+            <div class="font-mono text-brand-600 text-xs font-medium mb-2">VORTEIL 03</div>
+            <h4 class="font-semibold tracking-tight mb-1">Beratung ab Stunde 1.</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Du sprichst von Anfang an mit deinem Berater — nicht mit einem Call-Center. Persönlich, kontinuierlich, durchgehend bis zum Eintrag.</p>
+          </div>
+        </div>
+
+        <!-- Glatt komplett übernimmt -->
+        <div class="rounded-2xl bg-ink-50 border border-ink-200 p-7 mb-10">
+          <div class="label text-brand-600 mb-3">Was Glatt komplett übernimmt</div>
+          <h4 class="display text-xl lg:text-2xl tracking-tightest mb-4">Über die Gründung hinaus.</h4>
+          <ul class="grid sm:grid-cols-2 gap-x-8 gap-y-2.5 text-[0.95rem] text-ink-700">
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Pensionskassen-Setup (BVG-Lösung passend zu Lohnstruktur)</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Krankentaggeld &amp; UVG-Zusatz für Mitarbeitende</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Sach- &amp; Betriebshaftpflicht-Versicherung</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Steuer-Strategie für Lohn vs. Dividende</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Privat-Vorsorge des Inhabers (3a / Lebensversicherung)</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Krankenkassen-Optimierung Inhaber &amp; Familie</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Bei Bedarf: D&amp;O-Versicherung, Cyber, Rechtsschutz</span></li>
+            <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Folgejahre: Steuererklärung Firma + Inhaber gebündelt</span></li>
+          </ul>
+        </div>
+
+        <!-- CTA-Block -->
+        <div class="rounded-3xl bg-ink-950 text-white p-8 lg:p-12 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative grid lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7">
+              <div class="label text-brand-200 mb-3">Erstgespräch · 30 Minuten · kostenlos</div>
+              <h3 class="display text-2xl lg:text-4xl tracking-tightest mb-3">
+                Welche Rechtsform passt zu deinem Vorhaben?
+              </h3>
+              <p class="text-ink-300 lg:text-lg leading-relaxed">
+                Wir helfen dir, die richtige Rechtsform zu wählen — basierend auf Steuerlast, Haftung, Lohnstrategie und langfristiger Vorsorge. Das Erstgespräch ist gratis und unverbindlich.
+              </p>
+            </div>
+            <div class="lg:col-span-5 flex flex-col gap-3">
+              <a href="kontakt.html?topic=firmengruendung" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white !px-6 !py-4 !text-base justify-center">
+                Firmengründung-Erstgespräch
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="tel:+41774090519" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base justify-center">
+                <span class="num-tabular">+41 77 409 05 19</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 lg:py-28">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="rounded-3xl bg-ink-950 text-white p-10 lg:p-16 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative max-w-2xl">
+            <div class="label text-brand-200 mb-5">Erstgespräch · 30 Minuten · kostenlos</div>
+            <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-5">
+              Eine zweite Meinung zu eurem Setup.
+            </h2>
+            <p class="text-ink-300 lg:text-lg leading-relaxed mb-8">
+              Sende uns eure aktuellen Police-Übersichten und Pensionskassen-Reglemente. Wir prüfen sie vor dem Gespräch und kommen mit konkreten Punkten — nicht mit Werbe-Folien.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="kontakt.html?topic=kmu" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white !px-6 !py-4 !text-base">
+                KMU-Erstgespräch buchen
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="mailto:t.faniqi@glattbroker.ch" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base">
+                t.faniqi@glattbroker.ch
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-ink-200 py-16">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+      <div class="grid lg:grid-cols-12 gap-10 mb-16">
+        <div class="lg:col-span-4">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo-footer mb-5" />
+          <p class="text-ink-700 max-w-xs">
+            Unabhängige Versicherungs-, Vorsorge- und Steuerberatung in der Schweiz. FINMA-registriert seit 2017.
+          </p>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Privatkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="krankenkasse.html" class="ulink">Krankenkasse</a></li>
+            <li><a href="vorsorge.html" class="ulink">3. Säule</a></li>
+            <li><a href="steuern.html" class="ulink">Steuern</a></li>
+            <li><a href="finanzen.html" class="ulink">Finanzen</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Firmenkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="#pensionskasse" class="ulink">Pensionskasse</a></li>
+            <li><a href="#kader" class="ulink">Kadervorsorge</a></li>
+            <li><a href="#sach" class="ulink">Sach &amp; Haftpflicht</a></li>
+            <li><a href="#kmu" class="ulink">KMU-Beratung</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-4">
+          <h4 class="label text-ink-500 mb-4">Kontakt</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li class="num-tabular">+41 77 409 05 19</li>
+            <li>online@glattbroker.ch</li>
+            <li class="text-ink-500 mt-2">Glatt Broker AG · Staubstrasse 15 · 8038 Zürich</li>
+          </ul>
+          <div class="mt-5 flex gap-2">
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">FINMA 35821</span>
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">Cicero</span>
+          </div>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-ink-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-ink-500">
+        <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4</p>
+        <p class="num-tabular">Designed in Zürich</p>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-app-bar" aria-label="Schnelle Aktionen">
+    <a href="tel:+41774090519" class="call">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+      <span>Anrufen</span>
+    </a>
+    <a href="kontakt.html?topic=kmu" class="consult">
+      <span>KMU-Beratung</span>
+    </a>
+  </nav>
+
+  <script>
+    // Loader
+    addEventListener('load', () => setTimeout(() => document.getElementById('loader')?.classList.add('done'), 200));
+
+    // Mobile Menu
+    (function mobileMenu() {
+      const toggle = document.getElementById('mobileMenuToggle');
+      const close  = document.getElementById('mobileMenuClose');
+      const menu   = document.getElementById('mobileMenu');
+      if (!toggle || !menu) return;
+      const open = () => { menu.classList.add('open'); document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded', 'true'); };
+      const shut = () => { menu.classList.remove('open'); document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      toggle.addEventListener('click', open);
+      close?.addEventListener('click', shut);
+      document.getElementById('mobileMenuLinks')?.addEventListener('click', (e) => {
+        if (e.target.closest('a[href^="#"]')) shut();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) shut();
+      });
+    })();
+
+    // Mega Menu
+    (function megaMenu() {
+      const navItems = document.querySelectorAll('[data-nav-item]');
+      if (!navItems.length) return;
+      let openItem = null, leaveTimer = null;
+      function openMenu(item) {
+        if (openItem && openItem !== item) closeMenu(openItem);
+        item.dataset.open = 'true';
+        item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'true');
+        openItem = item;
+      }
+      function closeMenu(item) {
+        if (!item) return;
+        item.dataset.open = 'false';
+        item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'false');
+        if (openItem === item) openItem = null;
+      }
+      navItems.forEach((item) => {
+        item.addEventListener('mouseenter', () => { clearTimeout(leaveTimer); openMenu(item); });
+        item.addEventListener('mouseleave', () => { clearTimeout(leaveTimer); leaveTimer = setTimeout(() => closeMenu(item), 140); });
+        item.querySelector('[data-mega-trigger]')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (item.dataset.open === 'true') closeMenu(item);
+          else openMenu(item);
+        });
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && openItem) {
+          const item = openItem;
+          closeMenu(item);
+          item.querySelector('[data-mega-trigger]')?.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (openItem && !openItem.contains(e.target)) closeMenu(openItem);
+      });
+    })();
+
+    // Mobile Accordion
+    (function mobileAccordion() {
+      document.querySelectorAll('.m-acc-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const acc = btn.closest('.m-acc');
+          if (!acc) return;
+          const isOpen = acc.dataset.open === 'true';
+          acc.dataset.open = isOpen ? 'false' : 'true';
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+      });
+    })();
+
+    // Sticky nav shadow
+    const nav = document.getElementById('navInner');
+    if (nav) addEventListener('scroll', () => {
+      nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30);
+    }, { passive: true });
+  </script>
+</body>
+</html>
