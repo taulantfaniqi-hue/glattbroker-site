@@ -36,3 +36,15 @@ _drop/
 *.bak
 *.backup
 *~
+
+# Lokale Infrastruktur — NIE committen
+WLAN-Zugang LIESMICH.txt
+*.bat
+design-inspiration/
+_backup-*/
+HANDOVER-*
+UEBERGABE-*
+*.ai
+
+# Drittanbieter-Dokumente (Baumassurance) — nicht veröffentlichen
+formulare/dokumente/

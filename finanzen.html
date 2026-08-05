@@ -142,6 +142,13 @@
     .perf-bar-label.outside-right { left: calc(100% + 4px); color: var(--ink); }
     .perf-bar-label.outside-left { right: calc(100% + 4px); color: var(--ink); }
 
+
+    /* Wealth Calculator */
+    .wealth-input { width: 100%; border: 1px solid #E5E5E5; border-radius: 12px; padding: 0.85rem 0.95rem; background: #fff; color: var(--ink); font-family: var(--font-display); font-weight: 500; outline: none; transition: border-color .2s ease, box-shadow .2s ease; }
+    .wealth-input:focus { border-color: var(--red); box-shadow: 0 0 0 4px rgba(204,41,54,.08); }
+    .wealth-result { border: 1px solid #E5E5E5; border-radius: 18px; background: #fff; padding: 1.25rem; }
+    .wealth-chart { width: 100%; min-height: 260px; }
+    .wealth-chip { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem .75rem; border-radius: 999px; background: #F0F0F0; color: #404040; font-size: .82rem; font-weight: 500; }
     /* Award Badge */
     .award-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.85rem; border-radius: 999px; background: #fff; border: 1px solid #E5E5E5; font-size: 0.82rem; font-weight: 500; }
     .award-badge .badge-dot { width: 6px; height: 6px; border-radius: 999px; }
@@ -178,6 +185,8 @@
                 </ul></div>
                 <div class="mega-col"><div class="mega-col-title">Finanzen</div><ul>
                   <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                  <li><a class="mega-tool-link" href="finanzen.html#vermoegensrechner">Vermögens-Rechner</a></li>
+                  <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                   <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                 </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul></div>
                 <div class="mega-col"><div class="mega-col-title">Steuern</div><ul>
@@ -253,7 +262,9 @@
           <div class="m-acc-body">
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="finanzen.html#vermoegensrechner">Vermögens-Rechner</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
+              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
@@ -483,6 +494,98 @@
       </div>
     </section>
 
+
+    <!-- VERMÖGENSAUFBAU-RECHNER -->
+    <section id="vermoegensrechner" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Vermögensaufbau-Rechner</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5">
+            Aus Jahresprämie wird ein klares Zielbild.
+          </h2>
+          <p class="text-ink-700 leading-relaxed lg:text-lg">
+            Rechne Beitrag, Laufzeit, Zielvermögen und Rendite zusammen. Die historische Referenzrendite der hinterlegten Everon- und Zugerberg-Strategien kann direkt als Annahme übernommen werden.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          <div class="lg:col-span-5 card !rounded-3xl p-5 sm:p-6 lg:p-7">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <label class="block">
+                <span class="label text-ink-500 mb-2 block">Startkapital</span>
+                <input id="wealthStart" class="wealth-input num-tabular" type="number" min="0" step="1000" value="5000">
+              </label>
+              <label class="block">
+                <span class="label text-ink-500 mb-2 block">Jahresprämie</span>
+                <input id="wealthAnnual" class="wealth-input num-tabular" type="number" min="0" step="500" value="6000">
+              </label>
+              <label class="block">
+                <span class="label text-ink-500 mb-2 block">Laufzeit</span>
+                <input id="wealthYears" class="wealth-input num-tabular" type="number" min="1" max="45" step="1" value="20">
+              </label>
+              <label class="block">
+                <span class="label text-ink-500 mb-2 block">Zielvermögen</span>
+                <input id="wealthTarget" class="wealth-input num-tabular" type="number" min="0" step="10000" value="250000">
+              </label>
+              <label class="block sm:col-span-2">
+                <span class="label text-ink-500 mb-2 block">Historische Referenz</span>
+                <select id="wealthStrategy" class="wealth-input">
+                  <option value="6.0" data-label="Everon Smart Global Markets 60">Everon Smart Global Markets 60 · 6.0% p.a.</option>
+                  <option value="7.1" data-label="Everon Income Global 60">Everon Income Global 60 · 7.1% p.a.</option>
+                  <option value="6.3" data-label="Everon Smart Sustainability 60">Everon Smart Sustainability 60 · 6.3% p.a.</option>
+                  <option value="4.8" data-label="Everon Multifactor Global 60">Everon Multifactor Global 60 · 4.8% p.a.</option>
+                  <option value="4.4" data-label="Zugerberg Revo3">Zugerberg Revo3 · 4.4% p.a.</option>
+                  <option value="5.2" data-label="Glatt-Mix 50/50">Glatt-Mix 50/50 · 5.2% p.a.</option>
+                </select>
+              </label>
+              <label class="block sm:col-span-2">
+                <span class="label text-ink-500 mb-2 block">Zielrendite p.a.</span>
+                <div class="flex gap-3 items-center">
+                  <input id="wealthReturn" class="wealth-input num-tabular" type="number" min="-10" max="15" step="0.1" value="6.0">
+                  <span class="wealth-chip num-tabular">%</span>
+                </div>
+              </label>
+            </div>
+            <div class="mt-5 flex flex-wrap gap-2 text-xs text-ink-500 leading-relaxed">
+              <span class="wealth-chip">historisch ≠ garantiert</span>
+              <span class="wealth-chip">netto nach laufenden Kosten</span>
+              <span class="wealth-chip">Beratungsannahme</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7">
+            <div class="grid sm:grid-cols-3 gap-4 mb-4">
+              <div class="wealth-result">
+                <div class="label text-ink-500 mb-2">Endkapital</div>
+                <div id="wealthEnd" class="display text-3xl tracking-tightest num-tabular">CHF 0</div>
+              </div>
+              <div class="wealth-result">
+                <div class="label text-ink-500 mb-2">Rendite-Effekt</div>
+                <div id="wealthGain" class="display text-3xl tracking-tightest text-brand-600 num-tabular">CHF 0</div>
+              </div>
+              <div class="wealth-result">
+                <div class="label text-ink-500 mb-2">Ziel-Lücke</div>
+                <div id="wealthGap" class="display text-3xl tracking-tightest num-tabular">CHF 0</div>
+              </div>
+            </div>
+
+            <div class="card !rounded-3xl p-5 sm:p-6 lg:p-7">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div>
+                  <div class="font-mono text-xs uppercase tracking-widest text-ink-500">Projektion Vermögensaufbau</div>
+                  <div id="wealthSummary" class="text-sm text-ink-700 mt-1">Berechnung wird aktualisiert.</div>
+                </div>
+                <a id="wealthCta" href="kontakt.html?topic=anlage" class="btn-primary !px-4 !py-3">Strategie besprechen</a>
+              </div>
+              <div id="wealthChart" class="wealth-chart"></div>
+              <p class="text-xs text-ink-500 mt-4 leading-relaxed">
+                Modellrechnung mit jährlicher Einzahlung am Jahresende. Steuern, Inflation, Ausgabe-/Rücknahmespesen und individuelle Kosten können das Ergebnis verändern.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- EVERON DEEP DIVE -->
     <section class="py-16 lg:py-24 bg-white border-y border-ink-200">
       <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
@@ -623,6 +726,389 @@
           <p class="text-xs text-ink-500 mt-4 leading-relaxed">
             Beim Smart-Global-Markets-Mandat reduziert sich die Everon-Depotbankgebühr auf 0.23% (Total dann 0.73%). Konditionen Stand 2026, vorbehältlich aktueller Anbieter-Reglemente.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vorsorgeauftrag · Patientenverfügung · KESB -->
+    <section id="vorsorgeauftrag" class="py-16 lg:py-24">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-12">
+          <div class="label text-brand-600 mb-4">— Lebenslagen-Absicherung</div>
+          <h2 class="display text-[6vw] sm:text-[4vw] lg:text-[3vw] tracking-tightest mb-5">
+            Wenn du nicht mehr <span class="text-brand-600">entscheiden kannst</span> — wer schützt dann dein Vermögen?
+          </h2>
+          <p class="text-ink-700 leading-relaxed lg:text-lg">
+            Vorsorgeauftrag und Patientenverfügung gehören zur Finanzplanung wie der 3a-Plan. Ohne diese Dokumente entscheidet im Ernstfall die <strong>KESB</strong> — eine kantonale Behörde, die einen fremden Beistand ernennt, der über deine Konten, deine Wohnung und (bei Selbständigen) deine Firma verfügt. Mit den richtigen Dokumenten regelst du das selbst, vorab, für wenige hundert Franken.
+          </p>
+        </div>
+
+        <!-- Zwei Karten: Vorsorgeauftrag · Patientenverfügung -->
+        <div class="grid lg:grid-cols-2 gap-5 lg:gap-6 mb-14">
+          <article class="card !rounded-3xl p-7 lg:p-9 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-brand-600" aria-hidden="true"></div>
+            <div class="label text-brand-600 mb-3">Dokument 1 · Art. 360–369 ZGB</div>
+            <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-4">Vorsorgeauftrag</h3>
+            <p class="text-ink-700 leading-relaxed mb-6">
+              Du bestimmst <strong>eine oder mehrere Vertrauenspersonen</strong>, die für dich handeln, wenn du urteilsunfähig wirst (z. B. durch Demenz, Schlaganfall, Koma). Sie übernehmen Personensorge, Vermögenssorge und Rechtsverkehr — exakt nach deinen Vorgaben.
+            </p>
+
+            <div class="space-y-4 mb-6">
+              <div>
+                <div class="label text-ink-500 mb-1.5">Was geregelt wird</div>
+                <ul class="text-sm text-ink-700 space-y-1.5 list-disc pl-5">
+                  <li><strong>Personensorge:</strong> Wohnsituation, Pflege, Alltag, Spital-Entscheide</li>
+                  <li><strong>Vermögenssorge:</strong> Bankkonten, Wertschriften, Liegenschaft, Steuern, Versicherungen</li>
+                  <li><strong>Rechtsverkehr:</strong> Vertretung gegenüber Ämtern, Banken, Versicherungen</li>
+                </ul>
+              </div>
+              <div>
+                <div class="label text-ink-500 mb-1.5">Formvorschriften</div>
+                <ul class="text-sm text-ink-700 space-y-1.5 list-disc pl-5">
+                  <li><strong>Eigenhändig</strong> handschriftlich verfasst, datiert, unterschrieben — <em>oder</em></li>
+                  <li><strong>Öffentlich beurkundet</strong> beim Notar (empfohlen bei Firma/Immobilien)</li>
+                </ul>
+              </div>
+              <div>
+                <div class="label text-ink-500 mb-1.5">Hinterlegung</div>
+                <p class="text-sm text-ink-700">Eintrag beim <strong>Zivilstandsamt</strong> deiner Wohngemeinde (CHF 75 einmalig). Die KESB sucht im Ernstfall dort — sonst läuft der Vorsorgeauftrag ins Leere.</p>
+              </div>
+            </div>
+
+            <div class="border-t border-ink-100 pt-5">
+              <div class="label text-ink-500 mb-2">Aktivierung</div>
+              <p class="text-sm text-ink-700 leading-relaxed">Wird Urteilsunfähigkeit festgestellt, prüft die KESB den Vorsorgeauftrag auf Gültigkeit und Validität (Art. 363 ZGB). Ist er sauber, übergibt die KESB die Sache deiner Vertrauensperson — und tritt selbst zurück.</p>
+            </div>
+          </article>
+
+          <article class="card !rounded-3xl p-7 lg:p-9 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-ink-900" aria-hidden="true"></div>
+            <div class="label text-ink-900 mb-3">Dokument 2 · Art. 370–373 ZGB</div>
+            <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-4">Patientenverfügung</h3>
+            <p class="text-ink-700 leading-relaxed mb-6">
+              Du legst fest, <strong>welche medizinischen Massnahmen</strong> du im Fall der Urteilsunfähigkeit willst — und welche nicht. Nach Art. 372 ZGB sind Ärzte <strong>grundsätzlich daran gebunden</strong> — abweichen dürfen sie nur bei Gesetzeswidrigkeit oder begründeten Zweifeln, dass die Verfügung deinem aktuellen Willen entspricht (Begründungspflicht im KG-Eintrag).
+            </p>
+
+            <div class="space-y-4 mb-6">
+              <div>
+                <div class="label text-ink-500 mb-1.5">Typische Themen</div>
+                <ul class="text-sm text-ink-700 space-y-1.5 list-disc pl-5">
+                  <li>Lebenserhaltende Massnahmen (Reanimation, Beatmung)</li>
+                  <li>Künstliche Ernährung und Flüssigkeitszufuhr</li>
+                  <li>Schmerztherapie und Palliativ-Behandlung</li>
+                  <li>Organspende — Ja / Nein / nur bestimmte Organe</li>
+                  <li>Wahl einer vertretungsberechtigten Person (kann andere sein als beim Vorsorgeauftrag)</li>
+                </ul>
+              </div>
+              <div>
+                <div class="label text-ink-500 mb-1.5">Formvorschriften</div>
+                <ul class="text-sm text-ink-700 space-y-1.5 list-disc pl-5">
+                  <li>Schriftlich, <strong>datiert</strong>, eigenhändig <strong>unterschrieben</strong></li>
+                  <li>Keine Notarpflicht — keine Hinterlegungs-Pflicht</li>
+                  <li>Auch Vorlagen von FMH, Pro Senectute oder Krankenkasse sind gültig</li>
+                </ul>
+              </div>
+              <div>
+                <div class="label text-ink-500 mb-1.5">Auffindbarkeit (entscheidend!)</div>
+                <p class="text-sm text-ink-700">Original beim Hausarzt, Kopie bei Vertrauensperson, <strong>Eintrag auf der Krankenkassen-Karte</strong> (kostenlos). Sonst wird sie im Notfall nicht gefunden und ist nutzlos.</p>
+              </div>
+            </div>
+
+            <div class="border-t border-ink-100 pt-5">
+              <div class="label text-ink-500 mb-2">Verbindlichkeit</div>
+              <p class="text-sm text-ink-700 leading-relaxed">Bindend für Ärzte. Angehörige können sie nicht einfach übergehen. Aktualisierung alle 2–3 Jahre empfohlen — sonst zweifeln Ärzte am aktuellen Willen.</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- KESB-Block -->
+        <div class="bg-white border border-ink-200 rounded-3xl p-8 lg:p-12 mb-12">
+          <div class="grid lg:grid-cols-12 gap-10">
+            <div class="lg:col-span-5">
+              <div class="label text-brand-600 mb-3">— Die Rolle der KESB</div>
+              <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-5">Was die KESB ist — und wann sie übernimmt.</h3>
+              <p class="text-ink-700 leading-relaxed mb-4">
+                Die <strong>Kindes- und Erwachsenenschutzbehörde</strong> (KESB) ist eine kantonale Fachbehörde, die seit 2013 das alte Vormundschaftswesen abgelöst hat. Sie greift ein, wenn jemand <em>urteilsunfähig</em> wird und <strong>keine gültige Eigenvorsorge</strong> getroffen hat.
+              </p>
+              <p class="text-ink-700 leading-relaxed">
+                Im Kanton Zürich ist sie bezirksweise organisiert (z. B. KESB Bezirk Dielsdorf, Bezirk Bülach, Bezirk Zürich). Sie ist nicht „böse" — aber sie ist <strong>fremd</strong>, langsam, und sie kostet Geld aus deinem Vermögen.
+              </p>
+            </div>
+
+            <div class="lg:col-span-7 space-y-5">
+              <div>
+                <div class="label text-ink-900 mb-2">Welche Beistandschaften die KESB anordnen kann (Art. 390–398 ZGB)</div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="bg-ink-50 rounded-xl p-4">
+                    <div class="font-semibold mb-1">Begleitbeistandschaft</div>
+                    <div class="text-ink-700">Beistand begleitet bei einzelnen Geschäften — Selbstbestimmung bleibt.</div>
+                  </div>
+                  <div class="bg-ink-50 rounded-xl p-4">
+                    <div class="font-semibold mb-1">Vertretungsbeistandschaft</div>
+                    <div class="text-ink-700">Beistand handelt für dich — du verlierst Verfügungsmacht in definierten Bereichen.</div>
+                  </div>
+                  <div class="bg-ink-50 rounded-xl p-4">
+                    <div class="font-semibold mb-1">Mitwirkungsbeistandschaft</div>
+                    <div class="text-ink-700">Wichtige Geschäfte (Liegenschaftsverkauf, Kredite) brauchen Beistand-Zustimmung.</div>
+                  </div>
+                  <div class="bg-ink-50 rounded-xl p-4">
+                    <div class="font-semibold mb-1">Umfassende Beistandschaft</div>
+                    <div class="text-ink-700">Vollständiger Verlust der Handlungsfähigkeit — entspricht der früheren Entmündigung.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="label text-ink-900 mb-2">Was sie kostet — aus deinem Vermögen</div>
+                <ul class="text-sm text-ink-700 space-y-2 list-disc pl-5">
+                  <li><strong>Verfahrenskosten KESB</strong> bei Errichtung: typischerweise CHF 800–2'500</li>
+                  <li><strong>Berufsbeistand-Entschädigung</strong>: kantonal geregelt, ca. CHF 1'500–6'000 / Jahr — je nach Aufwand und Vermögensgrösse</li>
+                  <li><strong>Genehmigungspflichten</strong>: bei vielen Geschäften muss die KESB jedes Mal zustimmen → Wochen bis Monate Verzögerung</li>
+                  <li><strong>Reporting-Pflicht</strong>: Beistand legt der KESB jährlich Rechnung — administrativer Reibungsverlust auf Kosten deines Vermögens</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zahlen aus der Schweiz -->
+        <div class="grid lg:grid-cols-12 gap-6 lg:gap-8 mb-14 items-stretch">
+          <div class="lg:col-span-4">
+            <div class="label text-brand-600 mb-3">— Zahlen aus der Schweiz</div>
+            <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-4">Wie verbreitet das Problem wirklich ist.</h3>
+            <p class="text-sm text-ink-700 leading-relaxed">
+              Offizielle Daten der <strong>KOKES</strong> (Konferenz für Kindes- und Erwachsenenschutz) und Erhebungen von <strong>Pro Senectute / gfs-Zürich</strong> zeigen ein klares Bild: die meisten Schweizer:innen haben <em>keinen</em> Vorsorgeauftrag — und über 100'000 Erwachsene leben heute unter Beistandschaft.
+            </p>
+          </div>
+          <div class="lg:col-span-8 grid sm:grid-cols-2 gap-4 num-tabular">
+            <div class="card !rounded-2xl p-6">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-600 mb-1">105'849</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">Erwachsene unter Schutzmassnahme</div>
+              <div class="text-xs text-ink-500 leading-relaxed">Stand Ende 2023. Insgesamt 154'981 laufende Erwachsenen- und Kindesschutzmassnahmen. <span class="text-ink-700">KOKES</span></div>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-600 mb-1">+5'516</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">Netto-Zuwachs an Massnahmen / Jahr</div>
+              <div class="text-xs text-ink-500 leading-relaxed">2022→2023 (+3.5 %). Kindesschutz wuchs erstmals stark (+6.5 %). Brutto-Neuerrichtungen liegen darüber, werden aber nicht öffentlich aggregiert. <span class="text-ink-700">KOKES MM 2023</span></div>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-600 mb-1">12 %</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">der Erwachsenen haben einen Vorsorgeauftrag</div>
+              <div class="text-xs text-ink-500 leading-relaxed">gfs-Zürich-Umfrage 2022 i. A. Pro Senectute. 2020 waren es noch 17 % — Bekanntheit sinkt. <span class="text-ink-700">Pro Senectute</span></div>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-600 mb-1">~70 %</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">der Beistandschaften: Berufsbeistand</div>
+              <div class="text-xs text-ink-500 leading-relaxed">Nur ca. 30 % werden von Privatpersonen (PriMa) geführt — ohne Vorsorgeauftrag bekommst du fast immer eine Fremdperson. <span class="text-ink-700">KOKES</span></div>
+            </div>
+            <div class="card !rounded-2xl p-6">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-600 mb-1">~2'700</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">Berufsbeistände schweizweit</div>
+              <div class="text-xs text-ink-500 leading-relaxed">Rund 2'000 Vollzeitäquivalente — Berufsverband schätzt <strong>+700 Stellen</strong> nötig, um die KOKES-Sollwerte zu erreichen. <span class="text-ink-700">Berufsverband</span></div>
+            </div>
+            <div class="card !rounded-2xl p-6 bg-brand-50 !border-brand-100">
+              <div class="display text-3xl lg:text-4xl tracking-tightest text-brand-700 mb-1">60 → 110</div>
+              <div class="text-sm text-ink-800 font-semibold mb-1">Mandate pro 100 %-Pensum (Soll vs. Ist)</div>
+              <div class="text-xs text-ink-700 leading-relaxed"><strong>KOKES-Empfehlung: max. 60</strong> Erwachsenen-Mandate. <strong>Realität: bis 110</strong> (BS) / 80+ (ZG). Ein überlasteter Beistand für <em>dein</em> Leben — das ist der Hebel hinter „untätig, unerreichbar".</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Konkrete Regeln Vermögen -->
+        <div class="bg-white border border-ink-200 rounded-3xl p-8 lg:p-12 mb-14">
+          <div class="max-w-3xl mb-9">
+            <div class="label text-brand-600 mb-3">— Konkrete Regeln</div>
+            <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-4">Was passiert konkret mit Wertschriften, Firma, Liegenschaft?</h3>
+            <p class="text-ink-700 leading-relaxed">
+              Sobald die KESB Vermögensverwaltung anordnet, gilt die <strong>VBVV</strong> — die <em>Verordnung über die Vermögensverwaltung im Rahmen einer Beistandschaft oder Vormundschaft</em> (SR 211.223.11, total revidiert, in Kraft seit 1.1.2024). Sie sagt sehr präzise, was erlaubt ist — und was nicht.
+            </p>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-5 lg:gap-6">
+
+            <!-- Wertschriften -->
+            <article class="border border-ink-200 rounded-2xl p-6 lg:p-7 num-tabular">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="font-mono text-xs bg-brand-50 text-brand-700 px-2 py-1 rounded">VBVV Art. 6 – 8</div>
+              </div>
+              <h4 class="font-semibold text-lg mb-2">Wertschriften / Aktien-Portfolio</h4>
+              <p class="text-sm text-ink-700 leading-relaxed mb-4">Nein, nicht automatisch alles verkauft — aber stark eingeschränkt umgeschichtet.</p>
+              <ul class="text-sm text-ink-700 space-y-2.5 list-disc pl-5">
+                <li><strong>Art. 6 — „sichere Anlagen"</strong> (ohne KESB-Bewilligung erlaubt): Kassenobligationen / Festgelder bei Kantonalbanken, Schweizer Bundes- und Pfandbrief-Obligationen, konservative Anlagefonds nach Art. 6.</li>
+                <li><strong>Art. 7 — „weitergehende Bedürfnisse"</strong> (Aktien-Anteil möglich): nur mit ausdrücklicher <strong>KESB-Zustimmung</strong>. Keine fixe Aktienquote in der Verordnung — die Allokation muss zur Person passen.</li>
+                <li><strong>Art. 8 — Bestandesschutz / Umschichtungspflicht</strong>: bestehende, nicht-VBVV-konforme Wertschriften sind <strong>innert angemessener Frist, spätestens innert 2 Jahren</strong> in zulässige Anlagen umzuschichten. Persönliche Verhältnisse und Wünsche sind zu berücksichtigen — in der Praxis aber selten dein Veto wert.</li>
+              </ul>
+              <div class="mt-4 pt-4 border-t border-ink-100 text-xs text-ink-500">
+                Praxisrealität: Banken bieten Beiständen 2–3 vordefinierte VBVV-konforme Strategien (Obligationen / Ausgewogen / Rendite) — deine bisherige Asset-Allokation wird darin oft <em>nicht</em> abgebildet.
+              </div>
+            </article>
+
+            <!-- Firma -->
+            <article class="border border-ink-200 rounded-2xl p-6 lg:p-7 num-tabular">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="font-mono text-xs bg-brand-50 text-brand-700 px-2 py-1 rounded">ZGB Art. 416</div>
+              </div>
+              <h4 class="font-semibold text-lg mb-2">Firmenbeteiligung (GmbH / AG)</h4>
+              <p class="text-sm text-ink-700 leading-relaxed mb-4">Nicht automatisch verkauft — aber auch nicht aktiv weitergeführt. Heikelster Punkt für Selbständige.</p>
+              <ul class="text-sm text-ink-700 space-y-2.5 list-disc pl-5">
+                <li><strong>Bestandesschutz</strong> gilt analog Art. 8 VBVV: bestehende Beteiligungen werden nicht reflexartig liquidiert.</li>
+                <li><strong>Veräusserung, Liquidation, aussergewöhnliche Geschäftsführungs-Entscheide</strong> brauchen zwingend KESB-Zustimmung nach Art. 416 Abs. 1 ZGB.</li>
+                <li><strong>KOKES-Praxis</strong>: tendenziell Weiterführung bei Erhaltungsinteresse — aber der Beistand führt das Geschäft selbst <em>nicht</em>. Ohne Stellvertretungs-Regelung steht die Firma operativ still oder muss mandatiert werden.</li>
+                <li>Aktionärsentscheide (GV-Beschlüsse, Bankvollmachten) durch den Beistand: zustimmungsbedürftig — oft <strong>Monate Wartezeit</strong>.</li>
+              </ul>
+              <div class="mt-4 pt-4 border-t border-ink-100 text-xs text-ink-500">
+                Für KMU-Inhaber ist das der eigentliche Grund für einen Vorsorgeauftrag: Stellvertretungs-Klauseln (Zeichnungsrecht, Bankvollmacht, GV-Stimmrecht) <em>vorab</em> festschreiben.
+              </div>
+            </article>
+
+            <!-- Liegenschaft -->
+            <article class="border border-ink-200 rounded-2xl p-6 lg:p-7 num-tabular">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="font-mono text-xs bg-brand-50 text-brand-700 px-2 py-1 rounded">ZGB Art. 416 Abs. 1 Ziff. 4</div>
+              </div>
+              <h4 class="font-semibold text-lg mb-2">Liegenschaft / Immobilie</h4>
+              <p class="text-sm text-ink-700 leading-relaxed mb-4">Klar geregelt — und der Schutz funktioniert hier am besten.</p>
+              <ul class="text-sm text-ink-700 space-y-2.5 list-disc pl-5">
+                <li><strong>Erwerb, Veräusserung, Verpfändung</strong> von Grundstücken und Bauten: <strong>zwingende KESB-Zustimmung</strong>.</li>
+                <li><strong>Vermietung</strong> (gewöhnlicher Mietvertrag): ordentliche Verwaltung — keine Zustimmung nötig.</li>
+                <li>Ausnahme Art. 416 Abs. 2 ZGB: Wenn die betroffene Person urteilsfähig ist und zustimmt, entfällt die Zustimmungspflicht.</li>
+              </ul>
+              <div class="mt-4 pt-4 border-t border-ink-100 text-xs text-ink-500">
+                Bei Eigenheim mit Hypothek: der Beistand führt die laufenden Zahlungen weiter — Umschuldung oder Refinanzierung dagegen ist zustimmungspflichtig und langsam.
+              </div>
+            </article>
+
+            <!-- Inventar + Aufsicht -->
+            <article class="border border-ink-200 rounded-2xl p-6 lg:p-7 num-tabular">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="font-mono text-xs bg-brand-50 text-brand-700 px-2 py-1 rounded">ZGB Art. 405 + 410</div>
+              </div>
+              <h4 class="font-semibold text-lg mb-2">Inventar &amp; jährliche Rechenschaft</h4>
+              <p class="text-sm text-ink-700 leading-relaxed mb-4">Pflicht ab Tag 1 — fremde Augen auf deinen Vermögen.</p>
+              <ul class="text-sm text-ink-700 space-y-2.5 list-disc pl-5">
+                <li><strong>Art. 405 Abs. 2 ZGB</strong>: Beistand muss zusammen mit der KESB ein <strong>Inventar</strong> über das Vermögen erstellen — die betroffene Person ist mitwirkungspflichtig.</li>
+                <li><strong>Art. 410 ZGB</strong>: jährliche <strong>Rechenschaftsablage</strong> an die KESB über Vermögensentwicklung, Einnahmen, Ausgaben, getätigte Geschäfte.</li>
+                <li>Belege sind aufzubewahren, Bankauszüge offen zu legen — der Beistand führt im Grunde eine externe Buchhaltung deines Privatlebens.</li>
+              </ul>
+              <div class="mt-4 pt-4 border-t border-ink-100 text-xs text-ink-500">
+                Bei wirksamem Vorsorgeauftrag entfällt diese Rechenschaftspflicht regelmässig — du kannst sie vertraglich entweder belassen oder weglassen. Ein faktisches Mehr an Privatsphäre.
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Personalmangel Einfluss -->
+          <div class="mt-7 bg-ink-50 rounded-2xl p-6 lg:p-7">
+            <div class="flex items-start gap-4">
+              <div class="font-mono text-xs bg-ink-900 text-white px-2 py-1 rounded flex-shrink-0">Personalfrage</div>
+              <div class="text-sm text-ink-700 leading-relaxed">
+                <strong>Hat Personalmangel Einfluss?</strong> Ja — und das ist dokumentiert. Die <em>NZZ</em> beschreibt KESB-Beistände als „oft untätig, unerreichbar und überlastet". Konsequenzen aus der Praxis: <strong>unbezahlte Rechnungen, vernachlässigte Steuererklärungen, verzögerte Genehmigungs-Anträge</strong>. Eine systematische akademische Quantifizierung des Vermögensschadens fehlt — aber die anekdotische Evidenz aus Beobachter, NZZ, Basler Zeitung ist konsistent. Bei Fallbelastungen von 80–110 Mandaten pro 100 %-Pensum hat <em>dein</em> Beistand statistisch keine 2 Arbeitsstunden pro Woche für dich.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mit vs. Ohne -->
+        <div class="mb-14">
+          <div class="max-w-2xl mb-7">
+            <div class="label text-brand-600 mb-3">— Vergleich</div>
+            <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-3">Mit Vorsorgeauftrag <span class="text-ink-400">vs.</span> Ohne.</h3>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-5">
+            <div class="card !rounded-2xl p-7 border-l-4 !border-brand-600">
+              <div class="label text-brand-600 mb-3">Mit gültigem Vorsorgeauftrag</div>
+              <ul class="text-sm text-ink-800 space-y-2.5">
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>Deine Vertrauensperson (Partner / Kind / Geschwister / Anwalt) übernimmt</span></li>
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>KESB validiert nur — und zieht sich dann zurück</span></li>
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>Du legst Aufgabenbereiche, Befugnisse, Ersatzpersonen selbst fest</span></li>
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>Keine laufenden Beistand-Honorare aus deinem Vermögen</span></li>
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>Bei Selbständigen: Firma bleibt handlungsfähig (Bankvollmacht, Aktionärsrechte)</span></li>
+                <li class="flex gap-3"><span class="text-brand-600 font-bold flex-shrink-0">✓</span><span>Einmal-Kosten: CHF 75 (handschriftlich) bis CHF 600–1'500 (notariell)</span></li>
+              </ul>
+            </div>
+            <div class="card !rounded-2xl p-7 border-l-4 border-ink-300">
+              <div class="label text-ink-500 mb-3">Ohne (oder ungültig)</div>
+              <ul class="text-sm text-ink-700 space-y-2.5">
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>KESB eröffnet Verfahren — Angehörige müssen sich erst durchsetzen</span></li>
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>Oft wird ein <strong>Berufsbeistand</strong> (Fremdperson) eingesetzt, nicht der Partner</span></li>
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>Jedes wichtige Geschäft muss bei der KESB beantragt und genehmigt werden</span></li>
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>Laufende Kosten: ca. CHF 1'500–6'000 / Jahr aus deinem Vermögen</span></li>
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>Bei Selbständigen: Firma kann monatelang blockiert sein</span></li>
+                <li class="flex gap-3"><span class="text-ink-400 font-bold flex-shrink-0">✕</span><span>Beschwerden gegen KESB-Entscheide sind langwierig und teuer</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empfehlung -->
+        <div class="bg-ink-950 text-white rounded-3xl p-8 lg:p-12 relative overflow-hidden">
+          <div class="absolute -bottom-24 -left-24 w-[420px] h-[420px] bg-brand-600 rounded-full blur-3xl opacity-20 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative grid lg:grid-cols-12 gap-10">
+            <div class="lg:col-span-4">
+              <div class="label text-brand-200 mb-3">— Glatt-Broker-Empfehlung</div>
+              <h3 class="display text-2xl lg:text-3xl tracking-tighter2 mb-4">Unser konkreter Rat.</h3>
+              <p class="text-ink-300 leading-relaxed text-sm">
+                Wir sehen es bei Mandaten regelmässig: die Familie ist überfordert, die KESB übernimmt, das Vermögen schrumpft durch Friktion. Das ist vermeidbar — in einem Nachmittag.
+              </p>
+            </div>
+            <div class="lg:col-span-8 grid sm:grid-cols-2 gap-5 num-tabular">
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">01</div>
+                <div class="font-semibold mb-1.5">Beide Dokumente gehören zusammen</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Vorsorgeauftrag <em>und</em> Patientenverfügung — nicht eins oder anders. Beide regeln verschiedene Welten (Vermögen vs. Medizin).</div>
+              </div>
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">02</div>
+                <div class="font-semibold mb-1.5">Nicht erst ab 60</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Unfall, Schlaganfall, Aneurysma passieren mit 35 genauso. Wir empfehlen ab dem 1. Kind / 1. Firma / 1. Liegenschaft.</div>
+              </div>
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">03</div>
+                <div class="font-semibold mb-1.5">Komplexes Vermögen → Notar</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Bei Firma, Immobilien, Patchwork-Familie oder grenzüberschreitenden Vermögen <strong>öffentlich beurkunden</strong> lassen — handschriftlich greift dort zu kurz.</div>
+              </div>
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">04</div>
+                <div class="font-semibold mb-1.5">Auffindbarkeit zuerst</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Vorsorgeauftrag <strong>beim Zivilstandsamt hinterlegen</strong> (CHF 75). Patientenverfügung auf der <strong>Krankenkassen-Karte eintragen</strong>. Sonst nutzlos.</div>
+              </div>
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">05</div>
+                <div class="font-semibold mb-1.5">Selbständige zuerst</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Wer eine GmbH/AG führt, braucht klare Stellvertretungs-Klauseln: Bankvollmacht, Aktionärsrechte, Zeichnungsrecht. Sonst steht die Firma still.</div>
+              </div>
+              <div>
+                <div class="font-mono text-brand-200 text-sm mb-1">06</div>
+                <div class="font-semibold mb-1.5">Review alle 3–5 Jahre</div>
+                <div class="text-ink-300 text-sm leading-relaxed">Bei Heirat, Scheidung, neuem Kind, Firmenverkauf oder Tod der Vertrauensperson <strong>sofort</strong> anpassen. Veraltete Dokumente sind oft schlimmer als keine.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative mt-8 pt-8 border-t border-white/15 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <p class="text-ink-300 text-sm max-w-xl">
+              Wir setzen das nicht selbst auf — aber wir zeigen dir <strong>was du brauchst</strong>, koordinieren mit Notar / Anwalt und stellen sicher, dass Vorsorgeauftrag, Patientenverfügung, 3a-Begünstigung und Testament <em>zusammen</em> funktionieren.
+            </p>
+            <a href="kontakt.html?topic=vorsorgeauftrag" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white whitespace-nowrap">Setup besprechen<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+
+        <!-- Quellen -->
+        <div class="mt-8 pt-6 border-t border-ink-200">
+          <div class="label text-ink-500 mb-3">— Quellen &amp; rechtliche Grundlagen</div>
+          <ul class="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-ink-500">
+            <li><a href="https://www.fedlex.admin.ch/eli/cc/24/233_245_233/de" target="_blank" rel="noopener" class="ulink hover:text-ink-900">ZGB Art. 360–373 · Eigene Vorsorge ↗</a></li>
+            <li><a href="https://www.fedlex.admin.ch/eli/cc/24/233_245_233/de" target="_blank" rel="noopener" class="ulink hover:text-ink-900">ZGB Art. 390–416 · Beistandschaften &amp; Zustimmung ↗</a></li>
+            <li><a href="https://www.fedlex.admin.ch/eli/cc/2012/459/de" target="_blank" rel="noopener" class="ulink hover:text-ink-900">VBVV SR 211.223.11 · Vermögensverwaltung ↗</a></li>
+            <li><a href="https://www.bj.admin.ch/dam/bj/de/data/gesellschaft/gesetzgebung/kesr/erlaeuterungen-vbvv.pdf.download.pdf/erlaeuterungen-vbvv-d.pdf" target="_blank" rel="noopener" class="ulink hover:text-ink-900">BJ · Erläuterungen zur VBVV ↗</a></li>
+            <li><a href="https://www.kokes.ch/de/dokumentation/statistik/aktuellste-zahlen" target="_blank" rel="noopener" class="ulink hover:text-ink-900">KOKES-Fallzahlen 2023 ↗</a></li>
+            <li><a href="https://www.kokes.ch/application/files/2716/2814/0146/KOKES_Empfehlungen_Berufsbeistandschaften.pdf" target="_blank" rel="noopener" class="ulink hover:text-ink-900">KOKES · Empfehlungen Berufsbeistandschaften ↗</a></li>
+            <li><a href="https://www.prosenectute.ch/de/ratgeber/persoenliche-vorsorge/erwachsenenschutzrecht.html" target="_blank" rel="noopener" class="ulink hover:text-ink-900">Pro Senectute · Erwachsenenschutzrecht ↗</a></li>
+            <li><a href="https://www.bj.admin.ch/bj/de/home/gesellschaft/gesetzgebung/kesr.html" target="_blank" rel="noopener" class="ulink hover:text-ink-900">EJPD · Kindes- und Erwachsenenschutzrecht ↗</a></li>
+            <li><a href="https://leitfaden.samw.fmh.ch/rechtlicher-leitfaden/3-grundlagen-der-behandlung/34-patientenverfuegung.cfm" target="_blank" rel="noopener" class="ulink hover:text-ink-900">SAMW · Patientenverfügung-Leitfaden ↗</a></li>
+            <li><a href="https://www.nzz.ch/schweiz/kesb-beistaende-sind-oft-untaetig-unerreichbar-und-ueberlastet-ld.1454312" target="_blank" rel="noopener" class="ulink hover:text-ink-900">NZZ · Fallbelastung &amp; Praxiskritik ↗</a></li>
+          </ul>
+          <p class="text-xs text-ink-400 mt-3 leading-relaxed">Diese Sektion vermittelt allgemeine Orientierung — sie ersetzt keine individuelle Rechtsberatung. Für die rechtsgültige Errichtung von Vorsorgeauftrag und Patientenverfügung koordinieren wir mit Notar bzw. Anwalt deiner Wahl.</p>
         </div>
       </div>
     </section>
@@ -864,9 +1350,105 @@
     }
     renderAnnualChart();
 
+
+    // Vermögensaufbau-Rechner
+    (function () {
+      const ids = ['wealthStart', 'wealthAnnual', 'wealthYears', 'wealthTarget', 'wealthReturn', 'wealthStrategy'];
+      const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+      const chart = document.getElementById('wealthChart');
+      if (!chart || Object.values(els).some(el => !el)) return;
+
+      const fmtChf = (n) => 'CHF ' + Math.round(n).toLocaleString('de-CH');
+      const read = (id) => Math.max(0, Number(els[id].value) || 0);
+
+      function buildProjection(start, annual, years, rate) {
+        const rows = [{ year: 0, paid: start, balance: start }];
+        let balance = start;
+        let paid = start;
+        for (let y = 1; y <= years; y += 1) {
+          balance = balance * (1 + rate) + annual;
+          paid += annual;
+          rows.push({ year: y, paid, balance });
+        }
+        return rows;
+      }
+
+      function neededAnnual(start, target, years, rate) {
+        if (years <= 0) return 0;
+        const futureStart = start * Math.pow(1 + rate, years);
+        if (rate === 0) return Math.max(0, (target - futureStart) / years);
+        const factor = (Math.pow(1 + rate, years) - 1) / rate;
+        return Math.max(0, (target - futureStart) / factor);
+      }
+
+      function renderChart(rows, target) {
+        const width = 760;
+        const height = 300;
+        const pad = { l: 58, r: 20, t: 20, b: 42 };
+        const maxVal = Math.max(target, ...rows.map(r => r.balance), ...rows.map(r => r.paid), 1);
+        const maxYear = Math.max(rows[rows.length - 1].year, 1);
+        const x = (year) => pad.l + (year / maxYear) * (width - pad.l - pad.r);
+        const y = (val) => pad.t + (1 - val / maxVal) * (height - pad.t - pad.b);
+        const line = (key) => rows.map(r => `${x(r.year).toFixed(1)},${y(r[key]).toFixed(1)}`).join(' ');
+        const targetY = y(target);
+        const end = rows[rows.length - 1];
+
+        chart.innerHTML = `
+          <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Vermögensprojektion" class="w-full h-auto">
+            <line x1="${pad.l}" y1="${targetY}" x2="${width - pad.r}" y2="${targetY}" stroke="#CC2936" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.8"/>
+            <text x="${width - pad.r}" y="${Math.max(14, targetY - 8)}" text-anchor="end" font-size="12" fill="#CC2936" font-family="JetBrains Mono">Ziel ${fmtChf(target)}</text>
+            <polyline points="${line('paid')}" fill="none" stroke="#A3A3A3" stroke-width="2.5"/>
+            <polyline points="${line('balance')}" fill="none" stroke="#CC2936" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="${x(end.year)}" cy="${y(end.balance)}" r="5" fill="#CC2936"/>
+            <line x1="${pad.l}" y1="${height - pad.b}" x2="${width - pad.r}" y2="${height - pad.b}" stroke="#E5E5E5"/>
+            <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#E5E5E5"/>
+            <text x="${pad.l}" y="${height - 14}" text-anchor="start" font-size="12" fill="#737373" font-family="JetBrains Mono">heute</text>
+            <text x="${width - pad.r}" y="${height - 14}" text-anchor="end" font-size="12" fill="#737373" font-family="JetBrains Mono">${end.year} Jahre</text>
+            <text x="${pad.l + 6}" y="${pad.t + 12}" font-size="12" fill="#737373" font-family="JetBrains Mono">${fmtChf(maxVal)}</text>
+          </svg>
+          <div class="flex flex-wrap gap-4 mt-3 text-sm text-ink-700">
+            <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-600"></span>Projektion</span>
+            <span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-ink-400"></span>Einzahlungen</span>
+          </div>
+        `;
+      }
+
+      function update() {
+        const start = read('wealthStart');
+        const annual = read('wealthAnnual');
+        const years = Math.min(45, Math.max(1, read('wealthYears')));
+        const target = read('wealthTarget');
+        const rate = (Number(els.wealthReturn.value) || 0) / 100;
+        const rows = buildProjection(start, annual, years, rate);
+        const end = rows[rows.length - 1];
+        const gain = Math.max(0, end.balance - end.paid);
+        const gap = target - end.balance;
+        const needed = neededAnnual(start, target, years, rate);
+        const label = els.wealthStrategy.selectedOptions[0]?.dataset.label || 'gewählte Strategie';
+
+        document.getElementById('wealthEnd').textContent = fmtChf(end.balance);
+        document.getElementById('wealthGain').textContent = fmtChf(gain);
+        const gapEl = document.getElementById('wealthGap');
+        gapEl.textContent = gap > 0 ? fmtChf(gap) : 'Ziel erreicht';
+        gapEl.classList.toggle('text-brand-600', gap <= 0);
+        document.getElementById('wealthSummary').textContent =
+          `${fmtChf(annual)} pro Jahr über ${years} Jahre mit ${((rate || 0) * 100).toFixed(1)}% p.a. (${label}). Für das Ziel wären rund ${fmtChf(needed)} Jahresbeitrag nötig.`;
+        document.getElementById('wealthCta').href =
+          `kontakt.html?topic=anlage&betrag=${Math.round(annual)}&laufzeit=${years}&ziel=${Math.round(target)}&rendite=${((rate || 0) * 100).toFixed(1)}`;
+        renderChart(rows, target);
+      }
+
+      els.wealthStrategy.addEventListener('change', () => {
+        els.wealthReturn.value = Number(els.wealthStrategy.value).toFixed(1);
+        update();
+      });
+      ids.forEach(id => els[id].addEventListener('input', update));
+      update();
+    })();
     // Sticky nav shadow
     const nav = document.getElementById('navInner');
     if (nav) addEventListener('scroll', () => { nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30); }, { passive: true });
   </script>
 </body>
 </html>
+

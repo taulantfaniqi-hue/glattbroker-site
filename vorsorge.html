@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -406,6 +406,7 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -539,6 +540,7 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -864,7 +866,7 @@
                 </div>
 
                 <div class="relative">
-                  <svg id="sChart" viewBox="0 0 600 280" class="w-full h-auto" preserveAspectRatio="none">
+                  <svg id="sChart" viewBox="0 0 600 280" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
                     <defs>
                       <linearGradient id="sFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="#CC2936" stop-opacity="0.18"/>
@@ -1282,11 +1284,11 @@
             <h4 class="font-semibold mb-1.5 tracking-tight">Lebenspartner absichern</h4>
             <p class="text-ink-700 text-[0.93rem] leading-relaxed">Witwen-/Witwerrente hat Lücken — besonders bei unverheirateten Paaren. Begünstigungen und Vorsorgeauftrag prüfen.</p>
           </div>
-          <div class="bg-white p-6 lg:p-7">
+          <a href="finanzen.html#vorsorgeauftrag" class="bg-white p-6 lg:p-7 block transition hover:bg-ink-50 group">
             <div class="font-mono text-brand-600 text-sm font-medium mb-2">08</div>
-            <h4 class="font-semibold mb-1.5 tracking-tight">Vorsorge-rechtliche Doks</h4>
-            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Vorsorgeauftrag, Patienten­verfügung, Vollmacht, Testament — günstig zu erstellen, teuer zu vermissen.</p>
-          </div>
+            <h4 class="font-semibold mb-1.5 tracking-tight group-hover:text-brand-600">Vorsorge-rechtliche Doks <span aria-hidden="true" class="text-brand-600 opacity-0 group-hover:opacity-100 transition">→</span></h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Vorsorgeauftrag, Patienten­verfügung, KESB-Schutz — günstig zu erstellen, teuer zu vermissen.</p>
+          </a>
           <div class="bg-white p-6 lg:p-7">
             <div class="font-mono text-brand-600 text-sm font-medium mb-2">09</div>
             <h4 class="font-semibold mb-1.5 tracking-tight">Nachlassplanung</h4>
@@ -2713,32 +2715,31 @@
           'ambulantBalance': {
             name: 'myFlex Ambulant Balance',
             tier: 'Ambulant',
-            sub: 'Mittlere Deckung Ambulant',
+            sub: 'Ambulante Deckung Stufe Balance',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo + Bewegungs-Kurse' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              zahn:      { value: 0, note: 'Nicht enthalten — separat abschliessen' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Check-up, Impfungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr', note: 'Notfalltransport' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel + Heilbehelfe' },
+              brille:    { value: 150, unit: 'CHF', period: 'Jahr', note: 'ab 19 J.; bis 18 J. CHF 150/Fall' },
+              fitness:   { value: 250, unit: 'CHF', period: 'Jahr', note: 'Gesundheitskonto Balance: 50%, max. CHF 250/Jahr' },
+              zahn:      { value: 1000, unit: 'CHF', period: 'Jahr', note: '50% bis CHF 1\'000/Jahr; Kieferorthopädie bis 20 J. 50% bis CHF 12\'000' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '2 Jahre', note: 'Check-up gemäss CSS-Gesundheitskonto Balance' },
+              transport: { value: 'Unbegrenzt', note: 'Notfalltransporte weltweit; Such-/Rettung CHF 100\'000/Fall; Repatriierung unbegrenzt' },
+              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: '90% bis CHF 1\'000/Jahr gemäss CSS-Liste' },
             },
           },
-          'spitalEconomy': {
-            name: 'Spital Economy',
+          'spitalBalance': {
+            name: 'myFlex Spital Balance',
             tier: 'Spital',
-            sub: 'Allgemein, freie Spitalwahl Wohnkanton',
+            sub: 'Spitaldeckung Stufe Balance',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in Listspitälern Wohnkanton' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland (KVG-Tarif)' },
+              spital:  { value: 'Allgemein bis privat', note: 'Ganze Schweiz in KVG-/CSS-anerkannten Spitälern; Abteilung vor Eintritt wählbar; Kostenbeteiligung je Variante' },
+              ausland: { value: 'Weltweit unbegrenzt', note: 'Stationäre Notfallbehandlung weltweit; in der Schweiz gemäss gewählter Spitalabteilung' },
             },
           },
-          'alternativEconomy': {
-            name: 'Alternativ Economy',
+          'alternativBalance': {
+            name: 'myFlex Alternativ Balance',
             tier: 'Alternativ',
-            sub: 'Komplementärmedizin · Add-on',
+            sub: 'Komplementärmedizin Stufe Balance',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr · TCM, Akupunktur, Naturheilkunde, Homöopathie' },
+              alternativ: { value: 80, unit: '%', limit: 3000, note: 'Komplementärmedizin inkl. natürliche Heilmittel bis CHF 3\'000/Jahr; Erwachsene: CHF 300 Franchise und 20% Selbstbehalt' },
             },
           },
         },
@@ -2746,28 +2747,19 @@
       Helsana: {
         color: '#E60028',
         products: {
-          'completa': {
-            name: 'COMPLETA',
+          'completaPrimeo': {
+            name: 'COMPLETA + PRIMEO',
             tier: 'Ambulant',
-            sub: 'Vollumfängliche Ambulant-Versicherung',
+            sub: 'COMPLETA für ambulante Leistungen, PRIMEO als Zusatz für Vorsorge, Innovation und Ergänzungen',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen, ab 18 J.' },
-              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo bis CHF 200/J · TOP +200' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 5000, note: '75% bis CHF 5\'000/Jahr (mit TOP)' },
-              zahn:      { value: 0, note: 'Separat: Helsana Dental' },
-              vorsorge:  { value: 750, unit: 'CHF', period: 'Jahr', note: 'Vorsorge + Impfungen + Sehkraftkontrolle' },
-              transport: { value: 50, unit: '%', period: 'unbegrenzt', note: 'Rettungs- & Bergungskosten' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel & Heilbehelfe' },
-              ausland:   { value: 'Voll', note: 'Notfall + ungeplante Behandlung' },
-            },
-          },
-          'hospitalPlus': {
-            name: 'HOSPITAL PLUS',
-            tier: 'Spital',
-            sub: 'Halbprivat / Privat (modular)',
-            benefits: {
-              spital:  { value: 'Halbprivat / Privat', note: 'Freie Spitalwahl Schweiz · Hotellerie' },
-              ausland: { value: 'Voll', note: 'Stationärer Aufenthalt im Ausland' },
+              brille:    { value: 500, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 90% bis CHF 300/Jahr; PRIMEO ergänzt den übersteigenden Betrag zu 90% bis CHF 200/Jahr' },
+              fitness:   { value: 400, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 75% bis CHF 200/Bereich; PRIMEO ergänzt den übersteigenden Betrag bis CHF 200/Jahr' },
+              alternativ:{ value: 90, unit: '%', limit: 5000, note: 'COMPLETA: 75% für anerkannte Komplementärmedizin, stationär bis CHF 5\'000/Jahr; PRIMEO ergänzt ambulant um 15% bzw. zusätzliche Methoden/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Zahnfehlstellungskorrekturen bis 20 J.: 75% bis CHF 10\'000/Jahr' },
+              vorsorge:  { value: 1700, unit: 'CHF', period: '3 Jahre', note: 'PRIMEO: Check-ups gemäss Helsana-Liste bis CHF 1\'700/3 Jahre; COMPLETA: Prävention 90% bis CHF 750/Jahr' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: Transporte/Rettungen in der Schweiz bis CHF 100\'000/Jahr; PRIMEO ergänzt Suchaktionen in der Schweiz bis CHF 30\'000' },
+              hilfsmittel: { value: 5000, unit: 'CHF', period: 'Jahr', note: 'PRIMEO: Anteil über Grundversicherung bis CHF 5\'000/Jahr gemäss MiGeL; COMPLETA bis CHF 1\'500/Jahr' },
+              ausland:   { value: '100% Mehrkosten', note: 'COMPLETA: akute ambulante/stationäre Notfälle im Ausland, 100% der Kosten über Grundversicherung; Assistance im Ausland unlimitiert' },
             },
           },
         },
@@ -2775,91 +2767,76 @@
       Swica: {
         color: '#003E80',
         products: {
-          'fortePrevita': {
-            name: 'COMPLETA FORTE + PRAEVENTA',
+          'fortePraevita': {
+            name: 'COMPLETA FORTE + PRAEVITA',
             tier: 'Ambulant',
-            sub: 'COMPLETA FORTE für Ambulant + PRAEVENTA für Vorsorge',
+            sub: 'COMPLETA FORTE für ambulante Leistungen + PRAEVITA für Vorsorge/Prävention',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe alle 3 Jahre' },
-              fitness:   { value: 800, unit: 'CHF', period: 'Jahr', note: 'Fitness, Bewegungskurse, Active Programme' },
-              alternativ:{ value: 90, unit: '%', period: 'pro Sitzung', limit: 6000, note: '90% bis CHF 6\'000/Jahr · breite Anerkennung' },
-              zahn:      { value: 0, note: 'Separat: SUPPLEMENTA für Zahn' },
-              vorsorge:  { value: 1000, unit: 'CHF', period: 'Jahr', note: 'PRAEVENTA: Vorsorge, Check-ups, Sehkraft' },
-              transport: { value: 100, unit: '%', period: 'unbegrenzt', note: 'Notfalltransport + Bergung' },
-              hilfsmittel: { value: 1500, unit: 'CHF', period: 'Jahr', note: 'Inkl. Hörgeräte-Anteil' },
-              ausland:   { value: 'Voll', note: 'Weltweite Reise- & Notfalldeckung' },
-            },
-          },
-          'hospitalAllgemein': {
-            name: 'HOSPITA Allgemein',
-            tier: 'Spital',
-            sub: 'Allgemeine Abteilung · freie Spitalwahl Schweiz',
-            benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in der ganzen Schweiz (Listspitäler)' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              brille:    { value: 900, unit: 'CHF', period: '3 Jahre', note: '90% der Optikerrechnung; nicht kumulierbar mit Grundversicherung' },
+              fitness:   { value: 1000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA FORTE: 90% bis CHF 500/Jahr + PRAEVITA: 50% bis CHF 500/Jahr; je max. CHF 300 pro Vorsorgeart, zusammen bis CHF 1\'000/Jahr' },
+              alternativ:{ value: 120, unit: 'CHF', period: 'Std.', note: 'COMPLETA FORTE: bis CHF 120/Std. bei SWICA-anerkannten Ärzten/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Kieferorthopädie 50% bis CHF 10\'000/Jahr bis 25 J.; Dentalhygiene 50% bis CHF 100/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '3 Jahre', note: 'PRAEVITA: Check-ups 90% bis CHF 500/3 Jahre' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'Schweiz: Notfall-/Verlegungstransporte und Such-/Bergungsaktionen 90% bis CHF 100\'000/Jahr; Ausland bis CHF 150\'000/Jahr' },
+              hilfsmittel: { value: 500, unit: 'CHF', period: 'Jahr', note: 'PRAEVITA 90% bis CHF 500/Jahr; COMPLETA FORTE 90% bis CHF 200/Jahr' },
+              ausland:   { value: 'Volle Deckung', note: 'Notfallbehandlung ambulant und stationär im Ausland; private Spitalklasse für die ersten 3 Reisemonate' },
             },
           },
         },
       },
       Concordia: {
         color: '#003B71',
-        review: true,
         products: {
-          'diversaPrimaTop': {
-            name: 'DIVERSA PRIMA / TOP',
+          'diversaPlus': {
+            name: 'DIVERSA plus',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — bitte mit Glatt-Broker bestätigen',
+            sub: 'Ambulante Zusatzversicherung mit Sehhilfe, Hilfsmitteln, Ausland und Transport',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Bewegung & Prävention' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Vorsorge-Untersuchungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 250, unit: 'CHF', period: '3 Jahre', note: 'Ab 18 J.: CHF 250/3 Jahre; bis 18 J.: CHF 250/Jahr' },
+              zahn:      { value: 75, unit: '%', note: 'Ambulante Zahn-/Kieferleistungen bei definierten Erkrankungen/Kieferorthopädie bis 22 J.; stationär allgemeine Abteilung im Vertragsspital' },
+              transport: { value: 'Unbegrenzt', note: 'Rettungs- und Transportkosten unbeschränkt; Suchaktion zur Rettung und Bergung max. CHF 20\'000' },
+              hilfsmittel: { value: 2000, unit: 'CHF', note: '50% bis max. CHF 2\'000' },
+              ausland:   { value: 'Ortstarif', note: 'Notfall im Ausland: stationär max. 60 Tage, ambulant ortsüblicher Tarif; Such-/Rettungskosten max. CHF 20\'000' },
             },
           },
           'natura': {
-            name: 'NATURA (Alternativ)',
+            name: 'NATURA',
             tier: 'Alternativ',
-            sub: '⚠ Vorläufig — Komplementärmedizin Add-on',
+            sub: 'Komplementärmedizin, Gesundheitsförderung und Vorsorge',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr' },
-            },
-          },
-          'hospita': {
-            name: 'HOSPITA Allgemein / Halbprivat / Privat',
-            tier: 'Spital',
-            sub: '⚠ Vorläufig',
-            benefits: {
-              spital:  { value: 'Allgemein bis Privat', note: 'Modular · freie Spitalwahl' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              alternativ:{ value: 75, unit: '%', limit: 4000, note: 'Über 70 anerkannte Methoden; Naturheilpraktik 75% bis CHF 4\'000/Jahr, therapeutische Behandlung 75% bis CHF 1\'500/Jahr; Gesamtlimite CHF 4\'000/Jahr' },
+              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Rücken, Haltung, Fitness, Gesundheits-Apps usw.: 50% bis CHF 200/Bereich; mehrere Bereiche max. CHF 500/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Medizinische Vorsorge/Check-ups: 90% bis CHF 500/Jahr, wenn von CONCORDIA anerkannt' },
             },
           },
         },
       },
       Sympany: {
         color: '#E40046',
-        review: true,
         products: {
-          'premioStartPlus': {
-            name: 'premio.plus',
+          'plusNatura': {
+            name: 'plus + natura',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — Mittlere Ambulant-Deckung',
+            sub: 'Ambulante Zusatzversicherung plus mit natura-Erweiterung',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness, Yoga, Pilates' },
-              alternativ:{ value: 80, unit: '%', period: 'pro Sitzung', limit: 3000, note: '80% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 800, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfen/Hilfsmittel: Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre' },
+              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fit bleiben: max. CHF 200/Jahr; Fit werden max. CHF 150/Jahr' },
+              alternativ:{ value: 80, unit: '%', limit: 6000, note: 'Mit natura: anerkannte Alternativmedizin 80%, erweiterte Methoden 50% bis CHF 1\'000/Jahr; Gesamtlimite CHF 6\'000/Jahr' },
+              zahn:      { value: 10000, unit: 'CHF', note: 'Kieferorthopädie bis 25 J.: 70% bis CHF 10\'000, Wartefrist gemäss Bedingungen' },
+              vorsorge:  { value: 300, unit: 'CHF', period: 'Jahr', note: 'Prävention max. CHF 300/Jahr; gynäkologische Vorsorge 90%, eine Untersuchung pro Jahr' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen max. CHF 100\'000/Jahr' },
+              hilfsmittel: { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre; übrige Hilfsmittel 50% bis CHF 250/Jahr' },
+              ausland:   { value: 'Volle Kostenübernahme', note: 'Ambulante/stationäre Notfälle im Ausland im Nachgang zur Grundversicherung' },
             },
           },
-          'spitalStandard': {
-            name: 'Spital Standard',
+          'hospitalAllgemein': {
+            name: 'hospital allgemein',
             tier: 'Spital',
-            sub: '⚠ Vorläufig',
+            sub: 'Spitalzusatzversicherung allgemeine Abteilung',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl Wohnkanton' },
-              ausland: { value: 'Notfall' },
+              spital:  { value: 'Allgemein Schweiz', note: 'Volle Kostenübernahme in der allgemeinen Abteilung, freie Spitalwahl ganze Schweiz' },
+              ausland: { value: '90 Tage', note: 'Volle Kostenübernahme für die ersten 90 Tage; danach Tagespauschalen bis zum 180. Tag' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen keine Kostenübernahme' },
             },
           },
         },
@@ -3798,8 +3775,14 @@
     function sGeneratePdf() {
       const res = sCompute();
       const today = new Date();
-      const dateStr = today.toLocaleDateString('de-CH', { day: '2-digit', month: 'long', year: 'numeric' });
-      const filename = `Finanzplan-3.Saeule-Glatt-Broker-${today.toISOString().slice(0,10)}`;
+      // ─── Language ──────────────────────────────────────────
+      const pdfLang = (document.documentElement.lang === 'en') ? 'en' : 'de';
+      const T = (de, en) => pdfLang === 'en' ? en : de;
+      const dateStr = today.toLocaleDateString(pdfLang === 'en' ? 'en-US' : 'de-CH', { day: '2-digit', month: 'long', year: 'numeric' });
+      const filename = T(
+        `Finanzplan-3.Saeule-Glatt-Broker-${today.toISOString().slice(0,10)}`,
+        `Financial-Plan-3rd-Pillar-Glatt-Broker-${today.toISOString().slice(0,10)}`
+      );
 
       // Force chart entrance to full width, then clone (static, no transitions)
       const clipRect = document.getElementById('sClipRect');
@@ -3807,9 +3790,15 @@
       const live = document.getElementById('sChart');
       const chart = live.cloneNode(true);
       chart.querySelectorAll('[style]').forEach((el) => { el.style.transition = ''; });
+      // Standardized PDF rendering: keep natural viewBox ratio (600:280 ≈ 2.14:1),
+      // fix physical height to 58mm so width centers at ~124mm in the chart-wrap.
+      // Fixes prior distortion from preserveAspectRatio="none" + forced width/height.
       chart.removeAttribute('id');
-      chart.setAttribute('width', '100%');
-      chart.setAttribute('height', '180');
+      chart.removeAttribute('width');
+      chart.removeAttribute('height');
+      chart.removeAttribute('class');
+      chart.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      chart.style.cssText = 'display:block;height:58mm;width:auto;max-width:100%;margin:0 auto;';
       const chartHtml = chart.outerHTML;
 
       // Absolute base URL so the print window can load Mont and the logo
@@ -3823,26 +3812,29 @@
       const versInfo     = VERS_PROVIDERS[sState.versProvider];
 
       // Customer name + Geburtsdatum + Steuerort
-      const customerName = (sState.firstName + ' ' + sState.lastName).trim() || 'Beispielrechnung';
-      const isDemo = customerName === 'Beispielrechnung';
+      const demoName = T('Beispielrechnung', 'Sample calculation');
+      const customerName = (sState.firstName + ' ' + sState.lastName).trim() || demoName;
+      const isDemo = customerName === demoName;
       let birthdateStr = '';
       if (sState.birthdate) {
         const bd = new Date(sState.birthdate);
-        if (!isNaN(bd)) birthdateStr = bd.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        if (!isNaN(bd)) birthdateStr = bd.toLocaleDateString(pdfLang === 'en' ? 'en-US' : 'de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
       }
       const cantonShort = sState.canton;
       const cantonFull  = STRAT.cantonName(cantonShort);
       const useESTV     = !!sState.taxLocation;
       const dataDate    = (window.STEUERDATEN && window.STEUERDATEN.date) || '';
+      const cantonWord  = T('Kanton', 'Canton');
+      const approxWord  = T('(Approximation)', '(approximation)');
       const locationLine = useESTV
-        ? `${sState.taxLocation.p} ${sState.taxLocation.c} · Kanton ${sState.taxLocation.k}`
+        ? `${sState.taxLocation.p} ${sState.taxLocation.c} · ${cantonWord} ${sState.taxLocation.k}`
         : (sState.plz && sState.ort)
-          ? `${sState.plz} ${sState.ort} · Kanton ${cantonShort} (Approximation)`
-          : (sState.plz ? `${sState.plz} · Kanton ${cantonShort} (Approximation)` : 'Stadt Zürich, PLZ 8002 · Kanton ZH');
+          ? `${sState.plz} ${sState.ort} · ${cantonWord} ${cantonShort} ${approxWord}`
+          : (sState.plz ? `${sState.plz} · ${cantonWord} ${cantonShort} ${approxWord}` : T('Stadt Zürich, PLZ 8002 · Kanton ZH', 'City of Zurich, postal code 8002 · Canton ZH'));
       const cantonFactor = res.cantonFactor;
       const dataSourceStr = useESTV
-        ? `ESTV 2026 (Stand ${dataDate})`
-        : (cantonFactor === 1 ? 'ZH-Basistabelle' : `${cantonFactor.toFixed(2)} × ZH-Basis · approximiert`);
+        ? T(`ESTV 2026 (Stand ${dataDate})`, `Swiss FTA 2026 (as of ${dataDate})`)
+        : (cantonFactor === 1 ? T('ZH-Basistabelle', 'ZH base table') : T(`${cantonFactor.toFixed(2)} × ZH-Basis · approximiert`, `${cantonFactor.toFixed(2)} × ZH base · approximated`));
 
       // Donut chart — 3 Segmente
       const donutC = 263.89;
@@ -3862,7 +3854,7 @@
           stroke-dasharray="${versLen.toFixed(2)} ${(donutC - versLen).toFixed(2)}"
           stroke-dashoffset="${(-(everonLen + zugerbergLen)).toFixed(2)}"
           transform="rotate(-90 50 50)"/>
-        <text x="50" y="54" text-anchor="middle" font-family="Mont,Outfit,sans-serif" font-size="6.5" fill="#737373" letter-spacing="0.5">3 ANBIETER</text>
+        <text x="50" y="54" text-anchor="middle" font-family="Mont,Outfit,sans-serif" font-size="6.5" fill="#737373" letter-spacing="0.5">${T('3 ANBIETER', '3 PROVIDERS')}</text>
       </svg>`;
 
       // Tax progression table rows
@@ -3889,6 +3881,74 @@
         r.isCurrent = false;
       });
       taxRows[closestIdx].isCurrent = true;
+
+      // ─── Adaptive content for "Warum Versicherung im Mix" page ───
+      let whyOpenerHtml;
+      if (versPct === 0) {
+        whyOpenerHtml = T(
+          `Deine aktuelle Strategie setzt zu <strong>100% auf Banklösungen</strong>. Das ist eine reine Spar-Strategie — Schutzleistungen für Erwerbsunfähigkeit oder Tod sind nicht enthalten. Wir empfehlen, eine Beimischung von <strong>20–40% Versicherung</strong> zu prüfen, um Wachstum und Schutz auszubalancieren. Die folgenden vier Punkte zeigen dir, was dadurch zusätzlich abgedeckt würde.`,
+          `Your current strategy is <strong>100% bank-based</strong>. This is a pure savings approach — no protection benefits for disability or death are included. We recommend considering an allocation of <strong>20–40% insurance</strong> to balance growth and protection. The four points below show what this addition would cover.`
+        );
+      } else if (versPct < 30) {
+        whyOpenerHtml = T(
+          `Mit <strong>${versPct}% Versicherungsanteil</strong> hast du einen <strong>Grundschutz integriert</strong>. Das deckt die wichtigsten Risiken ab, ohne die Wachstumschancen der Banklösung zu opfern. Die folgenden vier Punkte zeigen, was diese Beimischung konkret leistet.`,
+          `With a <strong>${versPct}% insurance share</strong>, you've built in <strong>baseline protection</strong>. This covers the most important risks without sacrificing the growth potential of the bank solution. The four points below show what this allocation actually delivers.`
+        );
+      } else if (versPct <= 70) {
+        whyOpenerHtml = T(
+          `Dein <strong>ausgewogener Mix</strong> von ${bankPct}% Bank und ${versPct}% Versicherung verbindet die Stärken beider Welten: flexible Renditechancen aus dem Bank-Anteil, garantierter Schutz aus dem Versicherungs-Anteil. Die folgenden vier Punkte erklären, warum diese Kombination wirkt.`,
+          `Your <strong>balanced mix</strong> of ${bankPct}% bank and ${versPct}% insurance combines the strengths of both worlds: flexible return potential from the bank share, guaranteed protection from the insurance share. The four points below explain why this combination works.`
+        );
+      } else if (versPct < 100) {
+        whyOpenerHtml = T(
+          `Mit <strong>${versPct}% Versicherungsanteil</strong> steht <strong>Sicherheit im Vordergrund</strong> deiner Strategie. Du baust nicht nur Kapital auf, sondern garantierst Schutz und Versorgung in jeder Lebenslage. Die folgenden vier Punkte zeigen die Hebel im Detail.`,
+          `With a <strong>${versPct}% insurance share</strong>, <strong>security takes center stage</strong> in your strategy. You're not only building capital but also guaranteeing protection and provision in every life situation. The four points below detail the levers.`
+        );
+      } else {
+        whyOpenerHtml = T(
+          `Du setzt zu <strong>100% auf die Versicherungslösung</strong>. Vorteile: maximaler Schutz, garantierte Auszahlung, Prämienbefreiung. Beachte, dass du damit auf Flexibilität und höhere Renditechancen der Banklösung verzichtest — wir empfehlen, eine Bank-Beimischung von 20–30% zu prüfen.`,
+          `You're going <strong>100% with the insurance solution</strong>. Benefits: maximum protection, guaranteed payout, premium waiver. Note that you're giving up the flexibility and higher return potential of the bank solution — we recommend considering a bank allocation of 20–30%.`
+        );
+      }
+
+      // Lebensphasen-Block (3 × mit Versicherung, 3 × ohne)
+      const yearsLeft = res.retirementAge - sState.age;
+      let lifephaseHtml;
+      if (versPct === 0) {
+        if (sState.age < 35) {
+          lifephaseHtml = T(
+            `Mit <strong>${sState.age} Jahren</strong> liegen noch <strong>${yearsLeft} Berufsjahre</strong> vor dir — eine lange Strecke, in der Krankheit oder Unfall unkalkulierbar bleiben. Die aktuelle Bank-only-Strategie bietet dafür keinen Schutz. Eine kleine Versicherungs-Beimischung von 20–30% wäre sinnvoll zu prüfen.`,
+            `At <strong>${sState.age}</strong>, you still have <strong>${yearsLeft} working years</strong> ahead — a long stretch where illness or accident remain unpredictable. Your current bank-only strategy offers no protection here. A small insurance allocation of 20–30% would be worth considering.`
+          );
+        } else if (sState.age < 50) {
+          lifephaseHtml = T(
+            `In der Lebensphase zwischen 35 und 50 trägt man oft die <strong>grösste finanzielle Verantwortung</strong> — Familie, Hypothek, Karriere. Eine Bank-only-Strategie schützt das Sparziel nicht, falls Krankheit oder Unfall den Job unterbricht. Schon 20% Versicherung würden die wichtigsten Risiken abdecken.`,
+            `Between 35 and 50, you typically carry the <strong>greatest financial responsibility</strong> — family, mortgage, career. A bank-only strategy won't protect your savings goal if illness or accident interrupts your income. Even 20% insurance would cover the most important risks.`
+          );
+        } else {
+          lifephaseHtml = T(
+            `In den letzten <strong>${yearsLeft} Berufsjahren</strong> wird Schutz des Erreichten wichtiger als reine Wachstumsmaximierung. Eine Versicherungs-Beimischung würde das Sparziel auch bei Erwerbsunfähigkeit garantieren.`,
+            `In your final <strong>${yearsLeft} working years</strong>, protecting what you've built matters more than pure growth. An insurance allocation would guarantee your savings goal even in the case of disability.`
+          );
+        }
+      } else {
+        if (sState.age < 35) {
+          lifephaseHtml = T(
+            `Mit <strong>${sState.age} Jahren</strong> liegen noch <strong>${yearsLeft} Berufsjahre</strong> vor dir — eine lange Strecke, in der Krankheit oder Unfall unkalkulierbar bleiben. Der Versicherungs-Anteil sichert genau diese Zeit: im Todesfall stehen <strong>CHF ${fmt(res.death)}</strong> für deine Angehörigen bereit.`,
+            `At <strong>${sState.age}</strong>, you still have <strong>${yearsLeft} working years</strong> ahead — a long stretch where illness or accident remain unpredictable. The insurance share secures exactly this period: in case of death, <strong>CHF ${fmt(res.death)}</strong> goes to your dependants.`
+          );
+        } else if (sState.age < 50) {
+          lifephaseHtml = T(
+            `In der Lebensphase zwischen 35 und 50 trägt man oft die <strong>grösste finanzielle Verantwortung</strong> — Familie, Hypothek, Karriere. Genau hier wirkt der Versicherungs-Anteil am stärksten: <strong>CHF ${fmt(res.death)}</strong> Todesfallkapital, <strong>CHF ${fmt(res.ivRent)}/Jahr</strong> IV-Rente, Prämienbefreiung über <strong>CHF ${fmt(res.waiver)}</strong>.`,
+            `Between 35 and 50, you typically carry the <strong>greatest financial responsibility</strong> — family, mortgage, career. This is exactly where the insurance share works hardest: <strong>CHF ${fmt(res.death)}</strong> death benefit, <strong>CHF ${fmt(res.ivRent)}/year</strong> disability pension, and a premium waiver worth <strong>CHF ${fmt(res.waiver)}</strong>.`
+          );
+        } else {
+          lifephaseHtml = T(
+            `In den letzten <strong>${yearsLeft} Berufsjahren</strong> wird Sicherheit wichtiger als Renditemaximierung. Bei Erwerbsunfähigkeit läuft der Plan dank Prämienbefreiung (<strong>CHF ${fmt(res.waiver)}</strong>) weiter — das Sparziel bleibt erreichbar.`,
+            `In your final <strong>${yearsLeft} working years</strong>, security matters more than maximizing returns. In case of disability, the plan continues thanks to the premium waiver (<strong>CHF ${fmt(res.waiver)}</strong>) — your savings goal stays within reach.`
+          );
+        }
+      }
 
       // Logo SVG (inline)
       const logoSvg = `<img src="./assets/logo.png" alt="Glatt Broker" width="180" style="height:auto;display:block;" />`;
@@ -4032,8 +4092,8 @@
 
 <div class="toolbar">
   <span>${filename}.pdf</span>
-  <button onclick="window.print()">↓ Als PDF speichern</button>
-  <button class="secondary" onclick="window.close()">Schliessen</button>
+  <button onclick="window.print()">↓ ${T('Als PDF speichern', 'Save as PDF')}</button>
+  <button class="secondary" onclick="window.close()">${T('Schliessen', 'Close')}</button>
 </div>
 
 <!-- ─────────── PAGE 1: COVER ─────────── -->
@@ -4042,38 +4102,38 @@
   <div style="margin-top: 12mm;">${logoSvg}</div>
 
   <div style="margin-top: 30mm;">
-    <div class="eyebrow">Vorsorgestrategie · Säule 3a · 2026</div>
-    <h1 style="margin-top: 4mm;">Finanzplan<br>zur Optimierung der<br><em>3. Säule</em>.</h1>
+    <div class="eyebrow">${T('Vorsorgestrategie · Säule 3a · 2026', 'Pension Strategy · 3rd Pillar · 2026')}</div>
+    <h1 style="margin-top: 4mm;">${T('Finanzplan<br>zur Optimierung der<br><em>3. Säule</em>.', 'Financial Plan<br>to Optimize Your<br><em>3rd Pillar</em>.')}</h1>
   </div>
 
   <div class="cover-meta">
-    <div class="cover-meta-row"><span>${isDemo ? 'Modellrechnung' : 'Vorbereitet für'}</span><span style="${isDemo ? '' : 'color: #CC2936; font-weight: 600;'}">${customerName}</span></div>
-    ${birthdateStr ? `<div class="cover-meta-row"><span>Geburtsdatum</span><span>${birthdateStr} · ${sState.age} Jahre</span></div>` : ''}
-    <div class="cover-meta-row"><span>Erstellt am</span><span>${dateStr}</span></div>
-    <div class="cover-meta-row"><span>Berater</span><span>Taulant Faniqi</span></div>
-    <div class="cover-meta-row"><span>Steuerort</span><span>${locationLine}</span></div>
-    <div class="cover-meta-row"><span>Bezugssteuer-Quelle</span><span style="${useESTV ? 'color: #00A86B; font-weight: 600;' : ''}">${dataSourceStr}</span></div>
-    <div class="cover-meta-row"><span>Aufteilung</span><span>${everonPct}/${zugerbergPct}/${versPct} · Everon / Zugerberg / ${sState.versProvider === 'swisslife' ? 'Swiss Life' : 'Generali'}</span></div>
+    <div class="cover-meta-row"><span>${isDemo ? T('Modellrechnung', 'Sample calculation') : T('Vorbereitet für', 'Prepared for')}</span><span style="${isDemo ? '' : 'color: #CC2936; font-weight: 600;'}">${customerName}</span></div>
+    ${birthdateStr ? `<div class="cover-meta-row"><span>${T('Geburtsdatum', 'Date of birth')}</span><span>${birthdateStr} · ${sState.age} ${T('Jahre', 'years')}</span></div>` : ''}
+    <div class="cover-meta-row"><span>${T('Erstellt am', 'Created on')}</span><span>${dateStr}</span></div>
+    <div class="cover-meta-row"><span>${T('Berater', 'Advisor')}</span><span>Taulant Faniqi</span></div>
+    <div class="cover-meta-row"><span>${T('Steuerort', 'Tax location')}</span><span>${locationLine}</span></div>
+    <div class="cover-meta-row"><span>${T('Bezugssteuer-Quelle', 'Withdrawal tax source')}</span><span style="${useESTV ? 'color: #00A86B; font-weight: 600;' : ''}">${dataSourceStr}</span></div>
+    <div class="cover-meta-row"><span>${T('Aufteilung', 'Allocation')}</span><span>${everonPct}/${zugerbergPct}/${versPct} · Everon / Zugerberg / ${sState.versProvider === 'swisslife' ? 'Swiss Life' : 'Generali'}</span></div>
   </div>
 
   <div style="position: absolute; bottom: 30mm; left: 18mm; right: 18mm;">
     <div style="display: flex; justify-content: space-between; gap: 8mm;">
       <div>
-        <div class="eyebrow" style="margin-bottom: 3mm;">Dein Mehrwert</div>
+        <div class="eyebrow" style="margin-bottom: 3mm;">${T('Dein Mehrwert', 'Your value-add')}</div>
         <div style="font-size: 32pt; font-weight: 600; color: #CC2936; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;">+CHF ${fmt(Math.max(0, res.advantage))}</div>
-        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">über ${res.n} Jahre vs. ohne Strategie</div>
+        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${T(`über ${res.n} Jahre vs. ohne Strategie`, `over ${res.n} years vs. without strategy`)}</div>
       </div>
       <div style="text-align: right;">
-        <div class="eyebrow" style="margin-bottom: 3mm;">Endkapital netto</div>
+        <div class="eyebrow" style="margin-bottom: 3mm;">${T('Endkapital netto', 'Net final capital')}</div>
         <div style="font-size: 24pt; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">CHF ${fmt(res.finalNet)}</div>
-        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">nach Staffelungs-Vorteil</div>
+        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${T('nach Staffelungs-Vorteil', 'after staggered withdrawal benefit')}</div>
       </div>
     </div>
   </div>
 
   <div class="footer">
     <span>Glatt Broker AG · Taulant Faniqi · FINMA 35821</span>
-    <span class="pagenum">t.faniqi@glattbroker.ch · 077 409 05 19  ·  01 / 05</span>
+    <span class="pagenum">t.faniqi@glattbroker.ch · 077 409 05 19  ·  01 / 06</span>
   </div>
 </section>
 
@@ -4081,24 +4141,24 @@
 <section class="page">
   <div class="accent-bar"></div>
 
-  <div class="eyebrow" style="margin-top: 8mm;">— Vorsorgestrategie · Übersicht</div>
-  <h2 style="margin-top: 3mm;">Dein Plan auf einen Blick.</h2>
+  <div class="eyebrow" style="margin-top: 8mm;">— ${T('Vorsorgestrategie · Übersicht', 'Pension Strategy · Overview')}</div>
+  <h2 style="margin-top: 3mm;">${T('Dein Plan auf einen Blick.', 'Your plan at a glance.')}</h2>
 
   <!-- Parameter recap -->
   <div class="inputs-recap">
-    <div class="input-recap"><div class="lbl">Aktuelles Alter</div><div class="val">${sState.age} Jahre</div></div>
-    <div class="input-recap"><div class="lbl">Jahreseinkommen</div><div class="val">CHF ${fmt(sState.income)}</div></div>
-    <div class="input-recap"><div class="lbl">Beitrag 3a</div><div class="val">CHF ${fmt(sState.contribution)}</div></div>
-    <div class="input-recap"><div class="lbl">Bank-Rendite</div><div class="val">${sState.returnRate.toFixed(1)} %</div></div>
-    <div class="input-recap"><div class="lbl">Mix Bank / Vers.</div><div class="val">${bankPct} / ${versPct}</div></div>
-    <div class="input-recap"><div class="lbl">Auszahlung</div><div class="val">${sState.staff} Tranchen</div></div>
+    <div class="input-recap"><div class="lbl">${T('Aktuelles Alter', 'Current age')}</div><div class="val">${sState.age} ${T('Jahre', 'years')}</div></div>
+    <div class="input-recap"><div class="lbl">${T('Jahreseinkommen', 'Annual income')}</div><div class="val">CHF ${fmt(sState.income)}</div></div>
+    <div class="input-recap"><div class="lbl">${T('Beitrag 3a', '3a contribution')}</div><div class="val">CHF ${fmt(sState.contribution)}</div></div>
+    <div class="input-recap"><div class="lbl">${T('Bank-Rendite', 'Bank return')}</div><div class="val">${sState.returnRate.toFixed(1)} %</div></div>
+    <div class="input-recap"><div class="lbl">${T('Mix Bank / Vers.', 'Mix bank / ins.')}</div><div class="val">${bankPct} / ${versPct}</div></div>
+    <div class="input-recap"><div class="lbl">${T('Auszahlung', 'Withdrawal')}</div><div class="val">${sState.staff} ${T('Tranchen', 'tranches')}</div></div>
   </div>
 
   <!-- Mix split with donut — 3 providers -->
   <div class="mix-block">
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3mm;">
-      <h3>Aufteilung auf Anbieter</h3>
-      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(sState.contribution)} / Jahr</span>
+      <h3>${T('Aufteilung auf Anbieter', 'Allocation across providers')}</h3>
+      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(sState.contribution)} / ${T('Jahr', 'year')}</span>
     </div>
     <div style="display: flex; gap: 8mm; align-items: center;">
       <div style="flex-shrink: 0;">${donutSvg}</div>
@@ -4114,7 +4174,7 @@
             <div>
               <div style="font-size: 8pt; color: #737373;">Everon · ${everonPct}%</div>
               <div class="mix-amount" style="font-size: 11pt;">CHF ${fmt(res.everonContrib)}</div>
-              <div class="mix-sub">Bank · ETF, offensiv</div>
+              <div class="mix-sub">${T('Bank · ETF, offensiv', 'Bank · ETF, aggressive')}</div>
             </div>
           </div>
           <div class="mix-col">
@@ -4122,7 +4182,7 @@
             <div>
               <div style="font-size: 8pt; color: #737373;">Zugerberg · ${zugerbergPct}%</div>
               <div class="mix-amount" style="font-size: 11pt;">CHF ${fmt(res.zugerbergContrib)}</div>
-              <div class="mix-sub">Bank · ausgewogen</div>
+              <div class="mix-sub">${T('Bank · ausgewogen', 'Bank · balanced')}</div>
             </div>
           </div>
           <div class="mix-col">
@@ -4130,7 +4190,7 @@
             <div>
               <div style="font-size: 8pt; color: #CC2936;">${sState.versProvider === 'swisslife' ? 'Swiss Life' : 'Generali'} · ${versPct}%</div>
               <div class="mix-amount" style="font-size: 11pt;">CHF ${fmt(res.versContrib)}</div>
-              <div class="mix-sub">Vers. · mit Schutz</div>
+              <div class="mix-sub">${T('Vers. · mit Schutz', 'Insurance · with protection')}</div>
             </div>
           </div>
         </div>
@@ -4141,10 +4201,10 @@
   <!-- Chart -->
   <div class="chart-wrap">
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3mm;">
-      <h3>Vermögensaufbau bis Rentenalter (${res.retirementAge})</h3>
+      <h3>${T(`Vermögensaufbau bis Rentenalter (${res.retirementAge})`, `Wealth growth to retirement age (${res.retirementAge})`)}</h3>
       <div class="chart-legend">
-        <span><span class="dot" style="background: #A3A3A3;"></span>Ohne Strategie · Sparkonto 0%</span>
-        <span style="color: #CC2936;"><span class="dot" style="background: #CC2936;"></span>Mit Glatt-Strategie</span>
+        <span><span class="dot" style="background: #A3A3A3;"></span>${T('Ohne Strategie · Sparkonto 0%', 'Without strategy · savings account 0%')}</span>
+        <span style="color: #CC2936;"><span class="dot" style="background: #CC2936;"></span>${T('Mit Glatt-Strategie', 'With Glatt strategy')}</span>
       </div>
     </div>
     ${chartHtml}
@@ -4153,148 +4213,203 @@
   <!-- KPIs -->
   <div class="stat-grid">
     <div class="stat">
-      <div class="lbl">Steuerersparnis / Jahr</div>
+      <div class="lbl">${T('Steuerersparnis / Jahr', 'Tax savings / year')}</div>
       <div class="val">CHF ${fmt(res.annualTaxSave)}</div>
-      <div class="sub">Marginalsatz ${(res.marginalRate * 100).toFixed(0)}%</div>
+      <div class="sub">${T('Marginalsatz', 'Marginal rate')} ${(res.marginalRate * 100).toFixed(0)}%</div>
     </div>
     <div class="stat">
-      <div class="lbl">Kumuliert bis ${res.retirementAge}</div>
+      <div class="lbl">${T(`Kumuliert bis ${res.retirementAge}`, `Cumulative to ${res.retirementAge}`)}</div>
       <div class="val">CHF ${fmt(res.cumulativeTaxSave)}</div>
-      <div class="sub">Steuerabzüge total</div>
+      <div class="sub">${T('Steuerabzüge total', 'Total tax deductions')}</div>
     </div>
     <div class="stat">
-      <div class="lbl">Endkapital netto</div>
+      <div class="lbl">${T('Endkapital netto', 'Net final capital')}</div>
       <div class="val">CHF ${fmt(res.finalNet)}</div>
-      <div class="sub" style="color: #00A86B;">+CHF ${fmt(Math.max(0, res.taxWin))} Staffelung</div>
+      <div class="sub" style="color: #00A86B;">+CHF ${fmt(Math.max(0, res.taxWin))} ${T('Staffelung', 'staggering')}</div>
     </div>
     <div class="stat dark">
-      <div class="lbl">Mehrwert vs. ohne</div>
+      <div class="lbl">${T('Mehrwert vs. ohne', 'Value-add vs. without')}</div>
       <div class="val">+CHF ${fmt(Math.max(0, res.advantage))}</div>
-      <div class="sub">über ${res.n} Jahre</div>
+      <div class="sub">${T(`über ${res.n} Jahre`, `over ${res.n} years`)}</div>
     </div>
   </div>
 
   <div class="footer">
-    <span>Glatt Broker AG · Vorsorgestrategie</span>
-    <span class="pagenum">${dateStr}  ·  02 / 05</span>
+    <span>Glatt Broker AG · ${T('Vorsorgestrategie', 'Pension strategy')}</span>
+    <span class="pagenum">${dateStr}  ·  02 / 06</span>
   </div>
 </section>
 
-<!-- ─────────── PAGE 3: VERSICHERUNGS-SCHUTZ + BEZUGSSTEUER ─────────── -->
+<!-- ─────────── PAGE 3: WARUM VERSICHERUNG IM MIX (NEU) ─────────── -->
 <section class="page">
   <div class="accent-bar"></div>
 
-  <div class="eyebrow" style="margin-top: 8mm;">— Versicherungslösung · Zusätzlicher Schutz</div>
-  <h2 style="margin-top: 3mm;">Was die Versicherungs-Komponente abdeckt.</h2>
-  <p style="max-width: 140mm; margin-top: 2mm;">Der Versicherungs-Anteil von CHF ${fmt(res.versContrib)} pro Jahr (${versPct}% des Beitrags) sichert nicht nur Sparkapital, sondern auch dich und deine Angehörigen.</p>
+  <div class="eyebrow" style="margin-top: 8mm;">— ${T('Versicherungslösung · Begründung', 'Insurance solution · Rationale')}</div>
+  <h2 style="margin-top: 3mm;">${T('Warum die Versicherung<br>im Mix wichtig ist.', 'Why insurance matters<br>in the mix.')}</h2>
 
-  <div class="guard-grid">
-    <div class="guard">
-      <div class="lbl">Todesfallkapital</div>
-      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.death) : '—'}</div>
-      <div class="sub">Garantierte Auszahlung an Hinterbliebene bei Tod vor Pensionierung.</div>
+  <p style="max-width: 145mm; margin-top: 4mm; font-size: 11pt; line-height: 1.55; color: #404040;">
+    ${whyOpenerHtml}
+  </p>
+
+  <!-- 4 Reason Cards · 2×2 Grid -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 9mm;">
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm 5mm 5mm; position: relative;">
+      <div style="position: absolute; top: -2mm; left: 5mm; background: #CC2936; color: #fff; font-size: 7pt; font-weight: 600; letter-spacing: 0.10em; padding: 1.2mm 2.5mm; border-radius: 1mm;">01</div>
+      <h3 style="margin-bottom: 2.5mm;">${T('Was die Bank nicht abfedert', "What the bank doesn't cover")}</h3>
+      <p style="font-size: 9pt; line-height: 1.55;">${T('Die Bank-Säule 3a baut Vermögen auf — schützt aber nicht bei Erwerbsunfähigkeit oder Tod. Die Versicherungslösung schliesst genau diese Lücke.', 'The bank-based 3a builds wealth — but it offers no protection in case of disability or death. The insurance solution closes exactly that gap.')}</p>
     </div>
-    <div class="guard">
-      <div class="lbl">Prämienbefreiung</div>
-      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.waiver) : '—'}</div>
-      <div class="sub">Bei Erwerbsunfähigkeit oder Tod werden alle Restprämien bis ${res.retirementAge} von der Versicherung übernommen.</div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm 5mm 5mm; position: relative;">
+      <div style="position: absolute; top: -2mm; left: 5mm; background: #CC2936; color: #fff; font-size: 7pt; font-weight: 600; letter-spacing: 0.10em; padding: 1.2mm 2.5mm; border-radius: 1mm;">02</div>
+      <h3 style="margin-bottom: 2.5mm;">${T('Prämienbefreiung sichert das Sparziel', 'Premium waiver protects the savings goal')}</h3>
+      <p style="font-size: 9pt; line-height: 1.55;">${T(`Bei Erwerbsunfähigkeit übernimmt die Versicherung alle Restprämien bis ${res.retirementAge}. Dein Plan läuft weiter — auch ohne deine Beiträge.`, `In case of disability, the insurer covers all remaining premiums until age ${res.retirementAge}. Your plan keeps running — even without your contributions.`)}</p>
     </div>
-    <div class="guard">
-      <div class="lbl">IV-Rente / Jahr</div>
-      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.ivRent) : '—'}</div>
-      <div class="sub">Laufende Rente bei 100% Erwerbsunfähigkeit, bis zum AHV-Alter.</div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm 5mm 5mm; position: relative;">
+      <div style="position: absolute; top: -2mm; left: 5mm; background: #CC2936; color: #fff; font-size: 7pt; font-weight: 600; letter-spacing: 0.10em; padding: 1.2mm 2.5mm; border-radius: 1mm;">03</div>
+      <h3 style="margin-bottom: 2.5mm;">${T('Garantierter Schutzbetrag', 'Guaranteed protection amount')}</h3>
+      <p style="font-size: 9pt; line-height: 1.55;">${T('Bank-Vermögen schwankt mit dem Markt. Die Versicherung garantiert im Todesfall einen festgelegten Auszahlungsbetrag — unabhängig von Börsenphasen.', 'Bank assets fluctuate with the market. The insurance guarantees a defined death-benefit payout — independent of any market phase.')}</p>
+    </div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm 5mm 5mm; position: relative;">
+      <div style="position: absolute; top: -2mm; left: 5mm; background: #CC2936; color: #fff; font-size: 7pt; font-weight: 600; letter-spacing: 0.10em; padding: 1.2mm 2.5mm; border-radius: 1mm;">04</div>
+      <h3 style="margin-bottom: 2.5mm;">${T('Steuerlich identisch behandelt', 'Same tax treatment')}</h3>
+      <p style="font-size: 9pt; line-height: 1.55;">${T(`Versicherungsprämien sind 1:1 als 3a-Beitrag abzugsfähig. Bei Marginalsatz ${(res.marginalRate * 100).toFixed(0)}% kostet der Schutz netto rund <strong>${(100 - res.marginalRate * 100).toFixed(0)}%</strong> seiner Bruttoprämie.`, `Insurance premiums are deductible 1:1 as a 3a contribution. At a marginal rate of ${(res.marginalRate * 100).toFixed(0)}%, the protection effectively costs about <strong>${(100 - res.marginalRate * 100).toFixed(0)}%</strong> of its gross premium.`)}</p>
     </div>
   </div>
 
-  <p class="small-print" style="margin-top: 4mm;">Beispielwerte aus typischen Generali (Multi Index 100) und Swiss Life (Index Strategy Chance 75) 3a-Lösungen. Tatsächliche Schutzhöhen werden in der individuellen Offerte definiert und können je nach Gesundheitsfragen, Beruf und Beitrag abweichen.</p>
+  <!-- Adaptive Lebensphasen-Box -->
+  <div style="margin-top: 10mm; padding: 5mm 6mm; background: #0A0A0A; color: #fff; border-radius: 3mm; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; height: 100%; width: 1.5mm; background: #CC2936;"></div>
+    <div class="eyebrow" style="color: #CC2936; margin-bottom: 2.5mm;">— ${T('Für deine Lebensphase', 'For your life stage')}</div>
+    <p style="color: #fff; font-size: 10pt; line-height: 1.6; margin: 0;">${lifephaseHtml}</p>
+  </div>
+
+  <p class="small-print" style="margin-top: 6mm;">
+    ${T('Schutzleistungen sind Beispielwerte aus typischen Generali (Multi Index 100) und Swiss Life (Index Strategy Chance 75) Lösungen. Definitive Werte werden in der individuellen Offerte nach Gesundheitsfragen bestimmt.', 'Protection benefits are sample values from typical Generali (Multi Index 100) and Swiss Life (Index Strategy Chance 75) products. Definitive values are set in the individual quote after the health questionnaire.')}
+  </p>
+
+  <div class="footer">
+    <span>Glatt Broker AG · ${T('Versicherung im Mix', 'Insurance in the mix')}</span>
+    <span class="pagenum">${dateStr}  ·  03 / 06</span>
+  </div>
+</section>
+
+<!-- ─────────── PAGE 4: VERSICHERUNGS-SCHUTZ + BEZUGSSTEUER ─────────── -->
+<section class="page">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-top: 8mm;">— ${T('Versicherungslösung · Zusätzlicher Schutz', 'Insurance solution · Additional protection')}</div>
+  <h2 style="margin-top: 3mm;">${T('Was die Versicherungs-Komponente abdeckt.', 'What the insurance component covers.')}</h2>
+  <p style="max-width: 140mm; margin-top: 2mm;">${T(`Der Versicherungs-Anteil von CHF ${fmt(res.versContrib)} pro Jahr (${versPct}% des Beitrags) sichert nicht nur Sparkapital, sondern auch dich und deine Angehörigen.`, `The insurance share of CHF ${fmt(res.versContrib)} per year (${versPct}% of your contribution) doesn't just build savings — it protects you and your dependants.`)}</p>
+
+  <div class="guard-grid">
+    <div class="guard">
+      <div class="lbl">${T('Todesfallkapital', 'Death benefit')}</div>
+      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.death) : '—'}</div>
+      <div class="sub">${T('Garantierte Auszahlung an Hinterbliebene bei Tod vor Pensionierung.', 'Guaranteed payout to dependants in case of death before retirement.')}</div>
+    </div>
+    <div class="guard">
+      <div class="lbl">${T('Prämienbefreiung', 'Premium waiver')}</div>
+      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.waiver) : '—'}</div>
+      <div class="sub">${T(`Bei Erwerbsunfähigkeit oder Tod werden alle Restprämien bis ${res.retirementAge} von der Versicherung übernommen.`, `In case of disability or death, the insurer covers all remaining premiums until age ${res.retirementAge}.`)}</div>
+    </div>
+    <div class="guard">
+      <div class="lbl">${T('IV-Rente / Jahr', 'Disability pension / year')}</div>
+      <div class="val">CHF ${res.versContrib > 0 ? fmt(res.ivRent) : '—'}</div>
+      <div class="sub">${T('Laufende Rente bei 100% Erwerbsunfähigkeit, bis zum AHV-Alter.', 'Ongoing pension at 100% disability, until OASI retirement age.')}</div>
+    </div>
+  </div>
+
+  <p class="small-print" style="margin-top: 4mm;">${T('Beispielwerte aus typischen Generali (Multi Index 100) und Swiss Life (Index Strategy Chance 75) 3a-Lösungen. Tatsächliche Schutzhöhen werden in der individuellen Offerte definiert und können je nach Gesundheitsfragen, Beruf und Beitrag abweichen.', 'Sample values from typical Generali (Multi Index 100) and Swiss Life (Index Strategy Chance 75) 3a solutions. Actual benefit levels are defined in the individual quote and may vary depending on health questions, profession, and contribution.')}</p>
 
   <!-- Bezugssteuer -->
   <div style="margin-top: 14mm;">
-    <div class="eyebrow">— Steuerersparnis bei Auszahlung</div>
-    <h2 style="margin-top: 3mm;">Auszahlung gestaffelt — Progression vermeiden.</h2>
-    <p style="max-width: 140mm; margin-top: 2mm;">Bei einem Bezug aller 3a-Konten in einem Steuerjahr trifft die volle Progression. Mehrere 3a-Konten, gestaffelt über mehrere Jahre bezogen, senken den effektiven Steuersatz pro Tranche deutlich.</p>
+    <div class="eyebrow">— ${T('Steuerersparnis bei Auszahlung', 'Tax savings on withdrawal')}</div>
+    <h2 style="margin-top: 3mm;">${T('Auszahlung gestaffelt — Progression vermeiden.', 'Stagger your withdrawals — avoid progression.')}</h2>
+    <p style="max-width: 140mm; margin-top: 2mm;">${T('Bei einem Bezug aller 3a-Konten in einem Steuerjahr trifft die volle Progression. Mehrere 3a-Konten, gestaffelt über mehrere Jahre bezogen, senken den effektiven Steuersatz pro Tranche deutlich.', 'Withdrawing all 3a accounts in a single tax year triggers full progression. Multiple 3a accounts, withdrawn staggered over several years, significantly lower the effective tax rate per tranche.')}</p>
 
     <div class="tax-grid">
       <div class="tax-card">
         <div style="display: flex; justify-content: space-between; margin-bottom: 3mm;">
-          <span style="font-size: 8.5pt; color: #737373; letter-spacing: 0.08em; text-transform: uppercase;">Gesamtbezug · 1 Tranche</span>
+          <span style="font-size: 8.5pt; color: #737373; letter-spacing: 0.08em; text-transform: uppercase;">${T('Gesamtbezug · 1 Tranche', 'Single withdrawal · 1 tranche')}</span>
           <span style="font-size: 8.5pt; color: #737373; font-variant-numeric: tabular-nums;">${(res.rateAll * 100).toFixed(2)}%</span>
         </div>
-        <div class="tax-row"><span style="color: #737373;">Brutto</span><span>CHF ${fmt(res.gross)}</span></div>
-        <div class="tax-row"><span style="color: #737373;">Steuer</span><span style="color: #404040;">−CHF ${fmt(res.taxAllAmount)}</span></div>
-        <div class="tax-row total"><span>Netto</span><span>CHF ${fmt(res.netAll)}</span></div>
+        <div class="tax-row"><span style="color: #737373;">${T('Brutto', 'Gross')}</span><span>CHF ${fmt(res.gross)}</span></div>
+        <div class="tax-row"><span style="color: #737373;">${T('Steuer', 'Tax')}</span><span style="color: #404040;">−CHF ${fmt(res.taxAllAmount)}</span></div>
+        <div class="tax-row total"><span>${T('Netto', 'Net')}</span><span>CHF ${fmt(res.netAll)}</span></div>
       </div>
       <div class="tax-card recommend">
         <div style="display: flex; justify-content: space-between; margin-bottom: 3mm; margin-top: 3mm;">
-          <span style="font-size: 8.5pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase;">Staffelung · ${sState.staff} Tranchen</span>
+          <span style="font-size: 8.5pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase;">${T(`Staffelung · ${sState.staff} Tranchen`, `Staggered · ${sState.staff} tranches`)}</span>
           <span style="font-size: 8.5pt; color: #CC2936; font-variant-numeric: tabular-nums;">${(res.rateTranche * 100).toFixed(2)}%</span>
         </div>
-        <div class="tax-row"><span style="color: #737373;">Brutto</span><span>CHF ${fmt(res.gross)}</span></div>
-        <div class="tax-row"><span style="color: #737373;">Steuer</span><span style="color: #404040;">−CHF ${fmt(res.taxStaffAmount)}</span></div>
-        <div class="tax-row total"><span>Netto</span><span>CHF ${fmt(res.netStaff)}</span></div>
+        <div class="tax-row"><span style="color: #737373;">${T('Brutto', 'Gross')}</span><span>CHF ${fmt(res.gross)}</span></div>
+        <div class="tax-row"><span style="color: #737373;">${T('Steuer', 'Tax')}</span><span style="color: #404040;">−CHF ${fmt(res.taxStaffAmount)}</span></div>
+        <div class="tax-row total"><span>${T('Netto', 'Net')}</span><span>CHF ${fmt(res.netStaff)}</span></div>
       </div>
     </div>
 
     <div class="tax-banner">
-      <span class="label-big">Steuerersparnis durch Staffelung</span>
+      <span class="label-big">${T('Steuerersparnis durch Staffelung', 'Tax savings from staggering')}</span>
       <span class="amount">+CHF ${fmt(Math.max(0, res.taxWin))}</span>
     </div>
   </div>
 
   <div class="footer">
-    <span>Glatt Broker AG · Schutz & Steuern</span>
-    <span class="pagenum">${dateStr}  ·  03 / 05</span>
+    <span>Glatt Broker AG · ${T('Schutz & Steuern', 'Protection & taxes')}</span>
+    <span class="pagenum">${dateStr}  ·  04 / 06</span>
   </div>
 </section>
 
-<!-- ─────────── PAGE 4: ANBIETER-DETAILS ─────────── -->
+<!-- ─────────── PAGE 5: ANBIETER-DETAILS ─────────── -->
 <section class="page">
   <div class="accent-bar"></div>
 
-  <div class="eyebrow" style="margin-top: 8mm;">— 3. Säule · Empfohlene Lösung</div>
-  <h2 style="margin-top: 3mm;">Deine Anbieter im Detail.</h2>
+  <div class="eyebrow" style="margin-top: 8mm;">— ${T('3. Säule · Empfohlene Lösung', '3rd Pillar · Recommended solution')}</div>
+  <h2 style="margin-top: 3mm;">${T('Deine Anbieter im Detail.', 'Your providers in detail.')}</h2>
   <p style="max-width: 140mm; margin-top: 2mm;">${
     bankPct > 0 && versPct > 0
-      ? 'Deine 3a-Strategie wird über zwei spezialisierte Anbieter umgesetzt — die flexible Banklösung für Wachstum und die Versicherungslösung für Sicherheit.'
+      ? T('Deine 3a-Strategie wird über zwei spezialisierte Anbieter umgesetzt — die flexible Banklösung für Wachstum und die Versicherungslösung für Sicherheit.', 'Your 3a strategy is built across two specialized providers — the flexible bank solution for growth and the insurance solution for security.')
       : bankPct > 0
-        ? 'Deine 3a-Strategie wird über die flexible Banklösung umgesetzt.'
-        : 'Deine 3a-Strategie wird über die Versicherungslösung umgesetzt — mit integrierten Schutzleistungen.'
+        ? T('Deine 3a-Strategie wird über die flexible Banklösung umgesetzt.', 'Your 3a strategy is built via the flexible bank solution.')
+        : T('Deine 3a-Strategie wird über die Versicherungslösung umgesetzt — mit integrierten Schutzleistungen.', 'Your 3a strategy is built via the insurance solution — with integrated protection benefits.')
   }</p>
 
   ${(everonPct > 0 || zugerbergPct > 0) ? `
   <!-- Banklösung Section -->
   <div style="margin-top: 7mm;">
     <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3mm; padding-bottom: 2mm; border-bottom: 0.3mm solid #0A0A0A;">
-      <span class="eyebrow" style="color: #0A0A0A;">Banklösung · ${bankPct}% des Beitrags</span>
-      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(res.bankContrib)} / Jahr</span>
+      <span class="eyebrow" style="color: #0A0A0A;">${T(`Banklösung · ${bankPct}% des Beitrags`, `Bank solution · ${bankPct}% of contribution`)}</span>
+      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(res.bankContrib)} / ${T('Jahr', 'year')}</span>
     </div>
     <div style="display: grid; grid-template-columns: ${(everonPct > 0 && zugerbergPct > 0) ? '1fr 1fr' : '1fr'}; gap: 4mm;">
       ${everonPct > 0 ? `
       <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm; position: relative; padding-top: 8mm;">
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 1.5mm; background: #0A0A0A; border-radius: 3mm 3mm 0 0;"></div>
         <div style="margin-bottom: 4mm;">
-          <div class="eyebrow" style="color: #0A0A0A; margin-bottom: 1.5mm;">Bank A · ${everonPct}%</div>
-          <div style="font-size: 14pt; font-weight: 700; letter-spacing: -0.02em;">Everon Säule 3a</div>
-          <div style="font-size: 8.5pt; color: #737373; margin-top: 1mm;">ETF-basierter Sparteil · offensive Strategie</div>
+          <div class="eyebrow" style="color: #0A0A0A; margin-bottom: 1.5mm;">${T('Bank A', 'Bank A')} · ${everonPct}%</div>
+          <div style="font-size: 14pt; font-weight: 700; letter-spacing: -0.02em;">${T('Everon Säule 3a', 'Everon 3rd Pillar')}</div>
+          <div style="font-size: 8.5pt; color: #737373; margin-top: 1mm;">${T('ETF-basierter Sparteil · offensive Strategie', 'ETF-based savings · aggressive strategy')}</div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; padding: 3mm 0; border-top: 0.3mm solid #E5E5E5; border-bottom: 0.3mm solid #E5E5E5;">
           <div>
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Jahresbeitrag</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Jahresbeitrag', 'Annual contribution')}</div>
             <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.everonContrib)}</div>
           </div>
           <div>
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Rendite</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Rendite', 'Return')}</div>
             <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">${sState.returnRate.toFixed(1)} %</div>
           </div>
           <div style="grid-column: 1 / -1;">
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Endkapital ⌀</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Endkapital ⌀', 'Final capital ⌀')}</div>
             <div style="font-size: 13pt; font-weight: 700; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.everonFv)}</div>
           </div>
         </div>
         <ul style="list-style: none; padding: 0; margin: 4mm 0 0 0;">
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>Welt-ETF-Portfolio · jährlich anpassbar</span></li>
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>Keine Rückkaufswerte / Strafgebühren</span></li>
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>100% Sparteil · ohne Risikoschutz</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>${T('Welt-ETF-Portfolio · jährlich anpassbar', 'Global ETF portfolio · adjustable annually')}</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>${T('Keine Rückkaufswerte / Strafgebühren', 'No surrender values / penalty fees')}</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #0A0A0A; font-weight: 700;">→</span><span>${T('100% Sparteil · ohne Risikoschutz', '100% savings · no risk protection')}</span></li>
         </ul>
       </div>
       ` : ''}
@@ -4302,28 +4417,28 @@
       <div style="border: 0.3mm solid #E5E5E5; border-radius: 3mm; padding: 6mm; position: relative; padding-top: 8mm;">
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 1.5mm; background: #0EA5E9; border-radius: 3mm 3mm 0 0;"></div>
         <div style="margin-bottom: 4mm;">
-          <div class="eyebrow" style="color: #0369A1; margin-bottom: 1.5mm;">Bank B · ${zugerbergPct}%</div>
+          <div class="eyebrow" style="color: #0369A1; margin-bottom: 1.5mm;">${T('Bank B', 'Bank B')} · ${zugerbergPct}%</div>
           <div style="font-size: 14pt; font-weight: 700; letter-spacing: -0.02em;">Zugerberg Finanz</div>
-          <div style="font-size: 8.5pt; color: #737373; margin-top: 1mm;">Aktives Multi-Asset-Mandat · ausgewogen</div>
+          <div style="font-size: 8.5pt; color: #737373; margin-top: 1mm;">${T('Aktives Multi-Asset-Mandat · ausgewogen', 'Active multi-asset mandate · balanced')}</div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; padding: 3mm 0; border-top: 0.3mm solid #E5E5E5; border-bottom: 0.3mm solid #E5E5E5;">
           <div>
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Jahresbeitrag</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Jahresbeitrag', 'Annual contribution')}</div>
             <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.zugerbergContrib)}</div>
           </div>
           <div>
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Rendite</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Rendite', 'Return')}</div>
             <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">${sState.returnRate.toFixed(1)} %</div>
           </div>
           <div style="grid-column: 1 / -1;">
-            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Endkapital ⌀</div>
+            <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Endkapital ⌀', 'Final capital ⌀')}</div>
             <div style="font-size: 13pt; font-weight: 700; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.zugerbergFv)}</div>
           </div>
         </div>
         <ul style="list-style: none; padding: 0; margin: 4mm 0 0 0;">
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>Schweizer Vermögensverwaltung · breit diversifiziert</span></li>
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>Aktives Risikomanagement (Aktien · Anleihen · Gold)</span></li>
-          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>100% Sparteil · ohne Risikoschutz</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>${T('Schweizer Vermögensverwaltung · breit diversifiziert', 'Swiss asset management · broadly diversified')}</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>${T('Aktives Risikomanagement (Aktien · Anleihen · Gold)', 'Active risk management (equities · bonds · gold)')}</span></li>
+          <li style="display: flex; gap: 2mm; padding: 1mm 0; font-size: 8.5pt; color: #404040;"><span style="color: #2c3e50; font-weight: 700;">→</span><span>${T('100% Sparteil · ohne Risikoschutz', '100% savings · no risk protection')}</span></li>
         </ul>
       </div>
       ` : ''}
@@ -4335,14 +4450,14 @@
   <!-- Versicherungslösung Section -->
   <div style="margin-top: 7mm;">
     <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 3mm; padding-bottom: 2mm; border-bottom: 0.3mm solid #CC2936;">
-      <span class="eyebrow">Versicherungslösung · ${versPct}% des Beitrags</span>
-      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(res.versContrib)} / Jahr</span>
+      <span class="eyebrow">${T(`Versicherungslösung · ${versPct}% des Beitrags`, `Insurance solution · ${versPct}% of contribution`)}</span>
+      <span style="font-size: 9pt; color: #737373; font-variant-numeric: tabular-nums;">CHF ${fmt(res.versContrib)} / ${T('Jahr', 'year')}</span>
     </div>
     <div style="border: 0.3mm solid #CC2936; border-radius: 3mm; padding: 6mm; position: relative; padding-top: 8mm; background: rgba(204,41,54,.03);">
       <div style="position: absolute; top: 0; left: 0; right: 0; height: 1.5mm; background: #CC2936; border-radius: 3mm 3mm 0 0;"></div>
       <div style="display: flex; justify-content: space-between; gap: 6mm; align-items: flex-start; margin-bottom: 4mm;">
         <div>
-          <div class="eyebrow" style="margin-bottom: 1.5mm;">Versicherungslösung</div>
+          <div class="eyebrow" style="margin-bottom: 1.5mm;">${T('Versicherungslösung', 'Insurance solution')}</div>
           <div style="font-size: 16pt; font-weight: 700; letter-spacing: -0.02em;">${versInfo.name}</div>
           <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${versInfo.sub}</div>
         </div>
@@ -4350,41 +4465,41 @@
 
       <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; padding: 3mm 0; border-top: 0.3mm solid rgba(204,41,54,.2); border-bottom: 0.3mm solid rgba(204,41,54,.2);">
         <div>
-          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Monats­prämie</div>
+          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Monats­prämie', 'Monthly premium')}</div>
           <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.versContrib / 12)}</div>
         </div>
         <div>
-          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Jahres­prämie</div>
+          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Jahres­prämie', 'Annual premium')}</div>
           <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.versContrib)}</div>
         </div>
         <div>
-          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Laufzeit</div>
-          <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">${res.n} Jahre</div>
+          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Laufzeit', 'Term')}</div>
+          <div style="font-size: 11pt; font-weight: 600; margin-top: 1mm; font-variant-numeric: tabular-nums;">${res.n} ${T('Jahre', 'years')}</div>
         </div>
         <div>
-          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Endkapital ⌀</div>
+          <div style="font-size: 7pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Endkapital ⌀', 'Final capital ⌀')}</div>
           <div style="font-size: 13pt; font-weight: 700; color: #CC2936; margin-top: 1mm; font-variant-numeric: tabular-nums;">CHF ${fmt(res.versFv)}</div>
         </div>
       </div>
 
       <div style="margin-top: 4mm;">
-        <div style="font-size: 7.5pt; color: #CC2936; letter-spacing: 0.10em; text-transform: uppercase; margin-bottom: 2.5mm;">Eingeschlossene Schutzleistungen</div>
+        <div style="font-size: 7.5pt; color: #CC2936; letter-spacing: 0.10em; text-transform: uppercase; margin-bottom: 2.5mm;">${T('Eingeschlossene Schutzleistungen', 'Included protection benefits')}</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 6mm;">
           <div style="display: flex; gap: 2.5mm; font-size: 9pt; color: #404040; padding: 1mm 0;">
             <span style="color: #CC2936; font-weight: 700;">✓</span>
-            <span><strong>Todesfallkapital:</strong> CHF ${fmt(res.death)}</span>
+            <span><strong>${T('Todesfallkapital:', 'Death benefit:')}</strong> CHF ${fmt(res.death)}</span>
           </div>
           <div style="display: flex; gap: 2.5mm; font-size: 9pt; color: #404040; padding: 1mm 0;">
             <span style="color: #CC2936; font-weight: 700;">✓</span>
-            <span><strong>IV-Rente:</strong> CHF ${fmt(res.ivRent)} / Jahr</span>
+            <span><strong>${T('IV-Rente:', 'Disability pension:')}</strong> CHF ${fmt(res.ivRent)} / ${T('Jahr', 'year')}</span>
           </div>
           <div style="display: flex; gap: 2.5mm; font-size: 9pt; color: #404040; padding: 1mm 0;">
             <span style="color: #CC2936; font-weight: 700;">✓</span>
-            <span><strong>Prämienbefreiung</strong> bei IV / Tod (Wert: CHF ${fmt(res.waiver)})</span>
+            <span>${T(`<strong>Prämienbefreiung</strong> bei IV / Tod (Wert: CHF ${fmt(res.waiver)})`, `<strong>Premium waiver</strong> on disability / death (value: CHF ${fmt(res.waiver)})`)}</span>
           </div>
           <div style="display: flex; gap: 2.5mm; font-size: 9pt; color: #404040; padding: 1mm 0;">
             <span style="color: #CC2936; font-weight: 700;">✓</span>
-            <span>Steuerlich abzugsfähig</span>
+            <span>${T('Steuerlich abzugsfähig', 'Tax-deductible')}</span>
           </div>
         </div>
       </div>
@@ -4393,76 +4508,76 @@
   ` : ''}
 
   <p class="small-print" style="margin-top: 6mm;">
-    Werte basierend auf typischen Konditionen. Die definitive Offerte (Endkapital, Schutzhöhen, Prämien) wird vom Anbieter nach Gesundheitsfragen und individueller Anlagepräferenz erstellt.
+    ${T('Werte basierend auf typischen Konditionen. Die definitive Offerte (Endkapital, Schutzhöhen, Prämien) wird vom Anbieter nach Gesundheitsfragen und individueller Anlagepräferenz erstellt.', 'Values based on typical terms. The definitive quote (final capital, benefit levels, premiums) is produced by the provider after the health questionnaire and individual investment preferences.')}
   </p>
 
   <div class="footer">
-    <span>Glatt Broker AG · Anbieter & Lösungen</span>
-    <span class="pagenum">${dateStr}  ·  04 / 05</span>
+    <span>Glatt Broker AG · ${T('Anbieter & Lösungen', 'Providers & solutions')}</span>
+    <span class="pagenum">${dateStr}  ·  05 / 06</span>
   </div>
 </section>
 
-<!-- ─────────── PAGE 5: VORTEILE + STEUERTABELLE + DISCLAIMER + KONTAKT ─────────── -->
+<!-- ─────────── PAGE 6: VORTEILE + STEUERTABELLE + DISCLAIMER + KONTAKT ─────────── -->
 <section class="page">
   <div class="accent-bar"></div>
 
-  <div class="eyebrow" style="margin-top: 8mm;">— Vorteile der Glatt-Strategie</div>
-  <h2 style="margin-top: 3mm;">Warum dieser Mix wirkt.</h2>
+  <div class="eyebrow" style="margin-top: 8mm;">— ${T('Vorteile der Glatt-Strategie', 'Benefits of the Glatt strategy')}</div>
+  <h2 style="margin-top: 3mm;">${T('Warum dieser Mix wirkt.', 'Why this mix works.')}</h2>
 
   <div style="margin-top: 6mm;">
     <div class="benefit">
       <div class="num">1</div>
       <div>
-        <h3>Drei Steuereffekte zusammengedacht</h3>
-        <p>Sofortiger Steuerabzug auf den Beitrag (Marginalsatz ${(res.marginalRate * 100).toFixed(0)}% in ${locationLine.split(' · ')[0]}), steuerfreies Wachstum während der Laufzeit und reduzierte Kapitalauszahlungssteuer durch Staffelung (Kantonsfaktor ${cantonFactor.toFixed(2)} ggü. ZH-Basis).</p>
+        <h3>${T('Drei Steuereffekte zusammengedacht', 'Three tax effects, combined')}</h3>
+        <p>${T(`Sofortiger Steuerabzug auf den Beitrag (Marginalsatz ${(res.marginalRate * 100).toFixed(0)}% in ${locationLine.split(' · ')[0]}), steuerfreies Wachstum während der Laufzeit und reduzierte Kapitalauszahlungssteuer durch Staffelung (Kantonsfaktor ${cantonFactor.toFixed(2)} ggü. ZH-Basis).`, `Immediate tax deduction on the contribution (marginal rate ${(res.marginalRate * 100).toFixed(0)}% in ${locationLine.split(' · ')[0]}), tax-free growth during the term, and reduced capital withdrawal tax through staggering (cantonal factor ${cantonFactor.toFixed(2)} vs. ZH base).`)}</p>
       </div>
     </div>
     <div class="benefit">
       <div class="num">2</div>
       <div>
-        <h3>Flexibilität trifft Sicherheit</h3>
-        <p>Banklösung (${bankPct}%) mit jährlichem Anpassungsrecht und Anlagewahl, kombiniert mit Versicherungslösung (${versPct}%) für garantiertes Todesfall- und IV-Risiko bis zum Pensionsalter.</p>
+        <h3>${T('Flexibilität trifft Sicherheit', 'Flexibility meets security')}</h3>
+        <p>${T(`Banklösung (${bankPct}%) mit jährlichem Anpassungsrecht und Anlagewahl, kombiniert mit Versicherungslösung (${versPct}%) für garantiertes Todesfall- und IV-Risiko bis zum Pensionsalter.`, `Bank solution (${bankPct}%) with annual adjustment rights and investment choice, combined with insurance solution (${versPct}%) for guaranteed death and disability protection until retirement age.`)}</p>
       </div>
     </div>
     <div class="benefit">
       <div class="num">3</div>
       <div>
-        <h3>Prämienbefreiung als Existenzsicherung</h3>
-        <p>Bei Erwerbsunfähigkeit übernimmt die Versicherung alle Restprämien — dein Vorsorgeplan läuft ohne deine Belastung weiter, das Sparziel bleibt erreichbar.</p>
+        <h3>${T('Prämienbefreiung als Existenzsicherung', 'Premium waiver as a safety net')}</h3>
+        <p>${T('Bei Erwerbsunfähigkeit übernimmt die Versicherung alle Restprämien — dein Vorsorgeplan läuft ohne deine Belastung weiter, das Sparziel bleibt erreichbar.', 'In case of disability, the insurer covers all remaining premiums — your pension plan continues without burdening you, and your savings goal stays reachable.')}</p>
       </div>
     </div>
     <div class="benefit">
       <div class="num">4</div>
       <div>
-        <h3>Maximale Ausschöpfung der 3. Säule</h3>
-        <p>Mit CHF ${fmt(sState.contribution)} (von max. CHF 7'258) nutze ${((sState.contribution / 7258) * 100).toFixed(0)}% des steuerlich abzugsfähigen Maximums — ${sState.contribution >= 7258 ? 'das Maximum' : 'mit Spielraum nach oben'}.</p>
+        <h3>${T('Maximale Ausschöpfung der 3. Säule', 'Maximizing the 3rd pillar')}</h3>
+        <p>${T(`Mit CHF ${fmt(sState.contribution)} (von max. CHF 7'258) nutze ${((sState.contribution / 7258) * 100).toFixed(0)}% des steuerlich abzugsfähigen Maximums — ${sState.contribution >= 7258 ? 'das Maximum' : 'mit Spielraum nach oben'}.`, `With CHF ${fmt(sState.contribution)} (of max. CHF 7,258) you're using ${((sState.contribution / 7258) * 100).toFixed(0)}% of the tax-deductible maximum — ${sState.contribution >= 7258 ? 'the maximum' : 'with room to grow'}.`)}</p>
       </div>
     </div>
     <div class="benefit">
       <div class="num">5</div>
       <div>
-        <h3>Ein Berater. Ein Plan. Eine Verantwortung.</h3>
-        <p>Versicherungs-, Vorsorge- und Steuerseite werden bei Glatt Broker aus einer Hand betreut — keine Schnittstellenverluste, jährliche Überprüfung inklusive.</p>
+        <h3>${T('Ein Berater. Ein Plan. Eine Verantwortung.', 'One advisor. One plan. One responsibility.')}</h3>
+        <p>${T('Versicherungs-, Vorsorge- und Steuerseite werden bei Glatt Broker aus einer Hand betreut — keine Schnittstellenverluste, jährliche Überprüfung inklusive.', 'Insurance, pension, and tax sides are all handled by Glatt Broker from a single source — no handover losses, annual review included.')}</p>
       </div>
     </div>
   </div>
 
   <!-- Steuerprogression — Kanton-spezifisch -->
   <div style="margin-top: 12mm;">
-    <div class="eyebrow" style="margin-bottom: 2mm;">— Referenz · Steuerprogression Kanton ${cantonFull}</div>
-    <h3 style="font-size: 13pt; margin-bottom: 4mm;">Kapitalauszahlungssteuer 2026 · ${locationLine}</h3>
+    <div class="eyebrow" style="margin-bottom: 2mm;">— ${T(`Referenz · Steuerprogression Kanton ${cantonFull}`, `Reference · Tax progression Canton ${cantonFull}`)}</div>
+    <h3 style="font-size: 13pt; margin-bottom: 4mm;">${T(`Kapitalauszahlungssteuer 2026 · ${locationLine}`, `Capital withdrawal tax 2026 · ${locationLine}`)}</h3>
     <table style="width: 100%; border-collapse: collapse; font-size: 9pt; font-variant-numeric: tabular-nums;">
       <thead>
         <tr style="border-bottom: 0.3mm solid #0A0A0A;">
-          <th style="text-align: left; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">Auszahlung</th>
-          <th style="text-align: right; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">Effektiver Satz</th>
-          <th style="text-align: right; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">Steuerbetrag</th>
+          <th style="text-align: left; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">${T('Auszahlung', 'Withdrawal')}</th>
+          <th style="text-align: right; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">${T('Effektiver Satz', 'Effective rate')}</th>
+          <th style="text-align: right; padding: 2mm 0; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: #737373; font-weight: 500;">${T('Steuerbetrag', 'Tax amount')}</th>
         </tr>
       </thead>
       <tbody>
         ${taxRows.map((r) => `
           <tr style="border-bottom: 0.2mm solid #F0F0F0; ${r.isCurrent ? 'background: rgba(204,41,54,.06);' : ''}">
-            <td style="padding: 2.2mm 0; ${r.isCurrent ? 'color: #CC2936; font-weight: 600;' : ''}">CHF ${fmt(r.cap)}${r.isCurrent ? ' <span style="font-size: 7pt; letter-spacing: 0.06em; padding: 0.5mm 1.5mm; background: #CC2936; color: #fff; border-radius: 1mm; margin-left: 2mm; vertical-align: middle;">IHRE TRANCHE</span>' : ''}</td>
+            <td style="padding: 2.2mm 0; ${r.isCurrent ? 'color: #CC2936; font-weight: 600;' : ''}">CHF ${fmt(r.cap)}${r.isCurrent ? ` <span style="font-size: 7pt; letter-spacing: 0.06em; padding: 0.5mm 1.5mm; background: #CC2936; color: #fff; border-radius: 1mm; margin-left: 2mm; vertical-align: middle;">${T('IHRE TRANCHE', 'YOUR TRANCHE')}</span>` : ''}</td>
             <td style="text-align: right; padding: 2.2mm 0; ${r.isCurrent ? 'color: #CC2936; font-weight: 600;' : ''}">${(r.rate * 100).toFixed(2)} %</td>
             <td style="text-align: right; padding: 2.2mm 0; ${r.isCurrent ? 'color: #CC2936; font-weight: 600;' : ''}">CHF ${fmt(r.tax)}</td>
           </tr>
@@ -4471,44 +4586,44 @@
     </table>
     <p style="font-size: 8pt; color: #737373; margin-top: 3mm; line-height: 1.5;">
       ${useESTV
-        ? `Effektive Steuersätze für <strong>${sState.taxLocation.p} ${sState.taxLocation.c}</strong> direkt aus ESTV-Daten (Stand ${dataDate}, ledig ohne Kirche). Werte zwischen den Stufen werden linear interpoliert.`
-        : `Approximation: Bund + Kanton ${cantonFull} (Faktor ${cf.toFixed(2)} ggü. ZH-Basis). Für exakte Werte bitte PLZ + Ort eingeben.`}
+        ? T(`Effektive Steuersätze für <strong>${sState.taxLocation.p} ${sState.taxLocation.c}</strong> direkt aus ESTV-Daten (Stand ${dataDate}, ledig ohne Kirche). Werte zwischen den Stufen werden linear interpoliert.`, `Effective tax rates for <strong>${sState.taxLocation.p} ${sState.taxLocation.c}</strong> taken directly from Swiss FTA data (as of ${dataDate}, single, no church tax). Values between brackets are linearly interpolated.`)
+        : T(`Approximation: Bund + Kanton ${cantonFull} (Faktor ${cf.toFixed(2)} ggü. ZH-Basis). Für exakte Werte bitte PLZ + Ort eingeben.`, `Approximation: Federal + Canton ${cantonFull} (factor ${cf.toFixed(2)} vs. ZH base). For exact values, please enter postal code + city.`)}
     </p>
   </div>
 
   <div style="margin-top: 12mm; padding: 6mm; background: #F5F5F5; border-radius: 3mm;">
-    <div class="eyebrow" style="margin-bottom: 3mm;">— Nächster Schritt</div>
-    <h3 style="font-size: 14pt; margin-bottom: 2mm;">Persönliches Gespräch · 30 Minuten · kostenlos</h3>
-    <p>Diese Berechnung ist eine Modellrechnung. In einem persönlichen Gespräch verfeinern wir die Strategie auf deine Situation: Pensionskasse, Familie, Anlagepräferenz, Steuerprogression.</p>
+    <div class="eyebrow" style="margin-bottom: 3mm;">— ${T('Nächster Schritt', 'Next step')}</div>
+    <h3 style="font-size: 14pt; margin-bottom: 2mm;">${T('Persönliches Gespräch · 30 Minuten · kostenlos', 'Personal consultation · 30 minutes · free')}</h3>
+    <p>${T('Diese Berechnung ist eine Modellrechnung. In einem persönlichen Gespräch verfeinern wir die Strategie auf deine Situation: Pensionskasse, Familie, Anlagepräferenz, Steuerprogression.', 'This calculation is a model. In a personal conversation, we refine the strategy for your situation: pension fund, family, investment preference, tax progression.')}</p>
     <div style="display: flex; gap: 8mm; margin-top: 5mm; align-items: center;">
       <div>
-        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Telefon</div>
+        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Telefon', 'Phone')}</div>
         <div style="font-size: 12pt; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 1mm;">+41 77 409 05 19</div>
       </div>
       <div>
-        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">E-Mail</div>
+        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('E-Mail', 'Email')}</div>
         <div style="font-size: 12pt; font-weight: 600; margin-top: 1mm;">t.faniqi@glattbroker.ch</div>
       </div>
       <div>
-        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">Berater</div>
+        <div class="lbl" style="font-size: 7.5pt; color: #737373; letter-spacing: 0.10em; text-transform: uppercase;">${T('Berater', 'Advisor')}</div>
         <div style="font-size: 12pt; font-weight: 600; margin-top: 1mm;">Taulant Faniqi</div>
       </div>
     </div>
   </div>
 
   <p class="small-print">
-    <strong>Rechtlicher Hinweis:</strong> Modellrechnung basierend auf Steuersätzen ${locationLine}, 2026, alleinstehend ohne Kirchensteuer.
-    Bezugssteuer: ${useESTV ? `ESTV-Daten Stand ${dataDate}` : `ZH-Basistabelle × Kantonsfaktor ${cf.toFixed(2)}`}.
-    Die Bank-Komponente wird mit der gewählten Rendite berechnet, die Versicherungs-Komponente mit ~4.5% (nach Risikokosten).
-    ${res.elevatedAge ? `<strong>Referenzalter ${res.retirementAge}:</strong> Bei Personen unter 41 rechnen wir mit erhöhtem Referenzalter — gewichtet nach Anbieter-Mix (Generali / Swiss Life 70 · Everon 68 · Zugerberg Finanz 69) wegen Bevölkerungsalterung (Quelle: BFS bfs.admin.ch/bevoelkerung/alterung). Der individuelle Bezug der 3. Säule ist weiterhin ab dem 60. Altersjahr möglich; das Referenzalter ist nur die Modellannahme für den Vermögensaufbau.` : `<strong>Referenzalter 65:</strong> Standard-Modellrechnung.`}
-    Tatsächliche Werte hängen von deiner persönlichen Steuerprogression, Pensionskasse, Anlagewahl und der definitiven Versicherungs-Offerte ab.
-    Schutzleistungen sind Beispielwerte aus typischen Generali / Swiss Life Produkten.
-    Diese Unterlage ersetzt keine persönliche Beratung. © ${today.getFullYear()} Glatt Broker AG.
+    <strong>${T('Rechtlicher Hinweis:', 'Legal notice:')}</strong> ${T(`Modellrechnung basierend auf Steuersätzen ${locationLine}, 2026, alleinstehend ohne Kirchensteuer.`, `Model calculation based on tax rates ${locationLine}, 2026, single, no church tax.`)}
+    ${T('Bezugssteuer:', 'Withdrawal tax:')} ${useESTV ? T(`ESTV-Daten Stand ${dataDate}`, `Swiss FTA data, as of ${dataDate}`) : T(`ZH-Basistabelle × Kantonsfaktor ${cf.toFixed(2)}`, `ZH base table × cantonal factor ${cf.toFixed(2)}`)}.
+    ${T('Die Bank-Komponente wird mit der gewählten Rendite berechnet, die Versicherungs-Komponente mit ~4.5% (nach Risikokosten).', 'The bank component is calculated with the chosen return; the insurance component is set at ~4.5% (after risk costs).')}
+    ${res.elevatedAge ? T(`<strong>Referenzalter ${res.retirementAge}:</strong> Bei Personen unter 41 rechnen wir mit erhöhtem Referenzalter — gewichtet nach Anbieter-Mix (Generali / Swiss Life 70 · Everon 68 · Zugerberg Finanz 69) wegen Bevölkerungsalterung (Quelle: BFS bfs.admin.ch/bevoelkerung/alterung). Der individuelle Bezug der 3. Säule ist weiterhin ab dem 60. Altersjahr möglich; das Referenzalter ist nur die Modellannahme für den Vermögensaufbau.`, `<strong>Reference age ${res.retirementAge}:</strong> For people under 41, we model an elevated reference age — weighted by provider mix (Generali / Swiss Life 70 · Everon 68 · Zugerberg Finanz 69) due to demographic ageing (source: Swiss FSO bfs.admin.ch/bevoelkerung/alterung). Individual 3rd-pillar withdrawal remains possible from age 60; the reference age is only the modeling assumption for wealth growth.`) : T(`<strong>Referenzalter 65:</strong> Standard-Modellrechnung.`, `<strong>Reference age 65:</strong> Standard model calculation.`)}
+    ${T('Tatsächliche Werte hängen von deiner persönlichen Steuerprogression, Pensionskasse, Anlagewahl und der definitiven Versicherungs-Offerte ab.', 'Actual values depend on your personal tax progression, pension fund, investment choice, and the definitive insurance quote.')}
+    ${T('Schutzleistungen sind Beispielwerte aus typischen Generali / Swiss Life Produkten.', 'Protection benefits are sample values from typical Generali / Swiss Life products.')}
+    ${T('Diese Unterlage ersetzt keine persönliche Beratung.', 'This document does not replace personal advice.')} © ${today.getFullYear()} Glatt Broker AG.
   </p>
 
   <div class="footer">
-    <span>Glatt Broker AG · CH-020.3.043.123-4 · FINMA 35821 · Cicero zertifiziert</span>
-    <span class="pagenum">${dateStr}  ·  05 / 05</span>
+    <span>Glatt Broker AG · CH-020.3.043.123-4 · FINMA 35821 · ${T('Cicero zertifiziert', 'Cicero certified')}</span>
+    <span class="pagenum">${dateStr}  ·  06 / 06</span>
   </div>
 </section>
 
@@ -4845,3 +4960,6 @@
 
 </body>
 </html>
+
+
+

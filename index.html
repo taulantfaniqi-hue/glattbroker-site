@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -465,6 +465,7 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -615,6 +616,7 @@
               <div class="m-acc-section-title">Finanzen</div>
               <ul>
                 <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+                <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
                 <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
                 <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
               </ul>
@@ -872,7 +874,160 @@
           </div>
         </div>
       </div>
-    </section><!-- ───────────── PARTNER MARQUEE ───────────── -->
+    </section>
+
+    <!-- ───────────── 3. SÄULE · DURCHGERECHNET (Concept B) ───────────── -->
+    <section id="gb3a" class="relative py-20 lg:py-28 bg-ink-950 text-white overflow-hidden">
+      <style>
+        #gb3a .gb3a-grid{
+          position:absolute;inset:0;pointer-events:none;
+          background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+          background-size:64px 64px;
+          -webkit-mask-image:radial-gradient(800px 520px at 75% 45%,#000 30%,transparent 80%);
+                  mask-image:radial-gradient(800px 520px at 75% 45%,#000 30%,transparent 80%);
+        }
+        #gb3a .gb3a-u{position:relative;white-space:nowrap}
+        #gb3a .gb3a-u::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.09em;border-radius:4px;background:var(--red,#CC2936)}
+        #gb3a .gb3a-cardwrap{position:relative}
+        #gb3a .gb3a-cardwrap::before{content:"";position:absolute;inset:-2px;border-radius:28px;background:radial-gradient(60% 60% at 100% 80%,rgba(204,41,54,.5),transparent 70%);filter:blur(26px);z-index:0}
+        #gb3a .gb3a-card{position:relative;z-index:1;background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);border-radius:26px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+        #gb3a .gb3a-donut{width:128px;height:128px;flex:0 0 auto;transform:rotate(-90deg)}
+        #gb3a .gb3a-donut circle{fill:none;stroke-width:13;stroke-linecap:butt}
+        #gb3a .gb3a-val{margin-left:auto;color:#fff;font-weight:700;font-variant-numeric:tabular-nums}
+        #gb3a input[type="range"].gb3a-range{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:99px;background:linear-gradient(90deg,#14B8A6 var(--fill,50%),rgba(255,255,255,.14) var(--fill,50%));outline:none;cursor:pointer;padding:0}
+        #gb3a input[type="range"].gb3a-range::-webkit-slider-runnable-track{height:5px;background:transparent}
+        #gb3a input[type="range"].gb3a-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-7.5px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer}
+        #gb3a input[type="range"].gb3a-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer}
+        #gb3a input[type="range"].gb3a-range:hover::-webkit-slider-thumb{background:#fff}
+        #gb3a .gb3a-spark svg{width:100%;height:80px;display:block}
+      </style>
+      <div class="gb3a-grid" aria-hidden="true"></div>
+
+      <div class="relative mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+          <!-- Copy -->
+          <div class="lg:col-span-6">
+            <div class="label text-white/50 mb-5" data-i18n="gb3a.eyebrow">3. Säule · durchgerechnet</div>
+            <h2 class="display text-4xl sm:text-5xl lg:text-[3.6vw] tracking-tightest leading-[1.02]" data-i18n="gb3a.head">Ihre 3. Säule,<br><span class="gb3a-u">durchgerechnet</span></h2>
+            <p class="mt-7 text-lg text-white/60 max-w-md leading-relaxed" data-i18n="gb3a.sub">Bewegen Sie die Regler und sehen Sie live, was aus Ihrer Säule 3a wird — inklusive Steuerersparnis. Unabhängige Bank- &amp; Versicherungslösung aus einer Hand.</p>
+            <div class="mt-10">
+              <a href="vorsorge.html#strategy" class="btn-primary !px-6 !py-4 !text-base">
+                <span data-i18n="gb3a.cta">Vollständige Strategie berechnen</span>
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+            <p class="mt-5 text-xs text-white/40" data-i18n="gb3a.note">Modellrechnung · Everon 7,0 % · Zugerberg 6,0 % · Versicherung 4,5 % p. a. · ohne Gewähr</p>
+          </div>
+
+          <!-- Calculator card -->
+          <div class="lg:col-span-6 gb3a-cardwrap">
+            <div class="gb3a-card p-7 sm:p-8">
+              <div class="label text-white/50" data-i18n="gb3a.endlabel">Steuerfreies Endkapital</div>
+              <div class="display text-4xl sm:text-5xl mt-1.5 num-tabular">CHF <span id="gb3a-endk">–</span></div>
+              <div class="text-sm mt-2" style="color:#14B8A6">+ CHF <span id="gb3a-tax">–</span> <span data-i18n="gb3a.taxnote">Steuerersparnis über die Laufzeit</span></div>
+
+              <div class="flex items-center gap-6 my-7">
+                <svg class="gb3a-donut" viewBox="0 0 120 120" aria-hidden="true">
+                  <circle cx="60" cy="60" r="46" stroke="rgba(255,255,255,.07)"></circle>
+                  <circle id="gb3a-segA" cx="60" cy="60" r="46" stroke="#14B8A6"></circle>
+                  <circle id="gb3a-segB" cx="60" cy="60" r="46" stroke="#5B8DEF"></circle>
+                  <circle id="gb3a-segC" cx="60" cy="60" r="46" stroke="#CC2936"></circle>
+                </svg>
+                <div class="flex-1 space-y-3 text-sm">
+                  <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#14B8A6"></span>Everon<span class="gb3a-val" id="gb3a-lA">–</span></div>
+                  <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#5B8DEF"></span>Zugerberg<span class="gb3a-val" id="gb3a-lB">–</span></div>
+                  <div class="flex items-center gap-2.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#CC2936"></span><span data-i18n="gb3a.legVers">Versicherung</span><span class="gb3a-val" id="gb3a-lC">–</span></div>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="flex items-center justify-between text-sm text-white/60 mb-2.5"><span data-i18n="gb3a.lblSpar">Monatlicher Sparbetrag</span> <b class="text-white num-tabular">CHF <span id="gb3a-vSpar">300</span></b></label>
+                  <input id="gb3a-rSpar" class="gb3a-range" type="range" min="50" max="600" step="10" value="300">
+                </div>
+                <div>
+                  <label class="flex items-center justify-between text-sm text-white/60 mb-2.5"><span data-i18n="gb3a.lblJahre">Anlagedauer</span> <b class="text-white num-tabular"><span id="gb3a-vJahre">25</span> <span data-i18n="gb3a.years">Jahre</span></b></label>
+                  <input id="gb3a-rJahre" class="gb3a-range" type="range" min="5" max="40" step="1" value="25">
+                </div>
+                <div>
+                  <label class="flex items-center justify-between text-sm text-white/60 mb-2.5"><span data-i18n="gb3a.lblVers">Versicherungs-Anteil</span> <b class="text-white num-tabular"><span id="gb3a-vVers">40</span>%</b></label>
+                  <input id="gb3a-rVers" class="gb3a-range" type="range" min="0" max="100" step="5" value="40">
+                </div>
+                <div>
+                  <label class="flex items-center justify-between text-sm text-white/60 mb-2.5"><span data-i18n="gb3a.lblBank">Bank-Aufteilung</span> <b class="text-white num-tabular">Everon <span id="gb3a-vEver">50</span>% · Zugerberg <span id="gb3a-vZug">50</span>%</b></label>
+                  <input id="gb3a-rBank" class="gb3a-range" type="range" min="0" max="100" step="5" value="50">
+                </div>
+              </div>
+
+              <div class="gb3a-spark mt-6">
+                <svg viewBox="0 0 520 80" preserveAspectRatio="none">
+                  <defs><linearGradient id="gb3a-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14B8A6" stop-opacity=".45"/><stop offset="1" stop-color="#14B8A6" stop-opacity="0"/></linearGradient></defs>
+                  <path id="gb3a-sparkFill" fill="url(#gb3a-fill)" d=""></path>
+                  <path id="gb3a-sparkLine" fill="none" stroke="#14B8A6" stroke-width="2.5" d=""></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        // 3-Anbieter-Mix (mirrors the Vorsorgetool): bank-Anteil aufgeteilt in
+        // Everon (offensiv) + Zugerberg (ausgewogen), plus Versicherungs-Anteil.
+        var R_EVERON=0.070, R_ZUGER=0.060, R_VERS=0.045, TAX=0.26, CIRC=2*Math.PI*46;
+        var $=function(id){return document.getElementById(id);};
+        var chf=function(n){return Math.round(n).toLocaleString('de-CH');};
+        // Future value of a monthly annuity of `pmt` at annual rate `r` over `years`.
+        function fv(pmt,r,years){var i=r/12,N=years*12;return i===0?pmt*N:pmt*((Math.pow(1+i,N)-1)/i);}
+        function seg(el,frac,off){el.style.strokeDasharray=(frac*CIRC)+' '+CIRC;el.style.strokeDashoffset=(-off*CIRC);}
+        function fillTrack(el){var p=(el.value-el.min)/(el.max-el.min)*100;el.style.setProperty('--fill',p+'%');}
+        // contribution weights of total monthly savings across the three providers
+        function weights(vShare,everonSplit){
+          var bank=1-vShare;
+          return {e:bank*everonSplit, z:bank*(1-everonSplit), v:vShare};
+        }
+        function totalAt(pmt,years,w){
+          return fv(pmt*w.e,R_EVERON,years)+fv(pmt*w.z,R_ZUGER,years)+fv(pmt*w.v,R_VERS,years);
+        }
+        function spark(pmt,years,w){
+          var W=520,H=80,pad=4,n=years,vals=[],y;
+          for(y=0;y<=n;y++)vals.push(totalAt(pmt,y,w));
+          var max=vals[n]||1,d='';
+          for(y=0;y<=n;y++){var x=pad+(W-2*pad)*(y/n),yy=H-pad-(H-2*pad)*(vals[y]/max);d+=(y?'L':'M')+x.toFixed(1)+' '+yy.toFixed(1)+' ';}
+          $('gb3a-sparkLine').setAttribute('d',d);
+          $('gb3a-sparkFill').setAttribute('d',d+'L '+(W-pad)+' '+H+' L '+pad+' '+H+' Z');
+        }
+        function recalc(){
+          var pmt=+$('gb3a-rSpar').value, years=+$('gb3a-rJahre').value;
+          var vShare=(+$('gb3a-rVers').value)/100, everonSplit=(+$('gb3a-rBank').value)/100;
+          $('gb3a-vSpar').textContent=pmt; $('gb3a-vJahre').textContent=years;
+          $('gb3a-vVers').textContent=Math.round(vShare*100);
+          $('gb3a-vEver').textContent=Math.round(everonSplit*100);
+          $('gb3a-vZug').textContent=Math.round((1-everonSplit)*100);
+          fillTrack($('gb3a-rSpar')); fillTrack($('gb3a-rJahre')); fillTrack($('gb3a-rVers')); fillTrack($('gb3a-rBank'));
+
+          var w=weights(vShare,everonSplit);
+          var capE=fv(pmt*w.e,R_EVERON,years), capZ=fv(pmt*w.z,R_ZUGER,years), capV=fv(pmt*w.v,R_VERS,years);
+          var total=capE+capZ+capV, paid=pmt*12*years, taxSav=paid*TAX;
+          $('gb3a-endk').textContent=chf(total); $('gb3a-tax').textContent=chf(taxSav);
+
+          var sum=total||1, fE=capE/sum, fZ=capZ/sum, fV=capV/sum;
+          seg($('gb3a-segA'),fE,0); seg($('gb3a-segB'),fZ,fE); seg($('gb3a-segC'),fV,fE+fZ);
+          $('gb3a-lA').textContent=chf(capE); $('gb3a-lB').textContent=chf(capZ); $('gb3a-lC').textContent=chf(capV);
+          spark(pmt,years,w);
+        }
+        ['gb3a-rSpar','gb3a-rJahre','gb3a-rVers','gb3a-rBank'].forEach(function(id){
+          $(id).addEventListener('input',recalc);
+        });
+        recalc();
+      })();
+      </script>
+    </section>
+
+    <!-- ───────────── PARTNER MARQUEE ───────────── -->
     <section class="border-y border-ink-200 bg-white py-6 overflow-hidden">
       <div class="flex items-center gap-6 mx-auto max-w-[1320px] px-4 sm:px-6 mb-4">
         <span class="label text-ink-500 shrink-0" data-i18n="partners.label">Partner u. a.</span>
@@ -2589,32 +2744,31 @@
           'ambulantBalance': {
             name: 'myFlex Ambulant Balance',
             tier: 'Ambulant',
-            sub: 'Mittlere Deckung Ambulant',
+            sub: 'Ambulante Deckung Stufe Balance',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo + Bewegungs-Kurse' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              zahn:      { value: 0, note: 'Nicht enthalten — separat abschliessen' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Check-up, Impfungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr', note: 'Notfalltransport' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel + Heilbehelfe' },
+              brille:    { value: 150, unit: 'CHF', period: 'Jahr', note: 'ab 19 J.; bis 18 J. CHF 150/Fall' },
+              fitness:   { value: 250, unit: 'CHF', period: 'Jahr', note: 'Gesundheitskonto Balance: 50%, max. CHF 250/Jahr' },
+              zahn:      { value: 1000, unit: 'CHF', period: 'Jahr', note: '50% bis CHF 1\'000/Jahr; Kieferorthopädie bis 20 J. 50% bis CHF 12\'000' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '2 Jahre', note: 'Check-up gemäss CSS-Gesundheitskonto Balance' },
+              transport: { value: 'Unbegrenzt', note: 'Notfalltransporte weltweit; Such-/Rettung CHF 100\'000/Fall; Repatriierung unbegrenzt' },
+              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: '90% bis CHF 1\'000/Jahr gemäss CSS-Liste' },
             },
           },
-          'spitalEconomy': {
-            name: 'Spital Economy',
+          'spitalBalance': {
+            name: 'myFlex Spital Balance',
             tier: 'Spital',
-            sub: 'Allgemein, freie Spitalwahl Wohnkanton',
+            sub: 'Spitaldeckung Stufe Balance',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in Listspitälern Wohnkanton' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland (KVG-Tarif)' },
+              spital:  { value: 'Allgemein bis privat', note: 'Ganze Schweiz in KVG-/CSS-anerkannten Spitälern; Abteilung vor Eintritt wählbar; Kostenbeteiligung je Variante' },
+              ausland: { value: 'Weltweit unbegrenzt', note: 'Stationäre Notfallbehandlung weltweit; in der Schweiz gemäss gewählter Spitalabteilung' },
             },
           },
-          'alternativEconomy': {
-            name: 'Alternativ Economy',
+          'alternativBalance': {
+            name: 'myFlex Alternativ Balance',
             tier: 'Alternativ',
-            sub: 'Komplementärmedizin · Add-on',
+            sub: 'Komplementärmedizin Stufe Balance',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr · TCM, Akupunktur, Naturheilkunde, Homöopathie' },
+              alternativ: { value: 80, unit: '%', limit: 3000, note: 'Komplementärmedizin inkl. natürliche Heilmittel bis CHF 3\'000/Jahr; Erwachsene: CHF 300 Franchise und 20% Selbstbehalt' },
             },
           },
         },
@@ -2622,28 +2776,19 @@
       Helsana: {
         color: '#E60028',
         products: {
-          'completa': {
-            name: 'COMPLETA',
+          'completaPrimeo': {
+            name: 'COMPLETA + PRIMEO',
             tier: 'Ambulant',
-            sub: 'Vollumfängliche Ambulant-Versicherung',
+            sub: 'COMPLETA für ambulante Leistungen, PRIMEO als Zusatz für Vorsorge, Innovation und Ergänzungen',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen, ab 18 J.' },
-              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo bis CHF 200/J · TOP +200' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 5000, note: '75% bis CHF 5\'000/Jahr (mit TOP)' },
-              zahn:      { value: 0, note: 'Separat: Helsana Dental' },
-              vorsorge:  { value: 750, unit: 'CHF', period: 'Jahr', note: 'Vorsorge + Impfungen + Sehkraftkontrolle' },
-              transport: { value: 50, unit: '%', period: 'unbegrenzt', note: 'Rettungs- & Bergungskosten' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel & Heilbehelfe' },
-              ausland:   { value: 'Voll', note: 'Notfall + ungeplante Behandlung' },
-            },
-          },
-          'hospitalPlus': {
-            name: 'HOSPITAL PLUS',
-            tier: 'Spital',
-            sub: 'Halbprivat / Privat (modular)',
-            benefits: {
-              spital:  { value: 'Halbprivat / Privat', note: 'Freie Spitalwahl Schweiz · Hotellerie' },
-              ausland: { value: 'Voll', note: 'Stationärer Aufenthalt im Ausland' },
+              brille:    { value: 500, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 90% bis CHF 300/Jahr; PRIMEO ergänzt den übersteigenden Betrag zu 90% bis CHF 200/Jahr' },
+              fitness:   { value: 400, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 75% bis CHF 200/Bereich; PRIMEO ergänzt den übersteigenden Betrag bis CHF 200/Jahr' },
+              alternativ:{ value: 90, unit: '%', limit: 5000, note: 'COMPLETA: 75% für anerkannte Komplementärmedizin, stationär bis CHF 5\'000/Jahr; PRIMEO ergänzt ambulant um 15% bzw. zusätzliche Methoden/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Zahnfehlstellungskorrekturen bis 20 J.: 75% bis CHF 10\'000/Jahr' },
+              vorsorge:  { value: 1700, unit: 'CHF', period: '3 Jahre', note: 'PRIMEO: Check-ups gemäss Helsana-Liste bis CHF 1\'700/3 Jahre; COMPLETA: Prävention 90% bis CHF 750/Jahr' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: Transporte/Rettungen in der Schweiz bis CHF 100\'000/Jahr; PRIMEO ergänzt Suchaktionen in der Schweiz bis CHF 30\'000' },
+              hilfsmittel: { value: 5000, unit: 'CHF', period: 'Jahr', note: 'PRIMEO: Anteil über Grundversicherung bis CHF 5\'000/Jahr gemäss MiGeL; COMPLETA bis CHF 1\'500/Jahr' },
+              ausland:   { value: '100% Mehrkosten', note: 'COMPLETA: akute ambulante/stationäre Notfälle im Ausland, 100% der Kosten über Grundversicherung; Assistance im Ausland unlimitiert' },
             },
           },
         },
@@ -2651,91 +2796,76 @@
       Swica: {
         color: '#003E80',
         products: {
-          'fortePrevita': {
-            name: 'COMPLETA FORTE + PRAEVENTA',
+          'fortePraevita': {
+            name: 'COMPLETA FORTE + PRAEVITA',
             tier: 'Ambulant',
-            sub: 'COMPLETA FORTE für Ambulant + PRAEVENTA für Vorsorge',
+            sub: 'COMPLETA FORTE für ambulante Leistungen + PRAEVITA für Vorsorge/Prävention',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe alle 3 Jahre' },
-              fitness:   { value: 800, unit: 'CHF', period: 'Jahr', note: 'Fitness, Bewegungskurse, Active Programme' },
-              alternativ:{ value: 90, unit: '%', period: 'pro Sitzung', limit: 6000, note: '90% bis CHF 6\'000/Jahr · breite Anerkennung' },
-              zahn:      { value: 0, note: 'Separat: SUPPLEMENTA für Zahn' },
-              vorsorge:  { value: 1000, unit: 'CHF', period: 'Jahr', note: 'PRAEVENTA: Vorsorge, Check-ups, Sehkraft' },
-              transport: { value: 100, unit: '%', period: 'unbegrenzt', note: 'Notfalltransport + Bergung' },
-              hilfsmittel: { value: 1500, unit: 'CHF', period: 'Jahr', note: 'Inkl. Hörgeräte-Anteil' },
-              ausland:   { value: 'Voll', note: 'Weltweite Reise- & Notfalldeckung' },
-            },
-          },
-          'hospitalAllgemein': {
-            name: 'HOSPITA Allgemein',
-            tier: 'Spital',
-            sub: 'Allgemeine Abteilung · freie Spitalwahl Schweiz',
-            benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in der ganzen Schweiz (Listspitäler)' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              brille:    { value: 900, unit: 'CHF', period: '3 Jahre', note: '90% der Optikerrechnung; nicht kumulierbar mit Grundversicherung' },
+              fitness:   { value: 1000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA FORTE: 90% bis CHF 500/Jahr + PRAEVITA: 50% bis CHF 500/Jahr; je max. CHF 300 pro Vorsorgeart, zusammen bis CHF 1\'000/Jahr' },
+              alternativ:{ value: 120, unit: 'CHF', period: 'Std.', note: 'COMPLETA FORTE: bis CHF 120/Std. bei SWICA-anerkannten Ärzten/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Kieferorthopädie 50% bis CHF 10\'000/Jahr bis 25 J.; Dentalhygiene 50% bis CHF 100/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '3 Jahre', note: 'PRAEVITA: Check-ups 90% bis CHF 500/3 Jahre' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'Schweiz: Notfall-/Verlegungstransporte und Such-/Bergungsaktionen 90% bis CHF 100\'000/Jahr; Ausland bis CHF 150\'000/Jahr' },
+              hilfsmittel: { value: 500, unit: 'CHF', period: 'Jahr', note: 'PRAEVITA 90% bis CHF 500/Jahr; COMPLETA FORTE 90% bis CHF 200/Jahr' },
+              ausland:   { value: 'Volle Deckung', note: 'Notfallbehandlung ambulant und stationär im Ausland; private Spitalklasse für die ersten 3 Reisemonate' },
             },
           },
         },
       },
       Concordia: {
         color: '#003B71',
-        review: true,
         products: {
-          'diversaPrimaTop': {
-            name: 'DIVERSA PRIMA / TOP',
+          'diversaPlus': {
+            name: 'DIVERSA plus',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — bitte mit Glatt-Broker bestätigen',
+            sub: 'Ambulante Zusatzversicherung mit Sehhilfe, Hilfsmitteln, Ausland und Transport',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Bewegung & Prävention' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Vorsorge-Untersuchungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 250, unit: 'CHF', period: '3 Jahre', note: 'Ab 18 J.: CHF 250/3 Jahre; bis 18 J.: CHF 250/Jahr' },
+              zahn:      { value: 75, unit: '%', note: 'Ambulante Zahn-/Kieferleistungen bei definierten Erkrankungen/Kieferorthopädie bis 22 J.; stationär allgemeine Abteilung im Vertragsspital' },
+              transport: { value: 'Unbegrenzt', note: 'Rettungs- und Transportkosten unbeschränkt; Suchaktion zur Rettung und Bergung max. CHF 20\'000' },
+              hilfsmittel: { value: 2000, unit: 'CHF', note: '50% bis max. CHF 2\'000' },
+              ausland:   { value: 'Ortstarif', note: 'Notfall im Ausland: stationär max. 60 Tage, ambulant ortsüblicher Tarif; Such-/Rettungskosten max. CHF 20\'000' },
             },
           },
           'natura': {
-            name: 'NATURA (Alternativ)',
+            name: 'NATURA',
             tier: 'Alternativ',
-            sub: '⚠ Vorläufig — Komplementärmedizin Add-on',
+            sub: 'Komplementärmedizin, Gesundheitsförderung und Vorsorge',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr' },
-            },
-          },
-          'hospita': {
-            name: 'HOSPITA Allgemein / Halbprivat / Privat',
-            tier: 'Spital',
-            sub: '⚠ Vorläufig',
-            benefits: {
-              spital:  { value: 'Allgemein bis Privat', note: 'Modular · freie Spitalwahl' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              alternativ:{ value: 75, unit: '%', limit: 4000, note: 'Über 70 anerkannte Methoden; Naturheilpraktik 75% bis CHF 4\'000/Jahr, therapeutische Behandlung 75% bis CHF 1\'500/Jahr; Gesamtlimite CHF 4\'000/Jahr' },
+              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Rücken, Haltung, Fitness, Gesundheits-Apps usw.: 50% bis CHF 200/Bereich; mehrere Bereiche max. CHF 500/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Medizinische Vorsorge/Check-ups: 90% bis CHF 500/Jahr, wenn von CONCORDIA anerkannt' },
             },
           },
         },
       },
       Sympany: {
         color: '#E40046',
-        review: true,
         products: {
-          'premioStartPlus': {
-            name: 'premio.plus',
+          'plusNatura': {
+            name: 'plus + natura',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — Mittlere Ambulant-Deckung',
+            sub: 'Ambulante Zusatzversicherung plus mit natura-Erweiterung',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness, Yoga, Pilates' },
-              alternativ:{ value: 80, unit: '%', period: 'pro Sitzung', limit: 3000, note: '80% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 800, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfen/Hilfsmittel: Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre' },
+              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fit bleiben: max. CHF 200/Jahr; Fit werden max. CHF 150/Jahr' },
+              alternativ:{ value: 80, unit: '%', limit: 6000, note: 'Mit natura: anerkannte Alternativmedizin 80%, erweiterte Methoden 50% bis CHF 1\'000/Jahr; Gesamtlimite CHF 6\'000/Jahr' },
+              zahn:      { value: 10000, unit: 'CHF', note: 'Kieferorthopädie bis 25 J.: 70% bis CHF 10\'000, Wartefrist gemäss Bedingungen' },
+              vorsorge:  { value: 300, unit: 'CHF', period: 'Jahr', note: 'Prävention max. CHF 300/Jahr; gynäkologische Vorsorge 90%, eine Untersuchung pro Jahr' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen max. CHF 100\'000/Jahr' },
+              hilfsmittel: { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre; übrige Hilfsmittel 50% bis CHF 250/Jahr' },
+              ausland:   { value: 'Volle Kostenübernahme', note: 'Ambulante/stationäre Notfälle im Ausland im Nachgang zur Grundversicherung' },
             },
           },
-          'spitalStandard': {
-            name: 'Spital Standard',
+          'hospitalAllgemein': {
+            name: 'hospital allgemein',
             tier: 'Spital',
-            sub: '⚠ Vorläufig',
+            sub: 'Spitalzusatzversicherung allgemeine Abteilung',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl Wohnkanton' },
-              ausland: { value: 'Notfall' },
+              spital:  { value: 'Allgemein Schweiz', note: 'Volle Kostenübernahme in der allgemeinen Abteilung, freie Spitalwahl ganze Schweiz' },
+              ausland: { value: '90 Tage', note: 'Volle Kostenübernahme für die ersten 90 Tage; danach Tagespauschalen bis zum 180. Tag' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen keine Kostenübernahme' },
             },
           },
         },
@@ -3451,7 +3581,10 @@
       $('#sXAxis').innerHTML = xAxisSvg;
     }
 
-    // Wire inputs
+    // Wire inputs (guard: strategy-rechner markup only exists on vorsorge.html;
+    // without this guard $('#sAge') is null here and the throw kills the rest of
+    // the script — including the i18n DE/EN engine further down)
+    if ($('#sAge')) {
     $('#sAge').addEventListener('input', (e) => {
       sState.age = parseInt(e.target.value, 10);
       $('#sAgeOut').textContent = sState.age;
@@ -3511,6 +3644,7 @@
       b.classList.add('bg-ink-950', 'text-white', 'border-ink-950');
       sRender();
     }));
+    } // end strategy-rechner input wiring guard
 
     // Customer name fields (no recompute needed, PDF-only)
     $('#sFirst')?.addEventListener('input', (e) => { sState.firstName = e.target.value.trim(); });
@@ -4602,6 +4736,19 @@
         'footer.imprint': 'Imprint',
         'footer.privacy': 'Privacy',
         'footer.address': 'Glatt Broker AG · Staubstrasse 15 · 8038 Zürich',
+        'gb3a.eyebrow': 'Pillar 3a · calculated',
+        'gb3a.head': 'Your pillar 3a,<br><span class="gb3a-u">calculated</span>',
+        'gb3a.sub': 'Move the sliders and watch live what becomes of your pillar 3a — including tax savings. Independent bank &amp; insurance solution from a single source.',
+        'gb3a.cta': 'Calculate the full strategy',
+        'gb3a.note': 'Model calculation · Everon 7.0% · Zugerberg 6.0% · insurance 4.5% p.a. · without guarantee',
+        'gb3a.endlabel': 'Tax-free final capital',
+        'gb3a.taxnote': 'tax savings over the term',
+        'gb3a.legVers': 'Insurance',
+        'gb3a.lblSpar': 'Monthly savings',
+        'gb3a.lblJahre': 'Investment period',
+        'gb3a.lblVers': 'Insurance share',
+        'gb3a.lblBank': 'Bank allocation',
+        'gb3a.years': 'years',
       },
     };
     document.querySelectorAll('[data-i18n]').forEach((el) => { i18n.de[el.dataset.i18n] = el.innerHTML; });
@@ -4678,3 +4825,6 @@
 
 </body>
 </html>
+
+
+

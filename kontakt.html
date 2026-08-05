@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -406,6 +406,7 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -539,6 +540,7 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -2083,32 +2085,31 @@
           'ambulantBalance': {
             name: 'myFlex Ambulant Balance',
             tier: 'Ambulant',
-            sub: 'Mittlere Deckung Ambulant',
+            sub: 'Ambulante Deckung Stufe Balance',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo + Bewegungs-Kurse' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              zahn:      { value: 0, note: 'Nicht enthalten — separat abschliessen' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Check-up, Impfungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr', note: 'Notfalltransport' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel + Heilbehelfe' },
+              brille:    { value: 150, unit: 'CHF', period: 'Jahr', note: 'ab 19 J.; bis 18 J. CHF 150/Fall' },
+              fitness:   { value: 250, unit: 'CHF', period: 'Jahr', note: 'Gesundheitskonto Balance: 50%, max. CHF 250/Jahr' },
+              zahn:      { value: 1000, unit: 'CHF', period: 'Jahr', note: '50% bis CHF 1\'000/Jahr; Kieferorthopädie bis 20 J. 50% bis CHF 12\'000' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '2 Jahre', note: 'Check-up gemäss CSS-Gesundheitskonto Balance' },
+              transport: { value: 'Unbegrenzt', note: 'Notfalltransporte weltweit; Such-/Rettung CHF 100\'000/Fall; Repatriierung unbegrenzt' },
+              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: '90% bis CHF 1\'000/Jahr gemäss CSS-Liste' },
             },
           },
-          'spitalEconomy': {
-            name: 'Spital Economy',
+          'spitalBalance': {
+            name: 'myFlex Spital Balance',
             tier: 'Spital',
-            sub: 'Allgemein, freie Spitalwahl Wohnkanton',
+            sub: 'Spitaldeckung Stufe Balance',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in Listspitälern Wohnkanton' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland (KVG-Tarif)' },
+              spital:  { value: 'Allgemein bis privat', note: 'Ganze Schweiz in KVG-/CSS-anerkannten Spitälern; Abteilung vor Eintritt wählbar; Kostenbeteiligung je Variante' },
+              ausland: { value: 'Weltweit unbegrenzt', note: 'Stationäre Notfallbehandlung weltweit; in der Schweiz gemäss gewählter Spitalabteilung' },
             },
           },
-          'alternativEconomy': {
-            name: 'Alternativ Economy',
+          'alternativBalance': {
+            name: 'myFlex Alternativ Balance',
             tier: 'Alternativ',
-            sub: 'Komplementärmedizin · Add-on',
+            sub: 'Komplementärmedizin Stufe Balance',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr · TCM, Akupunktur, Naturheilkunde, Homöopathie' },
+              alternativ: { value: 80, unit: '%', limit: 3000, note: 'Komplementärmedizin inkl. natürliche Heilmittel bis CHF 3\'000/Jahr; Erwachsene: CHF 300 Franchise und 20% Selbstbehalt' },
             },
           },
         },
@@ -2116,28 +2117,19 @@
       Helsana: {
         color: '#E60028',
         products: {
-          'completa': {
-            name: 'COMPLETA',
+          'completaPrimeo': {
+            name: 'COMPLETA + PRIMEO',
             tier: 'Ambulant',
-            sub: 'Vollumfängliche Ambulant-Versicherung',
+            sub: 'COMPLETA für ambulante Leistungen, PRIMEO als Zusatz für Vorsorge, Innovation und Ergänzungen',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen, ab 18 J.' },
-              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fitness-Abo bis CHF 200/J · TOP +200' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 5000, note: '75% bis CHF 5\'000/Jahr (mit TOP)' },
-              zahn:      { value: 0, note: 'Separat: Helsana Dental' },
-              vorsorge:  { value: 750, unit: 'CHF', period: 'Jahr', note: 'Vorsorge + Impfungen + Sehkraftkontrolle' },
-              transport: { value: 50, unit: '%', period: 'unbegrenzt', note: 'Rettungs- & Bergungskosten' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr', note: 'Hilfsmittel & Heilbehelfe' },
-              ausland:   { value: 'Voll', note: 'Notfall + ungeplante Behandlung' },
-            },
-          },
-          'hospitalPlus': {
-            name: 'HOSPITAL PLUS',
-            tier: 'Spital',
-            sub: 'Halbprivat / Privat (modular)',
-            benefits: {
-              spital:  { value: 'Halbprivat / Privat', note: 'Freie Spitalwahl Schweiz · Hotellerie' },
-              ausland: { value: 'Voll', note: 'Stationärer Aufenthalt im Ausland' },
+              brille:    { value: 500, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 90% bis CHF 300/Jahr; PRIMEO ergänzt den übersteigenden Betrag zu 90% bis CHF 200/Jahr' },
+              fitness:   { value: 400, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: 75% bis CHF 200/Bereich; PRIMEO ergänzt den übersteigenden Betrag bis CHF 200/Jahr' },
+              alternativ:{ value: 90, unit: '%', limit: 5000, note: 'COMPLETA: 75% für anerkannte Komplementärmedizin, stationär bis CHF 5\'000/Jahr; PRIMEO ergänzt ambulant um 15% bzw. zusätzliche Methoden/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Zahnfehlstellungskorrekturen bis 20 J.: 75% bis CHF 10\'000/Jahr' },
+              vorsorge:  { value: 1700, unit: 'CHF', period: '3 Jahre', note: 'PRIMEO: Check-ups gemäss Helsana-Liste bis CHF 1\'700/3 Jahre; COMPLETA: Prävention 90% bis CHF 750/Jahr' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA: Transporte/Rettungen in der Schweiz bis CHF 100\'000/Jahr; PRIMEO ergänzt Suchaktionen in der Schweiz bis CHF 30\'000' },
+              hilfsmittel: { value: 5000, unit: 'CHF', period: 'Jahr', note: 'PRIMEO: Anteil über Grundversicherung bis CHF 5\'000/Jahr gemäss MiGeL; COMPLETA bis CHF 1\'500/Jahr' },
+              ausland:   { value: '100% Mehrkosten', note: 'COMPLETA: akute ambulante/stationäre Notfälle im Ausland, 100% der Kosten über Grundversicherung; Assistance im Ausland unlimitiert' },
             },
           },
         },
@@ -2145,91 +2137,76 @@
       Swica: {
         color: '#003E80',
         products: {
-          'fortePrevita': {
-            name: 'COMPLETA FORTE + PRAEVENTA',
+          'fortePraevita': {
+            name: 'COMPLETA FORTE + PRAEVITA',
             tier: 'Ambulant',
-            sub: 'COMPLETA FORTE für Ambulant + PRAEVENTA für Vorsorge',
+            sub: 'COMPLETA FORTE für ambulante Leistungen + PRAEVITA für Vorsorge/Prävention',
             benefits: {
-              brille:    { value: 300, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe alle 3 Jahre' },
-              fitness:   { value: 800, unit: 'CHF', period: 'Jahr', note: 'Fitness, Bewegungskurse, Active Programme' },
-              alternativ:{ value: 90, unit: '%', period: 'pro Sitzung', limit: 6000, note: '90% bis CHF 6\'000/Jahr · breite Anerkennung' },
-              zahn:      { value: 0, note: 'Separat: SUPPLEMENTA für Zahn' },
-              vorsorge:  { value: 1000, unit: 'CHF', period: 'Jahr', note: 'PRAEVENTA: Vorsorge, Check-ups, Sehkraft' },
-              transport: { value: 100, unit: '%', period: 'unbegrenzt', note: 'Notfalltransport + Bergung' },
-              hilfsmittel: { value: 1500, unit: 'CHF', period: 'Jahr', note: 'Inkl. Hörgeräte-Anteil' },
-              ausland:   { value: 'Voll', note: 'Weltweite Reise- & Notfalldeckung' },
-            },
-          },
-          'hospitalAllgemein': {
-            name: 'HOSPITA Allgemein',
-            tier: 'Spital',
-            sub: 'Allgemeine Abteilung · freie Spitalwahl Schweiz',
-            benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl in der ganzen Schweiz (Listspitäler)' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              brille:    { value: 900, unit: 'CHF', period: '3 Jahre', note: '90% der Optikerrechnung; nicht kumulierbar mit Grundversicherung' },
+              fitness:   { value: 1000, unit: 'CHF', period: 'Jahr', note: 'COMPLETA FORTE: 90% bis CHF 500/Jahr + PRAEVITA: 50% bis CHF 500/Jahr; je max. CHF 300 pro Vorsorgeart, zusammen bis CHF 1\'000/Jahr' },
+              alternativ:{ value: 120, unit: 'CHF', period: 'Std.', note: 'COMPLETA FORTE: bis CHF 120/Std. bei SWICA-anerkannten Ärzten/Therapeuten' },
+              zahn:      { value: 10000, unit: 'CHF', period: 'Jahr', note: 'Kieferorthopädie 50% bis CHF 10\'000/Jahr bis 25 J.; Dentalhygiene 50% bis CHF 100/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: '3 Jahre', note: 'PRAEVITA: Check-ups 90% bis CHF 500/3 Jahre' },
+              transport: { value: 100000, unit: 'CHF', period: 'Jahr', note: 'Schweiz: Notfall-/Verlegungstransporte und Such-/Bergungsaktionen 90% bis CHF 100\'000/Jahr; Ausland bis CHF 150\'000/Jahr' },
+              hilfsmittel: { value: 500, unit: 'CHF', period: 'Jahr', note: 'PRAEVITA 90% bis CHF 500/Jahr; COMPLETA FORTE 90% bis CHF 200/Jahr' },
+              ausland:   { value: 'Volle Deckung', note: 'Notfallbehandlung ambulant und stationär im Ausland; private Spitalklasse für die ersten 3 Reisemonate' },
             },
           },
         },
       },
       Concordia: {
         color: '#003B71',
-        review: true,
         products: {
-          'diversaPrimaTop': {
-            name: 'DIVERSA PRIMA / TOP',
+          'diversaPlus': {
+            name: 'DIVERSA plus',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — bitte mit Glatt-Broker bestätigen',
+            sub: 'Ambulante Zusatzversicherung mit Sehhilfe, Hilfsmitteln, Ausland und Transport',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfe' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Bewegung & Prävention' },
-              alternativ:{ value: 75, unit: '%', period: 'pro Sitzung', limit: 3000, note: '75% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Vorsorge-Untersuchungen' },
-              transport: { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 1000, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 250, unit: 'CHF', period: '3 Jahre', note: 'Ab 18 J.: CHF 250/3 Jahre; bis 18 J.: CHF 250/Jahr' },
+              zahn:      { value: 75, unit: '%', note: 'Ambulante Zahn-/Kieferleistungen bei definierten Erkrankungen/Kieferorthopädie bis 22 J.; stationär allgemeine Abteilung im Vertragsspital' },
+              transport: { value: 'Unbegrenzt', note: 'Rettungs- und Transportkosten unbeschränkt; Suchaktion zur Rettung und Bergung max. CHF 20\'000' },
+              hilfsmittel: { value: 2000, unit: 'CHF', note: '50% bis max. CHF 2\'000' },
+              ausland:   { value: 'Ortstarif', note: 'Notfall im Ausland: stationär max. 60 Tage, ambulant ortsüblicher Tarif; Such-/Rettungskosten max. CHF 20\'000' },
             },
           },
           'natura': {
-            name: 'NATURA (Alternativ)',
+            name: 'NATURA',
             tier: 'Alternativ',
-            sub: '⚠ Vorläufig — Komplementärmedizin Add-on',
+            sub: 'Komplementärmedizin, Gesundheitsförderung und Vorsorge',
             benefits: {
-              alternativ: { value: 90, unit: '%', period: 'pro Sitzung', limit: 5000, note: '90% bis CHF 5\'000/Jahr' },
-            },
-          },
-          'hospita': {
-            name: 'HOSPITA Allgemein / Halbprivat / Privat',
-            tier: 'Spital',
-            sub: '⚠ Vorläufig',
-            benefits: {
-              spital:  { value: 'Allgemein bis Privat', note: 'Modular · freie Spitalwahl' },
-              ausland: { value: 'Notfall', note: 'Notfalldeckung im Ausland' },
+              alternativ:{ value: 75, unit: '%', limit: 4000, note: 'Über 70 anerkannte Methoden; Naturheilpraktik 75% bis CHF 4\'000/Jahr, therapeutische Behandlung 75% bis CHF 1\'500/Jahr; Gesamtlimite CHF 4\'000/Jahr' },
+              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Rücken, Haltung, Fitness, Gesundheits-Apps usw.: 50% bis CHF 200/Bereich; mehrere Bereiche max. CHF 500/Jahr' },
+              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr', note: 'Medizinische Vorsorge/Check-ups: 90% bis CHF 500/Jahr, wenn von CONCORDIA anerkannt' },
             },
           },
         },
       },
       Sympany: {
         color: '#E40046',
-        review: true,
         products: {
-          'premioStartPlus': {
-            name: 'premio.plus',
+          'plusNatura': {
+            name: 'plus + natura',
             tier: 'Ambulant',
-            sub: '⚠ Vorläufig — Mittlere Ambulant-Deckung',
+            sub: 'Ambulante Zusatzversicherung plus mit natura-Erweiterung',
             benefits: {
-              brille:    { value: 200, unit: 'CHF', period: '3 Jahre', note: 'Brille / Kontaktlinsen' },
-              fitness:   { value: 500, unit: 'CHF', period: 'Jahr', note: 'Fitness, Yoga, Pilates' },
-              alternativ:{ value: 80, unit: '%', period: 'pro Sitzung', limit: 3000, note: '80% bis CHF 3\'000/Jahr' },
-              vorsorge:  { value: 500, unit: 'CHF', period: 'Jahr' },
-              hilfsmittel: { value: 800, unit: 'CHF', period: 'Jahr' },
+              brille:    { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Sehhilfen/Hilfsmittel: Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre' },
+              fitness:   { value: 200, unit: 'CHF', period: 'Jahr', note: 'Fit bleiben: max. CHF 200/Jahr; Fit werden max. CHF 150/Jahr' },
+              alternativ:{ value: 80, unit: '%', limit: 6000, note: 'Mit natura: anerkannte Alternativmedizin 80%, erweiterte Methoden 50% bis CHF 1\'000/Jahr; Gesamtlimite CHF 6\'000/Jahr' },
+              zahn:      { value: 10000, unit: 'CHF', note: 'Kieferorthopädie bis 25 J.: 70% bis CHF 10\'000, Wartefrist gemäss Bedingungen' },
+              vorsorge:  { value: 300, unit: 'CHF', period: 'Jahr', note: 'Prävention max. CHF 300/Jahr; gynäkologische Vorsorge 90%, eine Untersuchung pro Jahr' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen max. CHF 100\'000/Jahr' },
+              hilfsmittel: { value: 270, unit: 'CHF', period: '3 Jahre', note: 'Kinder bis 18 J. max. CHF 270/Jahr; Erwachsene max. CHF 270/3 Jahre; übrige Hilfsmittel 50% bis CHF 250/Jahr' },
+              ausland:   { value: 'Volle Kostenübernahme', note: 'Ambulante/stationäre Notfälle im Ausland im Nachgang zur Grundversicherung' },
             },
           },
-          'spitalStandard': {
-            name: 'Spital Standard',
+          'hospitalAllgemein': {
+            name: 'hospital allgemein',
             tier: 'Spital',
-            sub: '⚠ Vorläufig',
+            sub: 'Spitalzusatzversicherung allgemeine Abteilung',
             benefits: {
-              spital:  { value: 'Allgemein', note: 'Freie Spitalwahl Wohnkanton' },
-              ausland: { value: 'Notfall' },
+              spital:  { value: 'Allgemein Schweiz', note: 'Volle Kostenübernahme in der allgemeinen Abteilung, freie Spitalwahl ganze Schweiz' },
+              ausland: { value: '90 Tage', note: 'Volle Kostenübernahme für die ersten 90 Tage; danach Tagespauschalen bis zum 180. Tag' },
+              transport: { value: '100%', note: 'Transportkosten 100% im Nachgang zur Grundversicherung; Suchaktionen keine Kostenübernahme' },
             },
           },
         },
@@ -4171,3 +4148,6 @@
 
 </body>
 </html>
+
+
+
