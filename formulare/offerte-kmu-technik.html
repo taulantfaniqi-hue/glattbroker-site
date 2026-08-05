@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technikversicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-technik',
+  title: 'Technikversicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'https://' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['Einzelfirma', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-000.000.000', col: 'full' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verband_mitglied', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche', label: 'Ja, welcher Verband?', type: 'text', col: 'full', hint: 'Nur ausfüllen wenn "Ja" gewählt.' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'gebaeude_eigentuemer', label: 'Eigentümer von betriebsfremden Gebäuden', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'gebaeude_adresse', label: 'Adresse', type: 'text', col: 'full', hint: 'Nur ausfüllen wenn "Ja" gewählt.' },
+            { id: 'gebaeude_plz_ort', label: 'PLZ/Ort', type: 'text', hint: 'Nur ausfüllen wenn "Ja" gewählt.' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Personal',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z.B. 2024' },
+            { id: 'beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'beschaeftigte_familienmitglieder', label: 'Davon mitarbeitende Familienmitglieder', type: 'number', col: 'full' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Bitte alle relevanten Lohnsummen in CHF angeben.',
+          fields: [
+            { id: 'lohn_maenner_uvg', label: 'Männer – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ueberschuss', label: 'Männer – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ahv', label: 'Männer – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ahv_u8h', label: 'Männer – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_uvg', label: 'Frauen – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ueberschuss', label: 'Frauen – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ahv', label: 'Frauen – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ahv_u8h', label: 'Frauen – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_uvg', label: 'Total – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ueberschuss', label: 'Total – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ahv', label: 'Total – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ahv_u8h', label: 'Total – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'mitarbeiter_arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'mitarbeiter_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'lohn_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Zu versichernde Anlagen',
+      sections: [
+        {
+          label: 'Geräte- und Anlagenliste',
+          note: 'Bitte alle zu versichernden Anlagen und Geräte mit Baujahr und Neuwert erfassen.',
+          fields: [
+            {
+              id: 'anlagen_liste',
+              label: 'Anlagen und Geräte',
+              type: 'table',
+              columns: ['Anlage / Gerät', 'Hersteller / Typ', 'Baujahr', 'Neuwert (CHF)'],
+              rows: 5
+            }
+          ]
+        },
+        {
+          label: 'Gewünschte Deckungen',
+          fields: [
+            { id: 'selbstbehalt', label: 'Selbstbehalt', type: 'text', col: 'full' },
+            { id: 'static_buero', type: 'static', label: 'Bürotechnik am Versicherungsort' },
+            { id: 'buero_vs', label: 'Bürotechnik – Versicherungssumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'buero_deckungen', label: 'Bürotechnik – Eingeschlossene Deckungen', type: 'checkboxgroup', options: ['Äussere Einwirkungen', 'Einschluss innere Betriebsschäden', 'Einschluss einfacher Diebstahl und Veruntreuung'], vertical: true, col: 'full' },
+            { id: 'static_mobile', type: 'static', label: 'Mobile Krane und Anlagen sowie fahrbare Arbeitsmaschinen' },
+            { id: 'mobile_vs', label: 'Mobile Krane/Arbeitsmaschinen – Versicherungssumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'mobile_deckungen', label: 'Mobile Krane/Arbeitsmaschinen – Eingeschlossene Deckungen', type: 'checkboxgroup', options: ['Äussere Einwirkungen', 'Einschluss innere Betriebsschäden', 'Einschluss einfacher Diebstahl und Veruntreuung'], vertical: true, col: 'full' },
+            { id: 'static_daten', type: 'static', label: 'Datenträger und Wiederherstellungskosten von Daten' },
+            { id: 'daten_vs', label: 'Datenträger/Wiederherstellung – Versicherungssumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'daten_deckungen', label: 'Datenträger/Wiederherstellung – Eingeschlossene Deckungen', type: 'checkboxgroup', options: ['Äussere Einwirkungen', 'Einschluss innere Betriebsschäden', 'Einschluss einfacher Diebstahl und Veruntreuung'], vertical: true, col: 'full' },
+            { id: 'static_mehrkosten', type: 'static', label: 'Mehrkosten für Aufrechterhaltung des Betriebs' },
+            { id: 'mehrkosten_vs', label: 'Mehrkosten Betriebsaufrechterhaltung – Versicherungssumme (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Vertrag & Vorversicherung',
+      sections: [
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Beginn', type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Ablauf', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'vorversicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'police_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'], col: 'full' }
+          ]
+        },
+        {
+          label: 'Risikoangaben',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full', hint: 'Nur ausfüllen wenn "Ja" gewählt.' },
+            { id: 'leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Leistungsfälle – Schadensumme inkl. Reserven (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / weitere Angaben', type: 'textarea', rows: 5, col: 'full', placeholder: 'Weitere Informationen, Sonderwünsche oder Ergänzungen...' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

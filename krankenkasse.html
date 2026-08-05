@@ -354,6 +354,55 @@
     details summary { list-style: none; cursor: pointer; }
     details summary::-webkit-details-marker { display: none; }
     details[open] .faq-icon { transform: rotate(45deg); }
+
+    /* ── KK-Tool-Styling für 2 neue Rechner ─── */
+    .k-tool { background: #fff; border: 1px solid #E5E5E5; border-radius: 1.5rem; padding: 2rem 1.75rem; }
+    @media (min-width: 1024px) { .k-tool { padding: 2.5rem; } }
+    .k-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    @media (min-width: 960px) { .k-grid.split { grid-template-columns: 0.9fr 1fr; gap: 2rem; } }
+    .k-field + .k-field { margin-top: 0.85rem; }
+    .k-field-label {
+      display: block; font-family: var(--font-mono); font-size: 0.66rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #737373; margin-bottom: 0.35rem;
+    }
+    .k-input, .k-select {
+      width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #D4D4D4;
+      border-radius: 0.6rem; background: #fff; color: var(--ink);
+      font-family: inherit; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+    }
+    .k-input:focus, .k-select:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,41,54,0.1); }
+    .k-result { background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 1rem; padding: 1.25rem 1.35rem; }
+    .k-result + .k-result { margin-top: 0.85rem; }
+    .k-row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; padding: 0.4rem 0; font-size: 0.93rem; }
+    .k-row + .k-row { border-top: 1px dashed #E5E5E5; }
+    .k-row .k-lbl { color: #404040; }
+    .k-row .k-val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .k-row.total { padding-top: 0.6rem; border-top: 1px solid var(--ink); margin-top: 0.4rem; }
+    .k-row.total .k-val { color: var(--red); font-size: 1.1rem; }
+    .k-hero { background: var(--ink); color: #fff; border-radius: 1rem; padding: 1.5rem 1.5rem 1.6rem; margin-bottom: 0.85rem; }
+    .k-hero.red { background: linear-gradient(135deg, #CC2936, #7A181F); }
+    .k-hero .k-h-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem; }
+    .k-hero .k-h-value { font-size: 2.1rem; line-height: 1; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .k-hero .k-h-value small { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 400; margin-right: 0.35rem; }
+    .k-hero .k-h-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+    .k-hint { font-size: 0.78rem; color: #737373; margin-top: 1rem; line-height: 1.5; }
+
+    /* Modell-Vergleich: Bar-Chart */
+    .modell-grid { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
+    .modell-bar { background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 0.7rem; padding: 0.85rem 1rem; position: relative; overflow: hidden; }
+    .modell-bar.best { border-color: var(--red); background: #FDEFF1; }
+    .modell-bar .mb-fill {
+      position: absolute; top: 0; bottom: 0; left: 0;
+      background: linear-gradient(90deg, rgba(204,41,54,0.08), rgba(204,41,54,0.18));
+      z-index: 0;
+    }
+    .modell-bar.best .mb-fill { background: linear-gradient(90deg, rgba(204,41,54,0.2), rgba(204,41,54,0.35)); }
+    .modell-bar .mb-content { position: relative; display: flex; align-items: baseline; justify-content: space-between; z-index: 1; }
+    .modell-bar h5 { font-weight: 600; color: var(--ink); font-size: 0.95rem; }
+    .modell-bar h5 .mb-sub { font-weight: 400; color: #737373; font-size: 0.75rem; margin-left: 0.4rem; }
+    .modell-bar .mb-price { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); }
+    .modell-bar .mb-price.win { color: var(--red); }
   </style>
 </head>
 <body>
@@ -406,7 +455,6 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
-                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -540,7 +588,6 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
-              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -1003,6 +1050,114 @@
         </div>
       </div>
     </section>
+    <!-- ───────────── FRANCHISE-OPTIMIERUNG ───────────── -->
+    <section id="franchise-optimum" class="py-16 lg:py-24 border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Franchise-Optimierung</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Welche Franchise lohnt sich für dich?</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Höhere Franchise = tiefere Prämie, aber höheres Selbstrisiko bei Krankheit. Anhand deiner erwarteten Arztkosten zeigen wir dir den Break-Even-Punkt.
+          </p>
+        </div>
+
+        <div class="k-tool">
+          <div class="k-grid split">
+            <div>
+              <label class="k-field">
+                <span class="k-field-label">Erwartete Arzt-/Medikamentenkosten / Jahr</span>
+                <input id="frKosten" type="number" min="0" max="20000" step="100" value="1200" class="k-input" />
+              </label>
+              <label class="k-field">
+                <span class="k-field-label">Aktuelle Prämie / Monat (Standard-Tarif Franchise 300)</span>
+                <input id="frPraem" type="number" min="100" max="1000" step="10" value="450" class="k-input" />
+              </label>
+              <p class="k-hint">
+                Selbstbehalt: 10 % auf Kosten über der Franchise, max CHF 700 / Jahr. Prämien-Rabatte je Franchise: 300 = 0 % · 500 = 7 % · 1000 = 14 % · 1500 = 19 % · 2000 = 23 % · 2500 = 26 % (Schätzwerte 2026).
+              </p>
+            </div>
+
+            <div>
+              <div class="k-hero red">
+                <div class="k-h-label">Beste Franchise für dich</div>
+                <div class="k-h-value"><small>CHF</small><span id="frBest">300</span></div>
+                <div class="k-h-sub">Ersparnis gegenüber Franchise 300: CHF <span id="frBestSave">0</span> / Jahr</div>
+              </div>
+
+              <div class="k-result">
+                <div class="modell-grid">
+                  <div class="modell-bar" id="frBar300"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 300<span class="mb-sub">Standard</span></h5><span class="mb-price">CHF <span id="frTot300">0</span></span></div></div>
+                  <div class="modell-bar" id="frBar500"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 500<span class="mb-sub">−7 % Prämie</span></h5><span class="mb-price">CHF <span id="frTot500">0</span></span></div></div>
+                  <div class="modell-bar" id="frBar1000"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 1’000<span class="mb-sub">−14 %</span></h5><span class="mb-price">CHF <span id="frTot1000">0</span></span></div></div>
+                  <div class="modell-bar" id="frBar1500"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 1’500<span class="mb-sub">−19 %</span></h5><span class="mb-price">CHF <span id="frTot1500">0</span></span></div></div>
+                  <div class="modell-bar" id="frBar2000"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 2’000<span class="mb-sub">−23 %</span></h5><span class="mb-price">CHF <span id="frTot2000">0</span></span></div></div>
+                  <div class="modell-bar" id="frBar2500"><div class="mb-fill"></div><div class="mb-content"><h5>Franchise 2’500<span class="mb-sub">−26 % · max</span></h5><span class="mb-price">CHF <span id="frTot2500">0</span></span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── MODELL-VERGLEICH ───────────── -->
+    <section id="modell-vergleich" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Modell-Vergleich</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Standard, Hausarzt, Telmed oder HMO?</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Welche Versicherungs-Form passt zu deinem Verhalten? Tausch ist jedes Jahr per Kündigungs­frist möglich. Hier siehst du Prämien-Differenzen und was du in Kauf nehmen musst.
+          </p>
+        </div>
+
+        <div class="k-tool">
+          <div class="k-grid split">
+            <div>
+              <label class="k-field">
+                <span class="k-field-label">Aktuelle Standard-Prämie / Monat</span>
+                <input id="moPraem" type="number" min="100" max="1500" step="10" value="450" class="k-input" />
+              </label>
+              <label class="k-field">
+                <span class="k-field-label">Wie oft suchst du den Arzt auf?</span>
+                <select id="moVerhalten" class="k-select">
+                  <option value="selten">Selten (1-3× / Jahr)</option>
+                  <option value="mittel" selected>Mittel (4-8× / Jahr)</option>
+                  <option value="häufig">Häufig (&gt; 8× / Jahr)</option>
+                </select>
+              </label>
+              <label class="k-field">
+                <span class="k-field-label">Wechselbereitschaft</span>
+                <select id="moBereit" class="k-select">
+                  <option value="hoch">Hoch — flexibel mit Arzt-Wechsel</option>
+                  <option value="mittel" selected>Mittel — gleicher Arzt ok</option>
+                  <option value="null">Null — eigener Hausarzt ist Pflicht</option>
+                </select>
+              </label>
+              <p class="k-hint">Telmed: zuerst medizinische Hotline anrufen, dann Überweisung. HMO: feste Praxis-Gemeinschaft. Hausarzt: dein Hausarzt entscheidet über Überweisungen. Rabatte: Standard 0 % · Hausarzt 10–12 % · Telmed 15–18 % · HMO 18–22 %.</p>
+            </div>
+
+            <div>
+              <div class="k-hero red">
+                <div class="k-h-label">Empfehlung</div>
+                <div class="k-h-value" style="font-size: 1.5rem; line-height: 1.2;"><span id="moEmpfehlung">—</span></div>
+                <div class="k-h-sub">Jährliche Ersparnis: <strong>CHF <span id="moSave">0</span></strong></div>
+              </div>
+
+              <div class="k-result">
+                <div class="modell-grid">
+                  <div class="modell-bar" id="moStandard"><div class="mb-fill"></div><div class="mb-content"><h5>Standard<span class="mb-sub">freie Arztwahl</span></h5><span class="mb-price">CHF <span id="moTotStd">0</span> / J</span></div></div>
+                  <div class="modell-bar" id="moHausarzt"><div class="mb-fill"></div><div class="mb-content"><h5>Hausarzt<span class="mb-sub">−10–12 %</span></h5><span class="mb-price">CHF <span id="moTotHa">0</span> / J</span></div></div>
+                  <div class="modell-bar" id="moTelmed"><div class="mb-fill"></div><div class="mb-content"><h5>Telmed<span class="mb-sub">−15–18 %</span></h5><span class="mb-price">CHF <span id="moTotTm">0</span> / J</span></div></div>
+                  <div class="modell-bar" id="moHmo"><div class="mb-fill"></div><div class="mb-content"><h5>HMO<span class="mb-sub">−18–22 %</span></h5><span class="mb-price">CHF <span id="moTotHmo">0</span> / J</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ───────────── MINI-CONTACT ───────────── -->
     <section class="py-16 lg:py-20 bg-ink-950 text-white relative overflow-hidden">
       <div class="absolute -right-40 top-0 w-[400px] h-[400px] bg-brand-600/20 blur-3xl rounded-full" aria-hidden="true"></div>
@@ -1171,6 +1326,7 @@
     */
     const FORM_CONFIG = {
       formspreeId: '',                                 // ← hier einsetzen, z.B. 'xrgwzpdb'
+      apiEndpoint: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3001' : '', // lokal: automatisch ans lokale CRM — im Web: 'https://api.glattbroker.ch' eintragen
       mailtoFallback: 'online@glattbroker.ch',
       // Optional: pro Formular-Typ ein eigener Empfänger via _replyto / _subject
       subjects: {
@@ -1194,6 +1350,30 @@
         list.push({ ...payload, _ts: new Date().toISOString() });
         localStorage.setItem(localKey, JSON.stringify(list));
       } catch {}
+
+      // (a) Eigene Glatt-Plattform-API zuerst (wenn konfiguriert); Fehler/Timeout → weiter zu (b) Formspree / (c) mailto
+      if (FORM_CONFIG.apiEndpoint) {
+        try {
+          const _known = ['vorname', 'nachname', 'name', 'email', 'telefon', 'plz', 'nachricht', 'anliegen'];
+          const _lead = { source: 'website', page: location.pathname };
+          const _daten = {};
+          Object.entries(payload).forEach(([k, v]) => {
+            if (v === undefined || v === null || v === '' || k.startsWith('_') || k === 'gotcha') return;
+            if (k === 'thema') { _lead.anliegen = v; }
+            else if (_known.includes(k)) { _lead[k] = v; }
+            else { _daten[k] = v; }
+          });
+          _daten.formType = formType;
+          _lead.daten = _daten;
+          const apiRes = await fetch(FORM_CONFIG.apiEndpoint + '/api/public/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(_lead),
+            signal: AbortSignal.timeout(8000),
+          });
+          if (apiRes.status === 200) return { ok: true, mode: 'api' };
+        } catch (e) { /* API nicht erreichbar → Fallback */ }
+      }
 
       // Wenn Formspree konfiguriert: über API senden
       if (FORM_CONFIG.formspreeId && FORM_CONFIG.formspreeId !== 'YOUR_FORM_ID') {
@@ -2484,7 +2664,6 @@
         },
       },
     };
-
     const VVG_CATEGORIES = [
       { id: 'brille',     label: 'Brille / Kontaktlinsen',  icon: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z|circle:12,12,3' },
       { id: 'fitness',    label: 'Fitness und Kurse',        icon: 'M6.5 6.5h11M6.5 17.5h11M3 12h18M9.5 7v10M14.5 7v10' },
@@ -3211,7 +3390,8 @@
       $('#sXAxis').innerHTML = xAxisSvg;
     }
 
-    // Wire inputs
+    // Wire inputs — Guard: 3a-Rechner-Inputs existieren nur auf vorsorge.html (sonst TypeError, Folge-Scripts sterben)
+    if (document.getElementById('sChart')) {
     $('#sAge').addEventListener('input', (e) => {
       sState.age = parseInt(e.target.value, 10);
       $('#sAgeOut').textContent = sState.age;
@@ -3271,6 +3451,7 @@
       b.classList.add('bg-ink-950', 'text-white', 'border-ink-950');
       sRender();
     }));
+    } // Ende Guard #sChart
 
     // Customer name fields (no recompute needed, PDF-only)
     $('#sFirst')?.addEventListener('input', (e) => { sState.firstName = e.target.value.trim(); });
@@ -4433,10 +4614,126 @@
         }
       });
     })();
+
+    /* ════════════════════════════════════════════════════════════
+       FRANCHISE-OPTIMIERUNG + MODELL-VERGLEICH
+       Zwei Live-Rechner für KK-Optimierung
+       ════════════════════════════════════════════════════════════ */
+    (function kkRechner() {
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n) => Math.round(n).toLocaleString('de-CH').replace(/,/g, "'");
+      const PI = (id, def) => parseFloat($(id)?.value || def) || 0;
+      const PS = (id) => $(id)?.value || '';
+
+      // ── FRANCHISE-OPTIMIERUNG ──────────────────
+      const FR_RABATT = {300: 0, 500: 0.07, 1000: 0.14, 1500: 0.19, 2000: 0.23, 2500: 0.26};
+      const FR_LEVELS = [300, 500, 1000, 1500, 2000, 2500];
+
+      function calcFranchise() {
+        const kosten = PI('frKosten');     // erwartete Arzt-Kosten / J
+        const monPraem = PI('frPraem');    // Prämie / Mt (Franchise 300)
+        const jahrPraem300 = monPraem * 12;
+        const results = {};
+        let bestFr = 300;
+        let bestTotal = Infinity;
+
+        for (const fr of FR_LEVELS) {
+          const rab = FR_RABATT[fr] || 0;
+          const praem = jahrPraem300 * (1 - rab);
+          // Eigenkosten: Franchise (volle Höhe falls Kosten ≥ Franchise) + 10% Selbstbehalt auf Kosten-Franchise, max 700
+          const aboveFr = Math.max(0, kosten - fr);
+          const selbstbeh = Math.min(aboveFr * 0.10, 700);
+          const ownCost = Math.min(kosten, fr) + selbstbeh;
+          const total = praem + ownCost;
+          results[fr] = total;
+          if (total < bestTotal) { bestTotal = total; bestFr = fr; }
+        }
+
+        for (const fr of FR_LEVELS) {
+          $('frTot' + fr).textContent = fmt(results[fr]);
+          const bar = $('frBar' + fr);
+          const fill = bar.querySelector('.mb-fill');
+          // Bar fill: invertiert — beste = volle Fläche
+          const max = Math.max(...Object.values(results));
+          const min = Math.min(...Object.values(results));
+          const pct = max > min ? 100 - ((results[fr] - min) / (max - min) * 100) : 50;
+          if (fill) fill.style.width = pct.toFixed(0) + '%';
+          bar.classList.toggle('best', fr === bestFr);
+        }
+
+        $('frBest').textContent = bestFr;
+        const save = Math.max(0, results[300] - bestTotal);
+        $('frBestSave').textContent = fmt(save);
+      }
+      ['frKosten','frPraem'].forEach((id) => {
+        const el = $(id);
+        if (el) { el.addEventListener('input', calcFranchise); el.addEventListener('change', calcFranchise); }
+      });
+      if ($('frKosten')) calcFranchise();
+
+      // ── MODELL-VERGLEICH ───────────────────────
+      function calcModell() {
+        const monPraem = PI('moPraem');
+        const verhalten = PS('moVerhalten');
+        const bereit = PS('moBereit');
+        const jahr = monPraem * 12;
+
+        // Rabatte (Mittelwerte aus Range)
+        const rabatt = {
+          standard: 0,
+          hausarzt: 0.11,
+          telmed: 0.165,
+          hmo: 0.20,
+        };
+        const totals = {
+          standard: jahr,
+          hausarzt: jahr * (1 - rabatt.hausarzt),
+          telmed:   jahr * (1 - rabatt.telmed),
+          hmo:      jahr * (1 - rabatt.hmo),
+        };
+
+        $('moTotStd').textContent = fmt(totals.standard);
+        $('moTotHa').textContent  = fmt(totals.hausarzt);
+        $('moTotTm').textContent  = fmt(totals.telmed);
+        $('moTotHmo').textContent = fmt(totals.hmo);
+
+        // Empfehlungs-Logik
+        let empfehlung, save;
+        if (bereit === 'null') {
+          empfehlung = 'Standard'; save = 0;
+        } else if (bereit === 'hoch' && verhalten !== 'häufig') {
+          empfehlung = 'HMO'; save = totals.standard - totals.hmo;
+        } else if (verhalten === 'selten') {
+          empfehlung = 'Telmed'; save = totals.standard - totals.telmed;
+        } else {
+          empfehlung = 'Hausarzt'; save = totals.standard - totals.hausarzt;
+        }
+        $('moEmpfehlung').textContent = empfehlung;
+        $('moSave').textContent = fmt(save);
+
+        // Bar-Fills
+        const max = Math.max(...Object.values(totals));
+        const min = Math.min(...Object.values(totals));
+        const setBar = (key, id) => {
+          const bar = $(id);
+          const fill = bar.querySelector('.mb-fill');
+          const pct = max > min ? 100 - ((totals[key] - min) / (max - min) * 100) : 50;
+          if (fill) fill.style.width = pct.toFixed(0) + '%';
+          bar.classList.toggle('best', empfehlung.toLowerCase() === key || (empfehlung === 'Standard' && key === 'standard'));
+        };
+        setBar('standard', 'moStandard');
+        setBar('hausarzt', 'moHausarzt');
+        setBar('telmed', 'moTelmed');
+        setBar('hmo', 'moHmo');
+      }
+      ['moPraem','moVerhalten','moBereit'].forEach((id) => {
+        const el = $(id);
+        if (el) { el.addEventListener('input', calcModell); el.addEventListener('change', calcModell); }
+      });
+      if ($('moPraem')) calcModell();
+    })();
   </script>
 
 </body>
 </html>
-
-
 

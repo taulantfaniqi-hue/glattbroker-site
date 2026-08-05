@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ermittlung Versicherungssumme Hausrat</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'ermittlung-vs-hausrat',
+  title: 'Ermittlung Versicherungssumme Hausrat',
+  subtitle: 'Hilfsformular',
+  signature: false,
+  steps: [
+    {
+      label: 'Ermittlung Basis-Hausrat',
+      sections: [
+        {
+          label: 'Angaben zur versicherten Person und Wohnung',
+          fields: [
+            { id: 'versicherter', label: 'Versicherte/r', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse (bewohnte Räume)', type: 'text', col: 'full' },
+            { id: 'einrichtungsstandard', label: 'Einrichtungsstandard', type: 'radio', options: ['Einfach', 'Mittel', 'Gehoben'], hint: 'Einfach = E, Mittel = M, Gehoben = G' },
+            { id: 'kinder_unter_14', label: 'Kinder unter 14 Jahren (zählen je als ½ Person)', type: 'number', placeholder: 'Anzahl', hint: 'Kinder unter 14 Jahren werden als ½ Haushaltmitglied gezählt' },
+            { id: 'personen_ab_14', label: 'Personen ab 14 Jahren (zählen je als 1 Person)', type: 'number', placeholder: 'Anzahl' },
+            { id: 'total_haushaltmitglieder', label: 'Total Haushaltmitglieder (berechnet)', type: 'number', hint: 'Kinder unter 14 J. × 0.5 + Personen ab 14 J. × 1' },
+            { id: 'anzahl_raeume', label: 'Anzahl bewohnte Räume', type: 'select', options: ['1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5'] },
+          ]
+        },
+        {
+          label: 'Ermittelte Versicherungssumme',
+          note: 'Die Versicherungssumme wird aus der Tabelle (Einrichtungsstandard, Anzahl Räume, Haushaltmitglieder) abgelesen.',
+          fields: [
+            { id: 'vs_tabelle', label: 'Versicherungssumme aus Tabelle (abgelesen)', type: 'number', suffix: 'CHF', hint: 'Bitte den Wert aus der Referenztabelle gemäss Einrichtungsstandard, Raumanzahl und Haushaltmitglieder eintragen.' },
+            { id: 'vs_zuschlaege', label: 'Zuschläge (Wertsachen, Sonderpositionen)', type: 'number', suffix: 'CHF' },
+            { id: 'vs_total', label: 'Empfohlene Versicherungssumme Total', type: 'number', suffix: 'CHF' },
+          ]
+        },
+        {
+          label: 'Referenztabelle Basis-Hausrat',
+          note: 'Einrichtungsstandard E = Einfach, M = Mittel, G = Gehoben. Werte in CHF.',
+          fields: [
+            {
+              id: 'hinweis_tabelle',
+              type: 'static',
+              label: 'Die Versicherungssumme richtet sich nach Einrichtungsstandard (E/M/G), Anzahl bewohnter Räume (1–9.5) und Anzahl Haushaltmitglieder. Kinder unter 14 Jahren zählen als 0.5 Personen. Beispielwerte: 2 Raeume / 2 Personen / Mittel = CHF 105\'200; 3 Raeume / 2 Personen / Gehoben = CHF 161\'400. Bitte Wert aus der gedruckten Tabelle ablesen und oben eintragen.'
+            },
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: '', type: 'textarea', rows: 3 },
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

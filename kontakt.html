@@ -406,7 +406,6 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
-                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -540,7 +539,6 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
-              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -899,6 +897,7 @@
     */
     const FORM_CONFIG = {
       formspreeId: '',                                 // ← hier einsetzen, z.B. 'xrgwzpdb'
+      apiEndpoint: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3001' : '', // lokal: automatisch ans lokale CRM — im Web: 'https://api.glattbroker.ch' eintragen
       mailtoFallback: 'online@glattbroker.ch',
       // Optional: pro Formular-Typ ein eigener Empfänger via _replyto / _subject
       subjects: {
@@ -922,6 +921,30 @@
         list.push({ ...payload, _ts: new Date().toISOString() });
         localStorage.setItem(localKey, JSON.stringify(list));
       } catch {}
+
+      // (a) Eigene Glatt-Plattform-API zuerst (wenn konfiguriert); Fehler/Timeout → weiter zu (b) Formspree / (c) mailto
+      if (FORM_CONFIG.apiEndpoint) {
+        try {
+          const _known = ['vorname', 'nachname', 'name', 'email', 'telefon', 'plz', 'nachricht', 'anliegen'];
+          const _lead = { source: 'website', page: location.pathname };
+          const _daten = {};
+          Object.entries(payload).forEach(([k, v]) => {
+            if (v === undefined || v === null || v === '' || k.startsWith('_') || k === 'gotcha') return;
+            if (k === 'thema') { _lead.anliegen = v; }
+            else if (_known.includes(k)) { _lead[k] = v; }
+            else { _daten[k] = v; }
+          });
+          _daten.formType = formType;
+          _lead.daten = _daten;
+          const apiRes = await fetch(FORM_CONFIG.apiEndpoint + '/api/public/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(_lead),
+            signal: AbortSignal.timeout(8000),
+          });
+          if (apiRes.status === 200) return { ok: true, mode: 'api' };
+        } catch (e) { /* API nicht erreichbar → Fallback */ }
+      }
 
       // Wenn Formspree konfiguriert: über API senden
       if (FORM_CONFIG.formspreeId && FORM_CONFIG.formspreeId !== 'YOUR_FORM_ID') {
@@ -2212,7 +2235,6 @@
         },
       },
     };
-
     const VVG_CATEGORIES = [
       { id: 'brille',     label: 'Brille / Kontaktlinsen',  icon: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z|circle:12,12,3' },
       { id: 'fitness',    label: 'Fitness und Kurse',        icon: 'M6.5 6.5h11M6.5 17.5h11M3 12h18M9.5 7v10M14.5 7v10' },
@@ -2922,7 +2944,8 @@
       $('#sXAxis').innerHTML = xAxisSvg;
     }
 
-    // Wire inputs
+    // Wire inputs — Guard: 3a-Rechner-Inputs existieren nur auf vorsorge.html (sonst TypeError, Folge-Scripts sterben)
+    if (document.getElementById('sChart')) {
     $('#sAge').addEventListener('input', (e) => {
       sState.age = parseInt(e.target.value, 10);
       $('#sAgeOut').textContent = sState.age;
@@ -2982,6 +3005,7 @@
       b.classList.add('bg-ink-950', 'text-white', 'border-ink-950');
       sRender();
     }));
+    } // Ende Guard #sChart
 
     // Customer name fields (no recompute needed, PDF-only)
     $('#sFirst')?.addEventListener('input', (e) => { sState.firstName = e.target.value.trim(); });
@@ -4148,6 +4172,4 @@
 
 </body>
 </html>
-
-
 

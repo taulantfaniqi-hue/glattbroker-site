@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<!--
+  STEUER-CHECK (Auto-Rechner Kanton Zürich) | Glatt Broker AG
+  ============================================================
+  Native Tool-Seite. Lädt Steuerdokument(e) hoch (Lohnausweis-PDF) → liest Werte → provisorische Steuerberechnung
+  (steuerbares Einkommen + Vermögen, Kanton ZH + Gemeinde + Kirche + Bund). Manuelle Korrektur immer möglich.
+  - Tarife verifiziert (ESTV-Kantonsblatt ZH §35/§47, Form. 58c) Stand 2026, AUTO-JAHR via PARAMS_BY_YEAR.
+  - 100% clientseitig (pdf.js im Browser), keine Speicherung ohne Einwilligung.
+  - Reuse: CI (ink/brand, Mont/Outfit), Komponenten-Klassen aus steuern.html. Lead → kontakt.html?topic=Steuererklärung.
+-->
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steuer-Check Zürich · provisorische Berechnung aus Ihren Dokumenten · Glatt Broker AG</title>
+  <meta name="description" content="Laden Sie Lohnausweis & Belege hoch — der Steuer-Check berechnet provisorisch Ihr steuerbares Einkommen, Vermögen und die voraussichtliche Steuer im Kanton Zürich (Kanton + Gemeinde + Kirche + Bund). Stand 2026." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ['var(--font-display)','Mont','Outfit','system-ui','sans-serif'], mono: ['JetBrains Mono','ui-monospace','monospace'] },
+      colors: {
+        ink:   { 950:'#0A0A0A',900:'#1A1A1A',800:'#2A2A2A',700:'#404040',500:'#737373',400:'#A3A3A3',300:'#D4D4D4',200:'#E5E5E5',100:'#F0F0F0',50:'#FAFAFA' },
+        brand: { 50:'#FDEFF1',100:'#FAD8DD',200:'#F4B0B9',500:'#E04353',600:'#CC2936',700:'#A02029',800:'#7A181F' },
+      },
+    } } };
+  </script>
+  <style>
+    @font-face { font-family:"Mont"; src:url("./assets/Mont-Regular.otf") format("opentype"); font-weight:100 900; font-style:normal; font-display:swap; }
+    :root { --font-display:"Mont","Outfit",system-ui,-apple-system,sans-serif; --font-mono:"JetBrains Mono",ui-monospace,monospace; --ink:#0A0A0A; --bg:#FAFAFA; --red:#CC2936; }
+    *{ -webkit-font-smoothing:antialiased; }
+    html,body{ background:var(--bg); color:var(--ink); }
+    body{ font-family:var(--font-display); overflow-x:hidden; font-feature-settings:"ss01","ss02"; }
+    .display{ font-weight:600; letter-spacing:-0.04em; line-height:0.98; }
+    .num-tabular{ font-variant-numeric:tabular-nums; }
+    .label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:500; }
+    .btn-primary{ display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 1.4rem; border-radius:12px; background:var(--ink); color:#fff; font-weight:500; font-size:.95rem; transition:all .25s; cursor:pointer; border:0; }
+    .btn-primary:hover{ background:var(--red); transform:translateY(-1px); }
+    .btn-ghost{ display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 1.4rem; border-radius:12px; background:transparent; color:var(--ink); font-weight:500; font-size:.95rem; border:1px solid rgba(10,10,10,.15); cursor:pointer; }
+    .btn-ghost:hover{ border-color:var(--ink); background:var(--ink); color:#fff; }
+    .card{ background:#fff; border:1px solid #EEE; border-radius:16px; }
+    .pulse-dot{ width:6px;height:6px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulseRing 2s infinite; }
+    @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6);}70%{box-shadow:0 0 0 8px rgba(34,197,94,0);}100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}}
+    ::selection{ background:var(--red); color:#fff; }
+    /* Calculator */
+    .calc-grid{ display:grid; gap:1.5rem; }
+    @media(min-width:1024px){ .calc-grid{ grid-template-columns:5fr 7fr; } }
+    .calc-output-card{ background:var(--ink); color:#fff; border-radius:20px; padding:1.75rem; position:relative; overflow:hidden; }
+    .calc-output-card::before{ content:""; position:absolute; top:-100px; right:-100px; width:300px; height:300px; background:var(--red); border-radius:50%; opacity:.18; filter:blur(60px); }
+    .s-tool{ background:#fff; border:1px solid #E5E5E5; border-radius:1.5rem; padding:1.75rem; }
+    @media(min-width:1024px){ .s-tool{ padding:2.25rem; } }
+    .s-field{ display:block; } .s-field + .s-field{ margin-top:.8rem; }
+    .s-field-label{ display:block; font-family:var(--font-mono); font-size:.64rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:#737373; margin-bottom:.3rem; }
+    .s-input,.s-select{ width:100%; padding:.7rem .85rem; border:1px solid #D4D4D4; border-radius:.6rem; background:#fff; color:var(--ink); font-family:inherit; font-size:.95rem; font-variant-numeric:tabular-nums; }
+    @media(max-width:640px){ .s-input,.s-select{ font-size:16px; } }
+    .s-input:focus,.s-select:focus{ outline:none; border-color:var(--red); box-shadow:0 0 0 3px rgba(204,41,54,.1); }
+    .s2{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+    .stat{ padding:.9rem 0; border-bottom:1px solid rgba(255,255,255,.1); position:relative; z-index:1; }
+    .stat:last-child{ border-bottom:none; }
+    .stat-label{ font-family:var(--font-mono); font-size:.64rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:.3rem; }
+    .stat-value{ font-weight:600; font-size:1.6rem; letter-spacing:-.025em; color:#fff; font-variant-numeric:tabular-nums; }
+    .stat-value.hero{ font-size:2.7rem; color:var(--red); }
+    .stat-value.muted{ font-size:1.15rem; color:rgba(255,255,255,.85); }
+    .stat-sub{ font-size:.78rem; color:rgba(255,255,255,.55); margin-top:.15rem; }
+    .breakdown-row{ display:flex; justify-content:space-between; padding:.5rem 0; font-size:.9rem; font-variant-numeric:tabular-nums; border-bottom:1px solid rgba(255,255,255,.08); }
+    .breakdown-row:last-child{ border-bottom:none; }
+    .breakdown-label{ color:rgba(255,255,255,.7); } .breakdown-value{ color:#fff; font-weight:500; }
+    .breakdown-row.total{ padding-top:.8rem; margin-top:.4rem; border-top:1px dashed rgba(255,255,255,.25); }
+    .breakdown-row.total .breakdown-label{ color:#fff; font-weight:600; }
+    .breakdown-row.total .breakdown-value{ color:var(--red); font-weight:700; font-size:1.05rem; }
+    /* Dropzone */
+    .dropzone{ border:2px dashed #D4D4D4; border-radius:1rem; padding:1.4rem; text-align:center; cursor:pointer; transition:.2s; background:#FAFAFA; }
+    .dropzone:hover,.dropzone.drag{ border-color:var(--red); background:var(--brand-50,#FDEFF1); }
+    .chip{ display:inline-flex; align-items:center; gap:.4rem; font-size:.78rem; font-weight:600; padding:.3rem .7rem; border-radius:99px; background:#F0F0F0; color:#404040; }
+    .chip.ok{ background:#dcfce7; color:#166534; }
+    /* Rechenweg */
+    details.rw{ border:1px solid #E5E5E5; border-radius:.9rem; background:#FAFAFA; padding:0 1rem; margin-top:1rem; }
+    details.rw>summary{ font-weight:700; font-size:.85rem; cursor:pointer; padding:.8rem 0; list-style:none; display:flex; gap:.5rem; align-items:center; }
+    details.rw>summary::before{ content:"▸"; color:var(--red); transition:.15s; } details.rw[open]>summary::before{ transform:rotate(90deg); }
+    .rwt{ width:100%; border-collapse:collapse; font-size:.82rem; font-variant-numeric:tabular-nums; margin-bottom:.8rem; }
+    .rwt td{ padding:.32rem .4rem; border-bottom:1px solid #E5E5E5; } .rwt td:last-child{ text-align:right; font-weight:600; }
+    .rwt tr.sum td{ border-top:2px solid var(--ink); border-bottom:0; font-weight:800; }
+    .stand{ display:inline-flex; align-items:center; gap:.5rem; background:var(--red); color:#fff; font-size:.7rem; font-weight:700; padding:.3rem .8rem; border-radius:99px; letter-spacing:.02em; }
+    @media print{ .noprint{ display:none!important; } body{ background:#fff; } .calc-output-card{ background:#fff!important; color:#000!important; border:1px solid #ccc; } .stat-value,.breakdown-value,.breakdown-label,.stat-label,.stat-sub{ color:#000!important; } .stat-value.hero,.breakdown-row.total .breakdown-value{ color:#CC2936!important; } }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-ink-200 noprint">
+  <div class="mx-auto max-w-[1100px] px-4 sm:px-6 h-[62px] flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3"><img src="./assets/logo-app.png" alt="Glatt Broker" style="height:2.3rem" onerror="this.style.display='none'"><span class="label text-ink-400 pl-3 border-l border-ink-200 hidden sm:block">AG · Zürich</span></a>
+    <div class="flex items-center gap-3">
+      <a href="steuern.html" class="text-sm font-medium text-ink-700 hover:text-red-600 hidden sm:block">← Steuern</a>
+      <a href="tel:+41774090519" class="btn-primary !py-2 !px-4 !text-sm">📞 +41 77 409 05 19</a>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-[1100px] px-4 sm:px-6">
+
+  <!-- HERO -->
+  <section class="pt-10 pb-6">
+    <span class="stand" id="standBadge">● Stand 2026 · ESTV-/ZH-Tarife verifiziert</span>
+    <h1 class="display text-3xl sm:text-4xl mt-4 max-w-3xl">Wie viel Steuern zahlen Sie <span style="color:var(--red)">wirklich</span>?</h1>
+    <p class="text-ink-500 mt-3 max-w-2xl text-[15px]">Laden Sie Ihren Lohnausweis hoch oder geben Sie die Eckwerte ein — der Steuer-Check berechnet provisorisch Ihr steuerbares Einkommen, Vermögen und die voraussichtliche Steuer im Kanton Zürich (Kanton + Gemeinde + Kirche + Bund).</p>
+    <div class="flex gap-4 mt-4 text-xs text-ink-500 flex-wrap">
+      <span class="flex items-center gap-1.5"><span class="pulse-dot"></span>Berechnung im Browser</span>
+      <span>✓ Keine Speicherung Ihrer Dokumente</span><span>✓ Sofort-Ergebnis</span><span>✓ PDF-Auszug</span>
+    </div>
+  </section>
+
+  <div class="calc-grid pb-6">
+    <!-- ===== INPUTS ===== -->
+    <div class="s-tool noprint">
+      <!-- Upload -->
+      <div class="s-field-label">① Lohnausweis hochladen (optional)</div>
+      <div class="dropzone" id="dz">
+        <input type="file" id="fileInput" accept="application/pdf" class="hidden" multiple>
+        <div class="text-sm font-semibold">PDF hierher ziehen oder klicken</div>
+        <div class="text-xs text-ink-500 mt-1">Lohnausweis · liest Brutto-/Nettolohn automatisch · bleibt lokal</div>
+      </div>
+      <div id="uploadStatus" class="mt-2 flex flex-wrap gap-2"></div>
+
+      <div class="s-field-label" style="margin-top:1.4rem">② Angaben prüfen / ergänzen</div>
+      <div class="s2">
+        <label class="s-field"><span class="s-field-label">Gemeinde</span>
+          <select class="s-select" id="iGemeinde"></select></label>
+        <label class="s-field"><span class="s-field-label">Konfession</span>
+          <select class="s-select" id="iKonf"><option value="keine">keine / andere</option><option value="reformiert">evang.-reformiert</option><option value="katholisch">röm.-katholisch</option><option value="christkatholisch">christ-katholisch</option></select></label>
+        <label class="s-field"><span class="s-field-label">Zivilstand</span>
+          <select class="s-select" id="iZiv"><option value="ledig">ledig</option><option value="verh">verheiratet</option></select></label>
+        <label class="s-field"><span class="s-field-label">Kinder</span>
+          <input class="s-input" id="iKinder" type="number" min="0" max="12" value="0"></label>
+      </div>
+
+      <div class="s-field-label" style="margin-top:1.2rem">Einkommen</div>
+      <div class="s2">
+        <label class="s-field"><span class="s-field-label">Nettolohn (Lohnausweis Ziff. 11)</span>
+          <input class="s-input" id="iNetto" type="number" step="100" value="85000"></label>
+        <label class="s-field"><span class="s-field-label">Wertschriften-Ertrag /Jahr</span>
+          <input class="s-input" id="iWertErtrag" type="number" step="100" value="0"></label>
+      </div>
+
+      <div class="s-field-label" style="margin-top:1.2rem">Abzüge</div>
+      <div class="s2">
+        <label class="s-field"><span class="s-field-label">Säule 3a</span>
+          <input class="s-input" id="i3a" type="number" step="100" value="7258">
+          <select class="s-input" id="i3aTyp" style="margin-top:.4rem">
+            <option value="mit" selected>Mit Pensionskasse (max. 7'258)</option>
+            <option value="ohne">Ohne PK / Selbständig (max. 20 %, 36'288)</option>
+          </select></label>
+        <label class="s-field"><span class="s-field-label">PK-Einkauf</span>
+          <input class="s-input" id="iPk" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Fahrkosten Arbeitsweg</span>
+          <input class="s-input" id="iFahr" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Weiterbildung</span>
+          <input class="s-input" id="iWb" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Vers.-Prämien (KK etc.)</span>
+          <input class="s-input" id="iVers" type="number" step="100" value="8000"></label>
+        <label class="s-field"><span class="s-field-label">2. Einkommen (Ehepartner)</span>
+          <input class="s-input" id="iZweit" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label" title="Fremdbetreuung Kita/Hort, Kind unter 14 J. — max. CHF 25'300/Kind">Kinderbetreuung (Kita/Hort)</span>
+          <input class="s-input" id="iKita" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label" title="Abziehbar nur der Teil über 5 % des Nettolohns (Selbstbehalt)">Krankheits-/Zahnarztkosten</span>
+          <input class="s-input" id="iKrankheit" type="number" step="100" value="0"></label>
+        <label class="s-field"><span class="s-field-label" title="Freiwillige Zuwendungen — abziehbar bis 20 % des Nettoeinkommens">Spenden / Zuwendungen</span>
+          <input class="s-input" id="iSpenden" type="number" step="100" value="0"></label>
+      </div>
+
+      <div class="s-field-label" style="margin-top:1.2rem">Vermögen (Stand 31.12.)</div>
+      <div class="s2">
+        <label class="s-field"><span class="s-field-label">Bankkonten / Bargeld</span>
+          <input class="s-input" id="iBank" type="number" step="1000" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Wertschriften (Depot)</span>
+          <input class="s-input" id="iWertschriften" type="number" step="1000" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Liegenschaft (Steuerwert)</span>
+          <input class="s-input" id="iVermLieg" type="number" step="1000" value="0"></label>
+        <label class="s-field"><span class="s-field-label">Schulden (Hypothek etc.)</span>
+          <input class="s-input" id="iSchulden" type="number" step="1000" value="0"></label>
+      </div>
+    </div>
+
+    <!-- ===== OUTPUT ===== -->
+    <div class="calc-output-card" id="out"></div>
+  </div>
+
+  <!-- ===== OPTIMIERUNG (Schritt 3) ===== -->
+  <section class="pb-6 noprint">
+    <div class="s-tool">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="label text-red-600">Schritt 3</span>
+        <span class="pulse-dot"></span>
+      </div>
+      <h2 class="display text-xl">Ihr Optimierungs-Potenzial</h2>
+      <p class="text-sm text-ink-500 mt-2 mb-4">Konkret aus Ihren Zahlen: erst die sofort nutzbaren Steuerabzüge, dann — falls Sie ein Wertschriftendepot haben — ein Renditevergleich mit unseren Anlagelösungen.</p>
+
+      <!-- Wertschriften-Analyse-Inputs -->
+      <div class="s-field-label" style="margin-top:.4rem">Wertschriften-Analyse (optional)</div>
+      <div class="s2" style="max-width:720px">
+        <label class="s-field"><span class="s-field-label" title="Ihre bisherige jährliche Gesamtrendite (inkl. Kursgewinn)">Ihre Rendite p.a.</span>
+          <div style="position:relative"><input class="s-input" id="iWsRendite" type="number" step="0.1" value="2.5" style="padding-right:1.8rem"><span style="position:absolute;right:.7rem;top:.6rem;color:#737373">%</span></div></label>
+        <label class="s-field"><span class="s-field-label">Risikoprofil</span>
+          <select class="s-select" id="iWsProfil">
+            <option value="defensiv">Defensiv (≈40 % Aktien)</option>
+            <option value="ausgewogen" selected>Ausgewogen (≈60 % Aktien)</option>
+            <option value="offensiv">Offensiv (≈100 % Aktien)</option>
+          </select></label>
+        <label class="s-field"><span class="s-field-label">Anlagehorizont</span>
+          <div style="position:relative"><input class="s-input" id="iWsJahre" type="number" step="1" min="1" max="40" value="10" style="padding-right:2.6rem"><span style="position:absolute;right:.7rem;top:.6rem;color:#737373">Jahre</span></div></label>
+        <label class="s-field"><span class="s-field-label" title="Für den Vergleich mit der Everon-/Zugerberg-Rendite dieses Jahres">Steuerjahr (Performance)</span>
+          <select class="s-select" id="iWsPerfJahr"></select></label>
+      </div>
+
+      <div id="optiOut" class="mt-4"></div>
+    </div>
+  </section>
+
+  <!-- LEAD + REPORT -->
+  <section class="pb-6 noprint">
+    <div class="s-tool">
+      <h2 class="display text-xl">Provisorisch berechnet — jetzt optimieren lassen</h2>
+      <p class="text-sm text-ink-500 mt-2 mb-4">Wir prüfen Ihre Abzüge (3a, PK-Einkauf, Liegenschaft, Vorsorge) und holen das Maximum heraus. Ihre Eckwerte hängen wir automatisch an.</p>
+      <div class="s2" style="max-width:640px">
+        <label class="s-field"><span class="s-field-label">Name</span><input class="s-input" id="ldName" placeholder="Vor- und Nachname"></label>
+        <label class="s-field"><span class="s-field-label">Telefon</span><input class="s-input" id="ldPhone" type="tel" placeholder="+41 …"></label>
+        <label class="s-field" style="grid-column:1/-1"><span class="s-field-label">E-Mail</span><input class="s-input" id="ldMail" type="email" placeholder="name@beispiel.ch"></label>
+      </div>
+      <label class="flex gap-2 items-start text-xs text-ink-500 mt-3 max-w-640" style="max-width:640px"><input type="checkbox" id="ldConsent" style="margin-top:3px;accent-color:var(--red)"> Ich möchte zu meiner Steuersituation kontaktiert werden und bin mit der Bearbeitung meiner Angaben gemäss Datenschutz einverstanden. Es werden keine Dokumente übermittelt oder gespeichert.</label>
+      <div class="flex gap-3 mt-4 flex-wrap">
+        <button class="btn-primary !bg-brand-600 hover:!bg-brand-700" onclick="sendLead()">✉️ Steueroptimierung anfragen</button>
+        <button class="btn-ghost" onclick="window.print()">🖨 Als PDF speichern</button>
+      </div>
+      <div id="leadOk" class="hidden mt-3 rounded-xl bg-emerald-50 border border-emerald-200 p-4 text-sm text-emerald-900"></div>
+    </div>
+  </section>
+
+  <p class="text-[11px] text-ink-400 leading-relaxed pb-10" id="disclaimer"></p>
+</main>
+
+<!-- pdf.js für Lohnausweis-Extraktion -->
+<script type="module">
+  import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+  window.__pdfjs = pdfjsLib;
+  window.dispatchEvent(new Event('pdfjs-ready'));
+</script>
+
+<script>
+/* =================================================================
+   PARAMETER — pro Jahr. Auto-Jahr: aktuelles Kalenderjahr, Fallback = letztes.
+   Quelle 2026: ESTV-Kantonsblatt ZH §35/§47 StG, Form. 58c, ESTV-Rundschreiben 2-215 (verifiziert).
+   Folgejahr ergänzen: neuen Block PARAMS_BY_YEAR[<jahr>] hinzufügen.
+   ================================================================= */
+const PARAMS_BY_YEAR = {
+  2026: {
+    quelle:'ESTV-Kantonsblatt ZH / Form. 58c', stand:'2026',
+    bund: {
+      saeule3a_mit_pk:7258,
+      versicherung:{ledig:1800,verh:3700,proKind:700},
+      zweiverdiener:{pct:0.50,min:8600,max:14100},
+      kinderabzug:6800, weiterbildung_max:13000, fahrkosten_max:3300, steuerbetrag_proKind:263, drittbetreuung_max:25500,
+      // DBST 2026 (ESTV Form. 58c) als Grenzsatz-Stufen [Stufenbreite, Grenzsatz] ab 0 — verifiziert (80k/100k/105k/verh 115k/120k exakt)
+      tarif_grund:[[15200,0],[18000,0.0077],[10300,0.0088],[14500,0.0264],[18200,0.0297],[5900,0.0594],[26800,0.0660],[32600,0.0880],[43600,0.1100],[608800,0.1320]],
+      tarif_grund_plafond:793900,
+      tarif_verh:[[29700,0],[23700,0.0100],[7900,0.0200],[17800,0.0300],[15800,0.0400],[13800,0.0500],[11900,0.0600],[9900,0.0700],[7900,0.0800],[5900,0.0900],[4000,0.1000],[2100,0.1100],[2000,0.1200],[788900,0.1300]],
+      tarif_verh_plafond:941300,
+    },
+    zh: {
+      versicherung:{ledig:2900,verh:5800,proKind:1300},
+      saeule3a_mit_pk:7258,
+      fahrkosten_max:5200, weiterbildung_max:12600, kinderabzug:9400, unterstuetzung:2800,
+      drittbetreuung_max:25300, zweiverdiener_max:6200,
+      eink_tarif_grund:[[7000,0],[5000,.02],[4800,.03],[8000,.04],[9700,.05],[11200,.06],[13100,.07],[17600,.08],[34000,.09],[33700,.10],[53300,.11],[69300,.12],[Infinity,.13]],
+      eink_tarif_verh:[[14100,0],[6400,.02],[8100,.03],[9800,.04],[11200,.05],[14500,.06],[32200,.07],[32400,.08],[48500,.09],[57900,.10],[62900,.11],[72600,.12],[Infinity,.13]],
+      verm_tarif_grund:[[81000,0],[241000,.5],[404000,1],[645000,1.5],[968000,2],[965000,2.5],[Infinity,3]],
+      verm_tarif_verh:[[161000,0],[242000,.5],[402000,1],[646000,1.5],[967000,2],[967000,2.5],[Infinity,3]],
+      kanton_fuss:95,
+      kirche_fuss:{reformiert:10,katholisch:10,christkatholisch:14,keine:0},
+    }
+  }
+};
+const GEMEINDE_FUSS = {
+  'Stadt Zürich':119,'Winterthur':125,'Uster':112,'Dübendorf':92,'Dietikon':123,'Wetzikon':119,
+  'Kloten':100,'Bülach':110,'Thalwil':78,'Horgen':87,'Adliswil':104,'Wädenswil':107,'Küsnacht':73,
+  'Meilen':79,'Zollikon':76,'Opfikon':94,'Schlieren':111,'Regensdorf':117,'Volketswil':101,
+  'Illnau-Effretikon':113,'Zumikon':71,'Kilchberg':72,'Herrliberg':73,'Erlenbach':76,'Hinwil':116,'Pfäffikon ZH':110
+};
+// Kirchensteuerfuss 2026 je Gemeinde (% einf. Staatssteuer) — reformiert/katholisch. Quelle: Stat. Amt ZH OGD, Stand 24.03.2026
+const KIRCHE_FUSS = {
+  'Stadt Zürich':{ref:10,kath:10},'Winterthur':{ref:13,kath:17},'Uster':{ref:11,kath:10},'Dübendorf':{ref:11,kath:11},
+  'Dietikon':{ref:12,kath:13},'Wetzikon':{ref:14,kath:14},'Kloten':{ref:9,kath:9},'Bülach':{ref:10,kath:11},
+  'Thalwil':{ref:11,kath:10},'Horgen':{ref:10,kath:8},'Adliswil':{ref:11,kath:11},'Wädenswil':{ref:11,kath:13},
+  'Küsnacht':{ref:7,kath:7},'Meilen':{ref:9,kath:7},'Zollikon':{ref:8,kath:8},'Opfikon':{ref:8,kath:7},
+  'Schlieren':{ref:11,kath:10},'Regensdorf':{ref:11,kath:10},'Volketswil':{ref:10,kath:10},'Illnau-Effretikon':{ref:13,kath:13},
+  'Zumikon':{ref:8,kath:8},'Kilchberg':{ref:8,kath:6},'Herrliberg':{ref:9,kath:8},'Erlenbach':{ref:8,kath:7},
+  'Hinwil':{ref:12,kath:16},'Pfäffikon ZH':{ref:12,kath:11}
+};
+
+// Auto-Jahr
+function getSteuerParams(year){
+  const y = year || new Date().getFullYear();
+  const years = Object.keys(PARAMS_BY_YEAR).map(Number).sort((a,b)=>a-b);
+  if (PARAMS_BY_YEAR[y]) return { jahr:y, P:PARAMS_BY_YEAR[y], fallback:false };
+  const max = years[years.length-1];
+  return { jahr:max, P:PARAMS_BY_YEAR[max], fallback:(y>max) };
+}
+const YEARCTX = getSteuerParams();
+const P = YEARCTX.P;
+
+/* ================= TARIF-FUNKTIONEN (verifiziert) ================= */
+function einfacheSteuerEink(eink, stufen){ let tax=0, rem=Math.max(0,eink); for(const [breite,satz] of stufen){ if(rem<=0)break; const step=Math.min(rem,breite); tax+=step*satz; rem-=step; } return tax; }
+function einfacheSteuerVerm(verm, tarif){ let tax=0, rem=Math.max(0,verm); for(const [breite,pm] of tarif){ if(rem<=0)break; const step=Math.min(rem,breite); tax+=step*(pm/1000); rem-=step; } return tax; }
+function kircheSatz(gemeinde, konf){ if(konf==='keine')return 0; const e=KIRCHE_FUSS[gemeinde]; if(!e)return 0; if(konf==='reformiert')return e.ref; if(konf==='katholisch'||konf==='christkatholisch')return e.kath; return 0; }
+function gesamtSteuerKGK(einfach, gemeinde, konf){ const k=P.zh.kanton_fuss, g=GEMEINDE_FUSS[gemeinde]??0, ki=kircheSatz(gemeinde,konf); return einfach*(k+g+ki)/100; }
+// DBST 2026: Grenzsatz-Stufen [Stufenbreite, Grenzsatz] + 11.5%-Plafond
+function bundessteuer(eink, tarif, plafond){ const E=Math.max(0,eink); if(E>=plafond) return Math.round(E*0.115/0.05)*0.05; let tax=0, rem=E; for(const [breite,satz] of tarif){ if(rem<=0)break; const step=Math.min(rem,breite); tax+=step*satz; rem-=step; } return Math.round(tax/0.05)*0.05; }
+
+/* ================= MODELL ================= */
+function readInputs(){
+  const num=id=>Math.max(0,+document.getElementById(id).value||0);
+  return {
+    gemeinde:document.getElementById('iGemeinde').value,
+    konf:document.getElementById('iKonf').value,
+    ziv:document.getElementById('iZiv').value,
+    kinder:Math.max(0,Math.min(12,+document.getElementById('iKinder').value||0)),
+    netto:num('iNetto'), wertErtrag:num('iWertErtrag'),
+    s3a:num('i3a'), dreiTyp:(document.getElementById('i3aTyp')?.value||'mit'), pk:num('iPk'), fahr:num('iFahr'), wb:num('iWb'), vers:num('iVers'), zweit:num('iZweit'),
+    kita:num('iKita'), krankheit:num('iKrankheit'), spenden:num('iSpenden'),
+    bank:num('iBank'), wertschriften:num('iWertschriften'),
+    vermWert:num('iBank')+num('iWertschriften'), vermLieg:num('iVermLieg'), schulden:num('iSchulden'),
+  };
+}
+// Säule-3a-Maximalabzug: mit PK = fester Betrag (kleine 3a); ohne PK / Selbständig = 20 % des
+// Erwerbseinkommens, gedeckelt auf die grosse 3a (2026: CHF 36'288). Bund und Kanton identisch (harmonisiert).
+function max3aCap(x){
+  return x.dreiTyp==='ohne' ? Math.min(0.20*x.netto, 36288) : P.zh.saeule3a_mit_pk;
+}
+// Weitere Abzüge, Regeln identisch Bund/Kanton: Kinderbetreuung pro Kind gedeckelt,
+// Krankheitskosten nur über 5 %-Selbstbehalt (Basis Nettolohn), Spenden bis 20 % des Nettolohns.
+function weitereAbzuege(x, dritt_max){
+  const kita=Math.min(x.kita, dritt_max*x.kinder);
+  const krank=Math.max(0, x.krankheit - 0.05*x.netto);
+  const spenden=Math.min(x.spenden, 0.20*x.netto);
+  return {kita,krank,spenden};
+}
+function abzuegeZH(x){
+  const verh=x.ziv==='verh';
+  const versMax=(verh?P.zh.versicherung.verh:P.zh.versicherung.ledig)+x.kinder*P.zh.versicherung.proKind;
+  const vers=Math.min(x.vers, versMax);
+  const fahr=Math.min(x.fahr, P.zh.fahrkosten_max);
+  const wb=Math.min(x.wb, P.zh.weiterbildung_max);
+  const zv=(verh&&x.zweit>0)?P.zh.zweiverdiener_max:0;
+  const kind=x.kinder*P.zh.kinderabzug;
+  const s3a=Math.min(x.s3a, max3aCap(x));
+  const {kita,krank,spenden}=weitereAbzuege(x, P.zh.drittbetreuung_max);
+  return {vers,fahr,wb,zv,kind,s3a,kita,krank,spenden,pk:x.pk, total:vers+fahr+wb+zv+kind+s3a+kita+krank+spenden+x.pk};
+}
+function abzuegeBund(x){
+  const verh=x.ziv==='verh';
+  const versMax=(verh?P.bund.versicherung.verh:P.bund.versicherung.ledig)+x.kinder*P.bund.versicherung.proKind;
+  const vers=Math.min(x.vers, versMax);
+  const fahr=Math.min(x.fahr, P.bund.fahrkosten_max);
+  const wb=Math.min(x.wb, P.bund.weiterbildung_max);
+  const zv=(verh&&x.zweit>0)?Math.min(Math.max(P.bund.zweiverdiener.min,x.zweit*P.bund.zweiverdiener.pct),P.bund.zweiverdiener.max):0;
+  const kind=x.kinder*P.bund.kinderabzug;
+  const s3a=Math.min(x.s3a, max3aCap(x));
+  const {kita,krank,spenden}=weitereAbzuege(x, P.bund.drittbetreuung_max);
+  return {vers,fahr,wb,zv,kind,s3a,kita,krank,spenden,pk:x.pk, total:vers+fahr+wb+zv+kind+s3a+kita+krank+spenden+x.pk};
+}
+function compute(x){
+  const verh=x.ziv==='verh';
+  const einkBrutto=x.netto + x.zweit + x.wertErtrag;
+  const aZH=abzuegeZH(x), aBund=abzuegeBund(x);
+  const stbZH=Math.max(0, einkBrutto - aZH.total);
+  const stbBund=Math.max(0, einkBrutto - aBund.total);
+  const vermNet=Math.max(0, x.vermWert + x.vermLieg - x.schulden);
+  // einfache Staatssteuer
+  const eTarif=verh?P.zh.eink_tarif_verh:P.zh.eink_tarif_grund;
+  const vTarif=verh?P.zh.verm_tarif_verh:P.zh.verm_tarif_grund;
+  const einfEink=einfacheSteuerEink(stbZH, eTarif);
+  const einfVerm=einfacheSteuerVerm(vermNet, vTarif);
+  const einfach=einfEink+einfVerm;
+  const k=P.zh.kanton_fuss, g=GEMEINDE_FUSS[x.gemeinde]??0, ki=kircheSatz(x.gemeinde,x.konf);
+  const kantonT=einfach*k/100, gemeindeT=einfach*g/100, kircheT=einfach*ki/100;
+  // Bund (Elterntarif wenn Kinder / verheiratet)
+  const useVerh = verh || x.kinder>0;
+  const bTarif=useVerh?P.bund.tarif_verh:P.bund.tarif_grund;
+  const bPlafond=useVerh?P.bund.tarif_verh_plafond:P.bund.tarif_grund_plafond;
+  let bund=bundessteuer(stbBund, bTarif, bPlafond);
+  if(x.kinder>0) bund=Math.max(0, bund - x.kinder*P.bund.steuerbetrag_proKind);
+  const total=kantonT+gemeindeT+kircheT+bund;
+  return {einkBrutto,aZH,aBund,stbZH,stbBund,vermNet,einfEink,einfVerm,einfach,k,g,ki,kantonT,gemeindeT,kircheT,bund,total};
+}
+
+/* ================= HELPERS ================= */
+const fmt=v=>Math.round(v).toLocaleString('de-CH');
+const fmt2=v=>(Math.round(v*20)/20).toLocaleString('de-CH',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ===== Anlage-Benchmarks — echte p.a.-Werte (Quelle finanzen.html: Everon annualisiert 2016–2026,
+   Zugerberg Revo seit Lancierung). Defensiv-Zugerberg zwischen Revo1 (1.6%) und Revo3 (4.4%) interpoliert. ===== */
+const GLATT_BENCH = {
+  defensiv:   { label:'Defensiv', aktien:'≈40 % Aktien',  everon:{name:'Everon Income Global 40', pa:5.5}, zugerberg:{name:'Zugerberg Revo2', pa:3.0} },
+  ausgewogen: { label:'Ausgewogen', aktien:'≈60 % Aktien', everon:{name:'Everon Smart Global 60', pa:6.0}, zugerberg:{name:'Zugerberg Revo3', pa:4.4} },
+  offensiv:   { label:'Offensiv', aktien:'≈100 % Aktien',  everon:{name:'Everon Income Global 100', pa:9.2}, zugerberg:{name:'Zugerberg Revo5', pa:7.1} },
+};
+// Report-basierte Jahresrenditen PRO RISIKOPROFIL (Zugerberg Finanz Monthly Reports 12/2023, 12/2024, 11/2025) —
+// identisch zu vorsorge.html PERF_DATA; bei Update dort AUCH hier nachführen. 2025 = YTD per November.
+// Everon-Jahreswerte nur für die ausgewogene 60%-Linie (Smart Global 60, Quelle finanzen.html);
+// defensiv/offensiv Everon-Jahreswerte ausstehend → dort nur die langfristige Ø-p.a. aus GLATT_BENCH.
+const BENCH_ANNUAL = {
+  years: [2023, 2024, 2025], ytdYear: 2025,
+  defensiv:   { z:{name:'Zugerberg Revo2', r:[7.1, 6.2, 2.8]} },
+  ausgewogen: { z:{name:'Zugerberg Revo3', r:[8.2, 9.1, 3.8]}, e:{name:'Everon Smart Global 60', r:[4.2, 13.7, 11.0]} },
+  offensiv:   { z:{name:'Zugerberg Revo5', r:[13.5, 13.1, 5.0]} },
+};
+
+/* ================= OPTIMIERUNG (Schritt 3) ================= */
+function renderOptimierung(x,r,marg){
+  const box=document.getElementById('optiOut'); if(!box) return;
+  const cards=[];
+  // — Sofort nutzbare Steuerabzüge —
+  const wins=[];
+  const luecke3a=Math.max(0, max3aCap(x)-x.s3a);
+  if(luecke3a>0) wins.push(`<li><b>Säule 3a bis Maximum ausschöpfen:</b> noch CHF ${fmt(luecke3a)} einzahlbar → ca. <b style="color:var(--red)">CHF ${fmt(luecke3a*marg/100)} weniger Steuern</b> (Grenzsatz ${marg.toFixed(1)} %).</li>`);
+  if(x.kinder>0 && x.kita===0) wins.push(`<li><b>Kinderbetreuung geltend machen:</b> Fremdbetreuung (Kita/Hort) ist bis CHF ${fmt(P.zh.drittbetreuung_max)}/Kind abziehbar — bei Ihnen noch nicht erfasst.</li>`);
+  if(x.pk===0) wins.push(`<li><b>PK-Einkauf prüfen:</b> je CHF 10'000 Einkauf ≈ <b style="color:var(--red)">CHF ${fmt(10000*marg/100)}</b> Ersparnis. Über mehrere Jahre gestaffelt steigt der Effekt.</li>`);
+  if(x.wb===0) wins.push(`<li><b>Weiterbildungskosten:</b> berufsorientierte Kurse bis CHF ${fmt(P.zh.weiterbildung_max)} abziehbar.</li>`);
+  cards.push(`<div class="card" style="padding:1.1rem 1.25rem">
+    <div class="label text-ink-500 mb-2">Sofort nutzbare Steuerabzüge</div>
+    ${wins.length?`<ul style="list-style:disc;padding-left:1.1rem;display:grid;gap:.5rem;font-size:.9rem;color:#404040">${wins.join('')}</ul>`
+      :`<div class="text-sm text-ink-500">Ihre wichtigsten Abzüge sind bereits ausgeschöpft. Für die Feinoptimierung (Vermögenssteuer, Liegenschaftsunterhalt, Vorsorgestrategie) lohnt sich ein Beratungsgespräch.</div>`}
+  </div>`);
+
+  // — Wertschriften-Analyse —
+  const W=x.wertschriften;
+  if(W>0){
+    const own=parseFloat(document.getElementById('iWsRendite')?.value||'0')||0;
+    const years=Math.max(1,Math.min(40, parseInt(document.getElementById('iWsJahre')?.value||'10')||10));
+    const profil=document.getElementById('iWsProfil')?.value||'ausgewogen';
+    const b=GLATT_BENCH[profil];
+
+    // Panel A — konkretes Steuerjahr: echte Jahresrendite der PROFIL-Strategie (Zugerberg Revo, report-basiert)
+    const ba=BENCH_ANNUAL[profil];
+    const yr=parseInt(document.getElementById('iWsPerfJahr')?.value||'0')||BENCH_ANNUAL.ytdYear;
+    const yi=BENCH_ANNUAL.years.indexOf(yr);
+    let yearPanel='';
+    if(yi>=0 && ba){
+      const zgYr=ba.z.r[yi];
+      const evYr=ba.e?ba.e.r[yi]:null;
+      const bestYr=Math.max(zgYr, evYr!==null?evYr:-Infinity);
+      const deltaYr=W*(bestYr-own)/100;
+      const yRow=(name,val)=>`<div class="breakdown-row" style="border-color:#eee"><span style="color:#404040">${name}</span><span style="font-weight:700;color:${val>=0?'#0A0A0A':'#B91C1C'}">${val>=0?'+':''}${val.toFixed(1)} %</span></div>`;
+      yearPanel=`<div style="margin-top:.5rem">
+        <div class="label text-ink-500 mb-1">So lief unsere ${b.label.toLowerCase()}e Anlagelösung ${yr}${yr===BENCH_ANNUAL.ytdYear?' (YTD Nov.)':''} · ${b.aktien}</div>
+        ${yRow('Ihr Portfolio', own)}
+        ${yRow(ba.z.name, zgYr)}
+        ${evYr!==null?yRow(ba.e.name, evYr):''}
+        ${bestYr>own?`<div style="font-size:.85rem;color:#404040;margin-top:.4rem">Renditedifferenz ${yr} auf Ihr Depot: rund <b style="color:var(--red)">CHF ${fmt(deltaYr)}</b> (vs. beste Strategie ${bestYr.toFixed(1)} %).</div>`:`<div style="font-size:.85rem;color:#065F46;margin-top:.4rem">Ihr Portfolio lag ${yr} vorne — stark.</div>`}
+        ${!ba.e?`<div style="font-size:.72rem;color:#737373;margin-top:.3rem">Everon-Jahreswert für dieses Profil folgt; langfristige Everon-Rendite siehe unten.</div>`:''}
+      </div>`;
+    }
+
+    // Panel B — Langfrist-Projektion auf Ø p.a. (statistisch sauber, nicht auf ein Einzeljahr)
+    const fv=(rate)=>W*Math.pow(1+rate/100, years);
+    const fvOwn=fv(own);
+    const best=Math.max(b.everon.pa, b.zugerberg.pa);
+    const deltaBest=fv(best)-fvOwn;
+    const provRow=(p)=>`<div class="breakdown-row" style="border-color:#eee"><span style="color:#404040">${p.name}</span><span style="font-weight:700;color:#0A0A0A">${p.pa.toFixed(1)} % p.a.</span></div>`;
+    cards.push(`<div class="card" style="padding:1.1rem 1.25rem;margin-top:.75rem">
+      <div class="label text-ink-500 mb-2">Wertschriften-Analyse · ${b.label} (${b.aktien})</div>
+      <div style="font-size:.9rem;color:#404040">Depotwert <b>CHF ${fmt(W)}</b></div>
+      ${yearPanel}
+      <div class="label text-ink-500 mb-1" style="margin-top:.9rem">Langfristig · Ø p.a. über ${years} Jahre</div>
+      <div class="breakdown-row" style="border-color:#eee"><span style="color:#404040">Ihr Portfolio</span><span style="font-weight:700">${own.toFixed(1)} % p.a.</span></div>
+      ${provRow(b.everon)}
+      ${provRow(b.zugerberg)}
+      ${deltaBest>0
+        ? `<div style="background:#FDEFF1;border:1px solid #F4B0B9;border-radius:.7rem;padding:.8rem 1rem;font-size:.9rem;margin-top:.7rem">
+             Mit unserer ${b.label.toLowerCase()}en Lösung (bis ${best.toFixed(1)} % p.a.) läge Ihr Depot in ${years} Jahren bei rund <b>CHF ${fmt(fv(best))}</b> statt <b>CHF ${fmt(fvOwn)}</b> — Unterschied <b style="color:var(--red)">CHF ${fmt(deltaBest)}</b>.
+             <div style="font-size:.72rem;color:#737373;margin-top:.35rem">Jahreswerte: Zugerberg Finanz Monthly Reports (2025 YTD/Nov.). Langfristige Ø p.a.: Everon annualisiert 2016–2026, Zugerberg seit Lancierung. Vergangene Renditen sind keine Garantie für die Zukunft.</div>
+           </div>`
+        : `<div style="background:#ECFDF5;border:1px solid #A7F3D0;border-radius:.7rem;padding:.8rem 1rem;font-size:.9rem;color:#065F46;margin-top:.7rem">Ihr Portfolio liegt über unseren Referenzstrategien — sehr gut. Wir prüfen gerne Kosten (TER), Steuern und Klumpenrisiken.</div>`}
+    </div>`);
+  } else {
+    cards.push(`<div class="card" style="padding:1.1rem 1.25rem;margin-top:.75rem;border-style:dashed">
+      <div class="text-sm text-ink-500">Tragen Sie oben unter <b>Wertschriften (Depot)</b> Ihren Depotwert ein — dann vergleichen wir Ihre Rendite mit unseren Anlagelösungen (Everon / Zugerberg Finanz).</div>
+    </div>`);
+  }
+  box.innerHTML=cards.join('');
+}
+
+/* ================= RENDER ================= */
+function render(){
+  const x=readInputs(), r=compute(x);
+  const effEink = r.stbZH>0 ? r.total/r.stbZH*100 : 0;
+  // marginaler Satz (finite Differenz +1000 Einkommen)
+  const r2=compute({...x, netto:x.netto+1000});
+  const marg=(r2.total-r.total)/1000*100;
+  document.getElementById('out').innerHTML=`
+    <div class="stat"><div class="stat-label">Voraussichtliche Steuer ${YEARCTX.jahr}</div>
+      <div class="stat-value hero num-tabular">CHF ${fmt(r.total)}</div>
+      <div class="stat-sub">${x.gemeinde} · ${x.ziv==='verh'?'verheiratet':'ledig'}${x.kinder?` · ${x.kinder} Kind(er)`:''} · Konfession ${x.konf==='keine'?'keine':x.konf}</div></div>
+    <div class="stat"><div class="stat-label">Aufschlüsselung</div>
+      <div class="breakdown-row"><span class="breakdown-label">Kantonssteuer (${r.k}%)</span><span class="breakdown-value num-tabular">CHF ${fmt(r.kantonT)}</span></div>
+      <div class="breakdown-row"><span class="breakdown-label">Gemeindesteuer (${r.g}%)</span><span class="breakdown-value num-tabular">CHF ${fmt(r.gemeindeT)}</span></div>
+      ${r.ki?`<div class="breakdown-row"><span class="breakdown-label">Kirchensteuer (${r.ki}%)</span><span class="breakdown-value num-tabular">CHF ${fmt(r.kircheT)}</span></div>`:''}
+      <div class="breakdown-row"><span class="breakdown-label">Direkte Bundessteuer</span><span class="breakdown-value num-tabular">CHF ${fmt(r.bund)}</span></div>
+      <div class="breakdown-row total"><span class="breakdown-label">Total</span><span class="breakdown-value num-tabular">CHF ${fmt(r.total)}</span></div></div>
+    <div class="stat" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div><div class="stat-label">Steuerbares Einkommen</div><div class="stat-value muted num-tabular">CHF ${fmt(r.stbZH)}</div></div>
+      <div><div class="stat-label">Steuerbares Vermögen</div><div class="stat-value muted num-tabular">CHF ${fmt(r.vermNet)}</div></div>
+    </div>
+    <div class="stat" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;border-bottom:none">
+      <div><div class="stat-label">Effektiver Satz (steuerb. Eink.)</div><div class="stat-value muted num-tabular">${effEink.toFixed(1)}%</div></div>
+      <div><div class="stat-label">Grenzsteuersatz</div><div class="stat-value muted num-tabular">${marg.toFixed(1)}%</div></div>
+    </div>`;
+  renderRechenweg(x,r);
+  renderOptimierung(x,r,marg);
+  buildReportLead(x,r,effEink,marg);
+}
+function renderRechenweg(x,r){
+  const row=(l,v)=>`<tr><td>${l}</td><td>CHF ${fmt(v)}</td></tr>`;
+  const html=`<details class="rw noprint"><summary>Rechenweg anzeigen — jede Zahl herleitbar (Stand ${YEARCTX.jahr})</summary>
+    <table class="rwt"><tbody>
+    <tr><td colspan="2" style="font-weight:800;color:var(--red)">Einkommen (Kanton ZH)</td></tr>
+    ${row('Nettolohn + 2. Einkommen + Wertschriftenertrag', r.einkBrutto)}
+    ${row('− Säule 3a / PK-Einkauf', r.aZH.s3a+r.aZH.pk)}
+    ${row('− Berufskosten (Fahrt/Weiterbildung)', r.aZH.fahr+r.aZH.wb)}
+    ${row('− Versicherungsabzug', r.aZH.vers)}
+    ${row('− Kinder-/Zweiverdienerabzug', r.aZH.kind+r.aZH.zv)}
+    ${(r.aZH.kita+r.aZH.krank+r.aZH.spenden)>0?row('− Kinderbetreuung / Krankheit / Spenden', r.aZH.kita+r.aZH.krank+r.aZH.spenden):''}
+    <tr class="sum"><td>= Steuerbares Einkommen ZH</td><td>CHF ${fmt(r.stbZH)}</td></tr>
+    <tr><td colspan="2" style="font-weight:800;color:var(--red);padding-top:.6rem">Steuer (einfache Staatssteuer × Steuerfuss)</td></tr>
+    ${row('Einfache Steuer Einkommen (§35 StG)', r.einfEink)}
+    ${row('Einfache Steuer Vermögen (§47 StG)', r.einfVerm)}
+    <tr><td>× Kanton ${r.k}% + Gemeinde ${r.g}%${r.ki?` + Kirche ${r.ki}%`:''}</td><td>CHF ${fmt(r.kantonT+r.gemeindeT+r.kircheT)}</td></tr>
+    ${row('+ Direkte Bundessteuer (Form. 58c)', r.bund)}
+    <tr class="sum"><td>= Total Steuer ${YEARCTX.jahr}</td><td>CHF ${fmt(r.total)}</td></tr>
+    </tbody></table>
+    <div style="font-size:.72rem;color:#737373;padding-bottom:.6rem">Quelle: ${YEARCTX.P.quelle}. ${YEARCTX.fallback?'⚠ Parameter '+YEARCTX.jahr+' (neueres Jahr noch nicht hinterlegt). ':''}Bund ist Eckwert-Interpolation; ZH-Tarife exakt.</div></details>`;
+  // an Output anhängen (ausserhalb der dunklen Karte)
+  let rw=document.getElementById('rwBox'); if(!rw){ rw=document.createElement('div'); rw.id='rwBox'; document.querySelector('.calc-grid').after(rw); rw.className='mx-auto'; }
+  rw.innerHTML=html;
+}
+
+/* ================= LOHNAUSWEIS-EXTRAKTION (pdf.js) ================= */
+let pdfReady=false; window.addEventListener('pdfjs-ready',()=>pdfReady=true);
+async function extractPdf(file){
+  if(!window.__pdfjs){ return null; }
+  const buf=await file.arrayBuffer();
+  const pdf=await window.__pdfjs.getDocument({data:buf}).promise;
+  let text='';
+  for(let p=1;p<=pdf.numPages;p++){ const page=await pdf.getPage(p); const c=await page.getTextContent(); text+=' '+c.items.map(i=>i.str).join(' '); }
+  return text;
+}
+function parseNumber(s){ if(!s)return null; const m=s.replace(/[’']/g,'').replace(/\s/g,'').match(/(\d{4,7})(?:\.\d{2})?/); return m?+m[1]:null; }
+function extractLohn(text){
+  const out={};
+  // Nettolohn (Ziffer 11)
+  let m=text.match(/Nettolohn[^0-9]{0,60}?([\d'’.\s]{5,})/i); if(m) out.netto=parseNumber(m[1]);
+  // Bruttolohn (Ziffer 8)
+  m=text.match(/Bruttolohn[^0-9]{0,60}?([\d'’.\s]{5,})/i); if(m) out.brutto=parseNumber(m[1]);
+  return out;
+}
+function setVal(id,v){ if(v&&v>1000){ document.getElementById(id).value=Math.round(v); return true; } return false; }
+function uChip(txt,ok){ const s=document.getElementById('uploadStatus'); const c=document.createElement('span'); c.className='chip'+(ok?' ok':''); c.textContent=txt; s.appendChild(c); }
+async function handleFiles(files){
+  for(const f of files){
+    if(f.type!=='application/pdf'){ uChip('⚠ '+f.name+' (kein PDF)'); continue; }
+    uChip('⏳ '+f.name+' wird gelesen…');
+    try{
+      let tries=0; while(!window.__pdfjs && tries<40){ await new Promise(r=>setTimeout(r,100)); tries++; }
+      const text=await extractPdf(f);
+      const d=extractLohn(text||'');
+      const ok=setVal('iNetto', d.netto)|| (d.brutto?setVal('iNetto', d.brutto*0.87):false);
+      document.getElementById('uploadStatus').lastChild.remove();
+      uChip(ok?('✓ '+f.name+' — Nettolohn übernommen'):('• '+f.name+' — bitte Werte manuell prüfen'), ok);
+      render();
+    }catch(e){ document.getElementById('uploadStatus').lastChild.remove(); uChip('• '+f.name+' — nicht lesbar, manuell eingeben'); }
+  }
+}
+
+/* ================= LEAD + REPORT ================= */
+let LAST;
+function buildReportLead(x,r,eff,marg){ LAST={x,r,eff,marg}; }
+function leadText(){
+  const {x,r,eff,marg}=LAST;
+  const luecke3a=Math.max(0, max3aCap(x)-x.s3a);
+  const opt=[];
+  if(luecke3a>0) opt.push(`3a-Lücke CHF ${fmt(luecke3a)} → ca. CHF ${fmt(luecke3a*marg/100)} Ersparnis`);
+  if(x.pk===0) opt.push(`PK-Einkauf noch offen`);
+  if(x.kinder>0 && x.kita===0) opt.push(`Kinderbetreuungsabzug ungenutzt`);
+  if(x.wertschriften>0) opt.push(`Wertschriften-Depot CHF ${fmt(x.wertschriften)} (Rendite ${(parseFloat(document.getElementById('iWsRendite')?.value||'0')||0).toFixed(1)}% p.a., Profil ${document.getElementById('iWsProfil')?.value||'ausgewogen'}) → Renditevergleich Everon/Zugerberg gewünscht`);
+  return `STEUER-CHECK ZH ${YEARCTX.jahr}\nGemeinde: ${x.gemeinde} · ${x.ziv==='verh'?'verheiratet':'ledig'} · ${x.kinder} Kind(er) · Konfession ${x.konf}\n`+
+    `Steuerbares Einkommen: CHF ${fmt(r.stbZH)}\nSteuerbares Vermögen: CHF ${fmt(r.vermNet)}\n`+
+    `Voraussichtliche Steuer: CHF ${fmt(r.total)} (Kanton ${fmt(r.kantonT)} / Gemeinde ${fmt(r.gemeindeT)} / Kirche ${fmt(r.kircheT)} / Bund ${fmt(r.bund)})\n`+
+    `Effektiver Satz ${eff.toFixed(1)}% · Grenzsteuersatz ${marg.toFixed(1)}%`+
+    (opt.length?`\n\nOptimierungs-Ansätze:\n- ${opt.join('\n- ')}`:'');
+}
+function sendLead(){
+  const name=document.getElementById('ldName').value.trim(), phone=document.getElementById('ldPhone').value.trim(), mail=document.getElementById('ldMail').value.trim();
+  if(!document.getElementById('ldConsent').checked){ alert('Bitte Einwilligung bestätigen.'); return; }
+  if(!mail&&!phone){ alert('Bitte E-Mail oder Telefon angeben.'); return; }
+  try{ const c={custFirst:name,custEmail:mail,custPhone:phone,source:'steuer-check',ts:Date.now()}; window.glattCustomer=Object.assign(window.glattCustomer||{},c); localStorage.setItem('glatt-customer-v1',JSON.stringify(window.glattCustomer)); }catch(e){}
+  const body=encodeURIComponent(`Name: ${name}\nTelefon: ${phone}\nE-Mail: ${mail}\n\n`+leadText());
+  window.location.href=`mailto:online@glattbroker.ch?subject=${encodeURIComponent('Steuer-Check — Optimierung anfragen')}&body=${body}`;
+  const ok=document.getElementById('leadOk'); ok.classList.remove('hidden');
+  ok.innerHTML=`✓ Danke${name?', '+name.split(' ')[0]:''}! Falls Ihr Mailprogramm nicht öffnet: <a href="tel:+41774090519" style="font-weight:800;color:#166534">+41 77 409 05 19</a> oder <a href="kontakt.html?topic=Steuererkl%C3%A4rung" style="font-weight:800;color:#166534">Kontaktformular</a>.`;
+}
+
+/* ================= INIT ================= */
+(function init(){
+  // Gemeinde-Dropdown
+  const sel=document.getElementById('iGemeinde');
+  Object.keys(GEMEINDE_FUSS).sort().forEach(g=>{ const o=document.createElement('option'); o.value=g; o.textContent=`${g} (${GEMEINDE_FUSS[g]}%)`; sel.appendChild(o); });
+  sel.value='Stadt Zürich';
+  // Performance-Jahr-Dropdown (Benchmark-Jahresdaten, neueste zuerst) — Default = Steuerjahr des Checks
+  const yj=document.getElementById('iWsPerfJahr');
+  if(yj){ [...BENCH_ANNUAL.years].sort((a,b)=>b-a).forEach(y=>{ const o=document.createElement('option'); o.value=y; o.textContent=y+(y===BENCH_ANNUAL.ytdYear?' (YTD)':''); yj.appendChild(o); }); yj.value=BENCH_ANNUAL.years.includes(YEARCTX.jahr)?YEARCTX.jahr:Math.max(...BENCH_ANNUAL.years); }
+  // Stand-Badge + Disclaimer
+  document.getElementById('standBadge').textContent=`● Stand ${YEARCTX.jahr} · ESTV-/ZH-Tarife verifiziert`;
+  document.getElementById('disclaimer').textContent=`Provisorische, unverbindliche Schätzung auf Basis Ihrer Angaben. Tarife/Abzüge Kanton Zürich + Bund Stand ${YEARCTX.jahr} (${YEARCTX.P.quelle}). Versicherungsabzug = tieferer Wert aus effektiven Prämien und Maximalabzug. Bundessteuer ist eine Eckwert-Interpolation, die ZH-Tarife sind exakt. Kinderbetreuungs-, Krankheits- (5 %-Selbstbehalt) und Spendenabzüge (20 %-Limit) werden auf Basis des Nettolohns geschätzt. Der Wertschriften-Renditevergleich (Everon/Zugerberg) ist illustrativ — vergangene Renditen sind keine Garantie für die Zukunft und keine Anlageberatung. Massgebend ist allein die definitive Veranlagung. Glatt Broker AG übernimmt keine Haftung. Berechnung erfolgt vollständig in Ihrem Browser; Dokumente werden nicht übertragen oder gespeichert.`;
+  // Identity-Sync
+  try{ const c=JSON.parse(localStorage.getItem('glatt-customer-v1')||'{}'); if(c.custFirst)document.getElementById('ldName').value=[c.custFirst,c.custLast].filter(Boolean).join(' '); if(c.custEmail)document.getElementById('ldMail').value=c.custEmail; if(c.custPhone)document.getElementById('ldPhone').value=c.custPhone; }catch(e){}
+  // Events
+  ['iGemeinde','iKonf','iZiv','iKinder','iNetto','iWertErtrag','i3a','i3aTyp','iPk','iFahr','iWb','iVers','iZweit','iKita','iKrankheit','iSpenden','iBank','iWertschriften','iVermLieg','iSchulden','iWsRendite','iWsJahre','iWsProfil','iWsPerfJahr'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.addEventListener('input',render); el.addEventListener('change',render); } });
+  // Dropzone
+  const dz=document.getElementById('dz'), fi=document.getElementById('fileInput');
+  dz.addEventListener('click',()=>fi.click());
+  fi.addEventListener('change',e=>handleFiles(e.target.files));
+  ['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('drag');}));
+  dz.addEventListener('drop',e=>handleFiles(e.dataTransfer.files));
+  render();
+})();
+</script>
+</body>
+</html>

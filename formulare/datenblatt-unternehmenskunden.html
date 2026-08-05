@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datenblatt Unternehmenskunden – Glatt Broker AG</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'datenblatt-unternehmenskunden',
+  title: 'Datenblatt',
+  subtitle: 'Unternehmenskunden – Zusatz zum Mandat',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensangaben',
+      sections: [
+        {
+          label: 'Berater',
+          fields: [
+            { id: 'berater', label: 'Berater', type: 'text', col: 'full', required: true }
+          ]
+        },
+        {
+          label: 'Firmendaten',
+          fields: [
+            { id: 'firmenname', label: 'Firma', type: 'text', required: true },
+            { id: 'inhaber', label: 'Inhaber', type: 'text' },
+            { id: 'strasse_nr', label: 'Strasse, Nr.', type: 'text', required: true },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'website', label: 'Website', type: 'text', placeholder: 'https://' },
+            { id: 'branche', label: 'Branche', type: 'text', required: true },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'radio', options: ['Einzelfirma', 'GmbH', 'AG', 'Andere'] }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Ansprechperson',
+      sections: [
+        {
+          label: 'Kontakt',
+          fields: [
+            { id: 'ansprechperson', label: 'Ansprechperson', type: 'text', required: true },
+            { id: 'geschlecht', label: 'Geschlecht', type: 'radio', options: ['M', 'F'] },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bestehende Versicherungen',
+      sections: [
+        {
+          label: 'Policen',
+          note: 'Bitte tragen Sie alle bestehenden Versicherungspolicen ein.',
+          fields: [
+            {
+              id: 'policen',
+              label: 'Policen',
+              type: 'table',
+              columns: ['Gesellschaft', 'Policennummer', 'Branche'],
+              rows: 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bemerkungen & Aufnahme',
+      sections: [
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        },
+        {
+          label: 'Aufnahme',
+          fields: [
+            { id: 'aufnahme_mandat', label: 'Mandat', type: 'checkbox' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

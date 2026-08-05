@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mandat — Anhang Vorsorge</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="vorlagen/mandat-anhang-vorsorge-template.js"></script>
+<script src="assets/mandat-fill.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id:'mandat-anhang-vorsorge',
+  title:'Mandat — Anhang Vorsorge',
+  subtitle:'Provisionen Einzelleben, Vermögensanlagen & Hypotheken',
+  signature:true,
+  legalFirst:true,
+  doneText:'Der Anhang Vorsorge ist unterschrieben. Das offizielle Anhang-Formular wird mit Ihren Angaben und Ihrer Unterschrift als PDF erzeugt — Original-Layout, unverändert.',
+
+  legal:{
+    pill:'Anhang & Provisionen',
+    title:'Anhang Vorsorge zum Broker-Mandat',
+    subtitle:'Bitte Text lesen und bestätigen',
+    textLabel:'Anhang-Text',
+    confirm:'Ich habe den Anhang Vorsorge (Provisionen) gelesen und verstanden und bin mit der Datenbearbeitung einverstanden.',
+    summary:'Dieser Anhang regelt die Entschädigung für die Vermittlung von Einzellebensversicherungen, Vermögensanlagen und Hypotheken und ist integrierender Bestandteil des Broker-Mandats zwischen dem Kunden, der Glatt Broker AG (Co-Broker) und der Baumassurance AG (Broker / Partner).',
+    html:
+      '<h3>Anhang „Provisionen“ zum Versicherungsbroker-Mandat</h3>'+
+      '<p>Dieser Anhang ergänzt das Versicherungsbroker-Mandat und regelt die Entschädigung des Brokers / Co-Brokers für die Vermittlung von <b>Einzellebensversicherungen, Vermögensanlagen und Hypotheken</b>.</p>'+
+      '<p>Die Entschädigung erfolgt durch die jeweiligen Anbieter (Versicherer, Banken, Finanzdienstleister) als marktübliche Abschluss- und/oder Bestandesprovision. Dem Kunden entstehen daraus innerhalb der üblichen Unterstützungspflichten keine zusätzlichen Kosten. Der Kunde hat jederzeit das Recht, Art und Höhe der Entschädigung zu erfahren.</p>'+
+      '<p>Der Kunde bleibt Versicherungs- und Vorsorgenehmer. Es gelten im Übrigen die Bestimmungen des Versicherungsbroker-Mandats (Auftrag nach OR Art. 394 ff., Datenbearbeitung nach DSG, Informationen gemäss Art. 45 VAG).</p>'+
+      '<p><b>Parteien:</b> Co-Broker / Ansprechpartner: Glatt Broker AG, FINMA F01397063, Staubstrasse 15, 8038 Zürich. Broker / Partner: Baumassurance AG, FINMA F01207772, Badenerstrasse 681, 8048 Zürich.</p>'+
+      '<p class="hint">Der vollständige, rechtsverbindliche Wortlaut entspricht dem offiziellen Anhang-Formular, das beim Abschluss als PDF mit Ihren Angaben und Ihrer Unterschrift erzeugt wird.</p>'
+  },
+
+  steps:[
+    { label:'Kundendaten', subtitle:'Angaben des Mandatsgebers (Name, Adresse)',
+      sections:[
+        { label:'Mandatsgeber/in', fields:[
+          {id:'firma',label:'Firma (falls Unternehmen)',type:'text',col:'full',placeholder:'optional'},
+          {id:'vorname',label:'Vorname',type:'text',required:true},
+          {id:'nachname',label:'Nachname',type:'text',required:true},
+          {id:'strasse',label:'Strasse, Nr.',type:'text',col:'full'},
+          {id:'plzort',label:'PLZ / Ort',type:'text',col:'full'},
+          {id:'email',label:'E-Mail',type:'email',required:true,hint:'Für die Zustellung Ihrer unterschriebenen Kopie (erscheint nicht auf dem PDF).'},
+          {id:'telefon',label:'Telefon',type:'tel',placeholder:'+41 ...'}
+        ]},
+        { label:'Verantwortliche Person/en', note:'Erscheint im Unterschriftsblock. Bei Privatpersonen = Mandatsgeber.', fields:[
+          {id:'verantwortlich1',label:'Verantwortliche Person 1',type:'text',col:'full',placeholder:'leer lassen = Mandatsgeber'},
+          {id:'verantwortlich2',label:'Verantwortliche Person 2 (optional)',type:'text',col:'full'}
+        ]}
+      ]
+    }
+  ],
+
+  buildPDF:function(ctx){
+    return (async function(){
+      var errEl = document.getElementById('errPdf');
+      try{
+        var fullname = (ctx.val('vorname') + ' ' + ctx.val('nachname')).trim();
+        var lines = [];
+        if(ctx.val('firma')) lines.push(ctx.val('firma'));
+        if(fullname) lines.push(fullname);
+        if(ctx.val('strasse')) lines.push(ctx.val('strasse'));
+        if(ctx.val('plzort')) lines.push(ctx.val('plzort'));
+
+        var spec = {
+          multiline: ['Kunde  Kundin Mandatsgeberin Name Adresse'],
+          texts: {
+            'Kunde  Kundin Mandatsgeberin Name Adresse': lines.join('\n'),
+            'Ort Datum': ctx.val('ort') + (ctx.val('datum') ? (', ' + ctx.fmtDate(ctx.val('datum'))) : ''),
+            'Name':   ctx.val('verantwortlich1') || fullname,
+            'Name_2': ctx.val('verantwortlich2')
+          },
+          signatures: [ { field:'Verantwortliche Personen', dx:80, dyBottom:0, h:46 } ]
+        };
+
+        var sig = null;
+        if(ctx.hasSig && ctx.sigCanvas){
+          var b64s = ctx.sigCanvas.toDataURL('image/png').split(',')[1];
+          var bs = atob(b64s); sig = new Uint8Array(bs.length);
+          for(var i=0;i<bs.length;i++) sig[i] = bs.charCodeAt(i);
+        }
+
+        if(!window.ANHANG_TPL_B64) throw new Error('Vorlage nicht geladen');
+        var bt = atob(window.ANHANG_TPL_B64); var tpl = new Uint8Array(bt.length);
+        for(var k=0;k<bt.length;k++) tpl[k] = bt.charCodeAt(k);
+
+        var out = await window.fillPdfForm(window.PDFLib, tpl, spec, sig);
+        var blob = new Blob([out], {type:'application/pdf'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Mandat-Anhang-Vorsorge_' + ((ctx.customerName().trim().replace(/\s+/g,'-')) || 'Kunde') + '.pdf';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      }catch(e){
+        console.error(e);
+        if(errEl){ errEl.textContent = 'PDF konnte nicht erzeugt werden (' + e.message + '). Bitte „Drucken / Als PDF speichern“ nutzen.'; errEl.classList.add('show'); }
+      }
+    })();
+  }
+});
+</script>
+</body>
+</html>

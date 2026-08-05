@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betriebs- und Berufshaftpflicht – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-betriebs-haftpflicht',
+  title: 'Betriebs- und Berufshaftpflicht',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ / Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'https://' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['Einzelfirma', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-000.000.000', col: 'full' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verband_mitglied', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welcher', label: 'Wenn ja, welcher Verband?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ / Ort', type: 'text' },
+            { id: 'standort_a_benützung', label: 'Standort A – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ / Ort', type: 'text' },
+            { id: 'standort_b_benützung', label: 'Standort B – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ / Ort', type: 'text' },
+            { id: 'standort_c_benützung', label: 'Standort C – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_gebaeude_adresse', label: 'Adresse des Gebäudes', type: 'text', col: 'full' },
+            { id: 'eigentuemer_gebaeude_plz_ort', label: 'PLZ / Ort des Gebäudes', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Beschäftigte',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z. B. 2024' },
+            { id: 'anzahl_beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'anzahl_beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'anzahl_beschaeftigte_total', label: 'Anzahl Beschäftigte – Total', type: 'number' },
+            { id: 'davon_familienmitglieder', label: 'Davon mitarbeitende Familienmitglieder', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Alle Beträge in CHF',
+          fields: [
+            {
+              id: 'lohnsummen_tabelle',
+              label: 'Lohnsummen nach Kategorie',
+              type: 'table',
+              columns: ['Gruppe', 'Gesamtes Personal UVG-Lohnsumme (CHF)', 'Gesamtes Personal Überschuss-Lohnsumme (CHF)', 'Gesamtes Personal AHV-Lohnsumme (CHF)', 'Personal < 8 h/Woche AHV-Lohnsumme (CHF)'],
+              rows: 3
+            },
+            { id: 'mitarbeiter_arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'mitarbeiter_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Deckung',
+      sections: [
+        {
+          label: 'Offerte und Basisdeckung',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'versicherungssumme', label: 'Versicherungssumme', type: 'radio', options: ['CHF 5 Mio.', 'CHF 10 Mio.', 'Andere'] }
+          ]
+        },
+        {
+          label: 'Deckungserweiterung',
+          fields: [
+            { id: 'deckungspaket', label: 'Deckungspaket', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'static_deckung_hinweis', type: 'static', label: 'Risikospezifische Zuteilung der Deckungserweiterungen gemäss Leistungsübersicht' }
+          ]
+        },
+        {
+          label: 'Gewünschte Zusatzdeckungen',
+          fields: [
+            { id: 'zusatz_arbeitsgemeinschaften', label: 'Einschluss von Arbeiten im Rahmen von Arbeitsgemeinschaften (Baugewerbe, Architekten, Ingenieure)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_assistenten_dentalhygieniker', label: 'Einschluss von Assistenten, Dentalhygienikern (Ärzte, Zahnärzte)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_haftpflicht_art71_svg', label: 'Haftpflicht gem. Art. 71 SVG (Bau-, Motorfahrzeug- und Transportgewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_medienhaftpflicht', label: 'Medienhaftpflicht', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_privathaftpflicht_landwirtschaft', label: 'Privathaftpflichtversicherung für Landwirtschaftsbetriebe', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_produktrueckrufkosten', label: 'Produktrückrufkosten – Benachrichtigungskosten (v. a. Herstellung, Handel, Baugewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_rechtsschutz_straf_verwaltung', label: 'Rechtsschutz im Straf- und Verwaltungsverfahren', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_verzicht_rueckgriff', label: 'Verzicht auf Rückgriff oder Leistungskürzung bei Grobfahrlässigkeit', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_reiseveranstalter', label: 'Reiseveranstalter / Reisevermittler als Nebentätigkeit (v. a. Hotels, Carunternehmen)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_vermögensschäden_bauzwischenfaelle', label: 'Vermögensschäden wegen Bauzwischenfällen (Baugewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_kosten_maengel_schäden', label: 'Kosten für die Ermittlung und/oder Behebung von Mängeln und Schäden (v. a. Baugewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_bearbeitungs_obhutsschaeden', label: 'Bearbeitungs- und Obhutsschäden (v. a. Herstellung, Handel, Baugewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_erweiterte_produkthaftpflicht', label: 'Erweiterte Produkthaftpflicht (Herstellung, Handel)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_nutzungsausfall', label: 'Nutzungsausfall (v. a. Herstellung, Handel)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_schaeden_motorfahrzeuge', label: 'Schäden an aufbewahrten und bearbeiteten Motorfahrzeugen oder Wasserfahrzeugen (Mfz- oder Wfz-Gewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_schaeden_bauten_anlagen', label: 'Schäden und Mängel an Bauten und Anlagen sowie Vermögensschäden (Architekten, Ingenieure)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_aus_einbaukosten', label: 'Aus- und Einbaukosten (v. a. Baugewerbe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_schaeden_maschinen_geraete', label: 'Schäden an geliehenen oder gemieteten Maschinen und Geräten (Landwirtschaftsbetriebe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'zusatz_vermögensschaeden_it', label: 'Vermögensschäden (IT-Dienstleistungsbetriebe)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Prämien & Vorversicherung',
+      sections: [
+        {
+          label: 'Örtlicher Geltungsbereich',
+          fields: [
+            { id: 'geltungsbereich', label: 'Örtlicher Geltungsbereich', type: 'radio', options: ['Ganze Welt ohne USA/Kanada', 'Gemäss Basisdeckung', 'Ganze Welt'], col: 'full' }
+          ]
+        },
+        {
+          label: 'Prämienberechnungsgrundlagen',
+          fields: [
+            { id: 'betriebslohnsumme', label: 'Gesamte Betriebslohnsumme – Mfz-/Wfz-Gewerbe (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'honorarsumme', label: 'Honorarsumme – Architekten, Ingenieure, Gebäudetechnikingenieure (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'einnahmen_billettverkauf', label: 'Einnahmen aus Billettverkäufen – Kinos, Theater, Museen (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'anzahl_fachaerzte', label: 'Anzahl Fachärzte oder andere Medizinalpersonen sowie Fachgebiet (Ärzte)', type: 'text', col: 'full' },
+            { id: 'bodenflaeche', label: 'Bodenfläche in ha oder Grossvieheinheiten (Landwirtschaftsbetriebe)', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Angaben zu Fachpersonen (Architekten, Ingenieure, Ärzte)',
+          note: 'Bei Architekten, Ingenieuren, Ärzten wird zusätzlich benötigt:',
+          fields: [
+            {
+              id: 'fachpersonen_tabelle',
+              label: 'Fachpersonen',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geb.-Datum', 'Ausbildung', 'Stellenprozent'],
+              rows: 4
+            }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Vertragsbeginn', type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Vertragsablauf', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'vorversicherer_name', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'vorversicherer_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'vorversicherer_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['Laufend', 'Gekündigt von VN', 'Gekündigt von VG'], col: 'full' },
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' },
+            { id: 'leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme inkl. Reserven (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / weitere Angaben', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firma gründen · AHV · BVG · KTG · UVG — Glatt Broker</title>
+  <meta name="description" content="Alles, was du als Schweizer Gründer:in zur Sozialversicherung wissen musst — AHV, BVG, KTG, UVG, Löhne, Kadervorsorge, Standard-Lösung vs. individuell. Mit Checkliste für das Beratungsgespräch." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['var(--font-display)', 'Mont', 'Outfit', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            ink:   { 950:'#0A0A0A', 900:'#1A1A1A', 800:'#2A2A2A', 700:'#404040', 500:'#737373', 400:'#A3A3A3', 300:'#D4D4D4', 200:'#E5E5E5', 100:'#F0F0F0', 50:'#FAFAFA' },
+            brand: { 50:'#FDEFF1', 100:'#FAD8DD', 200:'#F4B0B9', 500:'#E04353', 600:'#CC2936', 700:'#A02029', 800:'#7A181F' },
+          },
+          letterSpacing: { 'tightest': '-0.04em', 'tighter2': '-0.025em' },
+        },
+      },
+    };
+  </script>
+  <style>
+    @font-face {
+      font-family: "Mont";
+      src: url("./assets/Mont-Regular.otf") format("opentype");
+      font-weight: 100 900; font-style: normal; font-display: swap;
+    }
+    :root {
+      --font-display: "Mont", "Outfit", system-ui, -apple-system, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936;
+    }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html, body { background: var(--bg); color: var(--ink); }
+    body { font-family: var(--font-display); overflow-x: hidden; font-feature-settings: "ss01", "ss02"; }
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--ink); display: grid; place-items: center; transition: opacity .4s ease; }
+    .loader.done { opacity: 0; pointer-events: none; }
+    .display { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; }
+    .num-tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+    .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .btn-primary {
+      position: relative; display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.4rem; border-radius: 12px; background: var(--ink); color: #fff;
+      font-weight: 500; font-size: .95rem; transition: all .25s ease; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--red); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; border-radius: 12px;
+      background: transparent; color: var(--ink); font-weight: 500; font-size: .95rem;
+      border: 1px solid rgba(10,10,10,.15); transition: all .25s ease; cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+    .ulink { position: relative; }
+    .ulink::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+      background: currentColor; transform: scaleX(0); transform-origin: right;
+      transition: transform .4s cubic-bezier(.7,0,.3,1);
+    }
+    .ulink:hover::after { transform: scaleX(1); transform-origin: left; }
+    .card { background: #fff; border: 1px solid #EEE; border-radius: 16px; transition: all .3s ease; }
+    .card:hover { border-color: rgba(208,33,33,.4); box-shadow: 0 12px 40px -16px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .pulse-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: pulseRing 2s infinite; }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); }
+      70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+    @supports (padding: max(0px)) {
+      header { padding-top: max(0px, env(safe-area-inset-top)); }
+      footer { padding-bottom: max(4rem, env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 380px) { .display { letter-spacing: -0.03em; } }
+    #mobileMenu {
+      position: fixed; inset: 0; z-index: 50; background: #fff;
+      transform: translateY(-100%);
+      transition: transform .3s cubic-bezier(.16,1,.3,1);
+      padding-top: env(safe-area-inset-top);
+    }
+    #mobileMenu.open { transform: translateY(0); }
+    @media (min-width: 1024px) { #mobileMenu { display: none; } }
+    body.menu-open { overflow: hidden; }
+    .brand-logo { display: block; height: 2.5rem; width: auto; object-fit: contain; }
+    .brand-logo-footer { display: block; height: 3.5rem; width: auto; object-fit: contain; }
+    .mobile-app-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: none;
+      gap: .75rem; align-items: center;
+      padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+      background: rgba(255,255,255,.96); border-top: 1px solid #E5E5E5;
+      backdrop-filter: blur(16px); box-shadow: 0 -12px 30px rgba(0,0,0,.08);
+    }
+    .mobile-app-bar a {
+      flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: .5rem;
+      border-radius: 14px; font-weight: 600; font-size: .95rem;
+    }
+    .mobile-app-bar .call { color: var(--ink); background: #F0F0F0; }
+    .mobile-app-bar .consult { color: #fff; background: var(--red); }
+    @media (min-width: 640px) { .brand-logo { height: 2.75rem; } }
+    @media (max-width: 640px) {
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+      header > div { margin-top: .5rem; }
+      #navInner { padding: .6rem .75rem; border-radius: 1rem; }
+      header .nav-cta { display: none; }
+      .mobile-app-bar { display: flex; }
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(to right, rgba(10,10,10,.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10,10,10,.03) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+    ::selection { background: var(--red); color: #fff; }
+
+    /* ── Desktop Mega-Menü ───────────────────────── */
+    #navInner { position: relative; }
+    .nav-main { display: flex; align-items: center; gap: 0.15rem; list-style: none; padding: 0; margin: 0; }
+    .nav-item-mega { position: static; }
+    .nav-item-dd { position: relative; }
+    .nav-trigger {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.55rem 0.9rem; border-radius: 0.65rem;
+      font-size: 0.93rem; font-weight: 500; color: var(--ink);
+      background: transparent; border: none; cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease;
+      font-family: inherit;
+    }
+    .nav-trigger:hover, .nav-trigger[aria-expanded="true"] { background: rgba(10,10,10,0.05); }
+    .nav-trigger.is-active { color: var(--red); }
+    .nav-trigger .nav-chevron { width: 0.7rem; height: 0.7rem; transition: transform 0.2s ease; }
+    .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+    .mega-panel, .dropdown-panel {
+      position: absolute; background: #fff;
+      border: 1px solid #E5E5E5;
+      box-shadow: 0 28px 60px -22px rgba(0,0,0,0.22), 0 4px 12px -4px rgba(0,0,0,0.06);
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 50;
+    }
+    .nav-item-mega[data-open="true"] > .mega-panel,
+    .nav-item-dd[data-open="true"] > .dropdown-panel {
+      opacity: 1; pointer-events: auto; transform: none;
+    }
+    .mega-panel {
+      left: 0; right: 0; top: calc(100% + 0.6rem);
+      border-radius: 1.25rem; padding: 1.85rem 2rem 1.6rem;
+    }
+    .mega-grid { display: grid; gap: 1.6rem 2.2rem; }
+    .mega-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .mega-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .mega-col { min-width: 0; }
+    .mega-col-title {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.7rem;
+    }
+    .mega-col ul { list-style: none; padding: 0; margin: 0; }
+    .mega-col li + li { margin-top: 0.05rem; }
+    .mega-col a {
+      display: block; padding: 0.5rem 0.7rem; margin: 0 -0.7rem;
+      border-radius: 0.55rem;
+      font-size: 0.93rem; line-height: 1.35; color: var(--ink); font-weight: 500;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .mega-col a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+    .mega-sub { display: block; margin-top: 0.15rem; font-size: 0.76rem; color: #737373; font-weight: 400; }
+    .mega-soon {
+      display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem;
+      border-radius: 999px; background: #F0F0F0;
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #737373; vertical-align: middle;
+    }
+    .mega-divider {
+      margin: 0.85rem -0.7rem 0.45rem; padding: 0.7rem 0.7rem 0;
+      font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: #A3A3A3;
+      border-top: 1px dashed #E5E5E5;
+    }
+    .mega-tool-link {
+      font-weight: 600 !important;
+      display: flex !important; align-items: center; justify-content: space-between; gap: 0.5rem;
+    }
+    .mega-tool-link::after { content: "→"; font-weight: 500; color: var(--red); transition: transform 0.2s ease; }
+    .mega-tool-link:hover::after { transform: translateX(2px); }
+    .dropdown-panel {
+      left: 0; top: calc(100% + 0.6rem);
+      min-width: 15rem; border-radius: 1rem; padding: 0.55rem;
+    }
+    .dropdown-panel ul { list-style: none; padding: 0; margin: 0; }
+    .dropdown-panel a {
+      display: block; padding: 0.55rem 0.8rem;
+      border-radius: 0.55rem;
+      font-size: 0.93rem; color: var(--ink); font-weight: 500;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .dropdown-panel a:hover { background: rgba(204,41,54,0.06); color: var(--red); }
+
+    /* ── Mobile Accordion ────────────────────────── */
+    .m-acc { border-bottom: 1px solid #F0F0F0; }
+    .m-acc-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 0.95rem 0; font-size: 1.05rem; font-weight: 600; color: var(--ink);
+      background: transparent; border: none; cursor: pointer; text-align: left;
+      font-family: inherit;
+    }
+    .m-acc-trigger .m-chevron { width: 1.05rem; height: 1.05rem; transition: transform 0.2s ease; color: #A3A3A3; }
+    .m-acc[data-open="true"] .m-chevron { transform: rotate(180deg); color: var(--red); }
+    .m-acc-body { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .m-acc[data-open="true"] .m-acc-body { max-height: 1200px; padding-bottom: 0.85rem; }
+    .m-acc-section { margin-top: 0.9rem; }
+    .m-acc-section:first-child { margin-top: 0.25rem; }
+    .m-acc-section-title {
+      font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--red);
+      margin-bottom: 0.2rem;
+    }
+    .m-acc-body ul { list-style: none; padding: 0; margin: 0; }
+    .m-acc-body a { display: block; padding: 0.5rem 0; font-size: 0.97rem; font-weight: 500; color: #404040; }
+    .m-acc-body a:hover { color: var(--red); }
+    .m-acc-link {
+      display: block; padding: 0.95rem 0;
+      font-size: 1.05rem; font-weight: 600; color: var(--ink);
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .m-acc-link:hover { color: var(--red); }
+
+    /* ── Pillar-Eyebrow & Soon-Pill ─────────────── */
+    .pillar-eyebrow {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 1rem;
+    }
+    .soon-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.8rem; border-radius: 999px;
+      background: #FDEFF1; color: var(--red);
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 500;
+    }
+
+    /* ── Page-Specific: Pillar-Tabelle ──────────── */
+    .pillar-table {
+      width: 100%; border-collapse: collapse; font-size: 0.93rem;
+      background: #fff; border-radius: 1rem; overflow: hidden; border: 1px solid #E5E5E5;
+    }
+    .pillar-table thead { background: #FAFAFA; }
+    .pillar-table th {
+      text-align: left; padding: 1rem 1.25rem;
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 500; color: #737373;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .pillar-table td { padding: 1.25rem; border-top: 1px solid #F0F0F0; vertical-align: top; }
+    .pillar-table tbody tr:first-child td { border-top: 0; }
+    .pillar-table td.pillar-cell { font-weight: 600; color: var(--red); white-space: nowrap; }
+    .pillar-table td.titel-cell { min-width: 200px; }
+    .pillar-table td.titel-cell strong { font-weight: 600; display: block; margin-bottom: 0.2rem; }
+    .pillar-table td.titel-cell .hinweis { font-size: 0.82rem; color: #737373; font-weight: 400; }
+    .pillar-pflicht-pill {
+      display: inline-block; padding: 0.2rem 0.55rem; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em;
+      text-transform: uppercase; font-weight: 500;
+    }
+    .pillar-pflicht-pill.obli { background: #FDEFF1; color: var(--red); }
+    .pillar-pflicht-pill.semi { background: #FFF7E5; color: #B45309; }
+    .pillar-pflicht-pill.frei { background: #ECFDF5; color: #047857; }
+
+    /* ── Checkliste ──────────────────────────── */
+    .check-group {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 1rem;
+      padding: 1.5rem 1.6rem;
+    }
+    .check-group h4 {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 0.9rem;
+    }
+    .check-group ul { list-style: none; padding: 0; margin: 0; }
+    .check-group li {
+      display: flex; gap: 0.6rem; padding: 0.5rem 0;
+      font-size: 0.94rem; line-height: 1.4; color: var(--ink);
+      border-bottom: 1px dashed #F0F0F0;
+    }
+    .check-group li:last-child { border-bottom: 0; }
+    .check-group .check-box {
+      display: inline-block; width: 1rem; height: 1rem; flex-shrink: 0;
+      border: 1.5px solid var(--red); border-radius: 0.25rem;
+      margin-top: 0.15rem;
+    }
+
+    /* ── Std-vs-Individuell Cards ────────────── */
+    .compare-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 1rem;
+      padding: 1.5rem 1.6rem;
+    }
+    .compare-card .compare-title {
+      font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1rem;
+    }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .compare-cell {
+      padding: 1rem 1.1rem; border-radius: 0.7rem;
+    }
+    .compare-cell.std { background: #F0F0F0; }
+    .compare-cell.ind { background: #FDEFF1; border: 1px solid #FAD8DD; }
+    .compare-cell .cc-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em;
+      text-transform: uppercase; font-weight: 500;
+      margin-bottom: 0.5rem; color: #737373;
+    }
+    .compare-cell.ind .cc-eyebrow { color: var(--red); }
+    .compare-cell p { font-size: 0.88rem; color: #404040; line-height: 1.5; }
+    .compare-rec {
+      margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #E5E5E5;
+      font-size: 0.85rem; color: #404040;
+    }
+    .compare-rec strong { color: var(--ink); }
+    @media (max-width: 720px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Lohnschwellen-Kachel ───────────────── */
+    .lohn-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 1rem; padding: 1.3rem;
+    }
+    .lohn-card .lc-label {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;
+    }
+    .lohn-card .lc-wert {
+      font-size: 1.4rem; font-weight: 600; letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums; margin-bottom: 0.45rem;
+    }
+    .lohn-card .lc-kontext { font-size: 0.82rem; color: #737373; line-height: 1.4; }
+
+    @media print {
+      header, .mobile-app-bar, .loader, footer, .cta-block, .tool-block { display: none !important; }
+      body { padding: 0; }
+      .check-group { break-inside: avoid; }
+    }
+
+    /* ── Rechner-Tool-Styling ────────────────── */
+    .tool-block {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 1.5rem;
+      padding: 2rem 1.75rem; position: relative; overflow: hidden;
+    }
+    @media (min-width: 1024px) { .tool-block { padding: 2.5rem; } }
+    .tool-block .tool-eyebrow {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 0.75rem;
+    }
+    .tool-block h3.tool-title {
+      font-weight: 600; letter-spacing: -0.025em;
+      font-size: 1.4rem; line-height: 1.2; margin-bottom: 0.5rem;
+    }
+    @media (min-width: 1024px) { .tool-block h3.tool-title { font-size: 1.7rem; } }
+    .tool-block .tool-sub { color: #404040; font-size: 0.95rem; max-width: 38rem; }
+    .tool-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;
+    }
+    @media (min-width: 960px) { .tool-grid.split { grid-template-columns: 0.85fr 1fr; gap: 2rem; } }
+
+    .field { display: block; }
+    .field + .field { margin-top: 0.9rem; }
+    .field-label {
+      display: block; font-family: var(--font-mono); font-size: 0.66rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #737373; margin-bottom: 0.35rem;
+    }
+    .field-input, .field-select {
+      width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #D4D4D4;
+      border-radius: 0.6rem; background: #fff; color: var(--ink);
+      font-family: inherit; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .field-input:focus, .field-select:focus {
+      outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,41,54,0.1);
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+
+    .result-box {
+      background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 1rem;
+      padding: 1.25rem 1.35rem;
+    }
+    .result-box + .result-box { margin-top: 0.85rem; }
+    .result-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 0.5rem; padding: 0.35rem 0;
+      font-size: 0.93rem;
+    }
+    .result-row + .result-row { border-top: 1px dashed #E5E5E5; }
+    .result-row .lbl { color: #404040; }
+    .result-row .lbl small { display: block; font-size: 0.78rem; color: #737373; }
+    .result-row .val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .result-row.total { padding-top: 0.6rem; border-top: 1px solid var(--ink); margin-top: 0.4rem; }
+    .result-row.total .lbl { font-weight: 600; }
+    .result-row.total .val { font-size: 1.15rem; color: var(--red); }
+
+    .result-hero {
+      background: var(--ink); color: #fff; border-radius: 1rem;
+      padding: 1.5rem 1.5rem 1.6rem; position: relative; overflow: hidden;
+    }
+    .result-hero .rh-eyebrow {
+      font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem;
+    }
+    .result-hero .rh-value {
+      font-size: 2.1rem; line-height: 1; font-weight: 600; letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .result-hero .rh-value .rh-currency { font-size: 1.1rem; color: rgba(255,255,255,0.6); margin-right: 0.35rem; font-weight: 400; }
+    .result-hero .rh-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+    .result-hero.red { background: linear-gradient(135deg, #CC2936, #7A181F); }
+    .result-hero.dark { background: var(--ink); }
+
+    .pill-tag {
+      display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 500;
+      background: #FDEFF1; color: var(--red);
+    }
+    .pill-tag.muted { background: #F0F0F0; color: #737373; }
+
+    .tool-hint {
+      font-size: 0.78rem; color: #737373; margin-top: 1rem; line-height: 1.5;
+    }
+
+    /* Tools-Index-Kacheln (für Mega-Tools-Section) */
+    .tool-link-card {
+      display: flex; gap: 0.85rem; align-items: flex-start;
+      padding: 1.2rem 1.3rem; background: #fff; border: 1px solid #E5E5E5;
+      border-radius: 1rem; transition: all 0.25s ease;
+    }
+    .tool-link-card:hover {
+      border-color: rgba(204,41,54,0.45);
+      box-shadow: 0 12px 32px -16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-link-card .tlc-icon {
+      width: 2.2rem; height: 2.2rem; flex-shrink: 0; border-radius: 0.55rem;
+      background: #FDEFF1; color: var(--red);
+      display: grid; place-items: center; font-weight: 600;
+    }
+    .tool-link-card h4 {
+      font-size: 0.98rem; font-weight: 600; letter-spacing: -0.01em;
+      margin-bottom: 0.15rem; color: var(--ink);
+    }
+    .tool-link-card p { font-size: 0.83rem; color: #737373; line-height: 1.4; }
+    .tool-link-card .tlc-arrow {
+      margin-left: auto; color: var(--red); font-weight: 500;
+      transition: transform 0.2s ease;
+    }
+    .tool-link-card:hover .tlc-arrow { transform: translateX(3px); }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="text-white display text-3xl">Glatt Broker</div>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6 mt-3">
+      <nav class="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur border border-ink-200 px-4 sm:px-5 py-2.5" id="navInner">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Glatt Broker — Startseite">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo" />
+          <span class="hidden sm:block label text-ink-400 pl-3 border-l border-ink-200">AG · Zürich</span>
+        </a>
+        <ul class="nav-main hidden lg:flex">
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-privat">
+              Privatkunden
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="mega-panel" id="mega-privat" role="menu" aria-label="Privatkunden">
+              <div class="mega-grid cols-4">
+                <div class="mega-col">
+                  <div class="mega-col-title">Versicherung</div>
+                  <ul>
+                    <li><a href="krankenkasse.html">Krankenkasse</a></li>
+                    <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+                    <li><a href="krankenkasse.html#sachversicherung">Sachversicherung<span class="mega-sub">Hausrat · Haftpflicht · Auto</span></a></li>
+                    <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul><li><a class="mega-tool-link" href="krankenkasse.html#calculator">Prämien-Rechner</a></li></ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Vorsorge</div>
+                  <ul>
+                    <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+                    <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="vorsorge.html#strategy">3.-Säule-Strategie</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Finanzen</div>
+                  <ul>
+                    <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
+                    <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Steuern</div>
+                  <ul>
+                    <li><a href="steuern.html#steuererklaerung">Steuererklärung<span class="mega-sub">ab CHF 69 · Pakete</span></a></li>
+                    <li><a href="steuern.html">Steueroptimierung</a></li>
+                    <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer</a></li>
+                    <li><a class="mega-tool-link" href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-mega" data-nav-item>
+            <button type="button" class="nav-trigger is-active" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="mega-firma">
+              Firmenkunden
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="mega-panel" id="mega-firma" role="menu" aria-label="Firmenkunden">
+              <div class="mega-grid cols-3">
+                <div class="mega-col">
+                  <div class="mega-col-title">Vorsorge</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#pensionskasse">Pensionskasse<span class="mega-sub">BVG-Lösungen · Anbieter-Mix</span></a></li>
+                    <li><a href="firmenkunden.html#kader">Kadervorsorge<span class="mega-sub">Bel-Etage · 1e-Pläne</span></a></li>
+                    <li><a href="firmenkunden.html#bvg">BVG-Optimierung</a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Versicherung</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#sach">Sach &amp; Haftpflicht</a></li>
+                    <li><a href="firmenkunden.html#betrieb">Betriebs-Schutz<span class="mega-sub">BU · Cyber · Rechtsschutz</span></a></li>
+                    <li><a href="firmenkunden.html#personen">Personenversicherung<span class="mega-sub">KTG · UVG-Zusatz</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-col">
+                  <div class="mega-col-title">Beratung</div>
+                  <ul>
+                    <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
+                    <li><a href="firmenkunden.html#strategie">Strategie &amp; Setup</a></li>
+                    <li><a href="firmenkunden.html#firmengruendung">Firmengründung<span class="mega-sub">ab CHF 599 · Notar zusätzlich</span></a></li>
+                    <li><a href="firma-gruenden.html"><strong>Firma gründen — Sozialversicherungs-Guide</strong><span class="mega-sub">AHV · BVG · KTG · UVG · Checkliste</span></a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="firma-gruenden.html#lohn-rechner">Lohnnebenkosten-Rechner</a></li>
+                    <li><a class="mega-tool-link" href="firma-gruenden.html#3a-inhaber">3a-Inhaber-Optimierung</a></li>
+                    <li><a class="mega-tool-link" href="firma-gruenden.html#bvg-spar">BVG-Sparbeitrag-Rechner</a></li>
+                    <li><a class="mega-tool-link" href="firma-gruenden.html#checkliste">Gründer-Checkliste</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-about">
+              Über uns
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="dropdown-panel" id="dd-about" role="menu" aria-label="Über uns">
+              <ul>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="team.html#difference">Unser Unterschied</a></li>
+                <li><a href="team.html#voices">Stimmen</a></li>
+                <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="kontakt.html?topic=karriere">Karriere<span class="mega-soon">bald</span></a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item-dd" data-nav-item>
+            <button type="button" class="nav-trigger" data-mega-trigger aria-expanded="false" aria-haspopup="true" aria-controls="dd-partner">
+              Partner
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="dropdown-panel" id="dd-partner" role="menu" aria-label="Partner">
+              <ul>
+                <li><a href="partner.html">Tippgeber-Programm</a></li>
+                <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-1 label text-ink-700 bg-ink-100 rounded-full p-1" role="group" aria-label="Sprache">
+            <button data-lang="de" class="px-2.5 py-1 rounded-full bg-white shadow-sm" aria-pressed="true">DE</button>
+            <button data-lang="en" class="px-2.5 py-1 rounded-full" aria-pressed="false">EN</button>
+          </div>
+          <a href="kontakt.html?topic=firmengruendung" class="btn-primary nav-cta">
+            <span>Gründer-Beratung</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <button id="mobileMenuToggle" class="lg:hidden p-2 -mr-1 text-ink-950" aria-label="Menü öffnen" aria-expanded="false">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="lg:hidden fixed inset-0 z-50 bg-white">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-5 border-b border-ink-200">
+        <span class="font-semibold tracking-tight">Glatt Broker</span>
+        <button id="mobileMenuClose" class="p-2 -mr-1 text-ink-950" aria-label="Menü schliessen">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-5" id="mobileMenuLinks">
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Privatkunden</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="krankenkasse.html">Krankenkasse</a></li>
+              <li><a href="krankenkasse.html#vvg">Zusatzversicherung (VVG)</a></li>
+              <li><a href="krankenkasse.html#sachversicherung">Sachversicherung</a></li>
+              <li><a href="krankenkasse.html#lebensversicherung">Lebens- &amp; Risiko-Versicherung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="vorsorge.html">3. Säule (3a)</a></li>
+              <li><a href="vorsorge.html#pensionsplanung">Pensionsplanung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
+              <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
+              <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Steuern</div><ul>
+              <li><a href="steuern.html#steuererklaerung"><strong>Steuererklärung — ab CHF 69</strong></a></li>
+              <li><a href="steuern.html">Steueroptimierung</a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc" data-open="true">
+          <button class="m-acc-trigger" type="button" aria-expanded="true">
+            <span>Firmenkunden</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <div class="m-acc-section"><div class="m-acc-section-title">Übersicht</div><ul>
+              <li><a href="firmenkunden.html">Firmenkunden-Übersicht</a></li>
+              <li><a href="firma-gruenden.html"><strong>Firma gründen — AHV · BVG · KTG · UVG</strong></a></li>
+              <li><a href="firmenkunden.html#firmengruendung">Gründungs-Pakete</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Vorsorge</div><ul>
+              <li><a href="firmenkunden.html#pensionskasse">Pensionskasse</a></li>
+              <li><a href="firmenkunden.html#kader">Kadervorsorge</a></li>
+              <li><a href="firmenkunden.html#bvg">BVG-Optimierung</a></li>
+            </ul></div>
+            <div class="m-acc-section"><div class="m-acc-section-title">Versicherung</div><ul>
+              <li><a href="firmenkunden.html#sach">Sach &amp; Haftpflicht</a></li>
+              <li><a href="firmenkunden.html#betrieb">Betriebs-Schutz</a></li>
+              <li><a href="firmenkunden.html#personen">Personenversicherung</a></li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Über uns</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <ul>
+              <li><a href="team.html">Team</a></li>
+              <li><a href="team.html#difference">Unser Unterschied</a></li>
+              <li><a href="team.html#voices">Stimmen</a></li>
+              <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="m-acc">
+          <button class="m-acc-trigger" type="button" aria-expanded="false">
+            <span>Partner</span>
+            <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="m-acc-body">
+            <ul>
+              <li><a href="partner.html">Tippgeber-Programm</a></li>
+              <li><a href="partner.html#kooperation">Kooperationspartner</a></li>
+            </ul>
+          </div>
+        </div>
+        <a href="kontakt.html" class="m-acc-link">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden">
+      <div class="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -top-40 -right-40 w-[700px] h-[700px] bg-brand-100 rounded-full blur-3xl opacity-40 pointer-events-none" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl">
+          <div class="soon-pill mb-7"><span class="pulse-dot"></span><span>Gründer-Guide · Schweiz 2026</span></div>
+          <h1 class="display text-[8.5vw] sm:text-[6.5vw] lg:text-[5.4vw] xl:text-[5vw] tracking-tightest">
+            Firma gründen.<br><span class="text-brand-600">Sozialversicherung verstehen.</span>
+          </h1>
+          <p class="mt-7 text-lg lg:text-xl text-ink-700 max-w-2xl leading-relaxed">
+            <strong class="text-ink-950 font-semibold">AHV, BVG, KTG, UVG — vier Buchstaben­kürzel, vier Entscheidungen.</strong>
+            Wir zeigen, was Pflicht ist, was Standard und wo sich eine individuelle Lösung wirklich rechnet. Inklusive Checkliste, mit der du dich aufs Beratungsgespräch vorbereiten kannst.
+          </p>
+          <div class="mt-10 flex flex-wrap gap-3">
+            <a href="#rechner" class="btn-primary !px-6 !py-4 !text-base">
+              🧮 Live-Rechner ausprobieren
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+            <a href="#saulen" class="btn-ghost !px-6 !py-4 !text-base">
+              Säulen-Übersicht
+            </a>
+            <a href="#checkliste" class="btn-ghost !px-6 !py-4 !text-base">
+              Checkliste
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÜBERSICHTS-TABELLE: 1./2./3. SÄULE ─────────────────────── -->
+    <section id="saulen" class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Die 3 Säulen · Wer zahlt was</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Pflicht, halbpflichtig, freiwillig.</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Diese Tabelle ist die Landkarte. Jede Zeile ist eine Versicherung, die du als Arbeitgeber organisieren musst — oder bewusst weglassen kannst, wenn es die Situation zulässt.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="pillar-table">
+            <thead>
+              <tr>
+                <th>Säule</th>
+                <th>Versicherung</th>
+                <th>Status</th>
+                <th>Wer zahlt</th>
+                <th>Lohn-Basis</th>
+                <th>Beitragssatz</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="pillar-cell">1. Säule</td>
+                <td class="titel-cell">
+                  <strong>AHV / IV / EO</strong>
+                  <span class="hinweis">Altersrente, Invaliden­rente, Erwerbsersatz. Grundlage des Schweizer Sozialsystems.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AG + AN je hälftig</td>
+                <td>Brutto-Lohn · kein Plafond</td>
+                <td><strong class="num-tabular">10.6 %</strong><br><span class="text-ink-500 text-xs">5.3 % AN + 5.3 % AG</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">1. Säule</td>
+                <td class="titel-cell">
+                  <strong>ALV (Arbeitslosen­versicherung)</strong>
+                  <span class="hinweis">Lohn­ersatz bei Arbeitslosigkeit. Solidaritäts­beitrag über dem Plafond.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AG + AN je hälftig</td>
+                <td>Bis CHF 148’200 / darüber Soli</td>
+                <td><strong class="num-tabular">2.2 % + 1.0 %</strong><br><span class="text-ink-500 text-xs">je 1.1 % bis 148’200 · je 0.5 % darüber</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">1. Säule</td>
+                <td class="titel-cell">
+                  <strong>FAK (Familienzulagen)</strong>
+                  <span class="hinweis">Finanziert Kinder- und Ausbildungs­zulagen. Kantonal stark unterschiedlich.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AG zahlt alleine</td>
+                <td>AHV-pflichtiger Lohn</td>
+                <td><strong class="num-tabular">1.2 – 3.4 %</strong><br><span class="text-ink-500 text-xs">ZH 1.2 % · BE 1.95 % · TI 2.35 %</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">2. Säule</td>
+                <td class="titel-cell">
+                  <strong>BVG (Berufliche Vorsorge)</strong>
+                  <span class="hinweis">Pensions­kasse. Ergänzt AHV/IV. Eintrittsschwelle 2026: CHF 22’680.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AG min. 50 % · Rest AN</td>
+                <td>Koord. Lohn (max CHF 64’260)</td>
+                <td><strong class="num-tabular">7 – 18 %</strong><br><span class="text-ink-500 text-xs">altersabhängig + Risiko­prämien</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">2. Säule</td>
+                <td class="titel-cell">
+                  <strong>UVG-BU (Berufsunfall)</strong>
+                  <span class="hinweis">Suva oder Privat­versicherer — Branchen­zuteilung definiert die Wahl.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AG zahlt voll</td>
+                <td>UVG-Lohn bis CHF 148’200</td>
+                <td><strong class="num-tabular">0.05 – 4 %</strong><br><span class="text-ink-500 text-xs">Branche: Büro 0.1 % · Bau 4 %</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">2. Säule</td>
+                <td class="titel-cell">
+                  <strong>UVG-NBU (Nichtberufs­unfall)</strong>
+                  <span class="hinweis">Greift ab 8 h/Woche bei AN. Sinnvoll, dass AG zahlt — gilt als Lohn­benefit.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill obli">Obligatorisch</span></td>
+                <td>AN (AG kann übernehmen)</td>
+                <td>UVG-Lohn bis CHF 148’200</td>
+                <td><strong class="num-tabular">1 – 2 %</strong><br><span class="text-ink-500 text-xs">Branchenabhängig</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">2. Säule</td>
+                <td class="titel-cell">
+                  <strong>KTG (Krankentaggeld)</strong>
+                  <span class="hinweis">Nicht obligatorisch — aber bei Verzicht haftet AG nur 3 Wo bis ~6 Mt nach OR 324a.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill semi">Faktisch Pflicht</span></td>
+                <td>Frei verhandelbar (oft 50/50)</td>
+                <td>AHV-Lohn, oft Plafond CHF 300’000</td>
+                <td><strong class="num-tabular">0.7 – 2.5 %</strong><br><span class="text-ink-500 text-xs">je nach Branche + Wartefrist</span></td>
+              </tr>
+              <tr>
+                <td class="pillar-cell">3. Säule</td>
+                <td class="titel-cell">
+                  <strong>3a (gebundene Vorsorge)</strong>
+                  <span class="hinweis">Privat — vom Lohn nach Abzügen. Voll steuerlich abzugsfähig.</span>
+                </td>
+                <td><span class="pillar-pflicht-pill frei">Freiwillig</span></td>
+                <td>Privatperson</td>
+                <td>Erwerbseinkommen</td>
+                <td><strong class="num-tabular">max CHF 7’258</strong><br><span class="text-ink-500 text-xs">Selbständige ohne PK: max 36’288</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-5 text-xs text-ink-500">
+          <strong>Werte Stand 2026.</strong> AHV-Sätze und BVG-Schwellen werden jährlich vom Bundes­rat angepasst. Kantonale FAK-Sätze gelten am Geschäftssitz oder Wohnsitz Selbständige.
+        </p>
+      </div>
+    </section>
+
+    <!-- LOHNSCHWELLEN 2026 ─────────────────────────── -->
+    <section class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Lohnschwellen 2026</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Diese Zahlen entscheiden Pflicht und Kosten.</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Lohn­höhe ist nicht egal. Sie definiert, ob jemand BVG-versichert ist, wo das Obligatorium endet und wo individuelle Lösungen einsetzen müssen.
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="lohn-card">
+            <div class="lc-label">BVG-Eintrittsschwelle</div>
+            <div class="lc-wert">CHF 22’680</div>
+            <div class="lc-kontext">Ab diesem Jahres­lohn pflicht­versichert in der Pensionskasse</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">Koordinations­abzug</div>
+            <div class="lc-wert">CHF 26’460</div>
+            <div class="lc-kontext">Lohn­teil, der bereits durch AHV gedeckt ist</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">BVG-Maximallohn</div>
+            <div class="lc-wert">CHF 90’720</div>
+            <div class="lc-kontext">Bis hierhin obligatorisch versichert · darüber freiwillig</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">Koord. Lohn max</div>
+            <div class="lc-wert">CHF 64’260</div>
+            <div class="lc-kontext">= 90’720 − 26’460 · darauf gehen Sparbeiträge</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">UVG-Maximallohn</div>
+            <div class="lc-wert">CHF 148’200</div>
+            <div class="lc-kontext">Für BU + NBU · darüber UVG-Zusatz nötig</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">AHV / IV / EO</div>
+            <div class="lc-wert">kein Plafond</div>
+            <div class="lc-kontext">Auf gesamtem Brutto­lohn, lebenslang</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">3a-Maximum (Angestellte)</div>
+            <div class="lc-wert">CHF 7’258</div>
+            <div class="lc-kontext">Voll steuerlich abzugsfähig — privat</div>
+          </div>
+          <div class="lohn-card">
+            <div class="lc-label">3a-Max (Selbst., ohne PK)</div>
+            <div class="lc-wert">CHF 36’288</div>
+            <div class="lc-kontext">20 % vom Netto­einkommen · Inhaber-Hebel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOHE LÖHNE — WAS NUN? ─────────────────────────── -->
+    <section class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Hohe Löhne · Geschäftsleitung · Kader</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Über CHF 90’720 endet das Obligatorium.</h2>
+        <p class="text-ink-700 max-w-3xl mb-12 lg:text-lg">
+          Ohne Über­obligatorium, Kader­plan oder 1e-Lösung fallen Inhaber- und Schlüssel­löhne in eine Vorsorge-Lücke. Hier sind die fünf Bausteine, mit denen wir das auffüllen.
+        </p>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">01 — Überobligatorium (BVG)</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">Den gesamten Lohn versichern.</h3>
+            <p class="text-ink-700 text-[0.96rem] leading-relaxed">
+              Lohn­anteile über CHF 90’720 werden freiwillig versichert — typisch bis CHF 300’000 oder höher. Höhere Sparbeiträge, höhere Rente, mehr Einkaufs­potenzial mit Steuer­hebel.
+            </p>
+          </div>
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">02 — Kaderpläne</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">Separate Vorsorge für Schlüsselpersonen.</h3>
+            <p class="text-ink-700 text-[0.96rem] leading-relaxed">
+              Eigene Sammel­stiftung oder Kader-Stiftung mit höheren Sparbeiträgen (15–25 %), aufgestockten Risiko­leistungen und klarer Abgrenzung vom Basis-Plan.
+            </p>
+          </div>
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">03 — 1e-Pläne (ab CHF 132’300)</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">Eigene Anlage­strategie wählen.</h3>
+            <p class="text-ink-700 text-[0.96rem] leading-relaxed">
+              Lohn­anteile zwischen CHF 132’300 und 900’720 individuell anlegen — Mitarbeiter wählt selber zwischen 0–100 % Aktien. Kapital­bezug bei Austritt möglich, steuerlich interessant.
+            </p>
+          </div>
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">04 — UVG-Zusatz (UVGZ)</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">Lohnanteile über CHF 148’200.</h3>
+            <p class="text-ink-700 text-[0.96rem] leading-relaxed">
+              Über der UVG-Grenze zahlt die obligatorische Unfall­versicherung nichts mehr. Mit UVGZ wird der vollständige Lohn versichert — Pflicht bei Geschäftsführer­löhnen.
+            </p>
+          </div>
+          <div class="card p-7 md:col-span-2">
+            <div class="label text-brand-600 mb-3">05 — KTG-Plafond anpassen</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-2">Standard-Plafond bei CHF 300’000 reicht nicht immer.</h3>
+            <p class="text-ink-700 text-[0.96rem] leading-relaxed">
+              Höhere Löhne erfordern Sonder­vereinbarung oder Ergänzungs­deckung — sonst entstehen genau dort Lücken, wo das Ausfallrisiko am höchsten ist (Schlüssel­personen).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── LIVE-RECHNER · 3 KOMPLETT-INTERAKTIV ─────────── -->
+    <section id="rechner" class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Live-Rechner · Schweiz 2026</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Probier es aus — drei Rechner, sofort.</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Anstatt im Versicherungs-Vergleich nur Preise zu sehen, schau dir an, was passiert. Lohnnebenkosten,
+          3a-Inhaber-Hebel, BVG-Sparbeitrag — live mit den Schweizer Werten 2026.
+        </p>
+
+        <!-- ─── TOOL 1 · Lohnnebenkosten ──────────────────────── -->
+        <div id="lohn-rechner" class="tool-block mb-10 anim-fade-up">
+          <div class="flex items-start gap-2 flex-wrap mb-3">
+            <span class="pill-tag">Tool 01</span>
+            <span class="pill-tag muted">Brutto → Netto + AG-Total</span>
+          </div>
+          <h3 class="tool-title">Lohnnebenkosten-Rechner.</h3>
+          <p class="tool-sub">Was kostet ein Brutto-Lohn deine Firma wirklich? Und was bleibt netto beim Mitarbeitenden? Wir rechnen AHV · ALV · BVG · UVG · KTG · FAK live auf.</p>
+
+          <div class="tool-grid split">
+            <div>
+              <label class="field">
+                <span class="field-label">Brutto-Jahres-Lohn</span>
+                <input id="lnBrutto" type="number" min="0" step="1000" value="90000" class="field-input" />
+              </label>
+              <label class="field">
+                <span class="field-label">Alter (für BVG-Sparbeitrag)</span>
+                <input id="lnAlter" type="number" min="17" max="70" value="35" class="field-input" />
+              </label>
+              <div class="field-row">
+                <label class="field">
+                  <span class="field-label">Kanton (FAK)</span>
+                  <select id="lnKanton" class="field-select">
+                    <option value="1.2">ZH · 1.2 %</option>
+                    <option value="1.95">BE · 1.95 %</option>
+                    <option value="1.6">AG · 1.6 %</option>
+                    <option value="1.5">SG · 1.5 %</option>
+                    <option value="1.5">LU · 1.5 %</option>
+                    <option value="1.4">BS · 1.4 %</option>
+                    <option value="1.65">BL · 1.65 %</option>
+                    <option value="2.45">GE · 2.45 %</option>
+                    <option value="2.0">VD · 2.0 %</option>
+                    <option value="2.35">TI · 2.35 %</option>
+                    <option value="1.4">ZG · 1.4 %</option>
+                    <option value="1.7">SO · 1.7 %</option>
+                    <option value="1.7">SZ · 1.7 %</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span class="field-label">Branche (UVG-BU)</span>
+                  <select id="lnBranche" class="field-select">
+                    <option value="0.1">Büro / IT / Dienstl. · 0.1 %</option>
+                    <option value="0.5">Detailhandel · 0.5 %</option>
+                    <option value="1.5">Gewerbe / Logistik · 1.5 %</option>
+                    <option value="3.0">Industrie · 3 %</option>
+                    <option value="4.0">Bau · 4 %</option>
+                  </select>
+                </label>
+              </div>
+              <label class="field">
+                <span class="field-label">KTG-Aufteilung</span>
+                <select id="lnKtg" class="field-select">
+                  <option value="0,1.5">AG zahlt voll · 1.5 %</option>
+                  <option value="0.75,0.75">50 / 50 · 1.5 %</option>
+                  <option value="1.5,0">AN zahlt voll · 1.5 %</option>
+                  <option value="0,0">Keine KTG (riskant)</option>
+                </select>
+              </label>
+              <p class="tool-hint">Werte 2026 · AHV 5.3 % AN+AG · ALV 1.1 % AN+AG bis 148’200 (darüber 0.5 % Soli) · BVG-Sparbeiträge altersabhängig + 3 % Risiko/Verwaltung (50/50). FAK nur AG.</p>
+            </div>
+
+            <div>
+              <div class="result-hero red mb-3">
+                <div class="rh-eyebrow">Total-Kosten Arbeitgeber pro Jahr</div>
+                <div class="rh-value"><span class="rh-currency">CHF</span><span id="lnAgTotal">0</span></div>
+                <div class="rh-sub"><span id="lnAgPct">0</span> % über dem Brutto-Lohn</div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">Brutto-Lohn</span><span class="val">CHF <span id="lnBrutto2">0</span></span></div>
+                <div class="result-row"><span class="lbl">AHV / IV / EO <small>5.3 % AN</small></span><span class="val">−CHF <span id="lnAhvAn">0</span></span></div>
+                <div class="result-row"><span class="lbl">ALV <small>1.1 % AN bis 148’200</small></span><span class="val">−CHF <span id="lnAlvAn">0</span></span></div>
+                <div class="result-row"><span class="lbl">BVG-Sparbeitrag AN <small>~50 % Sparbeitrag</small></span><span class="val">−CHF <span id="lnBvgAn">0</span></span></div>
+                <div class="result-row"><span class="lbl">UVG-NBU AN <small>~1.5 % bis 148’200</small></span><span class="val">−CHF <span id="lnNbuAn">0</span></span></div>
+                <div class="result-row"><span class="lbl">KTG AN <small id="lnKtgLblAn">0 %</small></span><span class="val">−CHF <span id="lnKtgAn">0</span></span></div>
+                <div class="result-row total"><span class="lbl">Netto-Lohn / Jahr</span><span class="val">CHF <span id="lnNetto">0</span></span></div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">AHV / IV / EO <small>5.3 % AG</small></span><span class="val">+CHF <span id="lnAhvAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">ALV <small>1.1 % AG bis 148’200</small></span><span class="val">+CHF <span id="lnAlvAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">BVG-Sparbeitrag AG <small>~50 %</small></span><span class="val">+CHF <span id="lnBvgAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">UVG-BU AG <small id="lnBuLbl">Büro 0.1 %</small></span><span class="val">+CHF <span id="lnBuAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">FAK AG <small id="lnFakLbl">ZH 1.2 %</small></span><span class="val">+CHF <span id="lnFakAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">KTG AG <small id="lnKtgLblAg">0 %</small></span><span class="val">+CHF <span id="lnKtgAg">0</span></span></div>
+                <div class="result-row"><span class="lbl">Total AG-Nebenkosten</span><span class="val">+CHF <span id="lnAgNeben">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── TOOL 2 · 3a-Inhaber-Optimierung ──────────────────────── -->
+        <div id="3a-inhaber" class="tool-block mb-10 anim-fade-up">
+          <div class="flex items-start gap-2 flex-wrap mb-3">
+            <span class="pill-tag">Tool 02</span>
+            <span class="pill-tag muted">3a · Steuer-Hebel für Inhaber</span>
+          </div>
+          <h3 class="tool-title">3a-Inhaber-Optimierung.</h3>
+          <p class="tool-sub">Wie viel kannst du in die 3. Säule legen — und wie viel Steuern sparst du dadurch? Selbst­ständige ohne PK haben den grössten Hebel.</p>
+
+          <div class="tool-grid split">
+            <div>
+              <label class="field">
+                <span class="field-label">Erwerbstyp</span>
+                <select id="saTyp" class="field-select">
+                  <option value="ang_pk">Angestellt (mit PK)</option>
+                  <option value="sel_pk">Selbständig MIT Pensionskasse</option>
+                  <option value="sel_nopk">Selbständig OHNE Pensionskasse</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Netto-Einkommen / Jahr</span>
+                <input id="saEink" type="number" min="0" step="1000" value="120000" class="field-input" />
+              </label>
+              <label class="field">
+                <span class="field-label">Marginal-Steuersatz <small id="saMargShow" class="text-ink-500" style="text-transform:none; letter-spacing: normal;">(automatisch geschätzt)</small></span>
+                <select id="saKanton" class="field-select">
+                  <option value="zh">Stadt Zürich (ledig)</option>
+                  <option value="zh-v">Stadt Zürich (verheiratet)</option>
+                  <option value="zg">Zug</option>
+                  <option value="ge">Genf</option>
+                  <option value="ti">Lugano</option>
+                  <option value="be">Bern</option>
+                  <option value="bs">Basel-Stadt</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Tranchen-Strategie (Konten)</span>
+                <select id="saTranchen" class="field-select">
+                  <option value="1">1 Konto (zentral)</option>
+                  <option value="3" selected>3 Konten (Standard-Empfehlung)</option>
+                  <option value="5">5 Konten (max Hebel)</option>
+                </select>
+              </label>
+              <p class="tool-hint">Marginalsatz aus ESTV-Tarifen 2026 vereinfacht abgeleitet — exakter Wert beim Steuer-Beratungs­termin. Tranchen reduzieren die Bezugs­steuer signifikant (Progression bricht).</p>
+            </div>
+
+            <div>
+              <div class="result-hero dark mb-3">
+                <div class="rh-eyebrow">Steuer-Ersparnis · jährlich</div>
+                <div class="rh-value"><span class="rh-currency">CHF</span><span id="saSave">0</span></div>
+                <div class="rh-sub">bei Vollausschöpfung der 3. Säule</div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">Max 3a-Einzahlung</span><span class="val">CHF <span id="saMax">0</span></span></div>
+                <div class="result-row"><span class="lbl">Geschätzter Marginalsatz</span><span class="val"><span id="saMarg">0</span> %</span></div>
+                <div class="result-row"><span class="lbl">Steuerersparnis pro Jahr</span><span class="val text-emerald-600">CHF <span id="saSaveLine">0</span></span></div>
+                <div class="result-row"><span class="lbl">Über 10 Jahre <small>(nominal)</small></span><span class="val">CHF <span id="saSave10">0</span></span></div>
+                <div class="result-row total"><span class="lbl">Netto-Kosten der Einzahlung</span><span class="val">CHF <span id="saNetto">0</span></span></div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">Bezugs­steuer einmalig (1 Konto)</span><span class="val">−CHF <span id="saBez1">0</span></span></div>
+                <div class="result-row"><span class="lbl">Bezugssteuer (<span id="saBezN">3</span> Tranchen)</span><span class="val">−CHF <span id="saBezN_val">0</span></span></div>
+                <div class="result-row total"><span class="lbl">Tranchen-Vorteil</span><span class="val text-emerald-600">+CHF <span id="saBezSave">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── TOOL 3 · BVG-Sparbeitrag-Live ──────────────────────── -->
+        <div id="bvg-spar" class="tool-block anim-fade-up">
+          <div class="flex items-start gap-2 flex-wrap mb-3">
+            <span class="pill-tag">Tool 03</span>
+            <span class="pill-tag muted">2. Säule · 10-Jahres-Projekt</span>
+          </div>
+          <h3 class="tool-title">BVG-Sparbeitrag-Live-Rechner.</h3>
+          <p class="tool-sub">Pensionskassen-Sparen für eine konkrete Person. Zeigt koordinierten Lohn, Sparbeitrag heute und Kapital-Aufbau über 10 / 20 / 30 Jahre — Standard-Plan vs. Über­obligatorium.</p>
+
+          <div class="tool-grid split">
+            <div>
+              <label class="field">
+                <span class="field-label">Jahres-Lohn</span>
+                <input id="bvgLohn" type="number" min="0" step="1000" value="120000" class="field-input" />
+              </label>
+              <label class="field">
+                <span class="field-label">Alter heute</span>
+                <input id="bvgAlter" type="number" min="18" max="64" value="40" class="field-input" />
+              </label>
+              <label class="field">
+                <span class="field-label">Vorsorge-Plan</span>
+                <select id="bvgPlan" class="field-select">
+                  <option value="min">BVG-Minimum (Sparsätze 7 / 10 / 15 / 18 %)</option>
+                  <option value="plus" selected>BVG-Plus (Sparsätze 10 / 13 / 17 / 19 %)</option>
+                  <option value="kader">Kaderplan (+ Überobligatorium, 18 / 20 / 23 / 25 %)</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Aufteilung AG / AN</span>
+                <select id="bvgSplit" class="field-select">
+                  <option value="50">50 / 50 (Standard)</option>
+                  <option value="60">60 AG / 40 AN (Benefit)</option>
+                  <option value="100">100 % AG (Top-Benefit)</option>
+                </select>
+              </label>
+              <p class="tool-hint">Koord. Lohn = min(BVG-Max 90’720 oder Überobli-Lohn) − Koord.abzug 26’460. Sparbeiträge altersabhängig — Tabelle aus BVG-Reglement-Standard. Projektion mit 1.5 % Verzinsung p.a.</p>
+            </div>
+
+            <div>
+              <div class="result-hero dark mb-3">
+                <div class="rh-eyebrow">Jährlicher Sparbeitrag</div>
+                <div class="rh-value"><span class="rh-currency">CHF</span><span id="bvgSparTotal">0</span></div>
+                <div class="rh-sub">davon AG: CHF <span id="bvgSparAg">0</span> · AN: CHF <span id="bvgSparAn">0</span></div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">Versicherter Lohn (BVG-Plafond)</span><span class="val">CHF <span id="bvgVersLohn">0</span></span></div>
+                <div class="result-row"><span class="lbl">Koordinationsabzug</span><span class="val">−CHF 26’460</span></div>
+                <div class="result-row total"><span class="lbl">Koord. Lohn</span><span class="val">CHF <span id="bvgKoordLohn">0</span></span></div>
+                <div class="result-row"><span class="lbl">Aktueller Sparsatz <small id="bvgSparSatzLbl">Alter 40</small></span><span class="val"><span id="bvgSparSatz">0</span> %</span></div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-row"><span class="lbl">Kapital in 10 Jahren <small>(1.5 % Zins)</small></span><span class="val">CHF <span id="bvg10y">0</span></span></div>
+                <div class="result-row"><span class="lbl">Kapital in 20 Jahren</span><span class="val">CHF <span id="bvg20y">0</span></span></div>
+                <div class="result-row total"><span class="lbl">Kapital bis Pension (65)</span><span class="val">CHF <span id="bvg65">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STANDARD VS. INDIVIDUELL ─────────────────────────── -->
+    <section class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Entscheidung pro Baustein</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Standard oder individuell — wo lohnt sich was?</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Eine reine Standard-Lösung deckt 80 % der Fälle ab. Aber bei Kader­löhnen, Branchen­risiken oder besonderen Lohnstrukturen rechnen sich individuelle Bausteine schnell. Hier unsere unabhängige Einschätzung pro Bereich.
+        </p>
+
+        <div class="space-y-5">
+          <div class="compare-card">
+            <div class="compare-title">BVG-Basis</div>
+            <div class="compare-grid">
+              <div class="compare-cell std">
+                <div class="cc-eyebrow">Standard</div>
+                <p>Anschluss an eine Sammel­stiftung (AXA, Helvetia, Swiss Life, Vita) mit BVG-Mindest­leistungen. Plug-and-play, geringer Verwaltungs­aufwand.</p>
+              </div>
+              <div class="compare-cell ind">
+                <div class="cc-eyebrow">Individuell</div>
+                <p>Eigene Stiftung, höhere Sparbeiträge (bis 25 %), Kader­pläne mit Über­obligatorium, 1e-Pläne ab Lohn CHF 132’300 mit selbst gewählter Anlagestrategie.</p>
+              </div>
+            </div>
+            <div class="compare-rec">
+              <strong>Glatti-Empfehlung:</strong> Standard für KMU bis ~20 MA · individuell sobald Inhaber­löhne über CHF 130k oder mehrere Lohnstufen.
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-title">UVG (Unfall)</div>
+            <div class="compare-grid">
+              <div class="compare-cell std">
+                <div class="cc-eyebrow">Standard</div>
+                <p>Suva-Branche oder Privat­versicherer für nicht-Suva-pflichtige Branchen. Deckung bis CHF 148’200 — reicht für Mehrheit der Angestellten.</p>
+              </div>
+              <div class="compare-cell ind">
+                <div class="cc-eyebrow">Individuell (UVGZ)</div>
+                <p>Lohn­anteile über CHF 148’200, Invaliden- und Hinter­lassenen-Renten ergänzen. Höhere Tag­geld-Sätze (90–100 % statt 80 %).</p>
+              </div>
+            </div>
+            <div class="compare-rec">
+              <strong>Glatti-Empfehlung:</strong> UVGZ ab ~3 MA mit Lohn über CHF 100k. Pflicht für GL/Inhaber mit hohem Lohn.
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-title">KTG (Krankentaggeld)</div>
+            <div class="compare-grid">
+              <div class="compare-cell std">
+                <div class="cc-eyebrow">Standard</div>
+                <p>80 % Lohn, 60 Tage Wartefrist, 730 Tage Leistung. Kollektiv­vertrag mit Erfahrungs­tarif. Plafond bei CHF 300’000 Lohn.</p>
+              </div>
+              <div class="compare-cell ind">
+                <div class="cc-eyebrow">Individuell</div>
+                <p>Wartefrist 30 / 14 / 0 Tage, 90–100 % Deckung, Lohn­summe über Plafond, Kader-Sonder­konditionen, kürzere Risiko­karenz.</p>
+              </div>
+            </div>
+            <div class="compare-rec">
+              <strong>Glatti-Empfehlung:</strong> Standard reicht meist. Individuell für Tech-Firmen, Anwalts­kanzleien — überall wo Personalressourcen knapp sind.
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-title">Kollektiv-Krankenkasse</div>
+            <div class="compare-grid">
+              <div class="compare-cell std">
+                <div class="cc-eyebrow">Standard</div>
+                <p>Mitarbeitende sind privat KVG-pflicht­versichert. AG nicht beteiligt — keine Verträge nötig.</p>
+              </div>
+              <div class="compare-cell ind">
+                <div class="cc-eyebrow">Individuell (Benefit)</div>
+                <p>Kollektiv­vertrag mit CSS / Helsana / Concordia / Swica / Sympany — Rabatte 5–15 % auf VVG-Zusatz für Mitarbeitende.</p>
+              </div>
+            </div>
+            <div class="compare-rec">
+              <strong>Glatti-Empfehlung:</strong> Lohnt sich ab 10+ MA als Recruiting-Argument. Aktiv kommunizieren, sonst kennen es die MA nicht.
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-title">Sach &amp; Haftpflicht</div>
+            <div class="compare-grid">
+              <div class="compare-cell std">
+                <div class="cc-eyebrow">Standard</div>
+                <p>Betriebs­haftpflicht (5–10 Mio.), Sach-Versicherung (Inventar, Geschäfts­einrichtung), Gebäude­glas.</p>
+              </div>
+              <div class="compare-cell ind">
+                <div class="cc-eyebrow">Individuell</div>
+                <p>Cyber-Versicherung, D&amp;O (Geschäftsführer­haftpflicht), Rechtsschutz Betrieb, Berufs­haftpflicht je nach Branche (Architekten, Ärzte, IT).</p>
+              </div>
+            </div>
+            <div class="compare-rec">
+              <strong>Glatti-Empfehlung:</strong> D&amp;O ab GmbH/AG mit externem VR. Cyber bei jedem Online-Geschäft. Berufs­haftpflicht branchen­spezifisch.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. + 3. SÄULE ROLLE ─────────────────────────── -->
+    <section class="py-16 lg:py-20 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Rolle 2. + 3. Säule</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">Was Pflicht ist — und was du gestalten darfst.</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Die 2. Säule kennt ein Minimum, das du nicht unterschreiten kannst — und nach oben sehr viel Spielraum. Die 3. Säule ist komplett individuell, dafür der stärkste Steuer­hebel für Inhaber.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <!-- 2. Säule -->
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">2. Säule (BVG)</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Obligatorium = Minimum.</h3>
+            <p class="text-ink-700 text-[0.95rem] leading-relaxed mb-5">
+              Spar­beiträge 7–18 % je nach Alter, Risiko­leistungen, Mindest­zinssatz auf Spar­kapital. Diese Werte gelten immer. Du kannst sie nicht unterschreiten — aber gezielt nach oben anpassen.
+            </p>
+            <div class="label text-ink-500 mb-3">Individuell gestaltbar</div>
+            <ul class="space-y-2 text-[0.93rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Höhere Spar­beiträge (z.B. 20 % statt 18 %)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Über­obligatorium für Löhne über CHF 90’720</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Verteilung AG / AN (z.B. AG 60 % statt 50 %)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Kader­pläne mit Sonder­beiträgen</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>1e-Pläne (eigene Anlage­strategie ab CHF 132’300)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Wahl der Stiftung (Sammel- vs. eigene)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Anlage­strategie der Stiftung (defensiv – ausgewogen – offensiv)</span></li>
+            </ul>
+          </div>
+
+          <!-- 3. Säule -->
+          <div class="card p-7">
+            <div class="label text-brand-600 mb-3">3. Säule (privat)</div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3">Komplett freiwillig — dafür voll individuell.</h3>
+            <p class="text-ink-700 text-[0.95rem] leading-relaxed mb-5">
+              Säule 3a (gebunden, voll steuer­lich abzugs­fähig) und 3b (frei, ungebunden). Als Inhaber:in nutzt du den Steuer­hebel doppelt: privat + auf der Firma­seite via PK-Einkäufe.
+            </p>
+            <div class="label text-ink-500 mb-3">Individuell gestaltbar</div>
+            <ul class="space-y-2 text-[0.93rem] text-ink-700">
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Anbieter wählen (Bank / Versicherung / Online: Everon, VIAC, finpension)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Anlage­strategie (Cash bis 100 % Aktien)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Tranchen-Strategie (3–5 Konten für gestaffelten Bezug)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Bezug für Wohn­eigentum (WEF), Selbst­ständigkeit oder Pensionierung</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Selbst­ständige ohne PK: bis CHF 36’288 / Jahr (20 % vom Lohn)</span></li>
+              <li class="flex gap-2"><span class="text-brand-600 shrink-0">→</span><span>Säule 3b für flexible Vermögens­bildung ohne Bezugs­einschränkung</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKLISTE ─────────────────────────── -->
+    <section id="checkliste" class="py-16 lg:py-20">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="pillar-eyebrow">Checkliste · druckbar</div>
+        <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">38 Punkte, die wir mit dir durchgehen.</h2>
+        <p class="text-ink-700 max-w-3xl mb-10 lg:text-lg">
+          Drucke die Liste aus (siehe Print-Button unten) oder hake sie vor dem Termin durch. So sparen wir dir 30 Minuten und du weisst, wo du noch unsicher bist.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div class="check-group">
+            <h4>Vor der Gründung</h4>
+            <ul>
+              <li><span class="check-box"></span><span>Rechtsform geklärt? (Einzelfirma vs. GmbH vs. AG — beeinflusst AHV-Status + Sozialversicherungen)</span></li>
+              <li><span class="check-box"></span><span>Geschäftsplan + Lohn­strategie für die ersten 12–24 Monate</span></li>
+              <li><span class="check-box"></span><span>Geplante Mitarbeitenden­zahl + Lohn­niveau (BVG-relevant)</span></li>
+              <li><span class="check-box"></span><span>Branche definiert (UVG-Tarif, BVG-Risiko­klasse)</span></li>
+              <li><span class="check-box"></span><span>Inhaber­lohn definiert (bei GmbH / AG: Selbst­anstellung)</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group">
+            <h4>1. Säule — sofort bei Gründung</h4>
+            <ul>
+              <li><span class="check-box"></span><span>AHV-Anmeldung als Arbeitgeber bei kantonaler Ausgleichs­kasse</span></li>
+              <li><span class="check-box"></span><span>AHV-Status als Selbst­ständig (bei Einzelfirma) bestätigen lassen</span></li>
+              <li><span class="check-box"></span><span>FAK-Anschluss (kantonal — Familien­zulagen)</span></li>
+              <li><span class="check-box"></span><span>EO-Beiträge sind in AHV inkludiert (kein Extra-Setup)</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group">
+            <h4>2. Säule — vor erster Lohnzahlung</h4>
+            <ul>
+              <li><span class="check-box"></span><span>BVG-Stiftung wählen (Sammel­stiftung oder eigene)</span></li>
+              <li><span class="check-box"></span><span>Spar­beiträge definieren — Mindest oder Über­obligatorium?</span></li>
+              <li><span class="check-box"></span><span>Kader­plan für Geschäftsleitung sinnvoll?</span></li>
+              <li><span class="check-box"></span><span>UVG-Anschluss: Suva-pflichtig oder Privat­versicherer?</span></li>
+              <li><span class="check-box"></span><span>UVG-Zusatz (UVGZ) bei Löhnen &gt; CHF 100k</span></li>
+              <li><span class="check-box"></span><span>KTG-Lösung definieren (Wartefrist, Deckung, Plafond)</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group">
+            <h4>Personen­versicherungen — optional</h4>
+            <ul>
+              <li><span class="check-box"></span><span>Kollektiv-Krankenkasse als Benefit (ab 10+ MA)?</span></li>
+              <li><span class="check-box"></span><span>Mutterschafts­zusatz (über 14 Wochen EO hinaus)?</span></li>
+              <li><span class="check-box"></span><span>Vaterschafts­zusatz (über 2 Wochen EO hinaus)?</span></li>
+              <li><span class="check-box"></span><span>3a-Förderung für Mitarbeitende kommunizieren</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group">
+            <h4>Sach + Haftpflicht</h4>
+            <ul>
+              <li><span class="check-box"></span><span>Betriebs­haftpflicht (mind. CHF 5 Mio. Deckung)</span></li>
+              <li><span class="check-box"></span><span>Sach + Inventar (Brand, Wasser, Diebstahl)</span></li>
+              <li><span class="check-box"></span><span>Cyber-Versicherung (bei Online-Geschäft)</span></li>
+              <li><span class="check-box"></span><span>D&amp;O (Geschäfts­führer­haftpflicht) für GmbH / AG</span></li>
+              <li><span class="check-box"></span><span>Rechts­schutz Betrieb (Arbeitsrecht, Vertragsrecht)</span></li>
+              <li><span class="check-box"></span><span>Berufs­haftpflicht (branchen­spezifisch)</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group">
+            <h4>Lohnabrechnung + Compliance</h4>
+            <ul>
+              <li><span class="check-box"></span><span>Lohn­summe jährlich an Ausgleichs­kasse melden</span></li>
+              <li><span class="check-box"></span><span>BVG-Lohn­summe jährlich an Stiftung melden</span></li>
+              <li><span class="check-box"></span><span>UVG-Lohn­summe jährlich melden (Prämien-Anpassung)</span></li>
+              <li><span class="check-box"></span><span>Quellen­steuer für ausländische Mitarbeitende</span></li>
+              <li><span class="check-box"></span><span>Spesen­reglement von kantonaler Steuer­verwaltung genehmigt</span></li>
+              <li><span class="check-box"></span><span>Mehrwert­steuer-Anmeldung (ab CHF 100k Umsatz pflichtig)</span></li>
+            </ul>
+          </div>
+
+          <div class="check-group md:col-span-2">
+            <h4>Inhaberseite (privat — oft vergessen)</h4>
+            <ul>
+              <li><span class="check-box"></span><span>3a-Konto mit Plan zur Voll­ausschöpfung (Tranchen über 3–5 Konten)</span></li>
+              <li><span class="check-box"></span><span>Eigene PK-Einkäufe planen (CHF 30k – 100k pro Jahr · Steuer­hebel)</span></li>
+              <li><span class="check-box"></span><span>Risiko­leistungen für Familie prüfen (Tod, Invalidität)</span></li>
+              <li><span class="check-box"></span><span>Vorsorge­auftrag + Testament regeln (Geschäfts­nachfolge!)</span></li>
+              <li><span class="check-box"></span><span>Lohn / Dividende-Strategie steuerlich optimiert</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <button onclick="window.print()" class="btn-ghost !text-sm">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Checkliste drucken
+          </button>
+          <a href="kontakt.html?topic=firmengruendung" class="btn-primary !text-sm">
+            Beratungs­termin anfragen
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA ─────────────────────────── -->
+    <section class="cta-block py-20 lg:py-28">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="rounded-3xl bg-ink-950 text-white p-10 lg:p-16 relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-[400px] h-[400px] bg-brand-600 rounded-full blur-3xl opacity-25 pointer-events-none" aria-hidden="true"></div>
+          <div class="relative max-w-2xl">
+            <div class="label text-brand-200 mb-5">Erstgespräch · 30 Minuten · kostenlos</div>
+            <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-5">
+              Welche Rechtsform passt zu deinem Vorhaben?
+            </h2>
+            <p class="text-ink-300 lg:text-lg leading-relaxed mb-8">
+              Wir gehen mit dir Schritt für Schritt durch — Rechtsform, Sozial­versicherungen, Vorsorge, Steuer­strategie. Eine Person, ein Festpreis, transparente Notar­kosten. Du bist nie alleine.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="kontakt.html?topic=firmengruendung" class="btn-primary !bg-white !text-ink-950 hover:!bg-brand-600 hover:!text-white !px-6 !py-4 !text-base">
+                Gründer-Erstgespräch buchen
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="firmenkunden.html#firmengruendung" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base">
+                Gründungs-Pakete ansehen
+              </a>
+              <a href="tel:+41774090519" class="btn-ghost !border-white/30 !text-white hover:!bg-white hover:!text-ink-950 !px-6 !py-4 !text-base">
+                <span class="num-tabular">+41 77 409 05 19</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-ink-200 py-16">
+    <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+      <div class="grid lg:grid-cols-12 gap-10 mb-16">
+        <div class="lg:col-span-4">
+          <img src="./assets/logo-app.png" alt="Glatt Broker" class="brand-logo-footer mb-5" />
+          <p class="text-ink-700 max-w-xs">
+            Unabhängige Versicherungs-, Vorsorge- und Steuer­beratung in der Schweiz. FINMA-registriert seit 2017.
+          </p>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Privatkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="krankenkasse.html" class="ulink">Krankenkasse</a></li>
+            <li><a href="vorsorge.html" class="ulink">3. Säule</a></li>
+            <li><a href="steuern.html" class="ulink">Steuern</a></li>
+            <li><a href="finanzen.html" class="ulink">Finanzen</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2">
+          <h4 class="label text-ink-500 mb-4">Firmenkunden</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li><a href="firmenkunden.html#pensionskasse" class="ulink">Pensionskasse</a></li>
+            <li><a href="firmenkunden.html#kader" class="ulink">Kadervorsorge</a></li>
+            <li><a href="firma-gruenden.html" class="ulink">Firma gründen</a></li>
+            <li><a href="firmenkunden.html#kmu" class="ulink">KMU-Beratung</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-4">
+          <h4 class="label text-ink-500 mb-4">Kontakt</h4>
+          <ul class="space-y-2.5 text-ink-700">
+            <li class="num-tabular">+41 77 409 05 19</li>
+            <li>online@glattbroker.ch</li>
+            <li class="text-ink-500 mt-2">Glatt Broker AG · Staubstrasse 15 · 8038 Zürich</li>
+          </ul>
+          <div class="mt-5 flex gap-2">
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">FINMA 35821</span>
+            <span class="label text-ink-500 px-3 py-1.5 rounded-full border border-ink-200">Cicero</span>
+          </div>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-ink-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-ink-500">
+        <p>© 2026 Glatt Broker AG · CH-020.3.043.123-4</p>
+        <p class="num-tabular">Designed in Zürich</p>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-app-bar" aria-label="Schnelle Aktionen">
+    <a href="tel:+41774090519" class="call">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+      <span>Anrufen</span>
+    </a>
+    <a href="kontakt.html?topic=firmengruendung" class="consult">
+      <span>Gründer-Beratung</span>
+    </a>
+  </nav>
+
+  <script>
+    addEventListener('load', () => setTimeout(() => document.getElementById('loader')?.classList.add('done'), 200));
+
+    (function mobileMenu() {
+      const toggle = document.getElementById('mobileMenuToggle');
+      const close  = document.getElementById('mobileMenuClose');
+      const menu   = document.getElementById('mobileMenu');
+      if (!toggle || !menu) return;
+      const open = () => { menu.classList.add('open'); document.body.classList.add('menu-open'); toggle.setAttribute('aria-expanded', 'true'); };
+      const shut = () => { menu.classList.remove('open'); document.body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', 'false'); };
+      toggle.addEventListener('click', open);
+      close?.addEventListener('click', shut);
+      document.getElementById('mobileMenuLinks')?.addEventListener('click', (e) => {
+        if (e.target.closest('a[href^="#"]')) shut();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) shut();
+      });
+    })();
+
+    (function megaMenu() {
+      const navItems = document.querySelectorAll('[data-nav-item]');
+      if (!navItems.length) return;
+      let openItem = null, leaveTimer = null;
+      function openMenu(item) {
+        if (openItem && openItem !== item) closeMenu(openItem);
+        item.dataset.open = 'true';
+        item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'true');
+        openItem = item;
+      }
+      function closeMenu(item) {
+        if (!item) return;
+        item.dataset.open = 'false';
+        item.querySelector('[data-mega-trigger]')?.setAttribute('aria-expanded', 'false');
+        if (openItem === item) openItem = null;
+      }
+      navItems.forEach((item) => {
+        item.addEventListener('mouseenter', () => { clearTimeout(leaveTimer); openMenu(item); });
+        item.addEventListener('mouseleave', () => { clearTimeout(leaveTimer); leaveTimer = setTimeout(() => closeMenu(item), 140); });
+        item.querySelector('[data-mega-trigger]')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (item.dataset.open === 'true') closeMenu(item);
+          else openMenu(item);
+        });
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && openItem) {
+          const item = openItem;
+          closeMenu(item);
+          item.querySelector('[data-mega-trigger]')?.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (openItem && !openItem.contains(e.target)) closeMenu(openItem);
+      });
+    })();
+
+    (function mobileAccordion() {
+      document.querySelectorAll('.m-acc-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const acc = btn.closest('.m-acc');
+          if (!acc) return;
+          const isOpen = acc.dataset.open === 'true';
+          acc.dataset.open = isOpen ? 'false' : 'true';
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+      });
+    })();
+
+    const nav = document.getElementById('navInner');
+    if (nav) addEventListener('scroll', () => {
+      nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30);
+    }, { passive: true });
+
+    /* ════════════════════════════════════════════════════════════
+       LIVE-RECHNER · firma-gruenden.html
+       3 Tools · alle Werte Schweiz 2026
+       ════════════════════════════════════════════════════════════ */
+    (function rechnerInit() {
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n) => Math.round(n).toLocaleString('de-CH').replace(/,/g, "'");
+      const PI = (id, def) => parseFloat($(id)?.value || def) || 0;
+      const PS = (id) => $(id)?.value || '';
+
+      // ── Konstanten 2026 ──────────────────────────
+      const BVG_EINTRITT = 22680;
+      const BVG_KOORD    = 26460;
+      const BVG_MAX      = 90720;
+      const UVG_MAX      = 148200;
+      const ALV_PLAFOND  = 148200;
+      const AHV_RATE     = 0.053;   // je AN / AG
+      const ALV_RATE     = 0.011;   // je AN / AG bis 148200
+      const ALV_SOLI     = 0.005;   // je AN / AG darüber
+      const NBU_RATE     = 0.015;   // AN — typisch
+      const BVG_VERWALTUNG = 0.005; // ~0.5 % Verwaltung + Risiko separat
+
+      // BVG-Sparsätze nach Plan (auf Alter-Bandverteilung)
+      const SPARSAETZE = {
+        min:    { '25-34': 7,  '35-44': 10, '45-54': 15, '55-64': 18 },
+        plus:   { '25-34': 10, '35-44': 13, '45-54': 17, '55-64': 19 },
+        kader:  { '25-34': 18, '35-44': 20, '45-54': 23, '55-64': 25 },
+      };
+      const altersBand = (a) => a < 25 ? '25-34' : a < 35 ? '25-34' : a < 45 ? '35-44' : a < 55 ? '45-54' : '55-64';
+
+      // Marginalsätze 2026 (vereinfacht aus ESTV — Gesamt-Steuer Bund+Kanton+Gemeinde+Kirche)
+      const MARG = {
+        zh:   [[0,0],[40000,12],[80000,21],[100000,26],[150000,30],[200000,33],[300000,37],[500000,40]],
+        'zh-v':[[0,0],[60000,11],[100000,18],[150000,24],[200000,28],[300000,33],[500000,38]],
+        zg:   [[0,0],[40000,8], [80000,14],[120000,18],[200000,22],[300000,24],[500000,26]],
+        ge:   [[0,0],[50000,16],[100000,28],[150000,34],[200000,38],[300000,43],[500000,45]],
+        ti:   [[0,0],[40000,11],[80000,20],[150000,28],[200000,33],[300000,37],[500000,40]],
+        be:   [[0,0],[40000,14],[80000,23],[150000,30],[200000,35],[300000,38],[500000,41]],
+        bs:   [[0,0],[50000,15],[100000,24],[150000,30],[200000,34],[300000,38],[500000,40]],
+      };
+      function margRate(kt, einkommen) {
+        const rows = MARG[kt] || MARG.zh;
+        let r = 0;
+        for (const [thr, pct] of rows) if (einkommen >= thr) r = pct;
+        return r;
+      }
+
+      // ── TOOL 1: Lohnnebenkosten-Rechner ─────────
+      function calcLohn() {
+        const brutto = PI('lnBrutto');
+        const alter  = PI('lnAlter');
+        const fakPct = PI('lnKanton') / 100;
+        const buPct  = PI('lnBranche') / 100;
+        const ktgRaw = PS('lnKtg').split(',').map(Number);
+        const ktgAnPct = (ktgRaw[0] || 0) / 100;
+        const ktgAgPct = (ktgRaw[1] || 0) / 100;
+
+        // AHV/IV/EO
+        const ahvAn = brutto * AHV_RATE;
+        const ahvAg = brutto * AHV_RATE;
+
+        // ALV (mit Soli über Plafond)
+        const alvBase = Math.min(brutto, ALV_PLAFOND);
+        const alvSoli = Math.max(0, brutto - ALV_PLAFOND);
+        const alvAn = alvBase * ALV_RATE + alvSoli * ALV_SOLI;
+        const alvAg = alvBase * ALV_RATE + alvSoli * ALV_SOLI;
+
+        // BVG: koord. Lohn × Sparsatz × 50/50 + Risiko/Verw. 3 % auf Lohn (50/50)
+        const versLohn = Math.min(brutto, BVG_MAX);
+        const koord = Math.max(0, versLohn - BVG_KOORD);
+        const sparSatz = (SPARSAETZE.min[altersBand(alter)] || 0) / 100;
+        const bvgSparTotal = koord * sparSatz;
+        const bvgRisiko = koord * 0.03; // 3 % Risiko + Verwaltung
+        const bvgTotal = bvgSparTotal + bvgRisiko;
+        const bvgAn = bvgTotal / 2;
+        const bvgAg = bvgTotal / 2;
+
+        // UVG-BU (AG zahlt) — auf UVG-Lohn
+        const uvgBase = Math.min(brutto, UVG_MAX);
+        const buAg = uvgBase * buPct;
+
+        // UVG-NBU (AN zahlt typisch) — auf UVG-Lohn
+        const nbuAn = uvgBase * NBU_RATE;
+
+        // KTG
+        const ktgAn = brutto * ktgAnPct;
+        const ktgAg = brutto * ktgAgPct;
+
+        // FAK (AG zahlt)
+        const fakAg = brutto * fakPct;
+
+        // Netto / Totale
+        const totalAnAbzuege = ahvAn + alvAn + bvgAn + nbuAn + ktgAn;
+        const netto = brutto - totalAnAbzuege;
+        const totalAgNeben = ahvAg + alvAg + bvgAg + buAg + ktgAg + fakAg;
+        const agTotal = brutto + totalAgNeben;
+        const agPct = brutto > 0 ? (totalAgNeben / brutto) * 100 : 0;
+
+        // Render
+        $('lnBrutto2').textContent = fmt(brutto);
+        $('lnAhvAn').textContent = fmt(ahvAn);
+        $('lnAlvAn').textContent = fmt(alvAn);
+        $('lnBvgAn').textContent = fmt(bvgAn);
+        $('lnNbuAn').textContent = fmt(nbuAn);
+        $('lnKtgAn').textContent = fmt(ktgAn);
+        $('lnKtgLblAn').textContent = (ktgAnPct * 100).toFixed(2) + ' %';
+        $('lnNetto').textContent = fmt(netto);
+
+        $('lnAhvAg').textContent = fmt(ahvAg);
+        $('lnAlvAg').textContent = fmt(alvAg);
+        $('lnBvgAg').textContent = fmt(bvgAg);
+        $('lnBuAg').textContent = fmt(buAg);
+        $('lnFakAg').textContent = fmt(fakAg);
+        $('lnKtgAg').textContent = fmt(ktgAg);
+        $('lnAgNeben').textContent = fmt(totalAgNeben);
+        $('lnKtgLblAg').textContent = (ktgAgPct * 100).toFixed(2) + ' %';
+
+        const branche = $('lnBranche')?.selectedOptions[0]?.text || '';
+        const kanton = $('lnKanton')?.selectedOptions[0]?.text || '';
+        $('lnBuLbl').textContent = branche;
+        $('lnFakLbl').textContent = kanton;
+
+        $('lnAgTotal').textContent = fmt(agTotal);
+        $('lnAgPct').textContent = agPct.toFixed(1);
+      }
+
+      ['lnBrutto','lnAlter','lnKanton','lnBranche','lnKtg'].forEach((id) => {
+        const el = $(id);
+        if (el) el.addEventListener('input', calcLohn);
+        if (el) el.addEventListener('change', calcLohn);
+      });
+      calcLohn();
+
+      // ── TOOL 2: 3a-Inhaber-Optimierung ──────────
+      function calc3a() {
+        const typ = PS('saTyp');
+        const eink = PI('saEink');
+        const ktn = PS('saKanton');
+        const tranchen = PI('saTranchen');
+
+        let max3a;
+        if (typ === 'sel_nopk') {
+          // 20 % vom Netto-Einkommen, max 36'288
+          max3a = Math.min(Math.round(eink * 0.20), 36288);
+        } else {
+          // Angestellte oder Selbst. mit PK: 7'258
+          max3a = 7258;
+        }
+        const marg = margRate(ktn, eink);
+        const ersparnis = max3a * (marg / 100);
+
+        // Bezugs­steuer Schätzung: Kapitalleistungssteuer ZH (vereinfacht progressiv)
+        // 1/5 Rente-Tarif: 50k → ~3%, 100k → ~5.5%, 200k → ~8%, 300k → ~10%
+        function bezSteuer(kapital) {
+          // grober Tarif Stadt ZH ledig, Kapitalbezug Vorsorge
+          const r =
+            kapital <= 50000 ? 0.025 :
+            kapital <= 100000 ? 0.04 :
+            kapital <= 150000 ? 0.055 :
+            kapital <= 200000 ? 0.07 :
+            kapital <= 300000 ? 0.09 : 0.105;
+          return kapital * r;
+        }
+
+        const kapital25j = max3a * 25; // 25 J Einzahlungs-Horizont, ohne Zins (konservativ)
+        const bez1 = bezSteuer(kapital25j);
+        const bezTranchen = bezSteuer(kapital25j / tranchen) * tranchen;
+        const bezSave = Math.max(0, bez1 - bezTranchen);
+
+        $('saMax').textContent = fmt(max3a);
+        $('saMarg').textContent = marg;
+        $('saMargShow').textContent = `≈ ${marg} %`;
+        $('saSave').textContent = fmt(ersparnis);
+        $('saSaveLine').textContent = fmt(ersparnis);
+        $('saSave10').textContent = fmt(ersparnis * 10);
+        $('saNetto').textContent = fmt(max3a - ersparnis);
+        $('saBez1').textContent = fmt(bez1);
+        $('saBezN').textContent = tranchen;
+        $('saBezN_val').textContent = fmt(bezTranchen);
+        $('saBezSave').textContent = fmt(bezSave);
+      }
+      ['saTyp','saEink','saKanton','saTranchen'].forEach((id) => {
+        const el = $(id);
+        if (el) el.addEventListener('input', calc3a);
+        if (el) el.addEventListener('change', calc3a);
+      });
+      calc3a();
+
+      // ── TOOL 3: BVG-Sparbeitrag-Live ────────────
+      function calcBvg() {
+        const lohn = PI('bvgLohn');
+        const alter = PI('bvgAlter');
+        const plan = PS('bvgPlan');
+        const splitAg = PI('bvgSplit'); // % AG
+
+        // BVG-Min stoppt bei 90'720. Kaderplan kennt Überobligatorium bis 300k.
+        const versLohn = plan === 'kader' ? Math.min(lohn, 300000) : Math.min(lohn, BVG_MAX);
+        const koord = Math.max(0, versLohn - BVG_KOORD);
+        const satzTabelle = SPARSAETZE[plan] || SPARSAETZE.min;
+        const satz = satzTabelle[altersBand(alter)] || 0;
+        const sparTotal = koord * (satz / 100);
+        const sparAg = sparTotal * (splitAg / 100);
+        const sparAn = sparTotal - sparAg;
+
+        // Projektion: aktuelle Sparrate × Restjahre × Bandverteilung wäre exakt, hier vereinfacht aktuelle Rate konstant + 1.5 % Zins
+        function projektion(jahre) {
+          // Mit Sparrate s und Zins r über n Jahre: future-value-of-annuity
+          const r = 0.015;
+          const fv = sparTotal * (Math.pow(1 + r, jahre) - 1) / r;
+          return fv;
+        }
+        const jahreBis65 = Math.max(0, 65 - alter);
+
+        $('bvgVersLohn').textContent = fmt(versLohn);
+        $('bvgKoordLohn').textContent = fmt(koord);
+        $('bvgSparSatz').textContent = satz;
+        $('bvgSparSatzLbl').textContent = `Alter ${alter} · Plan ${plan}`;
+        $('bvgSparTotal').textContent = fmt(sparTotal);
+        $('bvgSparAg').textContent = fmt(sparAg);
+        $('bvgSparAn').textContent = fmt(sparAn);
+        $('bvg10y').textContent = fmt(projektion(10));
+        $('bvg20y').textContent = fmt(projektion(20));
+        $('bvg65').textContent = fmt(projektion(jahreBis65));
+      }
+      ['bvgLohn','bvgAlter','bvgPlan','bvgSplit'].forEach((id) => {
+        const el = $(id);
+        if (el) el.addEventListener('input', calcBvg);
+        if (el) el.addEventListener('change', calcBvg);
+      });
+      calcBvg();
+    })();
+  </script>
+</body>
+</html>

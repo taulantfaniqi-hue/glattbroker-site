@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unfallversicherung (UVG) – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-unfall',
+  title: 'Unfallversicherung (UVG)',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'https://www.example.ch' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['AG', 'GmbH', 'Einzelfirma', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-123.456.789' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verbandszugehoerigkeit', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche', label: 'Wenn ja, welche?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentumsform', label: 'Standort A – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentumsform', label: 'Standort B – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentumsform', label: 'Standort C – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_adresse', label: 'Adresse des Gebäudes', type: 'text', col: 'full' },
+            { id: 'eigentuemer_plz_ort', label: 'PLZ/Ort', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Personal',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z.B. 2024' },
+            { id: 'beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'familienmitglieder_maenner', label: 'Davon mitarbeitende Familienmitglieder – Männer', type: 'number' },
+            { id: 'familienmitglieder_frauen', label: 'Davon mitarbeitende Familienmitglieder – Frauen', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Angaben in CHF. UVG-Lohnsumme = versicherter Lohn gemäss UVG; Überschuss-Lohnsumme = Lohnanteile über dem UVG-Maximum; AHV-Lohnsumme = massgebender AHV-Lohn.',
+          fields: [
+            {
+              id: 'lohnsummen_tabelle',
+              label: 'Lohnsummen (CHF)',
+              type: 'table',
+              columns: [
+                'Kategorie',
+                'Gesamtes Personal UVG-Lohnsumme',
+                'Gesamtes Personal Überschuss-Lohnsumme',
+                'Gesamtes Personal AHV-Lohnsumme',
+                'Personal < 8 h/Woche AHV-Lohnsumme'
+              ],
+              rows: 3
+            }
+          ]
+        },
+        {
+          label: 'Besondere Mitarbeitersituationen',
+          fields: [
+            { id: 'voruebergehend_arbeitsunfaehig', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Versicherungsdetails',
+      sections: [
+        {
+          label: 'Offerte und Versicherungsart',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'suva_unterstellt', label: 'Der Suva unterstellter Betrieb (UVG Art. 66)', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'obligatorische_uv_offerte', label: 'Obligatorische Unfallversicherung – Offerte erwünscht (UVG Art. 1a, für alle in der Schweiz beschäftigten Arbeitnehmenden)', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'freiwillige_v_offerte', label: 'Freiwillige Versicherung – Offerte erwünscht (UVG Art. 4, für Selbstständigerwerbende und mitarbeitende Familienangehörige)', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Freiwillig Versicherte Personen',
+          note: 'Für Selbstständigerwerbende und ihre mitarbeitenden Familienangehörigen gemäss UVG Art. 4.',
+          fields: [
+            {
+              id: 'freiwillig_versicherte',
+              label: 'Freiwillig versicherte Personen',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geburtsdatum', 'Selbstständigerwerbende', 'Familienangehörige', 'Jahreslohn (CHF)'],
+              rows: 4
+            }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer und Zahlweise',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Vertragsbeginn', type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Vertragsablauf', type: 'date' },
+            { id: 'zahlweise', label: 'Zahlweise', type: 'radio', options: ['jährlich', 'halbjährlich', 'vierteljährlich'] }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'bisheriger_versicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'vorversicherer_ablauf', label: 'Ablauf (Vorversicherer)', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] }
+          ]
+        },
+        {
+          label: 'Risikovorgeschichte',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full' }
+          ]
+        },
+        {
+          label: 'Schadenhistorie',
+          fields: [
+            { id: 'leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme inkl. Reserven (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

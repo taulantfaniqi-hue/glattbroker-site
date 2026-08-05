@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hausratversicherung</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="vorlagen/hausrat-template.js"></script>
+<script src="assets/mandat-fill.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-hausrat',
+  title: 'Hausratversicherung',
+  subtitle: 'Offertformular',
+  signature: false,
+  pdfTemplate: 'HAUSRAT_TPL_B64',
+  steps: [
+    {
+      label: 'Personenangaben',
+      sections: [
+        {
+          label: 'Versicherungsnehmer',
+          fields: [
+            { id: 'geschlecht', label: 'Anrede', type: 'radio', options: ['Mann', 'Frau'], pdfMap: { 'Mann': 'Mann', 'Frau': 'Frau' } },
+            { id: 'vorname_name', label: 'Vorname, Name', type: 'text', required: true, col: 'full', pdf: 'Vorname Name' },
+            { id: 'adresse', label: 'Adresse', type: 'text', col: 'full', pdf: 'Adresse' },
+            { id: 'plz_ort', label: 'PLZ, Ort', type: 'text', pdf: 'PLZ Ort' },
+            { id: 'geb_datum', label: 'Geb. Datum', type: 'date', pdf: 'Geb Datum' },
+            { id: 'nationalitaet', label: 'Nationalität', type: 'text', pdf: 'Nationalität' },
+            { id: 'aufenthaltsbewilligung', label: 'Aufenthaltsbewilligung', type: 'text', placeholder: 'z. B. C-Ausweis', pdf: 'Aufenthaltsbewilligung' },
+            { id: 'personen_ueber_18', label: 'Anzahl Personen über 18 Jahre', type: 'number', pdf: 'Anzahl Personen über 18 Jahre' },
+            { id: 'kinder_unter_15', label: 'Anzahl Kinder unter 15 Jahre', type: 'number', pdf: 'Anzahl Kinder unter 15 Jahre' },
+            { id: 'kinder_namen', label: 'Name Kinder / Geb. Datum Kinder', type: 'textarea', rows: 2, col: 'full', pdf: 'Name Kinder  Geb Datum Kinder' },
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Objekt & Deckung',
+      sections: [
+        {
+          label: 'Vertragsdaten',
+          fields: [
+            { id: 'versicherungsbeginn', label: 'Versicherungsbeginn', type: 'date', pdf: 'Versicherungsbeginn' },
+          ]
+        },
+        {
+          label: 'Versichertes Objekt',
+          fields: [
+            { id: 'objekt_adresse', label: 'Adresse', type: 'text', col: 'full', pdf: 'Adresse_2' },
+            { id: 'objekt_plz_ort', label: 'PLZ / Ort', type: 'text', pdf: 'PLZOrt' },
+            { id: 'objekt_typ', label: 'Objekttyp', type: 'select', options: ['EFH', 'MFH', 'Ferienhaus', 'Fahrnisbauten'], pdfMap: { 'EFH': 'undefined', 'MFH': 'undefined_2', 'Ferienhaus': 'undefined_3', 'Fahrnisbauten': 'undefined_4' } },
+            { id: 'mieter_eigentuemer', label: 'Mieter / Eigentümer', type: 'radio', options: ['Mieter', 'Eigentümer'], pdfMap: { 'Mieter': 'undefined_5', 'Eigentümer': 'undefined_6' } },
+          ]
+        },
+        {
+          label: 'Gewünschte Versicherungsdeckung',
+          fields: [
+            { id: 'versicherungssumme', label: 'Versicherungssumme', type: 'number', suffix: 'CHF', col: 'full', pdf: 'Versicherungssumme' },
+          ]
+        },
+        {
+          label: 'Standarddeckungen',
+          note: 'Bitte gewünschte Deckung und Versicherungssumme auswählen',
+          fields: [
+            { id: 'feuer_elementar', label: 'Feuer / Elementar', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_7' } },
+            { id: 'feuer_vs', label: 'Gewünschte VS Feuer/Elementar', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS' },
+            { id: 'diebstahl', label: 'Diebstahl', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_10' } },
+            { id: 'diebstahl_vs', label: 'Gewünschte VS Diebstahl', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_2' },
+            { id: 'wasser', label: 'Wasser', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_13' } },
+            { id: 'wasser_vs', label: 'Gewünschte VS Wasser', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_3' },
+          ]
+        },
+        {
+          label: 'Zusatzdeckungen',
+          fields: [
+            { id: 'mobiliarglas', label: 'Mobiliarglas', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_16' } },
+            { id: 'mobiliarglas_vs', label: 'Gewünschte VS Mobiliarglas', type: 'select', options: ['0', '200'], pdf: 'Gewünschte VS_4' },
+            { id: 'gebaeudegas', label: 'Gebäudeglas', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_19' } },
+            { id: 'gebaeudegas_vs', label: 'Gewünschte VS Gebäudeglas', type: 'select', options: ['0', '200'], pdf: 'Gewünschte VS_5' },
+            { id: 'diebstahl_auswaerts', label: 'Einfacher Diebstahl auswärts', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'Einfacher Diebstahl auswärts' } },
+            { id: 'diebstahl_auswaerts_vs', label: 'Gewünschte VS Einfacher Diebstahl auswärts', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_6' },
+            { id: 'reisegepaeck', label: 'Reisegepäck', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_24' } },
+            { id: 'reisegepaeck_vs', label: 'Gewünschte VS Reisegepäck', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_7' },
+            { id: 'hausrat_kasko', label: 'Hausrat Kasko', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_27' } },
+            { id: 'hausrat_kasko_vs', label: 'Gewünschte VS Hausrat Kasko', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_8' },
+            { id: 'sportgeraete_kasko', label: 'Sportgeräte Kasko', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_30' } },
+            { id: 'sportgeraete_kasko_vs', label: 'Gewünschte VS Sportgeräte Kasko', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_9' },
+            { id: 'fahrrad_kasko', label: 'Fahrrad Kasko', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_33' } },
+            { id: 'fahrrad_kasko_vs', label: 'Gewünschte VS Fahrrad Kasko', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_10' },
+            { id: 'wertsachen', label: 'Wertsachen (siehe Auflistung)', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'Wertsachen siehe Auflistung' } },
+            { id: 'wertsachen_vs', label: 'Gewünschte VS Wertsachen', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_11' },
+          ]
+        },
+        {
+          label: 'Privathaftpflicht',
+          fields: [
+            { id: 'php_vs', label: 'Versicherungssumme Privathaftpflicht', type: 'select', options: ['5 Mio.', '10 Mio.'] },
+            { id: 'php_zusatz_vs', label: 'Zusatz-VS Privathaftpflicht', type: 'select', options: ['0', '200'] },
+            { id: 'fuehren_fremder_mf', label: 'Führen fremder Motorfahrzeuge', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'fuehren_fremder_mf_vs', label: 'VS Führen fremder MF', type: 'select', options: ['0', '200'] },
+            { id: 'drohnen', label: 'Drohnen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'drohnen_gewicht', label: 'Drohnen Gewicht', type: 'text', placeholder: 'z. B. < 500g', pdf: 'Gewicht' },
+            { id: 'drohnen_vs', label: 'VS Drohnen', type: 'select', options: ['0', '200'] },
+            { id: 'pferdeschaeden', label: 'Pferdeschäden', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'pferdeschaeden_vs', label: 'Gewünschte VS Pferdeschäden', type: 'select', options: ['0', '200'] },
+            { id: 'jaegerhaftpflicht', label: 'Jägerhaftpflicht', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'jaegerhaftpflicht_bereich', label: 'Jägerhaftpflicht Bereich', type: 'select', options: ['CH', 'Ausland', 'CH und Ausland'] },
+            { id: 'jaegerhaftpflicht_vs', label: 'VS Jägerhaftpflicht', type: 'select', options: ['0', '200'] },
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Gebäude & Vorversicherer',
+      sections: [
+        {
+          label: 'Gebäudeversicherung — Versichertes Gebäude',
+          fields: [
+            { id: 'gebaeude_adresse', label: 'Adresse', type: 'text', col: 'full', pdf: 'Adresse_3' },
+            { id: 'gebaeude_plz_ort', label: 'PLZ / Ort', type: 'text', pdf: 'PLZOrt_2' },
+            { id: 'baujahr', label: 'Baujahr', type: 'number', placeholder: 'z. B. 1985', pdf: 'Baujahr' },
+            { id: 'bauart', label: 'Bauart', type: 'radio', options: ['Massiv', 'Nicht Massiv'], pdfMap: { 'Massiv': 'undefined_54', 'Nicht Massiv': 'undefined_55' } },
+            { id: 'loeschverhaeltnisse', label: 'Löschverhältnisse', type: 'radio', options: ['Mit Hydrant', 'Ohne Hydrant'], pdfMap: { 'Mit Hydrant': 'undefined_56', 'Ohne Hydrant': 'undefined_57' } },
+            { id: 'boden_deckenheizung', label: 'Boden- und Deckenheizung', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_58', 'Nein': 'undefined_59' } },
+            { id: 'flachdach', label: 'Flachdach', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'undefined_60', 'Nein': 'undefined_61' } },
+          ]
+        },
+        {
+          label: 'Gebäudeversicherung — Gewünschte Deckungen',
+          fields: [
+            { id: 'geb_feuer_vs', label: 'Feuer / Elementar — Gewünschte VS', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_13' },
+            { id: 'geb_diebstahl_vs', label: 'Diebstahl — Gewünschte VS', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_14' },
+            { id: 'geb_wasser_vs', label: 'Wasser — Gewünschte VS', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_15' },
+            { id: 'geb_glas_vs', label: 'Glas — Gewünschte VS', type: 'select', options: ['200', '500'], pdf: 'Gewünschte VS_16' },
+            { id: 'geb_gemeinschaftlich', label: 'Gemeinschaftlich benutzte Räume einschliessen', type: 'checkbox', label: 'Gemeinschaftlich benutzte Räume einschliessen', pdf: 'gemeinschaftlich benutzte Räume' },
+            { id: 'geb_haftpflicht_vs', label: 'Gebäudehaftpflicht — Versicherungssumme', type: 'select', options: ['5 Mio.', '10 Mio.'] },
+            { id: 'geb_haftpflicht_zusatz', label: 'Gebäudehaftpflicht Zusatz-VS', type: 'select', options: ['0', '200'] },
+          ]
+        },
+        {
+          label: 'Vorversicherer',
+          fields: [
+            { id: 'vorversicherer_hausrat', label: 'Hat oder hatte der Antragssteller schon eine Hausratversicherung?', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': '1 Hat oder hatte der Antragssteller schon eine Hausratversicherung Ja', 'Nein': 'Nein' } },
+            { id: 'vorversicherer_gesellschaft', label: 'Gesellschaft (Vorversicherer)', type: 'text', col: 'full', pdf: 'Text1' },
+            { id: 'hausrat_schaeden_anzahl', label: 'Wie viele Hausrat-Schäden in den letzten 5 Jahren?', type: 'select', options: ['Keine', '1', '2', '3', '4', '5 oder mehr'], hint: 'Anzahl Schäden in den letzten 5 Jahren', pdfMap: { 'Keine': 'Anzahl  Keine' } },
+            { id: 'php_schaeden_anzahl', label: 'Wie viele Privathaftpflicht-Schäden in den letzten 5 Jahren?', type: 'select', options: ['Keine', '1', '2', '3', '4', '5 oder mehr'], pdfMap: { 'Keine': 'Anzahl  Keine_2' } },
+            { id: 'gebaeude_schaeden_anzahl', label: 'Wie viele Gebäude-Schäden in den letzten 5 Jahren?', type: 'select', options: ['Keine', '1', '2', '3', '4', '5 oder mehr'], pdfMap: { 'Keine': 'Anzahl  Keine_3' } },
+          ]
+        },
+        {
+          label: 'Auflistung Wertsachen',
+          note: 'Bitte Objekt und gewünschte Versicherungssumme eintragen',
+          fields: [
+            { id: 'wertsachen_liste', label: '', type: 'table', columns: ['Objekt', 'Gewünschte VS (CHF)'], rows: 5 },
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: '', type: 'textarea', rows: 4, pdf: 'Text5' },
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

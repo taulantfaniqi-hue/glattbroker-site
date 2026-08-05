@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berufliche Vorsorge (BVG) – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-bvg',
+  title: 'Berufliche Vorsorge (BVG)',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', required: true, col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'www.beispiel.ch' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['AG', 'GmbH', 'Einzelfirma', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-123.456.789', col: 'full' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verbandszugehoerigkeit', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welcher', label: 'Ja, welcher Verband?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_gebaeude_adresse', label: 'Adresse (falls Ja)', type: 'text', col: 'full' },
+            { id: 'eigentuemer_gebaeude_plz_ort', label: 'PLZ/Ort (falls Ja)', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Jahresumsatz & Beschäftigte',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z.B. 2024' },
+            { id: 'anzahl_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'anzahl_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'familienmitglieder_maenner', label: 'Davon mitarbeitende Familienmitglieder – Männer', type: 'number' },
+            { id: 'familienmitglieder_frauen', label: 'Davon mitarbeitende Familienmitglieder – Frauen', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Bitte alle Lohnsummen in CHF angeben.',
+          fields: [
+            { id: 'uvg_lohn_maenner', label: 'UVG-Lohnsumme Männer (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'uvg_lohn_frauen', label: 'UVG-Lohnsumme Frauen (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'uvg_lohn_total', label: 'UVG-Lohnsumme Total (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ueberschuss_lohn_maenner', label: 'Überschuss-Lohnsumme Männer (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ueberschuss_lohn_frauen', label: 'Überschuss-Lohnsumme Frauen (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ueberschuss_lohn_total', label: 'Überschuss-Lohnsumme Total (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_maenner', label: 'AHV-Lohnsumme Männer (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_frauen', label: 'AHV-Lohnsumme Frauen (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_total', label: 'AHV-Lohnsumme Total (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_unter8h_maenner', label: 'Personal < 8 h/Woche AHV-Lohnsumme Männer (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_unter8h_frauen', label: 'Personal < 8 h/Woche AHV-Lohnsumme Frauen (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ahv_lohn_unter8h_total', label: 'Personal < 8 h/Woche AHV-Lohnsumme Total (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohn_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Vorversicherung & Personalliste',
+      sections: [
+        {
+          label: 'Offerte & Vorversicherung',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'vorversicherer_vorhanden', label: 'Vorversicherer vorhanden', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'vorversicherer_vertrags_nr', label: 'Vertrags-Nr.', type: 'text' },
+            { id: 'vorversicherer_gesellschaft', label: 'Gesellschaft', type: 'text' },
+            { id: 'vertrag_kuendbar', label: 'Vertrag kündbar?', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'kuendbar_per', label: 'Kündbar per', type: 'date' },
+            { id: 'beginndatum_bvg', label: 'Beginndatum BVG (zwingend erforderlich)', type: 'date', required: true }
+          ]
+        },
+        {
+          label: 'Personalliste',
+          note: 'Bitte die untenstehende Tabelle pro Mitarbeitenden ausfüllen – sofern mehr als 3 MA, bitte Excel-Liste ausfüllen.',
+          fields: [
+            {
+              id: 'personalliste',
+              label: 'Mitarbeitende',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geb. Dat.', 'Geschlecht (W/M)', 'Jahreslohn', 'Pensum in %', 'Einlage gesamt'],
+              rows: 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Planangaben',
+      sections: [
+        {
+          label: 'Eintrittsschwelle & Wartefristen',
+          fields: [
+            { id: 'eintrittsschwelle', label: 'Eintrittsschwelle', type: 'text', placeholder: 'gemäss BVG' },
+            { id: 'reduziert_teilzeit', label: 'Reduziert für Teilzeit', type: 'checkbox' },
+            { id: 'wartefrist_praemienbefreiung', label: 'Wartefrist Prämienbefreiung', type: 'text', placeholder: '3 Monate' },
+            { id: 'wartefrist_invaliditaet', label: 'Wartefrist Invalidität', type: 'text', placeholder: '12 Monate' },
+            { id: 'anspruch_tod_ohne_hinterlassene', label: 'Anspruch bei Tod ohne Hinterlassenenleistung', type: 'text', placeholder: 'Rückgewähr Altersguthaben' },
+            { id: 'einkaeufe_todesfallkapital', label: 'Einkäufe als separates Todesfallkapital auszahlen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Lohndefinitionen Sparen',
+          fields: [
+            { id: 'sparen_koordinationsabzug', label: 'Koordinationsabzug (%)', type: 'text', placeholder: 'gemäss BVG' },
+            { id: 'sparen_teilzeit_reduzieren', label: 'Bei Teilzeit reduzieren', type: 'checkbox' },
+            { id: 'sparen_minimallohn', label: 'Minimallohn (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'sparen_maximallohn', label: 'Maximallohn (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'kommentar_lohndefinition', label: 'Kommentar Lohndefinition (falls gewünschte Definition fehlt)', type: 'textarea', rows: 2, col: 'full' }
+          ]
+        },
+        {
+          label: 'Lohndefinitionen Risiko',
+          fields: [
+            { id: 'risiko_koordinationsabzug', label: 'Koordinationsabzug (%)', type: 'text', placeholder: 'gemäss BVG' },
+            { id: 'risiko_teilzeit_reduzieren', label: 'Bei Teilzeit reduzieren', type: 'checkbox' },
+            { id: 'risiko_minimallohn', label: 'Minimallohn (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'risiko_maximallohn', label: 'Maximallohn (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Altersgrenzen',
+          fields: [
+            { id: 'alter_beginn_sparen', label: 'Beginn Sparen', type: 'number', placeholder: '18' },
+            { id: 'alter_maenner', label: 'Männer', type: 'number', placeholder: '59' },
+            { id: 'alter_frauen', label: 'Frauen', type: 'number', placeholder: '59' },
+            { id: 'alter_kinder', label: 'Kinder', type: 'number', placeholder: '18' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Leistungen & Beiträge',
+      sections: [
+        {
+          label: 'Altersgutschriften (in % des versicherten Sparlohnes)',
+          fields: [
+            { id: 'altersgutschrift_18_24', label: 'Altersgutschrift 18–24 (%)', type: 'number', suffix: '%' },
+            { id: 'altersgutschrift_25_34', label: 'Altersgutschrift 25–34 (%)', type: 'number', suffix: '%' },
+            { id: 'altersgutschrift_35_44', label: 'Altersgutschrift 35–44 (%)', type: 'number', suffix: '%' },
+            { id: 'altersgutschrift_45_54', label: 'Altersgutschrift 45–54 (%)', type: 'number', suffix: '%' },
+            { id: 'altersgutschrift_55_65', label: 'Altersgutschrift 55–65 (%)', type: 'number', suffix: '%' }
+          ]
+        },
+        {
+          label: 'Risikoleistungen',
+          fields: [
+            { id: 'invalidenrente', label: 'Invalidenrente (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'invalidenkinderrente', label: 'Invalidenkinderrente (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'partnerrente', label: 'Partnerrente (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'erweiterte_deckung_partnerrente', label: 'Erweiterte Deckung (Partnerrente)', type: 'checkbox' },
+            { id: 'waisenrente', label: 'Waisenrente', type: 'text', placeholder: 'gem. BVG-Logik' },
+            { id: 'verdopplung_waisenrente', label: 'Verdopplung der Waisenrente', type: 'checkbox' },
+            { id: 'zusaetzliches_todesfallkapital', label: 'Zusätzliches Todesfallkapital', type: 'text', placeholder: '0% AHV-Lohn' },
+            { id: 'todesfallkapital_zusaetzlich', label: 'Zusätzlich zu vorhandenem Altersguthaben', type: 'checkbox' },
+            { id: 'todesfallkapital_verrechnung', label: 'Verrechnung mit bestehendem Altersguthaben', type: 'checkbox' },
+            { id: 'art_altersleistungen', label: 'Art der Altersleistungen', type: 'checkboxgroup', options: ['Kapitalbezug', 'Rentenbezug'], vertical: false },
+            { id: 'kommentar_leistungen', label: 'Kommentar Leistungen', type: 'textarea', rows: 3, col: 'full' }
+          ]
+        },
+        {
+          label: 'Beiträge',
+          fields: [
+            { id: 'arbeitnehmer_beitraege', label: 'Arbeitnehmerbeiträge in % der Beiträge', type: 'text', placeholder: 'z.B. 50%' },
+            { id: 'beitraege_sparteil', label: 'Beiträge: Sparteil', type: 'text', col: 'full' },
+            { id: 'weitere_kosten', label: 'Weitere Kosten', type: 'text', col: 'full' },
+            { id: 'kommentar_beitraege', label: 'Kommentar Beiträge', type: 'textarea', rows: 3, col: 'full' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bisheriger Versicherer & Schadenhistorie',
+      sections: [
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertragsdauer_beginn', label: 'Beginn', type: 'date', required: true },
+            { id: 'vertragsdauer_ablauf', label: 'Ablauf', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'bisheriger_versicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'bisheriger_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'bisheriger_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] }
+          ]
+        },
+        {
+          label: 'Risikoprüfung',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' }
+          ]
+        },
+        {
+          label: 'Leistungsfälle',
+          fields: [
+            { id: 'leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme inkl. Reserven (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 4, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

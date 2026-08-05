@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cockpit-Zugang · Glatt Broker AG</title>
+<style>
+  :root { --rot: #CC2936; --ink: #15181f; --muted: #6b7280; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f7f7f5; color: var(--ink); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  main { width: 100%; max-width: 760px; }
+  .top { text-align: center; margin-bottom: 28px; }
+  .top .brand { font-weight: 700; letter-spacing: .02em; color: var(--rot); font-size: 22px; }
+  .top p { color: var(--muted); margin-top: 6px; font-size: 14px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  a.card { display: block; background: #fff; border: 1px solid #e6e6e2; border-radius: 16px; padding: 22px; text-decoration: none; color: inherit; transition: transform .12s ease, box-shadow .12s ease; }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.07); border-color: #ddd; }
+  .icon { font-size: 26px; }
+  h2 { font-size: 17px; margin: 10px 0 4px; }
+  .card p { font-size: 13px; color: var(--muted); line-height: 1.45; }
+  .hint { text-align: center; margin-top: 22px; font-size: 12.5px; color: var(--muted); }
+  .back { display: inline-block; margin-top: 10px; color: var(--rot); text-decoration: none; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div class="brand">GLATT BROKER AG</div>
+    <p>Cockpit-Zugang — wähle deine Ansicht</p>
+  </div>
+  <div class="grid">
+    <a class="card" id="lnkKunde" href="#">
+      <div class="icon">🙋</div>
+      <h2>Kunden-Portal</h2>
+      <p>Verträge, Dokumente, Steuern, KI-Beratung und Optimierungen — die Sicht deiner Kunden.</p>
+    </a>
+    <a class="card" id="lnkBerater" href="#">
+      <div class="icon">🧑‍💼</div>
+      <h2>Berater</h2>
+      <p>Inbox, Kundenakten, Pipeline und die Wochenliste mit den wertvollsten Anrufen.</p>
+    </a>
+    <a class="card" id="lnkTippgeber" href="#">
+      <div class="icon">🤝</div>
+      <h2>Tippgeber</h2>
+      <p>Leads erfassen, Status verfolgen, Punkte und Provisionen im Blick.</p>
+    </a>
+    <a class="card" id="lnkAdmin" href="#">
+      <div class="icon">🛠️</div>
+      <h2>Admin · Master</h2>
+      <p>Gesamtübersicht: Alerts, Provisionen, Mandate, Reporting und Steuerung.</p>
+    </a>
+  </div>
+  <div class="hint">
+    Zugangsdaten erhältst du von der Geschäftsleitung.<br>
+    <a class="back" href="index.html">‹ zurück zur Website</a>
+  </div>
+</main>
+<script>
+  (function () {
+    var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    var map = {
+      lnkKunde:     local ? 'http://localhost:3005/login' : 'https://portal.glattbroker.ch/login',
+      lnkBerater:   local ? 'http://localhost:3003/login' : 'https://berater.glattbroker.ch/login',
+      lnkTippgeber: local ? 'http://localhost:3002/login' : 'https://tipp.glattbroker.ch/login',
+      lnkAdmin:     local ? 'http://localhost:3004/login' : 'https://crm.glattbroker.ch/login'
+    };
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.href = map[id];
+    });
+  })();
+</script>
+</body>
+</html>

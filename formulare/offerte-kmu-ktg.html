@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krankentaggeldversicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-ktg',
+  title: 'Krankentaggeldversicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'text' },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-XXX.XXX.XXX' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verbandszugehoerigkeit', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche', label: 'Wenn ja, welcher Verband?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_gebaeude_adresse', label: 'Adresse des Gebäudes', type: 'text', col: 'full' },
+            { id: 'eigentuemer_gebaeude_plz_ort', label: 'PLZ/Ort des Gebäudes', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Finanzkennzahlen',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z.B. 2024' },
+            { id: 'anzahl_beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'anzahl_beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'anzahl_beschaeftigte_total', label: 'Anzahl Beschäftigte – Total', type: 'number' },
+            { id: 'davon_familienmitglieder', label: 'davon mitarbeitende Familienmitglieder', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Bitte alle Lohnsummen in CHF angeben.',
+          fields: [
+            {
+              id: 'lohnsummen_tabelle',
+              label: 'Lohnsummen',
+              type: 'table',
+              columns: [
+                'Kategorie',
+                'Gesamtes Personal UVG-Lohnsumme (CHF)',
+                'Gesamtes Personal Überschuss-Lohnsumme (CHF)',
+                'Gesamtes Personal AHV-Lohnsumme (CHF)',
+                'Personal < 8 h/Woche AHV-Lohnsumme (CHF)'
+              ],
+              rows: 3
+            }
+          ]
+        },
+        {
+          label: 'Besondere Mitarbeitende',
+          fields: [
+            { id: 'ma_voruebergehend_arbeitsunfaehig', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'ma_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Versicherungsdetails',
+      sections: [
+        {
+          label: 'Offerte und Deckung',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'versicherte_personen', label: 'Versicherte Personen', type: 'checkboxgroup', options: ['gesamtes Personal', 'Kader'], vertical: false },
+            { id: 'versicherte_personen_andere', label: 'Versicherte Personen – andere', type: 'text', placeholder: 'andere Personengruppe' },
+            { id: 'leistungsdauer', label: 'Leistungsdauer', type: 'checkboxgroup', options: ['730 Tage abzgl. WF', '720 Tage innert 900'], vertical: false },
+            { id: 'leistungsdauer_andere', label: 'Leistungsdauer – andere', type: 'text', placeholder: 'andere Leistungsdauer' },
+            { id: 'taggeldhoehe', label: 'Taggeldhöhe', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false },
+            { id: 'taggeldhoehe_andere', label: 'Taggeldhöhe – andere', type: 'text', placeholder: 'andere Taggeldhöhe' },
+            { id: 'wartefrist', label: 'Wartefrist', type: 'checkboxgroup', options: ['14 Tage', '30 Tage', '60 Tage'], vertical: false },
+            { id: 'wartefrist_andere', label: 'Wartefrist – andere', type: 'text', placeholder: 'andere Wartefrist' }
+          ]
+        },
+        {
+          label: 'Fixe Leistung für bestimmte Personen',
+          note: 'Tragen Sie hier Personen ein, für die eine fixe Leistung gewünscht wird.',
+          fields: [
+            {
+              id: 'fixe_leistung_tabelle',
+              label: 'Fixe Leistung für',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geburtsdatum', 'Jahreslohn (CHF)', 'Wartefrist', 'Unfall mitversichert (Ja/Nein)'],
+              rows: 4
+            }
+          ]
+        },
+        {
+          label: 'Weitere Leistungen',
+          fields: [
+            { id: 'lohnnachgenuss', label: 'Lohnnachgenuss', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'mutterschaftsergaenzung_prozent', label: 'Mutterschaftsergänzung', type: 'checkboxgroup', options: ['10%', '20%'], vertical: false },
+            { id: 'mutterschaftsergaenzung_zudem', label: 'Mutterschaftsergänzung – zudem', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false },
+            { id: 'mutterschaftsergaenzung_info', type: 'static', label: 'vom 99. bis 112. Tag' }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer & Zahlweise',
+          fields: [
+            { id: 'vertragsdauer_beginn', label: 'Vertragsbeginn', type: 'date' },
+            { id: 'vertragsdauer_ablauf', label: 'Vertragsablauf', type: 'date' },
+            { id: 'zahlweise', label: 'Zahlweise', type: 'radio', options: ['jährlich', 'halbjährlich', 'vierteljährlich'] }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Vorversicherer & Schadenhistorie',
+      sections: [
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'bisheriger_versicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'police_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] }
+          ]
+        },
+        {
+          label: 'Risikobeurteilung',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full' }
+          ]
+        },
+        {
+          label: 'Leistungsfälle in den letzten 5 Jahren',
+          fields: [
+            { id: 'leistungsfaelle_anzahl', label: 'Anzahl Leistungsfälle', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme (inkl. Reserven)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

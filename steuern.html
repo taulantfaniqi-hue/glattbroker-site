@@ -150,6 +150,44 @@
     .tariff-table th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #737373; font-weight: 500; }
     .tariff-table td.r { text-align: right; }
     .tariff-table tr.active td { background: rgba(204,41,54,0.06); color: var(--red); font-weight: 600; }
+
+    /* ── Inline-Tool-Styling für 3 neue Rechner ─── */
+    .s-tool { background: #fff; border: 1px solid #E5E5E5; border-radius: 1.5rem; padding: 2rem 1.75rem; }
+    @media (min-width: 1024px) { .s-tool { padding: 2.5rem; } }
+    .s-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    @media (min-width: 960px) { .s-grid.split { grid-template-columns: 0.9fr 1fr; gap: 2rem; } }
+    .s-field { display: block; }
+    .s-field + .s-field { margin-top: 0.85rem; }
+    .s-field-label {
+      display: block; font-family: var(--font-mono); font-size: 0.66rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #737373; margin-bottom: 0.35rem;
+    }
+    .s-input, .s-select {
+      width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #D4D4D4;
+      border-radius: 0.6rem; background: #fff; color: var(--ink);
+      font-family: inherit; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .s-input:focus, .s-select:focus {
+      outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,41,54,0.1);
+    }
+    .s-result { background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 1rem; padding: 1.25rem 1.35rem; }
+    .s-result + .s-result { margin-top: 0.85rem; }
+    .s-row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; padding: 0.4rem 0; font-size: 0.93rem; }
+    .s-row + .s-row { border-top: 1px dashed #E5E5E5; }
+    .s-row .s-lbl { color: #404040; }
+    .s-row .s-lbl small { display: block; font-size: 0.78rem; color: #737373; }
+    .s-row .s-val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .s-row.total { padding-top: 0.6rem; border-top: 1px solid var(--ink); margin-top: 0.4rem; }
+    .s-row.total .s-val { color: var(--red); font-size: 1.1rem; }
+    .s-hero { background: var(--ink); color: #fff; border-radius: 1rem; padding: 1.5rem 1.5rem 1.6rem; margin-bottom: 0.85rem; }
+    .s-hero.red { background: linear-gradient(135deg, #CC2936, #7A181F); }
+    .s-hero .s-h-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem; }
+    .s-hero .s-h-value { font-size: 2.1rem; line-height: 1; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .s-hero .s-h-value small { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 400; margin-right: 0.35rem; }
+    .s-hero .s-h-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+    .s-hint { font-size: 0.78rem; color: #737373; margin-top: 1rem; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -181,7 +219,6 @@
                 </ul></div>
                 <div class="mega-col"><div class="mega-col-title">Finanzen</div><ul>
                   <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
-                  <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                   <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                 </ul><div class="mega-divider">Tools</div><ul><li><a class="mega-tool-link" href="finanzen.html#vergleich">Performance-Vergleich</a></li></ul></div>
                 <div class="mega-col"><div class="mega-col-title">Steuern</div><ul>
@@ -189,6 +226,7 @@
                   <li><a href="steuern.html">Steueroptimierung</a></li>
                   <li><a href="vorsorge.html#tax">Tranchenplanung 3. Säule</a></li>
                 </ul><div class="mega-divider">Tools</div><ul>
+                  <li><a class="mega-tool-link" href="steuer-check.html">Steuer-Check<span class="mega-sub">Dokument hochladen → Steuer berechnen</span></a></li>
                   <li><a class="mega-tool-link" href="steuern.html#kapitalleistungssteuer">Kapitalleistungssteuer-Rechner</a></li>
                   <li><a class="mega-tool-link" href="steuern.html#grundstueckgewinnsteuer">Grundstückgewinnsteuer-Rechner</a></li>
                 </ul></div>
@@ -223,6 +261,7 @@
               <li><a href="team.html#voices">Stimmen</a></li>
               <li><a href="krankenkasse.html#process">Ablauf einer Beratung</a></li>
               <li><a href="index.html#faq">FAQ</a></li>
+              <li><a class="mega-tool-link" href="lexikon.html">Finanzplaner-Lexikon<span class="mega-sub">327 Begriffe einfach erklärt</span></a></li>
               <li><a href="kontakt.html?topic=karriere">Karriere<span class="mega-soon">bald</span></a></li>
             </ul></div>
           </li>
@@ -268,7 +307,6 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
-              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Steuern</div><ul>
@@ -471,6 +509,18 @@
             <strong>Kapitalleistungssteuer-Rechner</strong> für 3.-Säule-/PK-Bezüge mit ESTV-Daten deiner Gemeinde · <strong>Grundstückgewinnsteuer-Rechner</strong> für Liegenschaftsverkauf nach §225 ZH StG. Beide kostenlos, ohne Anmeldung.
           </p>
         </div>
+        <!-- Featured: Steuer-Check -->
+        <a href="steuer-check.html" class="block mt-8 rounded-2xl bg-ink-950 text-white p-6 sm:p-8 relative overflow-hidden group" style="text-decoration:none">
+          <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full" style="background:var(--red);opacity:.2;filter:blur(60px)"></div>
+          <div class="relative flex flex-col sm:flex-row sm:items-center gap-5 justify-between">
+            <div>
+              <div class="label text-brand-200 mb-2">★ Neu · Steuer-Check Zürich</div>
+              <h3 class="display text-2xl sm:text-3xl mb-2">Wie viel Steuern zahlen Sie wirklich?</h3>
+              <p class="text-ink-300 text-sm max-w-xl">Lohnausweis hochladen oder Eckwerte eingeben — provisorische Berechnung von steuerbarem Einkommen, Vermögen und Steuer (Kanton + Gemeinde + Kirche + Bund). Verifizierte ZH-Tarife, Stand 2026.</p>
+            </div>
+            <span class="btn-primary !bg-brand-600 group-hover:!bg-white group-hover:!text-ink-950 whitespace-nowrap">Steuer-Check starten →</span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -705,6 +755,198 @@
             <div class="font-mono text-brand-600 text-xs font-medium mb-2">TIPP 03</div>
             <h4 class="font-semibold mb-1.5 tracking-tight">Steueraufschub bei Ersatzbeschaffung</h4>
             <p class="text-ink-700 text-[0.93rem] leading-relaxed">Beim Verkauf einer selbstgenutzten Liegenschaft mit Reinvestition in eine neue: Steueraufschub möglich (§ 216 Abs. 3 StG). Frist und Bedingungen prüfen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── STEUEROPTIM-QUICK-CHECK ─── -->
+    <section id="optimierung" class="py-16 lg:py-24">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Steueroptim-Quick-Check</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Wieviel kannst du heuer noch sparen?</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            3a-Vollausschöpfung, PK-Einkauf, Berufsauslagen-Pauschale — die drei grossen Stellschrauben fürs laufende Steuerjahr. Live mit Marginalsatz aus deinem Wohnort.
+          </p>
+        </div>
+
+        <div class="s-tool">
+          <div class="s-grid split">
+            <div>
+              <label class="s-field">
+                <span class="s-field-label">Brutto-Einkommen</span>
+                <input id="opEink" type="number" min="0" step="5000" value="110000" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Wohnort</span>
+                <select id="opKanton" class="s-select">
+                  <option value="zh">Stadt Zürich (ledig)</option>
+                  <option value="zh-v">Stadt Zürich (verheiratet)</option>
+                  <option value="zg">Zug</option>
+                  <option value="ge">Genf</option>
+                  <option value="ti">Lugano</option>
+                  <option value="be">Bern</option>
+                  <option value="bs">Basel-Stadt</option>
+                </select>
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">3a aktuell eingezahlt</span>
+                <input id="op3a" type="number" min="0" max="36288" step="500" value="0" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">PK-Einkauf geplant?</span>
+                <input id="opPk" type="number" min="0" step="5000" value="0" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Aktuelle Berufsauslagen-Pauschale</span>
+                <input id="opBeruf" type="number" min="0" step="500" value="3200" class="s-input" />
+              </label>
+              <p class="s-hint">3a-Maximum Angestellte 2026: CHF 7’258. Berufsauslagen-Pauschale ZH: 3 % vom Lohn, min CHF 2’000 / max CHF 4’000. Marginalsatz aus ESTV 2026 (vereinfacht).</p>
+            </div>
+
+            <div>
+              <div class="s-hero red">
+                <div class="s-h-label">Potenzielle Total-Ersparnis · Jahr</div>
+                <div class="s-h-value"><small>CHF</small><span id="opSaveTotal">0</span></div>
+                <div class="s-h-sub">3a-Lücke + PK-Einkauf + Berufsauslagen-Optim.</div>
+              </div>
+
+              <div class="s-result">
+                <div class="s-row"><span class="s-lbl">Marginal-Steuersatz</span><span class="s-val"><span id="opMarg">0</span> %</span></div>
+                <div class="s-row"><span class="s-lbl">3a-Lücke <small>max 7’258 − aktuell</small></span><span class="s-val">CHF <span id="op3aLuecke">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">→ Steuer-Ersparnis 3a</span><span class="s-val text-emerald-600">CHF <span id="opSave3a">0</span></span></div>
+              </div>
+
+              <div class="s-result">
+                <div class="s-row"><span class="s-lbl">PK-Einkauf geplant</span><span class="s-val">CHF <span id="opPkOut">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">→ Steuer-Ersparnis PK</span><span class="s-val text-emerald-600">CHF <span id="opSavePk">0</span></span></div>
+              </div>
+
+              <div class="s-result">
+                <div class="s-row"><span class="s-lbl">Berufsauslagen Default (3 %)</span><span class="s-val">CHF <span id="opBerufDefault">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">Differenz zur Maximalauslage</span><span class="s-val">CHF <span id="opBerufDelta">0</span></span></div>
+                <div class="s-row total"><span class="s-lbl">→ Steuer-Ersparnis Auslagen</span><span class="s-val text-emerald-600">CHF <span id="opSaveBeruf">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PENDLERABZUG ─── -->
+    <section id="pendlerabzug" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Pendlerabzug-Rechner</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Pendler-Steuerabzug — schnell ausrechnen.</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Auto, öV oder Velo — je nach Verkehrsmittel andere Pauschalen. Bei Bund max. CHF 3’200, bei den Kantonen unterschiedlich. ZH max. CHF 5’100 (Auto) / unbegrenzt (öV).
+          </p>
+        </div>
+
+        <div class="s-tool">
+          <div class="s-grid split">
+            <div>
+              <label class="s-field">
+                <span class="s-field-label">Verkehrsmittel</span>
+                <select id="paTyp" class="s-select">
+                  <option value="oev">öV (GA, Abo, ZVV)</option>
+                  <option value="auto">Auto / Motorrad</option>
+                  <option value="velo">Velo / E-Bike</option>
+                  <option value="gemischt">Gemischt (öV + Auto)</option>
+                </select>
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Distanz Wohnort → Arbeitsort (einfach, km)</span>
+                <input id="paKm" type="number" min="0" max="200" step="1" value="15" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Arbeitstage pro Jahr</span>
+                <input id="paTage" type="number" min="100" max="240" value="220" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">öV-Kosten (Abo, falls vorhanden)</span>
+                <input id="paOev" type="number" min="0" step="100" value="0" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Marginal-Steuersatz <small>(automatisch geschätzt)</small></span>
+                <input id="paMarg" type="number" min="0" max="50" step="1" value="26" class="s-input" />
+              </label>
+              <p class="s-hint">Auto: CHF 0.70/km × 2 × Tage. Velo: CHF 700 Pauschale (ZH). Bund-Limit 2026: CHF 3’200 für direkte Bundessteuer. Marginalsatz aus deinem Einkommen.</p>
+            </div>
+
+            <div>
+              <div class="s-hero red">
+                <div class="s-h-label">Steuer-Ersparnis pro Jahr</div>
+                <div class="s-h-value"><small>CHF</small><span id="paSave">0</span></div>
+                <div class="s-h-sub">durch Pendlerabzug · vorausgesetzt korrekte Belege</div>
+              </div>
+
+              <div class="s-result">
+                <div class="s-row"><span class="s-lbl">Brutto-Pendlerkosten</span><span class="s-val">CHF <span id="paBrutto">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">Bund-Plafond <small>max CHF 3’200</small></span><span class="s-val">CHF <span id="paBundLimit">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">Kanton-Plafond <small>ZH max CHF 5’100 / öV unbeschränkt</small></span><span class="s-val">CHF <span id="paKtLimit">0</span></span></div>
+                <div class="s-row total"><span class="s-lbl">Effektiver Abzug</span><span class="s-val">CHF <span id="paAbzug">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── EIGENMIETWERT-BELASTUNG ─── -->
+    <section id="eigenmietwert" class="py-16 lg:py-24">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— Eigenmietwert-Rechner</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Eigenmietwert vs. Abzüge — was bleibt netto?</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Eigentümer:innen zahlen Steuer auf den Eigenmietwert, dürfen aber Schuldzinsen und Unterhalt abziehen. Hier siehst du live, ob deine Immobilie steuerlich „rentiert" oder belastet.
+          </p>
+        </div>
+
+        <div class="s-tool">
+          <div class="s-grid split">
+            <div>
+              <label class="s-field">
+                <span class="s-field-label">Eigenmietwert (geschätzt 60–70 % der Marktmiete)</span>
+                <input id="emWert" type="number" min="0" step="500" value="24000" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Hypothek-Volumen</span>
+                <input id="emHypo" type="number" min="0" step="50000" value="600000" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Hypothek-Zinssatz</span>
+                <input id="emZins" type="number" min="0" max="10" step="0.1" value="1.85" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Unterhaltskosten (effektiv ODER 10/20%-Pauschale)</span>
+                <input id="emUnter" type="number" min="0" step="500" value="4800" class="s-input" />
+              </label>
+              <label class="s-field">
+                <span class="s-field-label">Marginal-Steuersatz</span>
+                <input id="emMarg" type="number" min="0" max="50" step="1" value="30" class="s-input" />
+              </label>
+              <p class="s-hint">Unterhalts-Pauschale: 10 % bei Objekten ≤ 10 J, 20 % bei älteren (Bund). Bei tatsächlich höheren Kosten effektive Belege nutzen. Schuldzinsen max bis Eigenmietwert + CHF 50’000 abziehbar.</p>
+            </div>
+
+            <div>
+              <div class="s-hero" id="emHeroBox">
+                <div class="s-h-label">Netto-Steuer-Effekt · pro Jahr</div>
+                <div class="s-h-value"><small>CHF</small><span id="emNetto">0</span></div>
+                <div class="s-h-sub" id="emNettoSub">Belastung / Entlastung</div>
+              </div>
+
+              <div class="s-result">
+                <div class="s-row"><span class="s-lbl">+ Eigenmietwert <small>als Einkommen</small></span><span class="s-val">CHF <span id="emWertOut">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">− Schuldzinsen <small>Hypothek × Zins</small></span><span class="s-val">−CHF <span id="emZinsOut">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">− Unterhaltskosten</span><span class="s-val">−CHF <span id="emUnterOut">0</span></span></div>
+                <div class="s-row total"><span class="s-lbl">Netto-Belastung <small>steuerbar</small></span><span class="s-val">CHF <span id="emBelOut">0</span></span></div>
+                <div class="s-row"><span class="s-lbl">× Marginal-Steuersatz</span><span class="s-val"><span id="emMargOut">0</span> %</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1235,6 +1477,154 @@
     // Sticky nav shadow
     const nav = document.getElementById('navInner');
     if (nav) addEventListener('scroll', () => { nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30); }, { passive: true });
+
+    /* ════════════════════════════════════════════════════════════
+       STEUEROPTIM + PENDLERABZUG + EIGENMIETWERT
+       3 neue Live-Rechner — alle Werte 2026
+       ════════════════════════════════════════════════════════════ */
+    (function steuernNeueRechner() {
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n) => Math.round(n).toLocaleString('de-CH').replace(/,/g, "'");
+      const PI = (id, def) => parseFloat($(id)?.value || def) || 0;
+      const PS = (id) => $(id)?.value || '';
+
+      // ZH-ledig identisch zum Vorsorge-Rechner (STRAT.marginalRate / vorsorge.html) — eine gemeinsame Quelle.
+      const MARG = {
+        zh:    [[0,5],[20000,13],[35000,20],[55000,26],[80000,30],[110000,34],[150000,37],[200000,40],[300000,42]],
+        'zh-v':[[0,0],[60000,11],[100000,18],[150000,24],[200000,28],[300000,33],[500000,38]],
+        zg:    [[0,0],[40000,8],[80000,14],[120000,18],[200000,22],[300000,24],[500000,26]],
+        ge:    [[0,0],[50000,16],[100000,28],[150000,34],[200000,38],[300000,43],[500000,45]],
+        ti:    [[0,0],[40000,11],[80000,20],[150000,28],[200000,33],[300000,37],[500000,40]],
+        be:    [[0,0],[40000,14],[80000,23],[150000,30],[200000,35],[300000,38],[500000,41]],
+        bs:    [[0,0],[50000,15],[100000,24],[150000,30],[200000,34],[300000,38],[500000,40]],
+      };
+      function margRate(kt, eink) {
+        const rows = MARG[kt] || MARG.zh;
+        let r = 0;
+        for (const [thr, pct] of rows) if (eink >= thr) r = pct;
+        return r;
+      }
+
+      // ── STEUEROPTIM-QUICK-CHECK ─────────────────
+      function calcOp() {
+        const eink = PI('opEink');
+        const kanton = PS('opKanton');
+        const drei_a = PI('op3a');
+        const pk = PI('opPk');
+        const beruf = PI('opBeruf');
+
+        const marg = margRate(kanton, eink);
+        const luecke3a = Math.max(0, 7258 - drei_a);
+        const save3a = luecke3a * marg / 100;
+        const savePk = pk * marg / 100;
+        // Berufsauslagen 3 % vom Lohn, max 4000 ZH
+        const berufDefault = Math.min(Math.max(eink * 0.03, 2000), 4000);
+        const berufDelta = Math.max(0, berufDefault - beruf);
+        const saveBeruf = berufDelta * marg / 100;
+        const saveTotal = save3a + savePk + saveBeruf;
+
+        $('opMarg').textContent = marg;
+        $('op3aLuecke').textContent = fmt(luecke3a);
+        $('opSave3a').textContent = fmt(save3a);
+        $('opPkOut').textContent = fmt(pk);
+        $('opSavePk').textContent = fmt(savePk);
+        $('opBerufDefault').textContent = fmt(berufDefault);
+        $('opBerufDelta').textContent = fmt(berufDelta);
+        $('opSaveBeruf').textContent = fmt(saveBeruf);
+        $('opSaveTotal').textContent = fmt(saveTotal);
+      }
+      ['opEink','opKanton','op3a','opPk','opBeruf'].forEach((id) => {
+        const el = $(id);
+        if (el) {
+          el.addEventListener('input', calcOp);
+          el.addEventListener('change', calcOp);
+        }
+      });
+      if ($('opEink')) calcOp();
+
+      // ── PENDLERABZUG ─────────────────────
+      function calcPa() {
+        const typ = PS('paTyp');
+        const km = PI('paKm');
+        const tage = PI('paTage');
+        const oev = PI('paOev');
+        const marg = PI('paMarg');
+
+        let brutto = 0;
+        if (typ === 'auto') {
+          brutto = km * 2 * tage * 0.70; // CHF 0.70 / km
+        } else if (typ === 'oev') {
+          brutto = oev > 0 ? oev : km * 220 * 2; // Default-Schätzung
+        } else if (typ === 'velo') {
+          brutto = 700; // ZH-Pauschale
+        } else if (typ === 'gemischt') {
+          brutto = (km * 2 * tage * 0.30) + (oev > 0 ? oev : 1500);
+        }
+
+        // Bund-Limit: CHF 3'200 alle Verkehrsmittel
+        const bundLimit = Math.min(brutto, 3200);
+        // Kanton-Limit ZH: Auto max 5'100 / öV unbeschränkt
+        const ktLimit = (typ === 'oev' || typ === 'velo') ? brutto : Math.min(brutto, 5100);
+        // Der Abzug wirkt auf zwei getrennte Steuerbasen mit unterschiedlichen Plafonds:
+        // Kanton+Gemeinde (grösserer Anteil am Grenzsatz) nutzt das Kantonslimit, der Bund das tiefere
+        // Bundeslimit. Steuerbasis-gewichtetes Mittel statt naivem (Bund+Kanton)/2.
+        const KANTONS_ANTEIL = 0.75; // Anteil Kanton+Gemeinde am kombinierten Grenzsatz (Näherung)
+        const abzug = ktLimit * KANTONS_ANTEIL + bundLimit * (1 - KANTONS_ANTEIL);
+        const save = abzug * marg / 100;
+
+        $('paBrutto').textContent = fmt(brutto);
+        $('paBundLimit').textContent = fmt(bundLimit);
+        $('paKtLimit').textContent = fmt(ktLimit);
+        $('paAbzug').textContent = fmt(abzug);
+        $('paSave').textContent = fmt(save);
+      }
+      ['paTyp','paKm','paTage','paOev','paMarg'].forEach((id) => {
+        const el = $(id);
+        if (el) {
+          el.addEventListener('input', calcPa);
+          el.addEventListener('change', calcPa);
+        }
+      });
+      if ($('paTyp')) calcPa();
+
+      // ── EIGENMIETWERT ──────────────────────
+      function calcEm() {
+        const wert = PI('emWert');
+        const hypo = PI('emHypo');
+        const zins = PI('emZins');
+        const unter = PI('emUnter');
+        const marg = PI('emMarg');
+
+        const zinsKosten = hypo * (zins / 100);
+        const netto = wert - zinsKosten - unter;
+        const steuerEffekt = netto * (marg / 100);
+
+        $('emWertOut').textContent = fmt(wert);
+        $('emZinsOut').textContent = fmt(zinsKosten);
+        $('emUnterOut').textContent = fmt(unter);
+        $('emBelOut').textContent = fmt(netto);
+        $('emMargOut').textContent = marg;
+        $('emNetto').textContent = fmt(Math.abs(steuerEffekt));
+
+        const heroBox = $('emHeroBox');
+        const sub = $('emNettoSub');
+        if (steuerEffekt > 0) {
+          heroBox.style.background = 'linear-gradient(135deg, #CC2936, #7A181F)';
+          sub.textContent = 'Belastung — Eigenmietwert höher als Abzüge';
+        } else {
+          heroBox.style.background = 'linear-gradient(135deg, #047857, #065F46)';
+          sub.textContent = 'Entlastung — Abzüge höher als Eigenmietwert';
+        }
+      }
+      ['emWert','emHypo','emZins','emUnter','emMarg'].forEach((id) => {
+        const el = $(id);
+        if (el) {
+          el.addEventListener('input', calcEm);
+          el.addEventListener('change', calcEm);
+        }
+      });
+      if ($('emWert')) calcEm();
+    })();
   </script>
 </body>
 </html>

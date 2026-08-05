@@ -252,6 +252,73 @@
       font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
       text-transform: uppercase; font-weight: 500;
     }
+
+    /* Tools-Lounge Karten */
+    .tool-link-card {
+      display: flex; gap: 0.85rem; align-items: flex-start;
+      padding: 1.25rem 1.4rem; background: #fff; border: 1px solid #E5E5E5;
+      border-radius: 1rem; transition: all 0.25s ease;
+    }
+    .tool-link-card:hover {
+      border-color: rgba(204,41,54,0.45);
+      box-shadow: 0 12px 32px -16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-link-card .tlc-icon {
+      width: 2.4rem; height: 2.4rem; flex-shrink: 0; border-radius: 0.6rem;
+      background: #FDEFF1; color: var(--red);
+      display: grid; place-items: center; font-size: 1.05rem;
+    }
+    .tool-link-card h4 {
+      font-size: 1rem; font-weight: 600; letter-spacing: -0.01em;
+      margin-bottom: 0.2rem; color: var(--ink);
+    }
+    .tool-link-card p { font-size: 0.85rem; color: #737373; line-height: 1.4; }
+    .tool-link-card .tlc-arrow {
+      margin-left: auto; color: var(--red); font-weight: 500; align-self: center;
+      transition: transform 0.2s ease;
+    }
+    .tool-link-card:hover .tlc-arrow { transform: translateX(3px); }
+
+    /* Mini-Rechner für KMU-Lohnsumme */
+    .kmu-tool { background: #fff; border: 1px solid #E5E5E5; border-radius: 1.25rem; padding: 1.75rem 1.5rem; }
+    @media (min-width: 1024px) { .kmu-tool { padding: 2.2rem; } }
+    .kmu-field { display: block; }
+    .kmu-field + .kmu-field { margin-top: 0.85rem; }
+    .kmu-field-label {
+      display: block; font-family: var(--font-mono); font-size: 0.66rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #737373; margin-bottom: 0.35rem;
+    }
+    .kmu-input, .kmu-select {
+      width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #D4D4D4;
+      border-radius: 0.6rem; background: #fff; color: var(--ink);
+      font-family: inherit; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .kmu-input:focus, .kmu-select:focus {
+      outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,41,54,0.1);
+    }
+    .kmu-stat {
+      background: var(--ink); color: #fff; border-radius: 1rem;
+      padding: 1.25rem 1.4rem; text-align: left;
+    }
+    .kmu-stat .ks-label {
+      font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.3rem;
+    }
+    .kmu-stat .ks-value {
+      font-size: 1.6rem; font-weight: 600; letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+    }
+    .kmu-stat.red { background: linear-gradient(135deg, #CC2936, #7A181F); }
+    .kmu-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 0.5rem; padding: 0.5rem 0; font-size: 0.92rem;
+      border-bottom: 1px dashed #E5E5E5;
+    }
+    .kmu-row:last-child { border-bottom: 0; }
+    .kmu-row .kr-val { font-weight: 600; font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
@@ -300,7 +367,6 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
-                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -351,6 +417,11 @@
                     <li><a href="firmenkunden.html#kmu">KMU-Beratung</a></li>
                     <li><a href="firmenkunden.html#strategie">Strategie &amp; Setup</a></li>
                     <li><a href="firmenkunden.html#firmengruendung">Firmengründung<span class="mega-sub">ab CHF 599 · Notar zusätzlich</span></a></li>
+                    <li><a href="firma-gruenden.html"><strong>Firma gründen — Sozialversicherungs-Guide</strong><span class="mega-sub">AHV · BVG · KTG · UVG · Checkliste</span></a></li>
+                  </ul>
+                  <div class="mega-divider">Tools</div>
+                  <ul>
+                    <li><a class="mega-tool-link" href="firma-gruenden.html#checkliste">Gründer-Checkliste</a></li>
                   </ul>
                 </div>
               </div>
@@ -431,7 +502,6 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
-              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -463,7 +533,8 @@
             <div class="m-acc-section"><div class="m-acc-section-title">Beratung</div><ul>
               <li><a href="#kmu">KMU-Beratung</a></li>
               <li><a href="#strategie">Strategie &amp; Setup</a></li>
-              <li><a href="#firmengruendung">Firmengründung (bald)</a></li>
+              <li><a href="#firmengruendung">Firmengründung-Pakete</a></li>
+              <li><a href="firma-gruenden.html"><strong>Firma gründen — AHV · BVG · KTG · UVG</strong></a></li>
             </ul></div>
           </div>
         </div>
@@ -783,6 +854,177 @@
       </div>
     </section>
 
+    <!-- TOOLS-LOUNGE ─────────────────────────── -->
+    <section id="tools" class="py-20 lg:py-28">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-12">
+          <div class="pillar-eyebrow">Tools · Live-Rechner</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-3">
+            Statt Verkaufs-Folien — Zahlen, die du selbst nachrechnen kannst.
+          </h2>
+          <p class="text-ink-700 lg:text-lg">
+            Glatt Broker ist nicht Comparis. Wir bauen Tools mit logischem Produkt­aufbau — nicht nur Preis, sondern was wirklich wichtig ist. Alle Rechner kostenlos, transparent, ohne Anmeldung.
+          </p>
+        </div>
+
+        <!-- Tool-Index-Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+          <a href="firma-gruenden.html#lohn-rechner" class="tool-link-card">
+            <div class="tlc-icon">💼</div>
+            <div>
+              <h4>Lohnnebenkosten-Rechner</h4>
+              <p>Brutto → AHV/ALV/BVG/UVG/KTG/FAK + AG-Total + Netto.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="firma-gruenden.html#3a-inhaber" class="tool-link-card">
+            <div class="tlc-icon">🏦</div>
+            <div>
+              <h4>3a-Inhaber-Optimierung</h4>
+              <p>Max 3a + Steuer-Hebel je nach Erwerbstyp + Kanton.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="firma-gruenden.html#bvg-spar" class="tool-link-card">
+            <div class="tlc-icon">📊</div>
+            <div>
+              <h4>BVG-Sparbeitrag-Rechner</h4>
+              <p>Koord. Lohn + Sparrate live, Kapital bis Pension.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="vorsorge.html#strategy" class="tool-link-card">
+            <div class="tlc-icon">📈</div>
+            <div>
+              <h4>3a-Strategie-Rechner</h4>
+              <p>Bank vs. Versicherung, Tranchen-Vorteil bei Bezug.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="vorsorge.html#pensionsplanung" class="tool-link-card">
+            <div class="tlc-icon">🧓</div>
+            <div>
+              <h4>Pensionsplanung</h4>
+              <p>Renten-Lücke + benötigtes Kapital ab Pensionierung.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="krankenkasse.html#calculator" class="tool-link-card">
+            <div class="tlc-icon">🩺</div>
+            <div>
+              <h4>KK-Familien-Vergleich</h4>
+              <p>BAG-Prämien 2026 für die ganze Familie · CSS / Helsana / Swica / Concordia / Sympany.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="steuern.html#kapitalleistungssteuer" class="tool-link-card">
+            <div class="tlc-icon">🧾</div>
+            <div>
+              <h4>Kapitalleistungssteuer</h4>
+              <p>Steuer auf 3a / PK / Freizügigkeit beim Bezug.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="steuern.html#grundstueckgewinnsteuer" class="tool-link-card">
+            <div class="tlc-icon">🏠</div>
+            <div>
+              <h4>Grundstückgewinnsteuer</h4>
+              <p>Wieviel Steuer beim Verkauf einer Liegenschaft.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+          <a href="finanzen.html#vergleich" class="tool-link-card">
+            <div class="tlc-icon">💹</div>
+            <div>
+              <h4>Anlage-Performance-Vergleich</h4>
+              <p>Bank-Anlage vs. Versicherungs-Lösung über 25 Jahre.</p>
+            </div>
+            <span class="tlc-arrow">→</span>
+          </a>
+        </div>
+
+        <!-- KMU-Lohnsumme-Live-Rechner ─────── -->
+        <div id="kmu-lohnsumme" class="kmu-tool">
+          <div class="pillar-eyebrow">KMU-Tool · Schnell-Schätzung</div>
+          <h3 class="display text-2xl lg:text-3xl tracking-tightest mb-2">Was kostet euer Personal? — Total-Schätzung.</h3>
+          <p class="text-ink-700 text-[0.96rem] mb-8 max-w-3xl">
+            Schnell­schätzung der jährlichen Sozial­versicherungs-Last für eure Firma — mit Anzahl Mitarbeitende und Durchschnittslohn. Für Detail-Aufschlüsselung pro Person → <a href="firma-gruenden.html#lohn-rechner" class="text-brand-600 underline">Lohnnebenkosten-Rechner</a>.
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <label class="kmu-field">
+                <span class="kmu-field-label">Anzahl Mitarbeitende</span>
+                <input id="kmuAnzahl" type="number" min="1" max="500" value="8" class="kmu-input" />
+              </label>
+              <label class="kmu-field">
+                <span class="kmu-field-label">Durchschnitts-Brutto / Jahr</span>
+                <input id="kmuLohn" type="number" min="20000" step="5000" value="85000" class="kmu-input" />
+              </label>
+              <label class="kmu-field">
+                <span class="kmu-field-label">Branche (UVG-BU)</span>
+                <select id="kmuBranche" class="kmu-select">
+                  <option value="0.1">Büro / IT · 0.1 %</option>
+                  <option value="0.5">Detailhandel · 0.5 %</option>
+                  <option value="1.5">Gewerbe / Logistik · 1.5 %</option>
+                  <option value="3.0">Industrie · 3 %</option>
+                  <option value="4.0">Bau · 4 %</option>
+                </select>
+              </label>
+              <label class="kmu-field">
+                <span class="kmu-field-label">Kanton (FAK)</span>
+                <select id="kmuKanton" class="kmu-select">
+                  <option value="1.2">ZH · 1.2 %</option>
+                  <option value="1.95">BE · 1.95 %</option>
+                  <option value="1.6">AG · 1.6 %</option>
+                  <option value="1.5">SG · 1.5 %</option>
+                  <option value="1.4">BS · 1.4 %</option>
+                  <option value="2.45">GE · 2.45 %</option>
+                  <option value="2.0">VD · 2.0 %</option>
+                  <option value="1.4">ZG · 1.4 %</option>
+                </select>
+              </label>
+              <label class="kmu-field">
+                <span class="kmu-field-label">Durchschnitts-Alter (BVG)</span>
+                <input id="kmuAlter" type="number" min="20" max="65" value="38" class="kmu-input" />
+              </label>
+              <p class="text-xs text-ink-500 mt-4 leading-relaxed">
+                Schätzung 2026 · AG-Anteile: AHV 5.3 %, ALV 1.1 %, BVG ~7.5 % (50 % vom altersgemischten Sparbeitrag + Risiko), UVG-BU branchenabhängig, FAK kantonal, KTG ~0.75 %.
+              </p>
+            </div>
+
+            <div>
+              <div class="kmu-stat red mb-3">
+                <div class="ks-label">Total AG-Lohnnebenkosten · pro Jahr</div>
+                <div class="ks-value">CHF <span id="kmuTotal">0</span></div>
+              </div>
+              <div class="kmu-stat mb-4">
+                <div class="ks-label">Lohnsumme · Brutto</div>
+                <div class="ks-value">CHF <span id="kmuLohnsumme">0</span></div>
+              </div>
+
+              <div>
+                <div class="kmu-row"><span>AHV / IV / EO + FAK</span><span class="kr-val">CHF <span id="kmuAhvAg">0</span></span></div>
+                <div class="kmu-row"><span>ALV</span><span class="kr-val">CHF <span id="kmuAlvAg">0</span></span></div>
+                <div class="kmu-row"><span>BVG-Sparbeiträge + Risiko</span><span class="kr-val">CHF <span id="kmuBvgAg">0</span></span></div>
+                <div class="kmu-row"><span>UVG-BU</span><span class="kr-val">CHF <span id="kmuUvgAg">0</span></span></div>
+                <div class="kmu-row"><span>KTG</span><span class="kr-val">CHF <span id="kmuKtgAg">0</span></span></div>
+                <div class="kmu-row"><span><strong>Pro Mitarbeitenden</strong></span><span class="kr-val">CHF <span id="kmuProMa">0</span></span></div>
+                <div class="kmu-row"><span><strong>% über Lohnsumme</strong></span><span class="kr-val"><span id="kmuProz">0</span> %</span></div>
+              </div>
+
+              <div class="mt-6">
+                <a href="kontakt.html?topic=kmu" class="btn-primary w-full justify-center !py-3.5 !text-sm">
+                  Detail-Analyse durch Glatt buchen
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="py-20 lg:py-28">
       <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
@@ -947,6 +1189,77 @@
     if (nav) addEventListener('scroll', () => {
       nav.classList.toggle('shadow-[0_8px_32px_-8px_rgba(0,0,0,.08)]', scrollY > 30);
     }, { passive: true });
+
+    /* ════════════════════════════════════════════════════════════
+       KMU-Lohnsumme-Live-Rechner · firmenkunden.html
+       Schnell-Schätzung aller AG-Lohnnebenkosten für ganze Firma
+       ════════════════════════════════════════════════════════════ */
+    (function kmuRechner() {
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n) => Math.round(n).toLocaleString('de-CH').replace(/,/g, "'");
+      const PI = (id, def) => parseFloat($(id)?.value || def) || 0;
+
+      const BVG_KOORD = 26460;
+      const BVG_MAX   = 90720;
+      const UVG_MAX   = 148200;
+      const ALV_PLAFOND = 148200;
+
+      const SPARSATZ_AVG = (alter) => {
+        // Standard-BVG-Plan AG-Anteil (50 % vom altersgemischten Sparsatz)
+        // 25-34: 7 % · 35-44: 10 % · 45-54: 15 % · 55-64: 18 %
+        const full = alter < 35 ? 7 : alter < 45 ? 10 : alter < 55 ? 15 : 18;
+        return full / 100;
+      };
+
+      function calc() {
+        const n = PI('kmuAnzahl');
+        const lohn = PI('kmuLohn');
+        const branchePct = PI('kmuBranche') / 100;
+        const fakPct = PI('kmuKanton') / 100;
+        const alter = PI('kmuAlter');
+
+        const lohnsumme = n * lohn;
+
+        // AHV 5.3 % AG (auf gesamtem Lohn)
+        const ahvAg = lohnsumme * 0.053;
+        // FAK kantonal
+        const fakAg = lohnsumme * fakPct;
+        // ALV 1.1 % AG bis 148200 + Soli 0.5 % darüber, pro Person
+        const alvPerPerson = Math.min(lohn, ALV_PLAFOND) * 0.011 + Math.max(0, lohn - ALV_PLAFOND) * 0.005;
+        const alvAg = alvPerPerson * n;
+        // BVG pro Person: koord. Lohn × Sparsatz × 0.5 + Risiko 1.5 %
+        const versLohn = Math.min(lohn, BVG_MAX);
+        const koord = Math.max(0, versLohn - BVG_KOORD);
+        const sparsatz = SPARSATZ_AVG(alter);
+        const bvgPerPerson = koord * sparsatz * 0.5 + koord * 0.015;
+        const bvgAg = bvgPerPerson * n;
+        // UVG-BU AG (auf UVG-Plafond)
+        const uvgBase = Math.min(lohn, UVG_MAX) * n;
+        const uvgAg = uvgBase * branchePct;
+        // KTG AG ~0.75 % (50/50 Standard)
+        const ktgAg = lohnsumme * 0.0075;
+
+        const totalAg = ahvAg + fakAg + alvAg + bvgAg + uvgAg + ktgAg;
+        const proMa = n > 0 ? totalAg / n : 0;
+        const proz = lohnsumme > 0 ? (totalAg / lohnsumme) * 100 : 0;
+
+        $('kmuLohnsumme').textContent = fmt(lohnsumme);
+        $('kmuAhvAg').textContent = fmt(ahvAg + fakAg);
+        $('kmuAlvAg').textContent = fmt(alvAg);
+        $('kmuBvgAg').textContent = fmt(bvgAg);
+        $('kmuUvgAg').textContent = fmt(uvgAg);
+        $('kmuKtgAg').textContent = fmt(ktgAg);
+        $('kmuTotal').textContent = fmt(totalAg);
+        $('kmuProMa').textContent = fmt(proMa);
+        $('kmuProz').textContent = proz.toFixed(1);
+      }
+      ['kmuAnzahl','kmuLohn','kmuBranche','kmuKanton','kmuAlter'].forEach((id) => {
+        const el = $(id);
+        if (el) el.addEventListener('input', calc);
+        if (el) el.addEventListener('change', calc);
+      });
+      if ($('kmuAnzahl')) calc();
+    })();
   </script>
 </body>
 </html>

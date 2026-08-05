@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versicherungsbroker-Mandat</title>
+<link rel="stylesheet" href="assets/styles.css">
+<!-- pdf-lib: füllt die Original-Mandat-PDF (AcroForm) clientseitig -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="vorlagen/mandat-template.js"></script>
+<script src="assets/mandat-fill.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id:'mandat',
+  title:'Versicherungsbroker-Mandat',
+  subtitle:'Auftrag & Vollmacht',
+  signature:true,
+  legalFirst:true,           // Ablauf: Mandat+Umfang -> Kundendaten -> Unterschrift -> Abschluss
+  doneText:'Ihr Mandat ist unterschrieben. Das offizielle Mandatsformular wird mit Ihren Angaben und Ihrer Unterschrift als PDF erzeugt — Original-Layout, unverändert.',
+
+  /* ---------- Schritt 1: Versicherungsbroker-Mandat + Umfang ---------- */
+  legal:{
+    pill:'Mandat & Umfang',
+    title:'Versicherungsbroker-Mandat',
+    subtitle:'Bitte Umfang wählen und Text lesen',
+    scope:{ label:'Umfang des Mandats', other:'Beschreibung der individuellen Vereinbarung',
+      options:[
+        {value:'Für das gesamte Portfolio, mit Einschluss der Pensionskassenpläne und Vorsorgelösungen', label:'Für das gesamte Portfolio, <b>mit Einschluss</b> der Pensionskassenpläne und Vorsorgelösungen'},
+        {value:'Für das gesamte Portfolio, unter Ausschluss der Pensionskassenpläne und Vorsorgelösungen', label:'Für das gesamte Portfolio, <b>unter Ausschluss</b> der Pensionskassenpläne und Vorsorgelösungen'},
+        {value:'Für Pensionskassenpläne und Vorsorgelösungen alleine', label:'Für Pensionskassenpläne und Vorsorgelösungen <b>alleine</b>'},
+        {value:'Andere', label:'Andere Vereinbarung', desc:'bitte im Feld unten beschreiben'}
+      ]
+    },
+    textLabel:'Mandatstext',
+    confirm:'Ich habe den Mandatstext sowie die Informationen gemäss Art. 45 VAG gelesen und verstanden und bin mit der Datenbearbeitung einverstanden.',
+    summary:'Der Kunde beauftragt und bevollmächtigt den Co-Broker (Glatt Broker AG) zusammen mit dem Broker / Partner (Baumassurance AG) mit der laufenden Betreuung des Versicherungs-Portfolios im gewählten Umfang. Der Kunde bleibt Versicherungs- und Vorsorgenehmer. Der Broker erhält von den Versicherern eine marktübliche Brokerentschädigung; dem Kunden entstehen keine zusätzlichen Kosten. Auftrag gemäss OR Art. 394 ff., unbestimmte Dauer, jederzeit kündbar nach OR Art. 404. Datenbearbeitung nach DSG; Informationen gemäss Art. 45 VAG sind integrierender Bestandteil des Mandats.',
+    html:
+      '<h3>Parteien</h3>'+
+      '<p><b>Co-Broker / Ihr Ansprechpartner:</b> Glatt Broker AG, FINMA Reg. F01397063, Staubstrasse 15, CH-8038 Zürich.<br><b>Broker / Partner:</b> Baumassurance AG, FINMA Reg. F01207772, Badenerstrasse 681, Postfach, CH-8048 Zürich.</p>'+
+      '<h3>Administration</h3>'+
+      '<p>Ohne anderslautende Vereinbarung wird der Postverkehr an die Adresse des Brokers geführt, gültig für Versicherungsverträge, Mutationen, Deklarationen, Schadendokumente, Prämienrechnungen usw. Der Broker leitet die Originaldokumente an den Co-Broker weiter, welcher dafür verantwortlich ist, dass diese zum Kunden gelangen.</p>'+
+      '<h3>Der Kunde</h3>'+
+      '<p>Der Kunde bleibt Versicherungsnehmer sowie Vorsorgenehmer. Er unterzeichnet Versicherungs- und Vorsorgeverträge selbst und nimmt Schadenzahlungen und Vorsorgeleistungen der Versicherer entgegen.</p>'+
+      '<h3>Der Broker</h3>'+
+      '<p>Der Broker vertritt den Kunden in allen übrigen Belangen gegenüber Versicherern und Stiftungen. Er ist autorisiert, Verhandlungen direkt zu führen, in alle Akten Einsicht zu nehmen, die Betreuung bestehender Verträge zu übernehmen und diese nach Absprache mit dem Kunden zu kündigen und neu offerieren zu lassen.</p>'+
+      '<h3>Der Co-Broker verpflichtet sich zu folgenden Aufgaben</h3>'+
+      '<ol type="a"><li>Betreuung und Überprüfung der bestehenden Verträge sowie Bedürfnis- und Wirtschaftlichkeitsabklärungen.</li>'+
+      '<li>Bei entsprechendem Bedarf werden dem Kunden Empfehlungen unterbreitet.</li>'+
+      '<li>Unterstützung des Kunden nach Bedarf bei Schadenfällen.</li>'+
+      '<li>Kunden über Neuerungen und Entwicklungen im Versicherungs- und Vorsorgebereich orientieren.</li>'+
+      '<li>Nutzung der seitens Baumassurance AG speziell ausgehandelten Versicherungsrahmenverträge.</li>'+
+      '<li>Ausschreibungen und Marktvergleiche für die Kunden.</li></ol>'+
+      '<h3>Entschädigung des Brokers / Co-Brokers</h3>'+
+      '<p>Durch dieses Mandat erhält der Broker von den Versicherern eine marktübliche Brokerentschädigung. Dem Kunden entstehen keine zusätzlichen Kosten innerhalb der üblichen Unterstützungspflichten. Durchschnittliche Courtage in % der Prämie (ohne Stempel und Abgaben):</p>'+
+      '<table><tr><td>Unfallversicherungen gemäss UVG</td><td>3–5 %</td></tr>'+
+      '<tr><td>Krankentaggeldversicherungen</td><td>7.5 %</td></tr>'+
+      '<tr><td>Übrige Unfallversicherungen</td><td>15 %</td></tr>'+
+      '<tr><td>Pensionskassen (Kosten- und Risikoprämie)</td><td>10 %</td></tr>'+
+      '<tr><td>Sachversicherungen</td><td>15 %</td></tr>'+
+      '<tr><td>Technische Versicherungen</td><td>15 %</td></tr>'+
+      '<tr><td>Transportversicherungen</td><td>15 %</td></tr>'+
+      '<tr><td>Haftpflicht- und übrige Vermögensversicherungen</td><td>15 %</td></tr>'+
+      '<tr><td>Motorfahrzeugversicherungen</td><td>8 %</td></tr>'+
+      '<tr><td>Marine / Aviatik</td><td>15 %</td></tr>'+
+      '<tr><td>KVG Grundversicherungen (einmalig)</td><td>CHF 70.–</td></tr>'+
+      '<tr><td>VVG Zusatzversicherungen (einmalig)</td><td>Monatsprämie × 12–16</td></tr></table>'+
+      '<p>Der Kunde hat jederzeit das Recht, Art und Höhe der Entschädigung zu erfahren. Zusätzliche Beratungen erfolgen nach Absprache gegen Honorar.</p>'+
+      '<h3>Vertragsdauer</h3>'+
+      '<p>Das Broker-Mandat ist ein Auftrag und gesetzlich geregelt in OR Art. 394 ff. Es beginnt mit Datum der Unterzeichnung, ist auf unbestimmte Dauer abgeschlossen und kann von den Parteien jederzeit nach OR Art. 404 aufgelöst werden. Die Kündigung zur Unzeit bleibt vorbehalten.</p>'+
+      '<h3>Datenschutz</h3>'+
+      '<p>Der Broker verpflichtet sich, personenbezogene Daten des Kunden gemäss den Anforderungen des Schweizerischen Datenschutzgesetzes (DSG) zu bearbeiten. Der Kunde erklärt sich damit einverstanden, dass der Broker wie auch seine Co-Broker Daten des Kunden an Dritte weitergeben dürfen, soweit es der Zweck des Mandates und der Datenbearbeitung notwendig machen.</p>'+
+      '<h3>Informationen gemäss Art. 45 VAG (Auszug)</h3>'+
+      '<p>Glatt Broker AG (Co-Broker, FINMA F01397063) und Baumassurance AG (Broker, FINMA F01207772) sind als ungebundene Versicherungsvermittler registriert und verfügen über eine Berufshaftpflichtversicherung. In Konfliktsituationen besteht die Möglichkeit, sich an die Ombudsstelle Versicherungen zu wenden. Dieses Formular bildet integrierenden Bestandteil des Broker-Mandats.</p>'
+  },
+
+  /* ---------- Schritt 2: Kundendaten ---------- */
+  steps:[
+    { label:'Kundendaten', subtitle:'Angaben des Mandatsgebers (Name, Adresse)',
+      sections:[
+        { label:'Mandatsgeber/in', fields:[
+          {id:'firma',label:'Firma (falls Unternehmen)',type:'text',col:'full',placeholder:'optional'},
+          {id:'vorname',label:'Vorname',type:'text',required:true},
+          {id:'nachname',label:'Nachname',type:'text',required:true},
+          {id:'strasse',label:'Strasse, Nr.',type:'text',col:'full'},
+          {id:'plzort',label:'PLZ / Ort',type:'text',col:'full'},
+          {id:'email',label:'E-Mail',type:'email',required:true,hint:'Für die Zustellung Ihrer unterschriebenen Kopie (erscheint nicht auf dem PDF).'},
+          {id:'telefon',label:'Telefon',type:'tel',placeholder:'+41 ...'}
+        ]},
+        { label:'Verantwortliche Person/en', note:'Erscheint im Unterschriftsblock des Mandats. Bei Privatpersonen = Mandatsgeber.', fields:[
+          {id:'verantwortlich1',label:'Verantwortliche Person 1',type:'text',col:'full',placeholder:'leer lassen = Mandatsgeber'},
+          {id:'verantwortlich2',label:'Verantwortliche Person 2 (optional)',type:'text',col:'full'}
+        ]}
+      ]
+    }
+  ],
+
+  /* ---------- Schritt 4: Abschluss -> Original-PDF füllen ---------- */
+  buildPDF:function(ctx){
+    return (async function(){
+      var errEl = document.getElementById('errPdf');
+      try{
+        // Umfang aus der Auswahl ableiten
+        var sc = document.querySelector('input[name="f_scope"]:checked');
+        var scv = sc ? sc.value : '';
+        var scopeKey = /Einschluss/i.test(scv) ? 'ein'
+                     : /Ausschluss/i.test(scv) ? 'aus'
+                     : /alleine/i.test(scv)    ? 'allein'
+                     : /Andere/i.test(scv)     ? 'andere' : null;
+        var otherEl = document.getElementById('f_scope_other');
+        var andereText = otherEl ? otherEl.value : '';
+
+        var fullname = (ctx.val('vorname') + ' ' + ctx.val('nachname')).trim();
+        var lines = [];
+        if(ctx.val('firma')) lines.push(ctx.val('firma'));
+        if(fullname) lines.push(fullname);
+        if(ctx.val('strasse')) lines.push(ctx.val('strasse'));
+        if(ctx.val('plzort')) lines.push(ctx.val('plzort'));
+
+        var values = {
+          kundeBox: lines.join('\n'),
+          scopeKey: scopeKey,
+          andereText: andereText,
+          ortDatum: ctx.val('ort') + (ctx.val('datum') ? (', ' + ctx.fmtDate(ctx.val('datum'))) : ''),
+          person1: ctx.val('verantwortlich1') || fullname,
+          person2: ctx.val('verantwortlich2')
+        };
+
+        // Unterschrift -> PNG-Bytes
+        var sig = null;
+        if(ctx.hasSig && ctx.sigCanvas){
+          var b64 = ctx.sigCanvas.toDataURL('image/png').split(',')[1];
+          var bin = atob(b64); sig = new Uint8Array(bin.length);
+          for(var i=0;i<bin.length;i++) sig[i] = bin.charCodeAt(i);
+        }
+
+        // Original-Vorlage aus eingebettetem Base64 (kein fetch -> funktioniert auch eingebettet/offline)
+        if(!window.MANDAT_TPL_B64) throw new Error('Vorlage nicht geladen');
+        var binT = atob(window.MANDAT_TPL_B64); var tpl = new Uint8Array(binT.length);
+        for(var k=0;k<binT.length;k++) tpl[k] = binT.charCodeAt(k);
+        var out = await window.fillMandat(window.PDFLib, tpl, values, sig);
+
+        var blob = new Blob([out], {type:'application/pdf'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Versicherungsbroker-Mandat_' + ((ctx.customerName().trim().replace(/\s+/g,'-')) || 'Kunde') + '.pdf';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      }catch(e){
+        console.error(e);
+        if(errEl){ errEl.textContent = 'PDF konnte nicht erzeugt werden (' + e.message + '). Bitte „Drucken / Als PDF speichern“ nutzen.'; errEl.classList.add('show'); }
+      }
+    })();
+  }
+});
+</script>
+</body>
+</html>

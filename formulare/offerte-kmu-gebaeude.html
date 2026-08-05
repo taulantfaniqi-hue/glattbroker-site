@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gebäudeversicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-gebaeude',
+  title: 'Gebäudeversicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmen- und Eigentümerangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'www.beispiel.ch' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['Einzelunternehmen', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-123.456.789', col: 'full' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verbandszugehoerigkeit', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche', label: 'Ja, welcher Verband?', type: 'text', col: 'full', hint: 'Nur ausfüllen wenn «Ja» gewählt.' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum/Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_nicht_betrieb', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_adresse', label: 'Adresse (nicht betriebliche Gebäude)', type: 'text', col: 'full', hint: 'Nur ausfüllen wenn «Ja» gewählt.' },
+            { id: 'eigentuemer_plz_ort', label: 'PLZ/Ort (nicht betriebliche Gebäude)', type: 'text', hint: 'Nur ausfüllen wenn «Ja» gewählt.' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Beschäftigte',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z. B. 2024' },
+            { id: 'beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'familienmitglieder', label: 'davon mitarbeitende Familienmitglieder', type: 'number', col: 'full' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Bitte alle Lohnsummen in CHF angeben.',
+          fields: [
+            { id: 'lohn_uvg_maenner', label: 'Männer – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_uvg_frauen', label: 'Frauen – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_uvg_total', label: 'Total – Gesamtes Personal UVG-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ueberschuss_maenner', label: 'Männer – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ueberschuss_frauen', label: 'Frauen – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ueberschuss_total', label: 'Total – Gesamtes Personal Überschuss-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_maenner', label: 'Männer – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_frauen', label: 'Frauen – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_total', label: 'Total – Gesamtes Personal AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_teilzeit_maenner', label: 'Männer – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_teilzeit_frauen', label: 'Frauen – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lohn_ahv_teilzeit_total', label: 'Total – Personal < 8 h/Woche AHV-Lohnsumme (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Besondere Mitarbeiter-Situationen',
+          fields: [
+            { id: 'ma_arbeitsunfaehig', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'ma_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohn_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Gebäudeangaben',
+      sections: [
+        {
+          label: 'Offerte und Gebäudekategorie',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'static_gebaeudekat', type: 'static', label: 'Bitte die Gebäudekategorie für jeden Objektstandort (A, B, C) angeben.' },
+            { id: 'kat_buero_a', label: 'Büro-/Verwaltungsgebäude – Standort A', type: 'checkbox' },
+            { id: 'kat_buero_b', label: 'Büro-/Verwaltungsgebäude – Standort B', type: 'checkbox' },
+            { id: 'kat_buero_c', label: 'Büro-/Verwaltungsgebäude – Standort C', type: 'checkbox' },
+            { id: 'kat_gewerbe_a', label: 'Geschäfts-/Gewerbegebäude – Standort A', type: 'checkbox' },
+            { id: 'kat_gewerbe_b', label: 'Geschäfts-/Gewerbegebäude – Standort B', type: 'checkbox' },
+            { id: 'kat_gewerbe_c', label: 'Geschäfts-/Gewerbegebäude – Standort C', type: 'checkbox' },
+            { id: 'kat_wohn_a', label: 'Wohngebäude – Standort A', type: 'checkbox' },
+            { id: 'kat_wohn_b', label: 'Wohngebäude – Standort B', type: 'checkbox' },
+            { id: 'kat_wohn_c', label: 'Wohngebäude – Standort C', type: 'checkbox' },
+            { id: 'kat_andere_a', label: 'Andere Gebäudekategorien (z. B. Hotel, Arztpraxis, Lagerhalle) – Standort A', type: 'checkbox' },
+            { id: 'kat_andere_b', label: 'Andere Gebäudekategorien – Standort B', type: 'checkbox' },
+            { id: 'kat_andere_c', label: 'Andere Gebäudekategorien – Standort C', type: 'checkbox' }
+          ]
+        },
+        {
+          label: 'Bauart und Merkmale – Standort A',
+          fields: [
+            { id: 'bauart_massiv_a', label: 'Bauart massiv – Standort A', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'bodenheizung_a', label: 'Bodenheizung – Standort A', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'flachdach_a', label: 'Flachdach – Standort A', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'stockwerkeigentum_a', label: 'Stockwerkeigentum – Standort A', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'versicherungssumme_a', label: 'Versicherungssumme – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'baujahr_a', label: 'Baujahr – Standort A', type: 'number', placeholder: 'z. B. 1985' },
+            { id: 'stockwerke_a', label: 'Anzahl Stockwerke – Standort A', type: 'number' },
+            { id: 'schaetzdatum_a', label: 'Schätzdatum – Standort A', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bauart und Merkmale – Standort B',
+          fields: [
+            { id: 'bauart_massiv_b', label: 'Bauart massiv – Standort B', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'bodenheizung_b', label: 'Bodenheizung – Standort B', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'flachdach_b', label: 'Flachdach – Standort B', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'stockwerkeigentum_b', label: 'Stockwerkeigentum – Standort B', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'versicherungssumme_b', label: 'Versicherungssumme – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'baujahr_b', label: 'Baujahr – Standort B', type: 'number', placeholder: 'z. B. 1985' },
+            { id: 'stockwerke_b', label: 'Anzahl Stockwerke – Standort B', type: 'number' },
+            { id: 'schaetzdatum_b', label: 'Schätzdatum – Standort B', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bauart und Merkmale – Standort C',
+          fields: [
+            { id: 'bauart_massiv_c', label: 'Bauart massiv – Standort C', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'bodenheizung_c', label: 'Bodenheizung – Standort C', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'flachdach_c', label: 'Flachdach – Standort C', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'stockwerkeigentum_c', label: 'Stockwerkeigentum – Standort C', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'versicherungssumme_c', label: 'Versicherungssumme – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'baujahr_c', label: 'Baujahr – Standort C', type: 'number', placeholder: 'z. B. 1985' },
+            { id: 'stockwerke_c', label: 'Anzahl Stockwerke – Standort C', type: 'number' },
+            { id: 'schaetzdatum_c', label: 'Schätzdatum – Standort C', type: 'date' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Gewünschte Deckungen',
+      sections: [
+        {
+          label: 'Feuer',
+          fields: [
+            { id: 'feuer_deckung', label: 'Feuer', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'feuer_vs', label: 'Versicherungssumme Feuer (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'feuer_sicherheitseinrichtung', label: 'Sicherheitseinrichtung', type: 'checkboxgroup', options: ['mit Brandmeldeanlage', 'mit automatischen Löscheinrichtungen', 'Nein'], vertical: true },
+            { id: 'feuer_zusatz_bauliche', label: 'Zusatzdeckung: Bauliche Einrichtungen, welche der Kanton nicht versichert', type: 'checkbox' },
+            { id: 'feuer_zusatz_mietertrag', label: 'Zusatzdeckung: Mietertragsausfall während eines Jahrs', type: 'checkbox' },
+            { id: 'feuer_haftzeit', label: 'Haftzeit in Monaten', type: 'radio', options: ['12', '18', '24', '36'] },
+            { id: 'feuer_zusatz_besondere_sachen', label: 'Zusatzdeckung: Besondere Sachen und Kosten', type: 'checkboxgroup', options: ['20%', 'anderer Prozentsatz'], vertical: false },
+            { id: 'feuer_besondere_sachen_vs', label: 'Versicherungssumme Besondere Sachen und Kosten (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'feuer_zusatz_geraete', label: 'Zusatzdeckung: Geräte und Materialien', type: 'checkbox' },
+            { id: 'feuer_geraete_vs', label: 'Versicherungssumme Geräte und Materialien (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Wasser',
+          fields: [
+            { id: 'wasser_deckung', label: 'Wasser', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'wasser_zusatz_bauliche', label: 'Zusatzdeckung: Bauliche Einrichtungen, welche der Kanton nicht versichert', type: 'checkbox' },
+            { id: 'wasser_zusatz_bauliche_vs', label: 'Versicherungssumme Bauliche Einrichtungen – Wasser (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'wasser_zusatz_bauliche_vw_er', label: 'Bauliche Einrichtungen, welche der Kanton nicht versichert – Deckungsart', type: 'checkboxgroup', options: ['VW', 'ER'], vertical: false },
+            { id: 'wasser_zusatz_mietertrag', label: 'Zusatzdeckung: Mietertrag von Hotel, Restaurant, Ferienhaus/-Wohnung', type: 'checkbox' },
+            { id: 'wasser_mietertrag_vs', label: 'Versicherungssumme Mietertrag – Wasser (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'wasser_zusatz_geraete', label: 'Zusatzdeckung: Geräte und Materialien', type: 'checkbox' },
+            { id: 'wasser_geraete_vs', label: 'Versicherungssumme Geräte und Materialien – Wasser (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Glas',
+          fields: [
+            { id: 'glas_vs', label: 'Versicherungssumme Glas (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_deckungsart', label: 'Deckung', type: 'radio', options: ['Standortunabhängige Deckungen', 'Deckungen pro Standort'] },
+            { id: 'glas_standort_a_vs', label: 'Glas – Versicherungssumme Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_standort_b_vs', label: 'Glas – Versicherungssumme Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_standort_c_vs', label: 'Glas – Versicherungssumme Standort C (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_gebaeudeverglasung', label: 'Gebäudeverglasung', type: 'checkbox' },
+            { id: 'glas_beschraenkung_gemeinsam', label: 'Beschränkung auf gemeinsam benutzte Räume (Rabatt auf Basisprämie)', type: 'checkbox' },
+            { id: 'glas_mobiliarverglasung', label: 'Mobiliarverglasung von Gebäudeeigentümer (ohne STWEG) mitversichern', type: 'checkbox' },
+            { id: 'glas_sonnenkollektoren', label: 'Gläser von Sonnenkollektoren/Photovoltaikanlagen', type: 'checkbox' },
+            { id: 'glas_sonnenkollektoren_vs', label: 'Versicherungssumme Sonnenkollektoren/Photovoltaikanlagen (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Haustechnik',
+          fields: [
+            { id: 'haustechnik_vs', label: 'Versicherungssumme Haustechnik (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'haustechnik_standort_a_vs', label: 'Haustechnik – Versicherungssumme Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'haustechnik_standort_b_vs', label: 'Haustechnik – Versicherungssumme Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'haustechnik_standort_c_vs', label: 'Haustechnik – Versicherungssumme Standort C (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Gebäudehaftpflicht',
+          fields: [
+            { id: 'haftpflicht_vs', label: 'Versicherungssumme Gebäudehaftpflicht (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'haftpflicht_deckung', label: 'Deckung', type: 'radio', options: ['CHF 5 Mio.', 'CHF 10 Mio.', 'CHF 15 Mio.'] },
+            { id: 'haftpflicht_gebaeude', label: 'Versicherte Gebäude', type: 'checkboxgroup', options: ['Gebäude A', 'Gebäude B', 'Gebäude C'], vertical: false }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bisheriger Versicherer & Vorschäden',
+      sections: [
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Beginn', type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Ablauf', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'vorversicherer_name', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'vorversicherer_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'vorversicherer_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] }
+          ]
+        },
+        {
+          label: 'Risikobeurteilung',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full', hint: 'Nur ausfüllen wenn «Ja» gewählt.' }
+          ]
+        },
+        {
+          label: 'Leistungsfälle',
+          fields: [
+            { id: 'schaeden_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'schaeden_summe', label: 'Schadensumme (inkl. Reserven) (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / Zusätzliche Informationen', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

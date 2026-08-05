@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motorfahrzeugversicherung</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-motorfahrzeug',
+  title: 'Motorfahrzeugversicherung',
+  subtitle: 'Offertformular',
+  signature: false,
+  steps: [
+    {
+      label: 'Personen',
+      sections: [
+        {
+          label: 'Versicherungsnehmer',
+          fields: [
+            { id: 'vn_geschlecht', label: 'Anrede', type: 'radio', options: ['Mann', 'Frau'] },
+            { id: 'vn_vorname_name', label: 'Vorname, Name', type: 'text', required: true },
+            { id: 'vn_firmenname', label: 'Firmenname', type: 'text' },
+            { id: 'vn_adresse', label: 'Adresse', type: 'text', col: 'full' },
+            { id: 'vn_plz_ort', label: 'PLZ, Ort', type: 'text' },
+            { id: 'vn_fuehrerausweisdatum', label: 'Führerausweisdatum', type: 'date' },
+            { id: 'vn_geb_datum', label: 'Geb. Datum', type: 'date' },
+            { id: 'vn_nationalitaet', label: 'Nationalität', type: 'text' },
+            { id: 'vn_aufenthaltsbewilligung', label: 'Aufenthaltsbewilligung', type: 'text', placeholder: 'z. B. C-Ausweis' },
+          ]
+        },
+        {
+          label: 'Häufigster Lenker',
+          note: 'Nur ausfüllen, wenn abweichend vom Versicherungsnehmer',
+          fields: [
+            { id: 'hl_geschlecht', label: 'Anrede', type: 'radio', options: ['Mann', 'Frau'] },
+            { id: 'hl_vorname_name', label: 'Vorname, Name', type: 'text' },
+            { id: 'hl_firmenname', label: 'Firmenname', type: 'text' },
+            { id: 'hl_adresse', label: 'Adresse', type: 'text', col: 'full' },
+            { id: 'hl_plz_ort', label: 'PLZ, Ort', type: 'text' },
+            { id: 'hl_fuehrerausweisdatum', label: 'Führerausweisdatum', type: 'date' },
+            { id: 'hl_geb_datum', label: 'Geb. Datum', type: 'date' },
+            { id: 'hl_nationalitaet', label: 'Nationalität', type: 'text' },
+            { id: 'hl_aufenthaltsbewilligung', label: 'Aufenthaltsbewilligung', type: 'text', placeholder: 'z. B. C-Ausweis' },
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Fahrzeug & Vertrag',
+      sections: [
+        {
+          label: 'Vertragsdaten',
+          fields: [
+            { id: 'versicherungsbeginn', label: 'Versicherungsbeginn', type: 'date' },
+            { id: 'junglenker', label: 'Junglenker unter 25 Jahre', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'einloesungsgrund', label: 'Einlösungsgrund', type: 'select', options: ['Neueinlösung', 'Fahrzeugwechsel', 'Wechselschilderöffnung', 'Versichererwechsel'] },
+          ]
+        },
+        {
+          label: 'Fahrzeugangaben',
+          fields: [
+            { id: 'marke_modell', label: 'Marke / Modell', type: 'text', col: 'full' },
+            { id: 'fahrzeugart', label: 'Fahrzeugart', type: 'text', placeholder: 'z. B. PW, Motorrad, Lieferwagen' },
+            { id: 'verwendungsart', label: 'Verwendungsart', type: 'select', options: ['Privat', 'Privat und geschäftlich', 'Geschäftlich', 'Werkverkehr'] },
+            { id: 'typenschein_nr', label: 'Typenschein Nr.', type: 'text' },
+            { id: 'erste_inverkehrssetzung', label: '1. Inverkehrssetzung', type: 'date' },
+            { id: 'katalogpreis', label: 'Katalogpreis', type: 'number', suffix: 'CHF' },
+            { id: 'zubehoer', label: 'Zubehör', type: 'number', suffix: 'CHF' },
+            { id: 'leasing', label: 'Leasing', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'garage_vorhanden', label: 'Garage vorhanden', type: 'radio', options: ['Ja', 'Nein'] },
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Deckung & Vorversicherer',
+      sections: [
+        {
+          label: 'Gewünschte Versicherungsdeckung',
+          fields: [
+            { id: 'haftpflicht', label: 'Haftpflicht', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'haftpflicht_sb', label: 'Selbstbehalt Haftpflicht', type: 'select', options: ['0', '500'] },
+            { id: 'teilkasko', label: 'Teilkasko', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'teilkasko_sb', label: 'Selbstbehalt Teilkasko', type: 'select', options: ['0', '200'] },
+            { id: 'vollkasko', label: 'Vollkasko', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'vollkasko_sb', label: 'Selbstbehalt Vollkasko', type: 'select', options: ['500', '1000'] },
+            { id: 'parkschaden', label: 'Parkschaden', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'parkschaden_variante', label: 'Parkschaden Variante', type: 'select', options: ['Unbegrenzt', 'Mit VS'] },
+            { id: 'parkschaden_vs', label: 'Parkschaden VS (falls mit Limit)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_plus', label: 'Glas Plus', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'glas_plus_variante', label: 'Glas Plus Variante', type: 'select', options: ['0', '200'] },
+            { id: 'kuendigungsrecht', label: 'Jährliches Kündigungsrecht', type: 'checkbox', label: 'Jährliches Kündigungsrecht' },
+            { id: 'gf_bs', label: 'GF / BS', type: 'select', options: ['GF', 'BS', 'GF und BS'] },
+            { id: 'assistance', label: 'Assistance', type: 'checkbox', label: 'Assistance' },
+            { id: 'mitgefuehrte_sachen_vs', label: 'Mitgeführte Sachen VS', type: 'number', suffix: 'CHF' },
+          ]
+        },
+        {
+          label: 'Weitere Deckungsoptionen',
+          fields: [
+            { id: 'garagenwahl', label: 'Garagenwahl', type: 'select', options: ['Freie Garagenwahl', 'Partnergarage'] },
+            { id: 'insassenunfall', label: 'Insassenunfall', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'insassenunfall_tod', label: 'Insassenunfall — Tod (VS)', type: 'number', suffix: 'CHF' },
+            { id: 'insassenunfall_iv', label: 'Insassenunfall — IV (VS)', type: 'number', suffix: 'CHF' },
+            { id: 'insassenunfall_heilungskosten', label: 'Insassenunfall — Heilungskosten (VS)', type: 'number', suffix: 'CHF' },
+            { id: 'insassenunfall_taggeld', label: 'Insassenunfall — Taggeld', type: 'number', suffix: 'CHF' },
+          ]
+        },
+        {
+          label: 'Vorversicherer',
+          fields: [
+            { id: 'vorversicherer_mf', label: 'Hat oder hatte der Antragssteller / häufigste Lenker schon Motorfahrzeugversicherungen?', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'vorversicherer_gesellschaft', label: 'Gesellschaft (Vorversicherer)', type: 'text', col: 'full' },
+            { id: 'fa_entzug', label: 'Wurde dem Antragssteller / häufigsten Lenker in den letzten 5 Jahren der Führerausweis entzogen?', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'fa_entzug_bemerkungen', label: 'Bemerkungen (Führerausweisentzug)', type: 'text', col: 'full' },
+            { id: 'schaeden_anzahl', label: 'Wie viele Haftpflicht- oder Kollisionsschäden in den letzten 5 Jahren?', type: 'select', options: ['Keine', '1', '2', '3', '4', '5 oder mehr'] },
+            { id: 'erschwerende_bedingungen', label: 'Wurde in den letzten 5 Jahren ein Vertrag mit erschwerenden Bedingungen abgeschlossen?', type: 'radio', options: ['Ja', 'Nein'], hint: 'Versicherungsnehmer, Fahrzeughalter oder häufigster Lenker' },
+            { id: 'erschwerende_bedingungen_bem', label: 'Bemerkungen (erschwerende Bedingungen)', type: 'text', col: 'full' },
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lebensversicherung – Offertenanfrage Einzelleben</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-einzelleben',
+  title: 'Lebensversicherung',
+  subtitle: 'Offertenanfrage Einzelleben',
+  signature: false,
+  steps: [
+    {
+      label: 'Antragsteller / Versicherte Person',
+      sections: [
+        {
+          label: 'Berater',
+          fields: [
+            { id: 'co_broker_berater', label: 'Co-Broker & Name Berater', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Persönliche Angaben',
+          fields: [
+            { id: 'nachname_vorname', label: 'Name, Vorname', type: 'text', required: true },
+            { id: 'strasse_nr', label: 'Strasse, Nr.', type: 'text' },
+            { id: 'geschlecht', label: 'Geschlecht', type: 'select', options: ['Männlich', 'Weiblich', 'Andere'] },
+            { id: 'ort_plz', label: 'Ort, PLZ', type: 'text' },
+            { id: 'zivilstand', label: 'Zivilstand', type: 'select', options: ['Ledig', 'Verheiratet', 'Getrennt', 'Geschieden', 'Verwitwet', 'Eingetragene Partnerschaft'] },
+            { id: 'geburtsdatum', label: 'Geburtsdatum', type: 'date', required: true },
+            { id: 'beruf_anstellung', label: 'Beruf und Anstellung', type: 'text' },
+            { id: 'nationalitaet', label: 'Nationalität', type: 'text' },
+            { id: 'aufenthaltsbewilligung', label: 'Aufenthaltsbewilligung', type: 'select', options: ['Keine', 'B', 'C', 'L', 'G', 'F', 'N', 'S'] },
+            { id: 'groesse', label: 'Grösse (cm)', type: 'number' },
+            { id: 'gelernt_ausbildung', label: 'Gelernt / Ausbildung', type: 'text' },
+            { id: 'gewicht', label: 'Gewicht (kg)', type: 'number' },
+            { id: 'raucher', label: 'Raucher', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Gewünschte Lösung / Deckung',
+      sections: [
+        {
+          label: 'Leistungsarten',
+          fields: [
+            { id: 'erlebensfall', label: 'Erlebensfall', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'erlebensfall_vs', label: 'Erlebensfall VS (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'erlebensfall_praemie', label: 'Erlebensfall Prämie (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'todesfall_konstant', label: 'Todesfall konstant', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'todesfall_konstant_vs', label: 'Todesfall konstant VS (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'todesfall_konstant_praemie', label: 'Todesfall konstant Prämie (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'todesfall_abnehmend', label: 'Todesfall abnehmend', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'todesfall_abnehmend_vs', label: 'Todesfall abnehmend VS (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'todesfall_abnehmend_praemie', label: 'Todesfall abnehmend Prämie (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'EU-Rente / Prämienbefreiung',
+          fields: [
+            { id: 'eu_rente', label: 'EU-Rente', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eu_rente_wartefrist', label: 'EU-Rente Wartefrist (Tage)', type: 'number', placeholder: 'z.B. 720' },
+            { id: 'monatliche_rente', label: 'Monatliche Rente (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'eu_rente_art', label: 'EU-Rente Art', type: 'radio', options: ['Krankheit', 'Unfall'] },
+            { id: 'praemienbefreiung', label: 'Prämienbefreiung', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'praemienbefreiung_wartefrist', label: 'Prämienbefreiung Wartefrist (Tage)', type: 'number', placeholder: 'z.B. 90' }
+          ]
+        },
+        {
+          label: 'Diverses / Prämie',
+          fields: [
+            { id: 'jahrespraemie_chf', label: 'Jahresprämie CHF', type: 'number', suffix: 'CHF' },
+            { id: 'praemienzahlung_art', label: 'Prämienart', type: 'radio', options: ['Periodisch', 'Einmalig'] },
+            { id: 'zahlart', label: 'Zahlart', type: 'select', options: ['Jährlich', 'Halbjährlich', 'Vierteljährlich', 'Monatlich'] },
+            { id: 'saeule', label: 'Säule', type: 'radio', options: ['3a', '3b'] },
+            { id: 'beginn', label: 'Beginn', type: 'date' },
+            { id: 'anlageform', label: 'Anlageform', type: 'radio', options: ['Klassisch', 'Fondsgebunden'] },
+            { id: 'ablauf', label: 'Ablauf', type: 'date' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bemerkungen',
+      sections: [
+        {
+          label: 'Bemerkungen / Spezielles',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / Spezielles', type: 'textarea', rows: 6, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

@@ -16,6 +16,8 @@
   <script src="./assets/bag-praemien.js" defer></script>
   <!-- Identity-Sync: füllt Identity-Felder über alle Formulare automatisch aus -->
   <script src="./assets/identity-sync.js" defer></script>
+  <script src="./assets/finanz-glossar.js" defer></script>
+  <script src="./assets/info-tips.js" defer></script>
   <script>
     tailwind.config = {
       theme: {
@@ -354,6 +356,66 @@
     details summary { list-style: none; cursor: pointer; }
     details summary::-webkit-details-marker { display: none; }
     details[open] .faq-icon { transform: rotate(45deg); }
+
+    /* ── Inline-Tool-Styling (PK + Bezugs-Optimierer) ─── */
+    .v-tool {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 1.5rem;
+      padding: 2rem 1.75rem;
+    }
+    @media (min-width: 1024px) { .v-tool { padding: 2.5rem; } }
+    .v-tool-eyebrow {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 0.75rem;
+    }
+    .v-tool h3 { font-weight: 600; letter-spacing: -0.025em; font-size: 1.5rem; margin-bottom: 0.4rem; }
+    @media (min-width: 1024px) { .v-tool h3 { font-size: 1.85rem; } }
+    .v-tool .v-sub { color: #404040; font-size: 0.95rem; max-width: 38rem; }
+    .v-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+    @media (min-width: 960px) { .v-grid.split { grid-template-columns: 0.9fr 1fr; gap: 2rem; } }
+    .v-field { display: block; }
+    .v-field + .v-field { margin-top: 0.9rem; }
+    .v-field-label {
+      display: block; font-family: var(--font-mono); font-size: 0.66rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #737373; margin-bottom: 0.35rem;
+    }
+    .v-input, .v-select {
+      width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #D4D4D4;
+      border-radius: 0.6rem; background: #fff; color: #0A0A0A;
+      font-family: inherit; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .v-input:focus, .v-select:focus {
+      outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,41,54,0.1);
+    }
+    .v-result { background: #FAFAFA; border: 1px solid #E5E5E5; border-radius: 1rem; padding: 1.25rem 1.35rem; }
+    .v-result + .v-result { margin-top: 0.85rem; }
+    .v-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 0.5rem; padding: 0.4rem 0; font-size: 0.93rem;
+    }
+    .v-row + .v-row { border-top: 1px dashed #E5E5E5; }
+    .v-row .v-lbl { color: #404040; }
+    .v-row .v-lbl small { display: block; font-size: 0.78rem; color: #737373; }
+    .v-row .v-val { font-variant-numeric: tabular-nums; font-weight: 600; color: #0A0A0A; white-space: nowrap; }
+    .v-row.v-total { padding-top: 0.6rem; border-top: 1px solid var(--ink); margin-top: 0.4rem; }
+    .v-row.v-total .v-val { color: var(--red); font-size: 1.1rem; }
+    .v-hero {
+      background: var(--ink); color: #fff; border-radius: 1rem;
+      padding: 1.5rem 1.5rem 1.6rem; margin-bottom: 0.85rem;
+    }
+    .v-hero.red { background: linear-gradient(135deg, #CC2936, #7A181F); }
+    .v-hero .v-h-label {
+      font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem;
+    }
+    .v-hero .v-h-value {
+      font-size: 2.1rem; line-height: 1; font-weight: 600; letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .v-hero .v-h-value small { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 400; margin-right: 0.35rem; }
+    .v-hero .v-h-sub { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+    .v-hint { font-size: 0.78rem; color: #737373; margin-top: 1rem; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -406,7 +468,6 @@
                   <div class="mega-col-title">Finanzen</div>
                   <ul>
                     <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen<span class="mega-sub">Everon · Zugerberg Finanz</span></a></li>
-                    <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB<span class="mega-sub">Patientenverfügung · Beistandschaft</span></a></li>
                     <li><a href="kontakt.html?topic=hypothek">Hypothek<span class="mega-soon">bald</span></a></li>
                   </ul>
                   <div class="mega-divider">Tools</div>
@@ -540,7 +601,6 @@
             </ul></div>
             <div class="m-acc-section"><div class="m-acc-section-title">Finanzen</div><ul>
               <li><a href="finanzen.html">Vermögensaufbau &amp; Anlegen</a></li>
-              <li><a href="finanzen.html#vorsorgeauftrag">Vorsorgeauftrag &amp; KESB</a></li>
               <li><a href="kontakt.html?topic=hypothek">Hypothek (bald)</a></li>
               <li><a href="finanzen.html#vergleich"><strong>→ Performance-Vergleich</strong></a></li>
             </ul></div>
@@ -630,6 +690,31 @@
           </div>
           <h1 class="display text-[8vw] sm:text-[5.5vw] lg:text-[4.5vw] tracking-tightest"><span>Was bringt dir die </span><span class="text-brand-600">3. Säule</span><span> wirklich?</span></h1>
           <p class="mt-6 text-lg lg:text-xl text-ink-700 max-w-2xl leading-relaxed">Animierter Vermögensaufbau bis 65 mit echten Stadt-Zürich-Steuersätzen, Bank- und Versicherungs-Mix, Staffelungs-Vorteil bei Auszahlung.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── TRUST-BAR (Drittquellen) ───────────── -->
+    <section aria-label="Datenquellen &amp; Zertifizierungen" class="py-5 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="flex flex-wrap items-center justify-center lg:justify-between gap-x-8 gap-y-3 text-[11px] text-ink-500">
+          <span class="font-semibold text-ink-700 tracking-wide uppercase text-[10px]" data-i18n="trust.head">Quellen &amp; Zertifizierungen</span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span><strong class="text-ink-700">ESTV</strong> · <span data-i18n="trust.estv">Steuerdaten pro Gemeinde</span></span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span><strong class="text-ink-700">BAG · priminfo.ch</strong> · <span data-i18n="trust.bag">Krankenkassen-Prämien</span></span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span><strong class="text-ink-700">BFS</strong> · <span data-i18n="trust.bfs">Bevölkerungsstatistik</span></span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+            <span><strong class="text-ink-700">FINMA</strong> 35821 · <strong class="text-ink-700">Cicero</strong> <span data-i18n="trust.cicero">zertifiziert</span></span>
+          </span>
         </div>
       </div>
     </section>
@@ -745,7 +830,7 @@
 
               <div>
                 <div class="flex items-center justify-between">
-                  <label for="sContrib" class="label text-ink-500" data-i18n="strat.contrib">Jahresbeitrag 3a</label>
+                  <label for="sContrib" class="label text-ink-500" data-i18n="strat.contrib">Jahresbeitrag 3a<button type="button" class="gb-i" data-term="saeule-3a" aria-label="Was ist Säule 3a?"></button></label>
                   <span class="text-sm font-semibold num-tabular">CHF <span id="sContribOut">7'258</span></span>
                 </div>
                 <input id="sContrib" type="range" min="0" max="7258" step="100" value="7258" class="mt-3" />
@@ -754,7 +839,7 @@
 
               <div>
                 <div class="flex items-center justify-between">
-                  <label for="sMix" class="label text-ink-500" data-i18n="strat.mix">Versicherungs-Anteil</label>
+                  <label for="sMix" class="label text-ink-500" data-i18n="strat.mix">Versicherungs-Anteil<button type="button" class="gb-i" data-term="vers-anteil" aria-label="Was bedeutet Versicherungs-Anteil?"></button></label>
                   <span class="text-sm font-semibold num-tabular"><span id="sMixOut">40</span>%</span>
                 </div>
                 <input id="sMix" type="range" min="0" max="100" step="5" value="40" class="mt-3" />
@@ -785,7 +870,7 @@
 
               <div>
                 <div class="flex items-center justify-between">
-                  <label for="sReturn" class="label text-ink-500" data-i18n="strat.return">Bank-Rendite p.a.</label>
+                  <label for="sReturn" class="label text-ink-500" data-i18n="strat.return">Bank-Rendite p.a.<button type="button" class="gb-i" data-term="index-strategie" aria-label="Wie wird angelegt?"></button></label>
                   <span class="text-sm font-semibold num-tabular"><span id="sReturnOut">6.5</span>%</span>
                 </div>
                 <input id="sReturn" type="range" min="2" max="8" step="0.1" value="6.5" class="mt-3" />
@@ -851,9 +936,9 @@
 
               <!-- Chart -->
               <div class="rounded-2xl bg-white border border-ink-200 p-5 lg:p-6 mb-5">
-                <div class="flex items-center justify-between mb-1">
+                <div class="flex items-start justify-between gap-4 mb-2 flex-wrap">
                   <div class="text-sm font-semibold" data-i18n="strat.chart.title">Vermögensaufbau bis Rentenalter (65)</div>
-                  <div class="flex items-center gap-4 text-xs">
+                  <div class="flex items-center gap-x-4 gap-y-1 text-xs flex-wrap">
                     <span class="flex items-center gap-1.5 text-ink-500">
                       <span class="w-3 h-0.5 bg-ink-300"></span>
                       <span data-i18n="strat.legend.without">Ohne Strategie · Sparkonto 0%</span>
@@ -862,15 +947,23 @@
                       <span class="w-3 h-0.5 bg-brand-600"></span>
                       <span data-i18n="strat.legend.with">Mit Glatt-Strategie</span>
                     </span>
+                    <span class="flex items-center gap-1.5 text-ink-500">
+                      <span class="w-3 h-2 rounded-sm" style="background: rgba(204,41,54,.12); border-top: 1px dashed rgba(204,41,54,.45); border-bottom: 1px dashed rgba(204,41,54,.45);"></span>
+                      <span data-i18n="strat.legend.band">Bandbreite ±2.5 % Rendite</span>
+                    </span>
                   </div>
                 </div>
 
                 <div class="relative">
-                  <svg id="sChart" viewBox="0 0 600 280" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+                  <svg id="sChart" viewBox="-14 -4 690 296" class="w-full h-auto" preserveAspectRatio="xMidYMid meet" style="overflow: visible;">
                     <defs>
                       <linearGradient id="sFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="#CC2936" stop-opacity="0.18"/>
                         <stop offset="100%" stop-color="#CC2936" stop-opacity="0"/>
+                      </linearGradient>
+                      <linearGradient id="sBandFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#CC2936" stop-opacity="0.13"/>
+                        <stop offset="100%" stop-color="#CC2936" stop-opacity="0.02"/>
                       </linearGradient>
                       <clipPath id="sClip"><rect id="sClipRect" x="0" y="0" width="0" height="280"/></clipPath>
                     </defs>
@@ -878,8 +971,14 @@
                     <g id="sGrid" stroke="#E5E5E5" stroke-dasharray="2 4"></g>
                     <!-- Chart content (clipped on entrance) -->
                     <g clip-path="url(#sClip)">
+                      <!-- Szenarien-Korridor: low/high -->
+                      <path id="sBand" fill="url(#sBandFill)" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
+                      <path id="sWithLow" fill="none" stroke="#CC2936" stroke-width="1.2" stroke-dasharray="3 3" stroke-opacity="0.45" stroke-linejoin="round" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
+                      <path id="sWithHigh" fill="none" stroke="#CC2936" stroke-width="1.2" stroke-dasharray="3 3" stroke-opacity="0.45" stroke-linejoin="round" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
+                      <!-- Erwartet (Hauptlinie) -->
                       <path id="sArea" fill="url(#sFill)" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
                       <path id="sWith" fill="none" stroke="#CC2936" stroke-width="2.5" stroke-linejoin="round" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
+                      <!-- Ohne Strategie -->
                       <path id="sWithout" fill="none" stroke="#A3A3A3" stroke-width="2" stroke-dasharray="4 4" stroke-linejoin="round" style="transition: d .6s cubic-bezier(.16,1,.3,1)"></path>
                       <circle id="sDotWith" r="5" fill="#CC2936" style="transition: cx .6s cubic-bezier(.16,1,.3,1), cy .6s cubic-bezier(.16,1,.3,1)"/>
                       <circle id="sDotWithout" r="4" fill="#A3A3A3" style="transition: cx .6s cubic-bezier(.16,1,.3,1), cy .6s cubic-bezier(.16,1,.3,1)"/>
@@ -887,8 +986,16 @@
                     <!-- Axis labels -->
                     <g id="sXAxis" font-family="JetBrains Mono, monospace" font-size="10" fill="#737373"></g>
                     <g id="sYAxis" font-family="JetBrains Mono, monospace" font-size="10" fill="#737373"></g>
-                    <!-- Endpoint label -->
+                    <!-- Endpoint pill (prominent) -->
                     <g id="sEndLabel"></g>
+                    <!-- Tooltip layer (vor Hover-Rect, damit Maus durch) -->
+                    <g id="sTooltip" style="display: none; pointer-events: none;">
+                      <line id="sTooltipLine" stroke="#0A0A0A" stroke-width="0.5" stroke-dasharray="3 3" stroke-opacity="0.6"/>
+                      <circle id="sTooltipDot" r="3.5" fill="#CC2936" stroke="#fff" stroke-width="2"/>
+                      <g id="sTooltipBox"></g>
+                    </g>
+                    <!-- Hover area (transparent overlay) -->
+                    <rect id="sHoverArea" x="48" y="16" width="496" height="236" fill="transparent" style="cursor: crosshair;"/>
                   </svg>
                 </div>
               </div>
@@ -920,6 +1027,11 @@
                 </div>
               </div>
 
+              <!-- Berater-Hinweis: KPI-Storytelling -->
+              <div class="advisor-only advisor-hint mt-4">
+                Nutze die KPI-Kaskade als Story: <em>Heute</em> → Steuerersparnis (sofortig sichtbar) · <em>Über die Laufzeit</em> → Kumuliert + Endkapital (Greifbarmachung) · <em>Versus nichts</em> → Mehrwert-Box (FOMO-Aktivierung). Wenn Kunde nur auf Endkapital schaut: schwenke auf "monatliche Pension daraus" (CHF Endkapital / (30 Jahre Pensionsalter) / 12 Monate).
+              </div>
+
               <!-- Versicherungs-Schutz: Was die Versicherungs-Komponente zusätzlich liefert -->
               <div class="mt-6 rounded-2xl bg-white border border-ink-200 p-5 lg:p-6">
                 <div class="flex items-center gap-2.5 mb-4">
@@ -946,6 +1058,11 @@
                 <p class="text-xs text-ink-500 leading-relaxed mt-4" data-i18n="strat.guard.note">
                   Beispielwerte aus typischen Generali / Swiss Life 3a-Lösungen. Tatsächliche Schutzhöhen werden in der individuellen Offerte definiert.
                 </p>
+              </div>
+
+              <!-- Berater-Hinweis: Schutz-Erklärung -->
+              <div class="advisor-only advisor-hint mt-4">
+                Schutz-Werte greifbar machen: Todesfallkapital = "wieviele Jahre Familie bezahlt" (Wert / Jahreseinkommen Partner). IV-Rente = "monatlich CHF X reinkommt wenn du morgen nicht mehr arbeiten kannst". Prämienbefreiung = "der Plan läuft weiter — auch wenn du in Reha bist". Diese drei Sätze schliessen die Schutz-Argumentation.
               </div>
 
               <!-- Bezugssteuer: Steuerersparnis durch Staffelung sichtbar -->
@@ -993,6 +1110,11 @@
                   </div>
                   <span class="display text-2xl text-brand-500 num-tabular">+CHF <span id="sTaxWin">0</span></span>
                 </div>
+              </div>
+
+              <!-- Berater-Hinweis: Bezugssteuer-Hebel -->
+              <div class="advisor-only advisor-hint mt-4">
+                Staffelung ist der unterschätzteste Hebel — viele Kunden wissen das nicht. Argumentation: "1 Konto = volle Progression. 3 Konten über 3 Steuerjahre bezogen = ø 35 % weniger Bezugssteuer." Wenn Kunde nur EIN 3a-Konto hat: <em>jetzt</em> ist Zeitpunkt für Konto-Splitting (2-3 Konten parallel führen, kostenneutral). Beim Wechsel-Vorschlag Anbieter-Mix vorschlagen, weil 2 Anbieter = 2 Konten = 2 Tranchen.
               </div>
 
               <p class="mt-5 text-xs text-ink-500 leading-relaxed" data-i18n="strat.disclaimer">
@@ -1055,6 +1177,173 @@
         </div>
       </div>
     </section>
+
+    <!-- ───────────── PERFORMANCE-HISTORIE ───────────── -->
+    <section id="performance" class="py-24 lg:py-32 bg-ink-50/40 border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+
+        <!-- Hero -->
+        <div class="max-w-3xl mb-12" data-reveal>
+          <div class="label text-brand-600 mb-4" data-i18n="perf.eyebrow">— Performance-Historie</div>
+          <h2 class="display text-[7vw] sm:text-[5vw] lg:text-[3.6vw] tracking-tightest mb-5 leading-[1.05]">
+            <span data-i18n="perf.title.1">Was unsere</span> <span class="text-brand-600" data-i18n="perf.title.2">Bank-Anbieter</span> <span data-i18n="perf.title.3">tatsächlich geliefert haben.</span>
+          </h2>
+          <p class="text-lg text-ink-700 leading-relaxed" data-i18n="perf.sub">
+            Netto-Renditen nach allen laufenden Kosten — direkt aus den offiziellen Monatsberichten der Anbieter. Keine Marketing-Zahlen.
+          </p>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="rounded-2xl bg-white border border-ink-200 p-5 lg:p-8 mb-5" data-reveal>
+          <div class="flex items-baseline justify-between mb-1 flex-wrap gap-2">
+            <h3 class="font-semibold text-base">Zugerberg Finanz · Revo-Strategien</h3>
+            <span class="text-xs text-ink-500" data-i18n="perf.scale">Netto-Performance p.a. · Quelle: Zugerberg Monthly Reports</span>
+          </div>
+
+          <div class="relative">
+            <svg id="perfChart" viewBox="0 0 800 340" class="w-full h-auto" preserveAspectRatio="xMidYMid meet" style="overflow: visible;">
+              <!-- Wird per JS gerendert (perfRender) -->
+            </svg>
+          </div>
+
+          <!-- Legende (Portfolios) -->
+          <div id="perfLegend" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-5 pt-5 border-t border-ink-100">
+            <!-- Wird per JS gerendert -->
+          </div>
+        </div>
+
+        <!-- Everon Callout -->
+        <div class="rounded-2xl border border-ink-200 bg-white p-5 lg:p-6 flex items-start gap-4 mb-5" data-reveal>
+          <div class="grid place-items-center w-10 h-10 rounded-xl bg-brand-50 text-brand-600 shrink-0 flex-shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          </div>
+          <div class="flex-1">
+            <div class="font-semibold text-sm mb-1.5">Everon · <span data-i18n="perf.everon.tag">Direktanlage in ETFs</span></div>
+            <p class="text-sm text-ink-700 leading-relaxed" data-i18n="perf.everon.text">
+              Everon ist eine Direktanlage-Plattform — die Performance entspricht 1:1 der gewählten ETF-Strategie. Eine breit gestreute Global-100-Variante (z.B. MSCI World) hat in CHF-Sicht 2023 rund <strong>+15 %</strong> und 2024 rund <strong>+27 %</strong> geliefert. Wir konfigurieren mit dir die individuell passende Mischung — die exakte Performance folgt aus deinen ETF-Picks, nicht aus einer Anbieter-Strategie.
+            </p>
+          </div>
+        </div>
+
+        <!-- Source & Disclaimer -->
+        <p class="text-xs text-ink-500 leading-relaxed max-w-3xl" data-i18n="perf.disclaimer">
+          <strong>Datenquellen:</strong> Zugerberg Finanz Monthly Reports 12/2023, 12/2024 und 11/2025 — Performance ist netto nach laufenden Kosten, vor Vertragsabschluss-Kosten. 2025-Werte sind YTD per November und annualisieren sich am Jahresende nach. MSCI World CHF-Sicht aus öffentlichen Index-Daten. <strong>Vergangene Wertentwicklung ist kein verlässlicher Indikator für zukünftige Renditen.</strong> Kapitalanlagen sind mit Verlustrisiko verbunden.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ───────────── REAL-LIFE STORIES ───────────── -->
+    <section id="stories" class="py-24 lg:py-32 bg-white">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-12" data-reveal>
+          <div class="label text-brand-600 mb-4" data-i18n="story.eyebrow">— So sieht's konkret aus</div>
+          <h2 class="display text-[7vw] sm:text-[5vw] lg:text-[3.4vw] tracking-tightest mb-5 leading-[1.05]">
+            <span data-i18n="story.title.1">Drei Leben.</span> <span class="text-brand-600" data-i18n="story.title.2">Drei Pläne.</span> <span data-i18n="story.title.3">Eine Logik.</span>
+          </h2>
+          <p class="text-lg text-ink-700 leading-relaxed" data-i18n="story.sub">
+            Beispiel-Profile aus unserer Praxis — anonymisiert, aber strukturell echt. Was passiert, wenn jemand wie du zu uns kommt?
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          <!-- Anna -->
+          <div class="rounded-2xl border border-ink-200 bg-white p-6 lg:p-7" data-reveal>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-full grid place-items-center bg-brand-50 text-brand-600 font-bold text-base">A</div>
+              <div>
+                <div class="font-semibold text-base" data-i18n="story.p1.who">Anna · 28 · Single</div>
+                <div class="text-xs text-ink-500" data-i18n="story.p1.role">Architektin · Stadt Zürich · CHF 85'000</div>
+              </div>
+            </div>
+            <div class="text-xs label text-ink-500 mb-1" data-i18n="story.p1.painLbl">Pain</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p1.pain">
+              "Ich höre immer 'mach 3a', habe aber keine Lust auf VIAC-Apps und keine Idee, ob mich das überhaupt etwas angeht."
+            </p>
+            <div class="text-xs label text-brand-600 mb-1" data-i18n="story.p1.fixLbl">Plan</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p1.fix">
+              80 % Bank (Zugerberg Revo 4, ausgewogen-offensiv) + 20 % Versicherung Generali für Erwerbsunfähigkeits-Absicherung. Beitrag CHF 7'258/Jahr (Max).
+            </p>
+            <div class="rounded-xl bg-ink-50 p-4 grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-[10px] label text-ink-500" data-i18n="story.p1.r1.lbl">Steuerersparnis</div>
+                <div class="num-tabular font-semibold text-base">CHF 1'887/Jahr</div>
+              </div>
+              <div>
+                <div class="text-[10px] label text-ink-500" data-i18n="story.p1.r2.lbl">Endkapital mit 65</div>
+                <div class="num-tabular font-semibold text-base text-brand-600">CHF 765'000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marco & Lea -->
+          <div class="rounded-2xl border-2 border-brand-600 bg-white p-6 lg:p-7 relative shadow-xl shadow-brand-500/15" data-reveal>
+            <div class="absolute -top-3 left-6 px-3 py-1 bg-brand-600 text-white text-[10px] font-semibold uppercase tracking-wider rounded" data-i18n="story.p2.badge">Familien-Klassiker</div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-full grid place-items-center bg-brand-50 text-brand-600 font-bold text-base">M</div>
+              <div>
+                <div class="font-semibold text-base" data-i18n="story.p2.who">Marco &amp; Lea · 38 · Familie</div>
+                <div class="text-xs text-ink-500" data-i18n="story.p2.role">2 Kinder · Eigenheim Wallisellen · CHF 160'000 Haushalt</div>
+              </div>
+            </div>
+            <div class="text-xs label text-ink-500 mb-1" data-i18n="story.p2.painLbl">Pain</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p2.pain">
+              "Hypothek 800 k, zwei Kinder — wenn einer von uns ausfällt, kollabiert der Plan. Brauche Sicherheit, nicht nur Rendite."
+            </p>
+            <div class="text-xs label text-brand-600 mb-1" data-i18n="story.p2.fixLbl">Plan</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p2.fix">
+              50 / 50 Bank-Versicherung pro Person. Beide max 7'258. Versicherungs-Komponente Generali sichert Todesfallkapital, Prämienbefreiung, IV-Rente — der Plan läuft auch dann weiter, wenn einer ausfällt.
+            </p>
+            <div class="rounded-xl bg-brand-50 p-4 grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-[10px] label text-brand-600" data-i18n="story.p2.r1.lbl">Todesfallschutz total</div>
+                <div class="num-tabular font-semibold text-base">CHF 380'000</div>
+              </div>
+              <div>
+                <div class="text-[10px] label text-brand-600" data-i18n="story.p2.r2.lbl">Steuerersparnis</div>
+                <div class="num-tabular font-semibold text-base text-brand-600">CHF 4'400/Jahr</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bruno -->
+          <div class="rounded-2xl border border-ink-200 bg-white p-6 lg:p-7" data-reveal>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-full grid place-items-center bg-brand-50 text-brand-600 font-bold text-base">B</div>
+              <div>
+                <div class="font-semibold text-base" data-i18n="story.p3.who">Bruno · 55 · Selbstständig</div>
+                <div class="text-xs text-ink-500" data-i18n="story.p3.role">Kein PK · Kinder ausgezogen · CHF 180'000</div>
+              </div>
+            </div>
+            <div class="text-xs label text-ink-500 mb-1" data-i18n="story.p3.painLbl">Pain</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p3.pain">
+              "Habe 8 Jahre bis Rente, kein Pensionskassen-Polster, vier 3a-Konten lose über die Jahre eröffnet — keine Strategie."
+            </p>
+            <div class="text-xs label text-brand-600 mb-1" data-i18n="story.p3.fixLbl">Plan</div>
+            <p class="text-sm text-ink-700 leading-relaxed mb-4" data-i18n="story.p3.fix">
+              Beitrag auf max (CHF 36'288/Jahr, 20% vom Einkommen) raufgesetzt. 4 Konten beibehalten für Staffelung: Bezug 2031/32/33/34 senkt Bezugssteuer um ~38 %. Defensiverer Mix (Revo 3) wegen kurzer Laufzeit.
+            </p>
+            <div class="rounded-xl bg-ink-50 p-4 grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-[10px] label text-ink-500" data-i18n="story.p3.r1.lbl">Bezugssteuer-Ersparnis</div>
+                <div class="num-tabular font-semibold text-base">CHF 41'000</div>
+              </div>
+              <div>
+                <div class="text-[10px] label text-ink-500" data-i18n="story.p3.r2.lbl">Marginalrate-Hebel</div>
+                <div class="num-tabular font-semibold text-base text-brand-600">CHF 13'430/Jahr</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="text-xs text-ink-500 mt-6 max-w-2xl" data-i18n="story.fine">
+          Beispiel-Berechnungen mit den hinterlegten Glatt-Strategien · Stadt Zürich 2026 · Werte gerundet. Tatsächliche Pläne werden auf deine Situation individuell zugeschnitten.
+        </p>
+      </div>
+    </section>
+
     <!-- ───────────── WARUM VERSICHERUNGS-ANTEIL ───────────── -->
     <section id="warum-versicherung" class="py-24 lg:py-32">
       <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
@@ -1284,11 +1573,11 @@
             <h4 class="font-semibold mb-1.5 tracking-tight">Lebenspartner absichern</h4>
             <p class="text-ink-700 text-[0.93rem] leading-relaxed">Witwen-/Witwerrente hat Lücken — besonders bei unverheirateten Paaren. Begünstigungen und Vorsorgeauftrag prüfen.</p>
           </div>
-          <a href="finanzen.html#vorsorgeauftrag" class="bg-white p-6 lg:p-7 block transition hover:bg-ink-50 group">
+          <div class="bg-white p-6 lg:p-7">
             <div class="font-mono text-brand-600 text-sm font-medium mb-2">08</div>
-            <h4 class="font-semibold mb-1.5 tracking-tight group-hover:text-brand-600">Vorsorge-rechtliche Doks <span aria-hidden="true" class="text-brand-600 opacity-0 group-hover:opacity-100 transition">→</span></h4>
-            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Vorsorgeauftrag, Patienten­verfügung, KESB-Schutz — günstig zu erstellen, teuer zu vermissen.</p>
-          </a>
+            <h4 class="font-semibold mb-1.5 tracking-tight">Vorsorge-rechtliche Doks</h4>
+            <p class="text-ink-700 text-[0.93rem] leading-relaxed">Vorsorgeauftrag, Patienten­verfügung, Vollmacht, Testament — günstig zu erstellen, teuer zu vermissen.</p>
+          </div>
           <div class="bg-white p-6 lg:p-7">
             <div class="font-mono text-brand-600 text-sm font-medium mb-2">09</div>
             <h4 class="font-semibold mb-1.5 tracking-tight">Nachlassplanung</h4>
@@ -1356,6 +1645,356 @@
                 <span class="num-tabular">+41 77 409 05 19</span>
               </a>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── PK-EINKAUF-RECHNER ───────────── -->
+    <section id="pk-einkauf" class="py-16 lg:py-24 border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— PK-Einkauf-Rechner</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">PK-Einkauf — der versteckte Hebel.</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Ein PK-Einkauf ist die effektivste Einzelmassnahme zur Steueroptimierung. Voll vom Einkommen abzugsfähig, mit Marginalsteuersatz multipliziert. Probier es aus.
+          </p>
+        </div>
+
+        <div class="v-tool">
+          <div class="v-grid split">
+            <div>
+              <label class="v-field">
+                <span class="v-field-label">Aktuelle Vorsorge-Lücke (lt. PK-Ausweis)</span>
+                <input id="pkLuecke" type="number" min="0" step="5000" value="50000" class="v-input" />
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Geplanter Einkauf jetzt</span>
+                <input id="pkEinkauf" type="number" min="0" step="5000" value="30000" class="v-input" />
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Brutto-Einkommen</span>
+                <input id="pkEink" type="number" min="0" step="5000" value="150000" class="v-input" />
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Wohnort</span>
+                <select id="pkKanton" class="v-select">
+                  <option value="zh">Stadt Zürich (ledig)</option>
+                  <option value="zh-v">Stadt Zürich (verheiratet)</option>
+                  <option value="zg">Zug</option>
+                  <option value="ge">Genf</option>
+                  <option value="ti">Lugano</option>
+                  <option value="be">Bern</option>
+                  <option value="bs">Basel-Stadt</option>
+                </select>
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Strategie über 3 Jahre staffeln?</span>
+                <select id="pkStaffel" class="v-select">
+                  <option value="1">1 Einkauf jetzt</option>
+                  <option value="2">2 Tranchen (über 2 Jahre)</option>
+                  <option value="3">3 Tranchen (über 3 Jahre)</option>
+                </select>
+              </label>
+              <p class="v-hint">Bezugssperre 3 Jahre nach Einkauf für Wohneigentum / Kapitalbezug. Maximale Einkaufs­summe = aktuelle Lücke laut PK-Ausweis. Marginalsatz aus ESTV 2026 vereinfacht.</p>
+            </div>
+
+            <div>
+              <div class="v-hero red">
+                <div class="v-h-label">Direkte Steuer-Ersparnis</div>
+                <div class="v-h-value"><small>CHF</small><span id="pkSave">0</span></div>
+                <div class="v-h-sub">bei <span id="pkMarg">0</span> % Marginalsteuersatz</div>
+              </div>
+
+              <div class="v-result">
+                <div class="v-row"><span class="v-lbl">Maximal möglicher Einkauf (Lücke)</span><span class="v-val">CHF <span id="pkLueckeOut">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Geplanter Einkauf</span><span class="v-val">CHF <span id="pkEinkOut">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Marginal-Steuersatz</span><span class="v-val"><span id="pkMargOut">0</span> %</span></div>
+                <div class="v-row v-total"><span class="v-lbl">Netto-Kosten der Einzahlung</span><span class="v-val">CHF <span id="pkNetto">0</span></span></div>
+              </div>
+
+              <div class="v-result">
+                <div class="v-row"><span class="v-lbl">Pro Tranche <small>bei <span id="pkStaffelN">1</span> Tranchen</small></span><span class="v-val">CHF <span id="pkProTr">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Steuerersparnis pro Tranche</span><span class="v-val text-emerald-600">CHF <span id="pkProTrSave">0</span></span></div>
+                <div class="v-row v-total"><span class="v-lbl">Total über alle Tranchen</span><span class="v-val">CHF <span id="pkTotalSave">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 3a-BEZUGS-OPTIMIERER ───────────── -->
+    <section id="bezug-tranchen" class="py-16 lg:py-24 bg-white border-y border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-10">
+          <div class="label text-brand-600 mb-4">— 3a-Bezugs-Tranchen-Optimierer</div>
+          <h2 class="display text-3xl lg:text-5xl tracking-tightest mb-4">Wann beziehst du deine Säulen — und warum mehrere Konten Sinn machen.</h2>
+          <p class="text-ink-700 lg:text-lg leading-relaxed">
+            Die Kapitalbezugs-Steuer ist progressiv: 1 grosser Bezug → 100 % Tarif. 3 mittlere Bezüge in verschiedenen Jahren → drastisch weniger. So viel kannst du sparen.
+          </p>
+        </div>
+
+        <div class="v-tool">
+          <div class="v-grid split">
+            <div>
+              <label class="v-field">
+                <span class="v-field-label">Total 3a / Freizügigkeits-Kapital</span>
+                <input id="bzKap" type="number" min="0" step="10000" value="350000" class="v-input" />
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Anzahl Bezugsjahre (Tranchen)</span>
+                <select id="bzTranchen" class="v-select">
+                  <option value="1">1 Tranche (1 Jahr)</option>
+                  <option value="2">2 Tranchen (2 verschiedene Jahre)</option>
+                  <option value="3" selected>3 Tranchen (3 Jahre, Standard)</option>
+                  <option value="4">4 Tranchen (4 Jahre)</option>
+                  <option value="5">5 Tranchen (5 Jahre, max Hebel)</option>
+                </select>
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Wohnort beim Bezug</span>
+                <select id="bzKanton" class="v-select">
+                  <option value="zh">Stadt Zürich (ledig)</option>
+                  <option value="zh-v">Stadt Zürich (verheiratet)</option>
+                  <option value="zg">Zug</option>
+                  <option value="ge">Genf</option>
+                  <option value="ti">Lugano</option>
+                  <option value="be">Bern</option>
+                  <option value="bs">Basel-Stadt</option>
+                </select>
+              </label>
+              <label class="v-field">
+                <span class="v-field-label">Zivilstand bei Pensionierung</span>
+                <select id="bzZivil" class="v-select">
+                  <option value="ledig">Ledig / geschieden / verwitwet</option>
+                  <option value="verh" selected>Verheiratet / eingetr. Partnerschaft</option>
+                </select>
+              </label>
+              <p class="v-hint">Schweizer Kapitalbezugs-Steuer = Bund + Kanton + Gemeinde. 1/5-Renten-Tarif. Wer in Konkubinat lebt, wird wie Ledige besteuert. Verheiratete profitieren von Splitting.</p>
+            </div>
+
+            <div>
+              <div class="v-hero red">
+                <div class="v-h-label">Steuer-Ersparnis durch Staffelung</div>
+                <div class="v-h-value"><small>CHF</small><span id="bzSave">0</span></div>
+                <div class="v-h-sub">bei <span id="bzNshow">3</span>-Tranchen-Strategie</div>
+              </div>
+
+              <div class="v-result">
+                <div class="v-row"><span class="v-lbl">Kapital Total</span><span class="v-val">CHF <span id="bzKapOut">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Steuer bei 1 Bezug <small>einmaliger Tarif</small></span><span class="v-val">−CHF <span id="bz1">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Effektiv-Satz</span><span class="v-val"><span id="bz1pct">0</span> %</span></div>
+                <div class="v-row v-total"><span class="v-lbl">Netto nach 1 Bezug</span><span class="v-val">CHF <span id="bz1net">0</span></span></div>
+              </div>
+
+              <div class="v-result">
+                <div class="v-row"><span class="v-lbl">Steuer bei <span id="bzN2show">3</span> Tranchen</span><span class="v-val">−CHF <span id="bzN">0</span></span></div>
+                <div class="v-row"><span class="v-lbl">Effektiv-Satz pro Tranche</span><span class="v-val"><span id="bzNpct">0</span> %</span></div>
+                <div class="v-row v-total"><span class="v-lbl">Netto nach Staffelung</span><span class="v-val">CHF <span id="bzNnet">0</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── DREI WEGE — VERGLEICH ───────────── -->
+    <section id="vergleich" class="py-24 lg:py-32 bg-white border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-3xl mb-12" data-reveal>
+          <div class="label text-brand-600 mb-4" data-i18n="cmp.eyebrow">— Im direkten Vergleich</div>
+          <h2 class="display text-[7vw] sm:text-[5vw] lg:text-[3.4vw] tracking-tightest mb-5 leading-[1.05]">
+            <span data-i18n="cmp.title.1">Drei Wege.</span><br>
+            <span class="text-brand-600" data-i18n="cmp.title.2">Ein Ziel.</span>
+          </h2>
+          <p class="text-lg text-ink-700 leading-relaxed" data-i18n="cmp.sub">
+            Was unterscheidet uns vom günstigsten Discount-Tool — und vom Nichtstun? Mit deinen Werten aus dem Rechner oben.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+
+          <!-- Karte 1: Nichts -->
+          <div class="rounded-2xl border border-ink-200 bg-ink-50/40 p-6 lg:p-7" data-reveal>
+            <div class="label text-ink-500 mb-2" data-i18n="cmp.c1.tag">Status quo</div>
+            <h3 class="display text-xl mb-1" data-i18n="cmp.c1.title">Nichts tun</h3>
+            <p class="text-xs text-ink-500" data-i18n="cmp.c1.sub">Sparkonto · Zins ~0 % · Beitrag voll versteuert</p>
+            <div class="mt-6 pb-6 border-b border-ink-200">
+              <div class="label text-ink-500 text-[10px]" data-i18n="cmp.final.lbl">Endkapital netto nach <span id="cmpYrs1">35</span> Jahren</div>
+              <div class="display text-2xl num-tabular text-ink-700 mt-1">CHF <span id="cmpVal1">0</span></div>
+              <div class="text-xs text-ink-500 mt-1" data-i18n="cmp.c1.basis">Basis-Szenario</div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm text-ink-700">
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c1.l1">Kein Steuerabzug · Beitrag nach Steuern auf Sparkonto</span></li>
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c1.l2">Inflation frisst Realwert auf</span></li>
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c1.l3">Kein Todesfallschutz · keine IV-Absicherung</span></li>
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c1.l4">Volle Bezugssteuer-Progression auf Pensionskasse</span></li>
+            </ul>
+          </div>
+
+          <!-- Karte 2: Discount selbst -->
+          <div class="rounded-2xl border border-ink-200 bg-white p-6 lg:p-7" data-reveal>
+            <div class="label text-ink-500 mb-2" data-i18n="cmp.c2.tag">Discount-Online</div>
+            <h3 class="display text-xl mb-1" data-i18n="cmp.c2.title">Selbst anlegen</h3>
+            <p class="text-xs text-ink-500" data-i18n="cmp.c2.sub">VIAC · finpension · 100 % Bank · TER ~0.4 %</p>
+            <div class="mt-6 pb-6 border-b border-ink-200">
+              <div class="label text-ink-500 text-[10px]" data-i18n="cmp.final.lbl">Endkapital netto nach <span id="cmpYrs2">35</span> Jahren</div>
+              <div class="display text-2xl num-tabular text-ink-900 mt-1">CHF <span id="cmpVal2">0</span></div>
+              <div class="text-xs text-emerald-600 font-medium mt-1">+CHF <span id="cmpDelta2">0</span> <span data-i18n="cmp.vs.nothing">vs. nichts tun</span></div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm text-ink-700">
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c2.l1">Steuerabzug auf Beitrag · steuerfreies Wachstum</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c2.l2">Volle ETF-Auswahl · jährlich anpassbar</span></li>
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c2.l3">Kein Todesfallkapital · keine Prämienbefreiung bei IV</span></li>
+              <li class="flex gap-2"><span class="text-ink-400 shrink-0">○</span><span data-i18n="cmp.c2.l4">Du allein verantwortlich für Strategie &amp; Staffelung</span></li>
+            </ul>
+          </div>
+
+          <!-- Karte 3: Glatt -->
+          <div class="rounded-2xl border-2 border-brand-600 bg-white p-6 lg:p-7 relative shadow-xl shadow-brand-500/15" data-reveal>
+            <div class="absolute -top-3 left-6 px-3 py-1 bg-brand-600 text-white text-[10px] font-semibold uppercase tracking-wider rounded" data-i18n="cmp.c3.badge">Empfehlung</div>
+            <div class="label text-brand-600 mb-2" data-i18n="cmp.c3.tag">Mit Glatt Broker</div>
+            <h3 class="display text-xl mb-1" data-i18n="cmp.c3.title">Voll begleitet</h3>
+            <p class="text-xs text-ink-500" data-i18n="cmp.c3.sub">Bank + Versicherung Mix · gestaffelter Bezug · jährliche Überprüfung</p>
+            <div class="mt-6 pb-6 border-b border-brand-100">
+              <div class="label text-ink-500 text-[10px]" data-i18n="cmp.final.lbl">Endkapital netto nach <span id="cmpYrs3">35</span> Jahren</div>
+              <div class="display text-2xl num-tabular text-brand-600 mt-1">CHF <span id="cmpVal3">0</span></div>
+              <div class="text-xs text-emerald-600 font-medium mt-1">+CHF <span id="cmpDelta3">0</span> <span data-i18n="cmp.vs.self">vs. selbst anlegen</span></div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm text-ink-700">
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c3.l1"><strong>Alles aus Karte 2</strong> · gleiche Steuervorteile</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c3.l2"><strong>Schutz inkl.:</strong> Todesfallkapital, IV-Rente, Prämienbefreiung</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c3.l3"><strong>Gestaffelte Auszahlung</strong> · ø 30-40 % weniger Bezugssteuer</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 shrink-0">✓</span><span data-i18n="cmp.c3.l4"><strong>Cross-Beratung</strong> · KK, Steuern, Vorsorge aus einer Hand</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="text-xs text-ink-500 mt-6 leading-relaxed max-w-3xl" data-i18n="cmp.fine">
+          Beträge sind netto nach Bezugssteuer. "Selbst anlegen" rechnet 100 % Bank-Anteil mit deiner gewählten Rendite, ohne Schutz, ohne Staffelung. "Mit Glatt" rechnet deinen aktuellen Mix mit gestaffeltem Bezug. "Nichts tun" = Beitrag nach Steuern auf Sparkonto, 0 % Zins.
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────────── ABLAUF (Onboarding-Stepper) ───────────── -->
+    <section id="ablauf" class="py-20 lg:py-24 bg-ink-50/40 border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="max-w-2xl mb-10" data-reveal>
+          <div class="label text-brand-600 mb-3" data-i18n="abl.eyebrow">— So läuft's</div>
+          <h2 class="display text-2xl lg:text-3xl tracking-tightest" data-i18n="abl.title">Vom Erstgespräch zum Vertrag in 14 Tagen.</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 relative" data-reveal>
+          <!-- Connector line (desktop) -->
+          <div class="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-px bg-ink-200" aria-hidden="true"></div>
+
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-brand-600 text-white grid place-items-center font-bold text-base mx-auto mb-4 relative z-10 shadow-md">1</div>
+            <div class="text-center">
+              <div class="font-semibold text-sm mb-1" data-i18n="abl.s1.t">Erstgespräch</div>
+              <div class="text-xs text-ink-600 leading-relaxed" data-i18n="abl.s1.d">30 Minuten · kostenlos · Telefon, Video oder vor Ort. Wir hören zu — keine Verkaufsfolien.</div>
+              <div class="text-[10px] text-ink-400 mt-2" data-i18n="abl.s1.k">Aufwand: 30 Min</div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-ink-900 text-white grid place-items-center font-bold text-base mx-auto mb-4 relative z-10 shadow-md">2</div>
+            <div class="text-center">
+              <div class="font-semibold text-sm mb-1" data-i18n="abl.s2.t">Plan-Erstellung</div>
+              <div class="text-xs text-ink-600 leading-relaxed" data-i18n="abl.s2.d">Wir erstellen deinen individuellen Plan basierend auf Einkommen, Steuersituation, Lebenslage — als PDF zum Mitnehmen.</div>
+              <div class="text-[10px] text-ink-400 mt-2" data-i18n="abl.s2.k">Dein Aufwand: 0</div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-ink-900 text-white grid place-items-center font-bold text-base mx-auto mb-4 relative z-10 shadow-md">3</div>
+            <div class="text-center">
+              <div class="font-semibold text-sm mb-1" data-i18n="abl.s3.t">Du entscheidest</div>
+              <div class="text-xs text-ink-600 leading-relaxed" data-i18n="abl.s3.d">Ja oder nein — kein Druck, keine Bindung. Bei Ja: Antrag elektronisch in &lt; 30 Min, Konto-Eröffnung in 7-14 Tagen.</div>
+              <div class="text-[10px] text-ink-400 mt-2" data-i18n="abl.s3.k">Aufwand: 30 Min</div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-ink-900 text-white grid place-items-center font-bold text-base mx-auto mb-4 relative z-10 shadow-md">4</div>
+            <div class="text-center">
+              <div class="font-semibold text-sm mb-1" data-i18n="abl.s4.t">Jährliche Überprüfung</div>
+              <div class="text-xs text-ink-600 leading-relaxed" data-i18n="abl.s4.d">Einmal pro Jahr 30 Min: Strategie-Check, Anbieter-Wechsel falls besser, Steueroptimierung — automatisch im Service.</div>
+              <div class="text-[10px] text-ink-400 mt-2" data-i18n="abl.s4.k">Aufwand: 30 Min/Jahr</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── FAQ ───────────── -->
+    <section id="faq" class="py-20 lg:py-24 bg-white border-t border-ink-200">
+      <div class="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div class="grid lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-4" data-reveal>
+            <div class="label text-brand-600 mb-3" data-i18n="faq.eyebrow">— Häufige Fragen</div>
+            <h2 class="display text-2xl lg:text-4xl tracking-tightest mb-5" data-i18n="faq.title">Was Kunden uns immer wieder fragen.</h2>
+            <p class="text-sm text-ink-600" data-i18n="faq.sub">Etwas anderes auf dem Herzen? Direkt anrufen oder kurze Nachricht via <a class="text-brand-600 underline" href="kontakt.html">Kontakt</a>.</p>
+          </div>
+
+          <div class="lg:col-span-8 space-y-3" data-reveal>
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q1.q">Kann ich auch nur Bank — ohne Versicherungs-Anteil?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q1.a">Ja. Manche Profile passen besser zu 100 % Bank: Junge Singles ohne Kredit, hohes Sicherheits-Polster bereits vorhanden, klare Anlagepräferenz. Wir empfehlen Mix nur, wo der Schutz-Mehrwert (Todesfall, IV) den 1-2 % Rendite-Trade-off rechtfertigt. Im Rechner oben einfach Versicherungs-Anteil auf 0 % stellen.</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q2.q">Was passiert, wenn ich auswandere?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q2.a">Säule 3a kannst du bei Wegzug aus der Schweiz auflösen — Kapitalauszahlungssteuer fällt einmalig an. In EU/EFTA reduziert sich die Quellensteuer nach Doppelbesteuerungs-Abkommen. Wir prüfen vor Auflösung, ob aufschieben (bis Pensionierung, Bezug vor Ort) günstiger ist. Bei konkreten Plänen sprich uns früh an — die Wahl Bank-/Versicherungs-Anbieter beeinflusst die Flexibilität.</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q3.q">Kann ich vor 60 ans Geld?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q3.a">Nur in vier Fällen: Erwerb von selbstbewohntem Wohneigentum (alle 5 Jahre, beliebige Höhe), Start in Selbstständigkeit (Aufgabe Arbeitnehmer-Status), Auswanderung aus der Schweiz, IV-Vollrente. In allen Fällen fällt Kapitalauszahlungssteuer an — Höhe je nach Kanton und Bezugsbetrag (siehe Tabelle im Rechner oben).</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q4.q">Wieso "Mix" und nicht 100 % Bank?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q4.a">Bank-3a baut Vermögen auf, hat aber keine Schutz-Komponente. Versicherungs-3a liefert Todesfallkapital, IV-Rente und Prämienbefreiung — bei Erwerbsunfähigkeit läuft der Plan ohne deinen Beitrag weiter. Bei jungen Familien, Hypothekarschulden, Selbstständigkeit ist das ein materieller Schutz von 50-300 k über die Restlaufzeit. Wir empfehlen 30-50 % Versicherungs-Anteil. Bei Singles ohne Kredit kannst du auch 0 % nehmen.</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q5.q">Was kostet euer Service?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q5.a">Für dich: <strong>nichts</strong>. Wir sind FINMA-registrierter Broker und werden von den Anbietern entschädigt (Cicero-zertifizierte Provisionen). Plan-Erstellung, jährliche Überprüfung, Vertrags-Wechsel — alles im Service. Vorteil für dich: ein Ansprechpartner für KK, 3a, Steuern, Vorsorge statt mehrere Online-Tools. Nachteil: Beratung ist nicht "neutral" wie ein Honorar-Berater — dafür ist sie kostenlos und integriert.</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q6.q">Was wenn der Markt crashed?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q6.a">Drawdowns sind normal: 2008 −38 %, 2020 −20 %. Historische Erholungsdauer liegt bei 2-3 Jahren. Bei 30+ Jahren Anlagedauer egalisiert sich das mehrfach. Der Versicherungs-Anteil garantiert ein Mindest-Endkapital — das ist dein Sicherheitsnetz nach unten. Bei Pensionierungs-Annäherung schichten wir automatisch in defensivere Strategien um (Lifecycle-Shifting), damit ein Crash kurz vor 65 dich nicht trifft.</p>
+            </details>
+
+            <details class="card p-5 group">
+              <summary class="flex items-center justify-between cursor-pointer list-none">
+                <h3 class="font-semibold text-base" data-i18n="faq.q7.q">Wieviel kann ich 2026 maximal einzahlen?</h3>
+                <svg class="w-5 h-5 text-ink-400 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-ink-700 leading-relaxed" data-i18n="faq.q7.a">Mit Pensionskasse: <strong>CHF 7'258</strong>. Ohne Pensionskasse (Selbstständig ohne Eintritt in 2. Säule): <strong>20 % des Nettoerwerbseinkommens, max. CHF 36'288</strong>. Beträge gelten pro Person. Ehepartner können beide voll einzahlen. Beitrag muss bis 31.12. überwiesen sein (Bankgutschrift, nicht Auftragsdatum).</p>
+            </details>
           </div>
         </div>
       </div>
@@ -1529,6 +2168,7 @@
     */
     const FORM_CONFIG = {
       formspreeId: '',                                 // ← hier einsetzen, z.B. 'xrgwzpdb'
+      apiEndpoint: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3001' : '', // lokal: automatisch ans lokale CRM — im Web: 'https://api.glattbroker.ch' eintragen
       mailtoFallback: 'online@glattbroker.ch',
       // Optional: pro Formular-Typ ein eigener Empfänger via _replyto / _subject
       subjects: {
@@ -1552,6 +2192,30 @@
         list.push({ ...payload, _ts: new Date().toISOString() });
         localStorage.setItem(localKey, JSON.stringify(list));
       } catch {}
+
+      // (a) Eigene Glatt-Plattform-API zuerst (wenn konfiguriert); Fehler/Timeout → weiter zu (b) Formspree / (c) mailto
+      if (FORM_CONFIG.apiEndpoint) {
+        try {
+          const _known = ['vorname', 'nachname', 'name', 'email', 'telefon', 'plz', 'nachricht', 'anliegen'];
+          const _lead = { source: 'website', page: location.pathname };
+          const _daten = {};
+          Object.entries(payload).forEach(([k, v]) => {
+            if (v === undefined || v === null || v === '' || k.startsWith('_') || k === 'gotcha') return;
+            if (k === 'thema') { _lead.anliegen = v; }
+            else if (_known.includes(k)) { _lead[k] = v; }
+            else { _daten[k] = v; }
+          });
+          _daten.formType = formType;
+          _lead.daten = _daten;
+          const apiRes = await fetch(FORM_CONFIG.apiEndpoint + '/api/public/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(_lead),
+            signal: AbortSignal.timeout(8000),
+          });
+          if (apiRes.status === 200) return { ok: true, mode: 'api' };
+        } catch (e) { /* API nicht erreichbar → Fallback */ }
+      }
 
       // Wenn Formspree konfiguriert: über API senden
       if (FORM_CONFIG.formspreeId && FORM_CONFIG.formspreeId !== 'YOUR_FORM_ID') {
@@ -2842,7 +3506,6 @@
         },
       },
     };
-
     const VVG_CATEGORIES = [
       { id: 'brille',     label: 'Brille / Kontaktlinsen',  icon: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z|circle:12,12,3' },
       { id: 'fitness',    label: 'Fitness und Kurse',        icon: 'M6.5 6.5h11M6.5 17.5h11M3 12h18M9.5 7v10M14.5 7v10' },
@@ -3222,7 +3885,6 @@
         return Math.round(weighted);
       },
       versRate: 0.045,                // Versicherungs-Rendite (nach Risikokosten)
-      taxDrag: 0.005,                 // Drag bei Vermögen ohne 3a (Vermögens-/Dividendensteuer)
 
       // Kantonsfaktor für Kapitalauszahlungssteuer (Quelle: internes Vorsorge-Tool)
       cantonFactor: {
@@ -3386,8 +4048,8 @@
 
     // Versicherungs-Anbieter-Katalog
     const VERS_PROVIDERS = {
-      generali:  { name: 'Generali Multi Index 100', sub: 'Sparteil + integrierte Schutzleistungen' },
-      swisslife: { name: 'Swiss Life Index Strategy Chance 75', sub: 'Index-basierter Sparteil mit Schutzbausteinen' },
+      generali:  { name: 'Generali Multi Index 100',            sub: 'Sparteil + integrierte Schutzleistungen',     subEn: 'Savings component + integrated protection' },
+      swisslife: { name: 'Swiss Life Index Strategy Chance 75', sub: 'Index-basierter Sparteil mit Schutzbausteinen', subEn: 'Index-based savings with protection modules' },
     };
 
     function sCompute() {
@@ -3404,18 +4066,31 @@
       const everonContrib     = bankTotalContrib * everonShare;
       const zugerbergContrib  = bankTotalContrib * (1 - everonShare);
 
+      // Szenarien-Spread: konservativ −2.5pp, optimistisch +2.5pp (Bank-Anteil; Versicherung bleibt fix bei STRAT.versRate)
+      const rLow  = Math.max(0, r - 0.025);
+      const rHigh = r + 0.025;
+
       // Jahresprojektionen — Bank (zusammen), Versicherung, Total, sowie "Ohne Strategie"
       const data = [];
-      let bank = 0, vers = 0, without = 0, cumTax = 0;
-      data.push({ year: 0, age, bank: 0, vers: 0, with3a: 0, without: 0 });
+      let bank = 0, bankLow = 0, bankHigh = 0, vers = 0, without = 0, cumTax = 0;
+      data.push({ year: 0, age, bank: 0, vers: 0, with3a: 0, with3aLow: 0, with3aHigh: 0, without: 0 });
       for (let y = 1; y <= n; y++) {
-        bank = (bank + bankTotalContrib) * (1 + r);
+        bank     = (bank     + bankTotalContrib) * (1 + r);
+        bankLow  = (bankLow  + bankTotalContrib) * (1 + rLow);
+        bankHigh = (bankHigh + bankTotalContrib) * (1 + rHigh);
         vers = (vers + versContrib) * (1 + STRAT.versRate);
         // "Ohne Strategie" = Sparkonto-Szenario: kein Steuerabzug, kein Zins (~0% Zinsumfeld).
         // Beitrag wird zuerst versteuert (ohne 3a-Abzug), dann auf Sparkonto gelegt — keine Verzinsung.
         without = without + contribution * (1 - t);
         cumTax += contribution * t;
-        data.push({ year: y, age: age + y, bank, vers, with3a: bank + vers, without });
+        data.push({
+          year: y, age: age + y,
+          bank, vers,
+          with3a: bank + vers,
+          with3aLow: bankLow + vers,
+          with3aHigh: bankHigh + vers,
+          without,
+        });
       }
 
       // Bezugssteuer: Gesamtbezug (1 Tranche) vs. gestaffelt
@@ -3448,6 +4123,10 @@
       return {
         data, n, marginalRate: t,
         retirementAge, elevatedAge,
+        // Szenarien-Renditen
+        rExpected: r, rLow, rHigh,
+        // Endkapital pro Szenario
+        finalLow: bankLow + vers, finalExpected: bank + vers, finalHigh: bankHigh + vers,
         // Beiträge
         bankContrib: bankTotalContrib, versContrib,
         everonContrib, zugerbergContrib,
@@ -3522,7 +4201,8 @@
       // Chart
       const W = 600, H = 280, P = { l: 48, r: 56, t: 16, b: 28 };
       const innerW = W - P.l - P.r, innerH = H - P.t - P.b;
-      const maxY = Math.max(res.finalNet, res.finalWithout, 1) * 1.10;
+      // maxY berücksichtigt jetzt auch das High-Szenario (sonst läuft die optimistische Linie oben raus)
+      const maxY = Math.max(res.finalHigh, res.finalNet, res.finalWithout, 1) * 1.10;
       const xScale = (i) => P.l + (i / (res.data.length - 1)) * innerW;
       const yScale = (v) => P.t + innerH - (v / maxY) * innerH;
 
@@ -3530,10 +4210,21 @@
         (i === 0 ? 'M' : 'L') + xScale(i).toFixed(1) + ' ' + yScale(d[key]).toFixed(1)
       ).join(' ');
 
-      const dWith    = path('with3a');
-      const dWithout = path('without');
-      const dArea    = dWith + ' L' + xScale(res.data.length - 1).toFixed(1) + ' ' + (P.t + innerH).toFixed(1) + ' L' + xScale(0).toFixed(1) + ' ' + (P.t + innerH).toFixed(1) + ' Z';
+      const dWith     = path('with3a');
+      const dWithLow  = path('with3aLow');
+      const dWithHigh = path('with3aHigh');
+      const dWithout  = path('without');
+      const dArea     = dWith + ' L' + xScale(res.data.length - 1).toFixed(1) + ' ' + (P.t + innerH).toFixed(1) + ' L' + xScale(0).toFixed(1) + ' ' + (P.t + innerH).toFixed(1) + ' Z';
+      // Bandbreite (Korridor): High oben hin, Low unten zurück
+      const lastIdx = res.data.length - 1;
+      const dBand   = dWithHigh + ' ' + res.data.slice().reverse().map((d, i) => {
+        const realIdx = lastIdx - i;
+        return (i === 0 ? 'L' : 'L') + xScale(realIdx).toFixed(1) + ' ' + yScale(d.with3aLow).toFixed(1);
+      }).join(' ') + ' Z';
 
+      $('#sBand').setAttribute('d', dBand);
+      $('#sWithLow').setAttribute('d', dWithLow);
+      $('#sWithHigh').setAttribute('d', dWithHigh);
       $('#sWith').setAttribute('d', dWith);
       $('#sWithout').setAttribute('d', dWithout);
       $('#sArea').setAttribute('d', dArea);
@@ -3544,11 +4235,18 @@
       $('#sDotWithout').setAttribute('cx', xScale(last));
       $('#sDotWithout').setAttribute('cy', yScale(res.data[last].without));
 
-      // Endpoint label
-      const ex = xScale(last) + 6, ey1 = yScale(res.data[last].with3a);
+      // Endpoint label — prominenter Pillen-Callout für Erwartet, Range darunter
+      const ex = xScale(last) + 10, ey = yScale(res.data[last].with3a);
+      const labelFinal = 'CHF ' + fmt(res.finalExpected);
+      const labelRange = 'CHF ' + fmt(res.finalLow) + ' – ' + fmt(res.finalHigh);
+      const ageEnd = sState.age + res.n;
+      // Pillen-Breite proxy aus Text-Länge (~6.5px pro Zeichen bei 12.5pt)
+      const pillW = Math.max(82, labelFinal.length * 6.8 + 12);
       $('#sEndLabel').innerHTML = `
-        <text x="${ex}" y="${ey1 - 6}" font-family="Mont,Outfit,sans-serif" font-size="11" font-weight="600" fill="#CC2936">CHF ${fmt(res.gross)}</text>
-        <text x="${ex}" y="${ey1 + 7}" font-family="Mont,Outfit,sans-serif" font-size="9" fill="#A02029">brutto · Alter ${sState.age + res.n}</text>
+        <rect x="${ex}" y="${ey - 13}" width="${pillW.toFixed(1)}" height="20" rx="10" fill="#CC2936"/>
+        <text x="${ex + pillW/2}" y="${ey + 1}" text-anchor="middle" font-family="Mont,Outfit,sans-serif" font-size="11.5" font-weight="700" fill="#fff" letter-spacing="-0.01em">${labelFinal}</text>
+        <text x="${ex + 2}" y="${ey + 18}" font-family="Mont,Outfit,sans-serif" font-size="8" fill="#737373">Alter ${ageEnd} · brutto</text>
+        <text x="${ex + 2}" y="${ey + 28}" font-family="Mont,Outfit,sans-serif" font-size="7.5" fill="#A3A3A3">Range ${labelRange}</text>
       `;
 
       // Y axis (4 gridlines + labels)
@@ -3557,7 +4255,7 @@
         const v = (maxY * i) / 4;
         const y = yScale(v).toFixed(1);
         gridSvg  += `<line x1="${P.l}" y1="${y}" x2="${W - P.r}" y2="${y}"/>`;
-        yAxisSvg += `<text x="${P.l - 8}" y="${y}" text-anchor="end" dominant-baseline="middle">CHF ${v >= 1000 ? Math.round(v/1000)+'k' : Math.round(v)}</text>`;
+        yAxisSvg += `<text x="${P.l - 8}" y="${y}" text-anchor="end" dominant-baseline="middle">CHF ${v >= 1000000 ? (v/1000000).toFixed(2)+'M' : v >= 1000 ? Math.round(v/1000)+'k' : Math.round(v)}</text>`;
       }
       $('#sGrid').innerHTML = gridSvg;
       $('#sYAxis').innerHTML = yAxisSvg;
@@ -3592,6 +4290,30 @@
             noteContent.textContent = `Mit ${sState.age} Jahren rechnen wir mit erhöhtem Referenzalter (Auszahlung ${ra}) — Bevölkerungsalterung. Bezug ab 60 weiterhin individuell möglich.`;
           }
         }
+      }
+
+      // Persistiere State für Tooltip-Handler (siehe unten)
+      window.__sLastRes = res;
+      window.__sLastMaxY = maxY;
+      window.__sChartGeom = { W, H, P, innerW, innerH };
+
+      // ── Vergleichs-Karten (3 Wege) — Live-Update aus sState ─────
+      if (document.getElementById('cmpVal3')) {
+        // Selbst anlegen: 100% Bank-Anteil mit gewählter Rendite, ohne Schutz, ohne Staffelung
+        const rExp = res.rExpected;
+        // Gleiche vorschüssige Verzinsung wie die Strategie-Projektion → fairer Gleich-für-Gleich-Vergleich
+        // (annuity-due, mit r===0-Schutz). Unterschied zur Glatt-Lösung bleibt: Schutzleistungen + Staffelung.
+        const fvSelfGross = rExp > 0
+          ? sState.contribution * ((Math.pow(1 + rExp, res.n) - 1) / rExp) * (1 + rExp)
+          : sState.contribution * res.n;
+        const fvSelfNet   = fvSelfGross * (1 - res.rateAll); // ein-Tranche Bezugssteuer (ohne Staffelungs-Beratung)
+        const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+        setT('cmpYrs1', res.n); setT('cmpYrs2', res.n); setT('cmpYrs3', res.n);
+        setT('cmpVal1', fmt(res.finalWithout));
+        setT('cmpVal2', fmt(fvSelfNet));
+        setT('cmpVal3', fmt(res.finalNet));
+        setT('cmpDelta2', fmt(Math.max(0, fvSelfNet - res.finalWithout)));
+        setT('cmpDelta3', fmt(Math.max(0, res.finalNet - fvSelfNet)));
       }
     }
 
@@ -3790,15 +4512,15 @@
       const live = document.getElementById('sChart');
       const chart = live.cloneNode(true);
       chart.querySelectorAll('[style]').forEach((el) => { el.style.transition = ''; });
-      // Standardized PDF rendering: keep natural viewBox ratio (600:280 ≈ 2.14:1),
-      // fix physical height to 58mm so width centers at ~124mm in the chart-wrap.
-      // Fixes prior distortion from preserveAspectRatio="none" + forced width/height.
+      // Standardized PDF rendering: keep natural viewBox ratio,
+      // erweitere viewBox um Y-Labels (links) und Endpoint-Label (rechts) sichtbar zu halten.
       chart.removeAttribute('id');
       chart.removeAttribute('width');
       chart.removeAttribute('height');
       chart.removeAttribute('class');
       chart.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      chart.style.cssText = 'display:block;height:58mm;width:auto;max-width:100%;margin:0 auto;';
+      chart.setAttribute('viewBox', '-14 -4 690 296'); // war 0 0 600 280: +14px links für Y-Labels, +76px rechts für Endpoint-Label, +12px Höhenpuffer
+      chart.style.cssText = 'display:block;height:60mm;width:auto;max-width:100%;margin:0 auto;overflow:visible;';
       const chartHtml = chart.outerHTML;
 
       // Absolute base URL so the print window can load Mont and the logo
@@ -3954,7 +4676,7 @@
       const logoSvg = `<img src="./assets/logo.png" alt="Glatt Broker" width="180" style="height:auto;display:block;" />`;
 
       const html = `<!DOCTYPE html>
-<html lang="de">
+<html lang="${pdfLang}">
 <head>
 <meta charset="UTF-8">
 <base href="${baseHref}">
@@ -3970,9 +4692,11 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { font-family: "Mont", "Outfit", system-ui, sans-serif; color: #0A0A0A; background: #F0F0F0; }
   .page {
-    width: 210mm; min-height: 297mm; margin: 6mm auto; background: #fff;
-    padding: 22mm 18mm 28mm; position: relative; page-break-after: always;
+    width: 210mm; height: 297mm; margin: 6mm auto; background: #fff;
+    padding: 22mm 18mm 14mm; position: relative; page-break-after: always;
     box-shadow: 0 1mm 4mm rgba(0,0,0,.08);
+    display: flex; flex-direction: column;
+    overflow: hidden;
   }
   .page:last-child { page-break-after: auto; }
   @media print { body { background: #fff; } .page { margin: 0; box-shadow: none; } }
@@ -3982,7 +4706,7 @@
     background: linear-gradient(90deg, #CC2936 0%, #CC2936 38%, #2c3e50 38%, #2c3e50 100%);
   }
   .footer {
-    position: absolute; bottom: 14mm; left: 18mm; right: 18mm;
+    margin-top: auto; flex-shrink: 0;
     font-size: 8pt; color: #737373;
     display: flex; justify-content: space-between;
     border-top: 0.3mm solid #E5E5E5; padding-top: 3mm;
@@ -4099,14 +4823,15 @@
 <!-- ─────────── PAGE 1: COVER ─────────── -->
 <section class="page">
   <div class="accent-bar"></div>
-  <div style="margin-top: 12mm;">${logoSvg}</div>
 
-  <div style="margin-top: 30mm;">
+  <div style="margin-top: 6mm;">${logoSvg}</div>
+
+  <div style="margin-top: 14mm;">
     <div class="eyebrow">${T('Vorsorgestrategie · Säule 3a · 2026', 'Pension Strategy · 3rd Pillar · 2026')}</div>
     <h1 style="margin-top: 4mm;">${T('Finanzplan<br>zur Optimierung der<br><em>3. Säule</em>.', 'Financial Plan<br>to Optimize Your<br><em>3rd Pillar</em>.')}</h1>
   </div>
 
-  <div class="cover-meta">
+  <div class="cover-meta" style="margin-top: 10mm;">
     <div class="cover-meta-row"><span>${isDemo ? T('Modellrechnung', 'Sample calculation') : T('Vorbereitet für', 'Prepared for')}</span><span style="${isDemo ? '' : 'color: #CC2936; font-weight: 600;'}">${customerName}</span></div>
     ${birthdateStr ? `<div class="cover-meta-row"><span>${T('Geburtsdatum', 'Date of birth')}</span><span>${birthdateStr} · ${sState.age} ${T('Jahre', 'years')}</span></div>` : ''}
     <div class="cover-meta-row"><span>${T('Erstellt am', 'Created on')}</span><span>${dateStr}</span></div>
@@ -4116,22 +4841,30 @@
     <div class="cover-meta-row"><span>${T('Aufteilung', 'Allocation')}</span><span>${everonPct}/${zugerbergPct}/${versPct} · Everon / Zugerberg / ${sState.versProvider === 'swisslife' ? 'Swiss Life' : 'Generali'}</span></div>
   </div>
 
-  <div style="position: absolute; bottom: 30mm; left: 18mm; right: 18mm;">
-    <div style="display: flex; justify-content: space-between; gap: 8mm;">
+  <!-- Mehrwert-Block: direkt nach cover-meta, nicht mehr am Seitenende -->
+  <div style="margin-top: 10mm; padding: 6mm 7mm; background: #0A0A0A; color: #fff; border-radius: 3mm; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; height: 100%; width: 1.5mm; background: #CC2936;"></div>
+    <div style="display: flex; justify-content: space-between; gap: 8mm; align-items: flex-end;">
       <div>
-        <div class="eyebrow" style="margin-bottom: 3mm;">${T('Dein Mehrwert', 'Your value-add')}</div>
-        <div style="font-size: 32pt; font-weight: 600; color: #CC2936; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;">+CHF ${fmt(Math.max(0, res.advantage))}</div>
-        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${T(`über ${res.n} Jahre vs. ohne Strategie`, `over ${res.n} years vs. without strategy`)}</div>
+        <div class="eyebrow" style="color: #CC2936; margin-bottom: 3mm;">${T('Dein Mehrwert', 'Your value-add')}</div>
+        <div style="font-size: 28pt; font-weight: 600; color: #fff; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1;">+CHF ${fmt(Math.max(0, res.advantage))}</div>
+        <div style="font-size: 9pt; color: rgba(255,255,255,0.6); margin-top: 2mm;">${T(`über ${res.n} Jahre vs. ohne Strategie`, `over ${res.n} years vs. without strategy`)}</div>
       </div>
       <div style="text-align: right;">
-        <div class="eyebrow" style="margin-bottom: 3mm;">${T('Endkapital netto', 'Net final capital')}</div>
-        <div style="font-size: 24pt; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">CHF ${fmt(res.finalNet)}</div>
-        <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${T('nach Staffelungs-Vorteil', 'after staggered withdrawal benefit')}</div>
+        <div class="eyebrow" style="color: rgba(255,255,255,0.55); margin-bottom: 3mm;">${T('Endkapital netto', 'Net final capital')}</div>
+        <div style="font-size: 22pt; font-weight: 600; color: #fff; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1;">CHF ${fmt(res.finalNet)}</div>
+        <div style="font-size: 9pt; color: rgba(255,255,255,0.55); margin-top: 2mm;">${T('nach Staffelungs-Vorteil', 'after staggered withdrawal benefit')}</div>
       </div>
     </div>
   </div>
 
-  <div class="footer">
+  <!-- Highlight-Banner direkt überm Footer für visuelle Balance -->
+  <div style="margin-top: auto; margin-bottom: 4mm; padding: 4mm 5mm; border-top: 0.3mm solid #E5E5E5; border-bottom: 0.3mm solid #E5E5E5; display: flex; justify-content: space-between; align-items: center; font-size: 9pt;">
+    <span style="color: #737373;">${T('Dieses Dokument zeigt deinen individuellen Finanzplan für die 3. Säule.', 'This document presents your individual financial plan for the 3rd pillar.')}</span>
+    <span style="color: #CC2936; font-weight: 600; letter-spacing: 0.04em;">${T('6 SEITEN · DETAILLIERTE ANALYSE', '6 PAGES · DETAILED ANALYSIS')}</span>
+  </div>
+
+  <div class="footer" style="margin-top: 0;">
     <span>Glatt Broker AG · Taulant Faniqi · FINMA 35821</span>
     <span class="pagenum">t.faniqi@glattbroker.ch · 077 409 05 19  ·  01 / 06</span>
   </div>
@@ -4208,6 +4941,20 @@
       </div>
     </div>
     ${chartHtml}
+
+    <!-- Anlagedauer + Gesamteinzahlung über Laufzeit -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 4mm; padding-top: 4mm; border-top: 0.3mm solid #E5E5E5;">
+      <div style="border-left: 0.6mm solid #CC2936; padding-left: 4mm;">
+        <div style="font-size: 7.5pt; letter-spacing: 0.10em; text-transform: uppercase; color: #737373;">${T('Anlagedauer', 'Investment term')}</div>
+        <div style="font-size: 18pt; font-weight: 600; margin-top: 1.5mm; font-variant-numeric: tabular-nums;">${res.n} ${T('Jahre', 'years')}</div>
+        <div style="font-size: 8.5pt; color: #737373; margin-top: 0.5mm;">${T('Alter', 'Age')} ${sState.age} → ${res.retirementAge}</div>
+      </div>
+      <div style="border-left: 0.6mm solid #CC2936; padding-left: 4mm;">
+        <div style="font-size: 7.5pt; letter-spacing: 0.10em; text-transform: uppercase; color: #737373;">${T('Gesamteinzahlung', 'Total contributions')}</div>
+        <div style="font-size: 18pt; font-weight: 600; margin-top: 1.5mm; font-variant-numeric: tabular-nums;">CHF ${fmt(sState.contribution * res.n)}</div>
+        <div style="font-size: 8.5pt; color: #737373; margin-top: 0.5mm;">${T(`CHF ${fmt(sState.contribution)} × ${res.n} Jahre`, `CHF ${fmt(sState.contribution)} × ${res.n} years`)}</div>
+      </div>
+    </div>
   </div>
 
   <!-- KPIs -->
@@ -4459,7 +5206,7 @@
         <div>
           <div class="eyebrow" style="margin-bottom: 1.5mm;">${T('Versicherungslösung', 'Insurance solution')}</div>
           <div style="font-size: 16pt; font-weight: 700; letter-spacing: -0.02em;">${versInfo.name}</div>
-          <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${versInfo.sub}</div>
+          <div style="font-size: 9pt; color: #737373; margin-top: 1mm;">${pdfLang === 'en' ? versInfo.subEn : versInfo.sub}</div>
         </div>
       </div>
 
@@ -4627,6 +5374,141 @@
   </div>
 </section>
 
+${(typeof window !== 'undefined' && window.__advisorPdfActive) ? `
+<!-- ─────────── PAGE B1: BERATER-SKRIPT (INTERN) ─────────── -->
+<section class="page" style="position: relative;">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-28deg); font-size: 56pt; color: rgba(204,41,54,0.05); font-weight: 700; letter-spacing: 0.1em; pointer-events: none; white-space: nowrap; z-index: 0;">BERATER · INTERN</div>
+  <div class="accent-bar" style="background: linear-gradient(90deg, #0A0A0A 0%, #0A0A0A 38%, #CC2936 38%, #CC2936 100%);"></div>
+
+  <div class="eyebrow" style="margin-top: 8mm; color: #0A0A0A;">— ${T('Berater-Anhang · Vertraulich', 'Advisor appendix · Confidential')}</div>
+  <h2 style="margin-top: 3mm;">${T('Argumentations-Skript &amp; Einwand-Behandlung.', 'Argumentation script &amp; objection handling.')}</h2>
+  <p style="max-width: 145mm; margin-top: 3mm; font-size: 10pt;">${T('Häufige Kundeneinwände in dieser Strategie-Konstellation — mit kontextspezifischen Antworten basierend auf den eingegebenen Werten.', 'Common client objections for this strategy configuration — with context-specific answers based on the entered values.')}</p>
+
+  <div style="margin-top: 8mm; display: grid; grid-template-columns: 1fr; gap: 4mm;">
+    <div style="border-left: 0.6mm solid #CC2936; padding: 3mm 5mm; background: #F9F9F9; border-radius: 0 2mm 2mm 0;">
+      <div style="font-size: 8pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5mm;">${T('Einwand 1', 'Objection 1')}</div>
+      <div style="font-size: 11pt; font-weight: 600; margin-bottom: 2mm;">${T('"Versicherung ist nur Provisionsmaximierung."', '"Insurance is just commission maximization."')}</div>
+      <div style="font-size: 9.5pt; line-height: 1.55; color: #404040;">${T(`Steuerersparnis bei CHF ${fmt(sState.contribution)} Beitrag und ${(res.marginalRate*100).toFixed(0)} % Marginalrate = <strong>CHF ${fmt(res.annualTaxSave)} pro Jahr</strong>. Die jährliche Vermittlungs-Marge ist <em>deutlich geringer</em>. Zusätzlich: ${res.versContrib > 0 ? `Todesfallkapital CHF ${fmt(res.death)}, IV-Rente CHF ${fmt(res.ivRent)}/Jahr und Prämienbefreiung im Wert von CHF ${fmt(res.waiver)} sind in der Bank-3a NICHT enthalten.` : 'aktuell 100% Bank ohne Schutzleistungen — Erwerbsunfähigkeitsrisiko offen.'}`, `Tax savings at CHF ${fmt(sState.contribution)} contribution and ${(res.marginalRate*100).toFixed(0)} % marginal rate = <strong>CHF ${fmt(res.annualTaxSave)} per year</strong>. The annual brokerage margin is <em>significantly lower</em>. Plus: ${res.versContrib > 0 ? `death benefit CHF ${fmt(res.death)}, disability pension CHF ${fmt(res.ivRent)}/year and premium waiver worth CHF ${fmt(res.waiver)} are NOT included in pure bank 3a.` : 'currently 100% bank — no protection benefits, disability risk left uncovered.'}`)}</div>
+    </div>
+
+    <div style="border-left: 0.6mm solid #CC2936; padding: 3mm 5mm; background: #F9F9F9; border-radius: 0 2mm 2mm 0;">
+      <div style="font-size: 8pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5mm;">${T('Einwand 2', 'Objection 2')}</div>
+      <div style="font-size: 11pt; font-weight: 600; margin-bottom: 2mm;">${T('"VIAC / finpension ist günstiger."', '"VIAC / finpension is cheaper."')}</div>
+      <div style="font-size: 9.5pt; line-height: 1.55; color: #404040;">${T('VIAC ist Top für reine Bank-3a (TER ~0.4 %, voller ETF-Zugang) — bietet aber <strong>keine Risikoabsicherung</strong>. Für Singles in 20ern ist das tragbar. Sobald Familie, Kredit oder Selbstständigkeit ins Spiel kommen, deckt die fehlende IV-Rente und Prämienbefreiung ein Risiko von 50-150k über die Restlaufzeit ab. Unser Mix kombiniert: VIAC-ähnliche Bank-Tarife (Everon/Zugerberg) UND Schutz.', 'VIAC is top for pure bank 3a (TER ~0.4 %, full ETF access) — but offers <strong>no risk coverage</strong>. For singles in their 20s, that\'s acceptable. As soon as family, credit, or self-employment enters the picture, the missing disability pension and premium waiver leaves a 50-150k risk over the remaining term. Our mix combines: VIAC-like bank tariffs (Everon/Zugerberg) AND protection.')}</div>
+    </div>
+
+    <div style="border-left: 0.6mm solid #CC2936; padding: 3mm 5mm; background: #F9F9F9; border-radius: 0 2mm 2mm 0;">
+      <div style="font-size: 8pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5mm;">${T('Einwand 3', 'Objection 3')}</div>
+      <div style="font-size: 11pt; font-weight: 600; margin-bottom: 2mm;">${T('"Was wenn der Markt crashed?"', '"What if the market crashes?"')}</div>
+      <div style="font-size: 9.5pt; line-height: 1.55; color: #404040;">${T(`Drawdowns sind normal (2008: −38 %, 2020: −20 %). Historische Erholungsdauer 2-3 Jahre. Bei <strong>${res.n} Jahren Laufzeit</strong> egalisiert sich das mehrfach. Versicherungs-Komponente garantiert ein Mindest-Endkapital — Schutz nach unten. Bei Pensionierungsnähe automatisches Lifecycle-Shifting.`, `Drawdowns are normal (2008: −38 %, 2020: −20 %). Historical recovery 2-3 years. Over <strong>${res.n} years term</strong> this evens out several times. Insurance component guarantees a minimum final capital — downside protection. Automatic lifecycle shifting near retirement.`)}</div>
+    </div>
+
+    <div style="border-left: 0.6mm solid #CC2936; padding: 3mm 5mm; background: #F9F9F9; border-radius: 0 2mm 2mm 0;">
+      <div style="font-size: 8pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5mm;">${T('Einwand 4', 'Objection 4')}</div>
+      <div style="font-size: 11pt; font-weight: 600; margin-bottom: 2mm;">${T('"Zu wenig flexibel — ich will jederzeit ran."', '"Too inflexible — I want access anytime."')}</div>
+      <div style="font-size: 9.5pt; line-height: 1.55; color: #404040;">${T('Bank-Anteil ist <strong>jährlich anpassbar</strong> (Strategie/Anbieter-Switch ohne Steuerfolgen). Versicherungs-Sparplan ebenfalls. Was nicht flexibel ist: Bezug vor 60 — ausser Wohneigentum, Selbstständigkeit, Auswanderung, IV. Diese Inflexibilität ist <em>der Grund</em> für die Steuerprivilegierung — Kunde tauscht Liquidität gegen 30 %+ Marginal-Steuerabzug.', 'Bank share is <strong>annually adjustable</strong> (strategy/provider switch without tax consequences). Insurance savings plan too. What isn\'t flexible: withdrawal before 60 — except home ownership, self-employment, emigration, disability. This inflexibility is <em>the reason</em> for the tax privilege — client trades liquidity for 30 %+ marginal tax deduction.')}</div>
+    </div>
+
+    <div style="border-left: 0.6mm solid #CC2936; padding: 3mm 5mm; background: #F9F9F9; border-radius: 0 2mm 2mm 0;">
+      <div style="font-size: 8pt; color: #CC2936; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5mm;">${T('Cross-Sell-Anker', 'Cross-sell anchors')}</div>
+      <div style="font-size: 9.5pt; line-height: 1.55; color: #404040;">
+        <strong>${T('Naheliegende Folge-Themen:', 'Logical follow-up topics:')}</strong><br>
+        • ${T('Krankenkassen-Vergleich (ø CHF 1\'200 Ersparnis/Jahr — Schnell-Win)', 'Health insurance comparison (avg. CHF 1,200 savings/year — quick win)')}<br>
+        • ${T(`Steueroptimierung Säule 3b (bei Marginalrate ${(res.marginalRate*100).toFixed(0)} % weiterer Hebel)`, `Pillar 3b tax optimization (further lever at ${(res.marginalRate*100).toFixed(0)} % marginal rate)`)}<br>
+        • ${T(sState.contribution < 7258 ? `3a-Beitrag aktuell ${((sState.contribution/7258)*100).toFixed(0)} % vom Max — Ausschöpfung wäre +CHF ${fmt(7258 - sState.contribution)} ` : 'Sondereinkauf Pensionskasse, wenn PK-Lücke vorhanden', sState.contribution < 7258 ? `3a contribution currently ${((sState.contribution/7258)*100).toFixed(0)} % of max — maxing out would add +CHF ${fmt(7258 - sState.contribution)}` : 'Pension-fund purchase if PK gap exists')}<br>
+        • ${T('VVG/Halbprivat bei Familie · Sachversicherungs-Bundle bei Eigenheim', 'Supplementary health insurance if family · property bundle if homeowner')}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span style="color: #CC2936;">${T('VERTRAULICH — NUR FÜR BERATER, NICHT AN KUNDEN ABGEBEN', 'CONFIDENTIAL — ADVISOR ONLY, NOT FOR CLIENT DISTRIBUTION')}</span>
+    <span class="pagenum">${dateStr}  ·  B1 / B2</span>
+  </div>
+</section>
+
+<!-- ─────────── PAGE B2: MATH-ANHANG (INTERN) ─────────── -->
+<section class="page" style="position: relative;">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-28deg); font-size: 56pt; color: rgba(204,41,54,0.05); font-weight: 700; letter-spacing: 0.1em; pointer-events: none; white-space: nowrap; z-index: 0;">BERATER · INTERN</div>
+  <div class="accent-bar" style="background: linear-gradient(90deg, #0A0A0A 0%, #0A0A0A 38%, #CC2936 38%, #CC2936 100%);"></div>
+
+  <div class="eyebrow" style="margin-top: 8mm; color: #0A0A0A;">— ${T('Berater-Anhang · Berechnungs-Details', 'Advisor appendix · Calculation details')}</div>
+  <h2 style="margin-top: 3mm;">${T('Math-Anhang &amp; Quellen.', 'Math appendix &amp; sources.')}</h2>
+
+  <div style="margin-top: 6mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm;">
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 2mm; padding: 4mm;">
+      <div class="eyebrow" style="margin-bottom: 2mm;">${T('Marginalrate Stadt ZH 8002', 'Marginal rate City ZH 8002')}</div>
+      <table style="width: 100%; font-size: 8.5pt; border-collapse: collapse; font-variant-numeric: tabular-nums;">
+        <thead><tr style="border-bottom: 0.2mm solid #0A0A0A;"><th style="text-align: left; padding: 1.5mm 0; color: #737373; font-weight: 500;">${T('Einkommen', 'Income')}</th><th style="text-align: right; padding: 1.5mm 0; color: #737373; font-weight: 500;">${T('Satz', 'Rate')}</th></tr></thead>
+        <tbody>
+          ${[[20000,5],[35000,13],[55000,20],[80000,26],[110000,30],[150000,34],[200000,37],[300000,40]].map(([cap, rate]) => `<tr style="border-bottom: 0.1mm solid #F0F0F0;"><td style="padding: 1.2mm 0;">&lt; CHF ${fmt(cap)}</td><td style="text-align: right; padding: 1.2mm 0; ${Math.abs(rate/100 - res.marginalRate) < 0.001 ? 'background: rgba(204,41,54,0.1); color: #CC2936; font-weight: 600;' : ''}">${rate} %</td></tr>`).join('')}
+          <tr><td style="padding: 1.2mm 0;">≥ CHF 300'000</td><td style="text-align: right; padding: 1.2mm 0;">42 %</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size: 7.5pt; color: #737373; margin-top: 2mm; line-height: 1.4;">${T(`Aktuelles Kundeneinkommen CHF ${fmt(sState.income)} → ${(res.marginalRate*100).toFixed(0)} %`, `Current client income CHF ${fmt(sState.income)} → ${(res.marginalRate*100).toFixed(0)} %`)}</div>
+    </div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 2mm; padding: 4mm;">
+      <div class="eyebrow" style="margin-bottom: 2mm;">${T('Rendite-Modell', 'Return model')}</div>
+      <div style="font-size: 9pt; line-height: 1.55; color: #404040;">
+        <strong>${T('Bank-Komponente:', 'Bank component:')}</strong><br>
+        ${T('Erwartet', 'Expected')} ${(res.rExpected*100).toFixed(1)} % p.a.<br>
+        ${T('Konservativ', 'Conservative')} ${(res.rLow*100).toFixed(1)} % p.a. (−2.5 pp)<br>
+        ${T('Optimistisch', 'Optimistic')} ${(res.rHigh*100).toFixed(1)} % p.a. (+2.5 pp)<br>
+        <br>
+        <strong>${T('Versicherungs-Komponente:', 'Insurance component:')}</strong><br>
+        ${T('Fix ~4.5 % p.a. nach Risikokosten', 'Fixed ~4.5 % p.a. after risk costs')}<br>
+        <br>
+        <strong>${T('Endkapital-Spektrum:', 'Final capital spectrum:')}</strong><br>
+        CHF ${fmt(res.finalLow)} – CHF ${fmt(res.finalHigh)}<br>
+        ${T('Erwartet', 'Expected')}: CHF ${fmt(res.finalExpected)}
+      </div>
+    </div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 2mm; padding: 4mm;">
+      <div class="eyebrow" style="margin-bottom: 2mm;">${T('Anbieter-Quick-Reference', 'Provider quick reference')}</div>
+      <div style="font-size: 8.5pt; line-height: 1.55; color: #404040;">
+        <strong>Everon</strong> · ${T('Direktanlage ETF · TER ~0.4 % · keine Garantie · Plattform: Liberty Vorsorgestiftung', 'Direct ETF · TER ~0.4 % · no guarantee · platform: Liberty Vorsorgestiftung')}<br>
+        <strong>Zugerberg Finanz Revo 3</strong> · ${T('Aktiv verwaltet · 2024: +9.1 % · 2023: +8.2 % · YTD 2025 (Nov): +3.8 %', 'Actively managed · 2024: +9.1 % · 2023: +8.2 % · YTD 2025 (Nov): +3.8 %')}<br>
+        <strong>Generali Multi Index 100</strong> · ${T('Indexnah · Sparteil + Risikoschutz · Mindestgarantie', 'Index-near · savings + risk protection · minimum guarantee')}<br>
+        <strong>Swiss Life Index Strategy Chance 75</strong> · ${T('Max 75 % Aktien · Risikoschutz · jährliche Anpassung möglich', 'Max 75 % equities · risk protection · annual adjustment possible')}
+      </div>
+    </div>
+
+    <div style="border: 0.3mm solid #E5E5E5; border-radius: 2mm; padding: 4mm;">
+      <div class="eyebrow" style="margin-bottom: 2mm;">${T('Bezugssteuer-Logik', 'Withdrawal tax logic')}</div>
+      <div style="font-size: 9pt; line-height: 1.55; color: #404040;">
+        <strong>${T('Quelle:', 'Source:')}</strong> ${res.rateSource}<br>
+        ${T('Kantonsfaktor', 'Cantonal factor')}: ${res.cantonFactor === 1 ? T('ZH-Basis (1.00)', 'ZH base (1.00)') : `${res.cantonFactor.toFixed(2)} × ZH (${sState.canton})`}<br>
+        <br>
+        ${T('Bruttobezug', 'Gross withdrawal')} CHF ${fmt(res.gross)}<br>
+        ${T('1 Tranche', '1 tranche')}: ${(res.rateAll*100).toFixed(2)} % → ${T('Steuer', 'Tax')} CHF ${fmt(res.taxAllAmount)}<br>
+        ${sState.staff} ${T('Tranchen', 'tranches')}: ${(res.rateTranche*100).toFixed(2)} % → ${T('Steuer', 'Tax')} CHF ${fmt(res.taxStaffAmount)}<br>
+        <strong>${T('Staffel-Win', 'Staggering gain')}: +CHF ${fmt(Math.max(0, res.taxWin))}</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 8mm; padding: 4mm 5mm; background: #F9F9F9; border-radius: 2mm; border-left: 2mm solid #0A0A0A;">
+    <div class="eyebrow" style="color: #0A0A0A; margin-bottom: 2mm;">${T('Quellen-Referenz', 'Source reference')}</div>
+    <div style="font-size: 8.5pt; line-height: 1.55; color: #404040;">
+      • <strong>ESTV</strong> ${T('Steuersätze pro Gemeinde', 'Tax rates per municipality')} · estv.admin.ch<br>
+      • <strong>BFS</strong> ${T('Lebenserwartung &amp; Bevölkerungsalterung', 'Life expectancy &amp; population ageing')} · bfs.admin.ch/bevoelkerung/alterung<br>
+      • <strong>Zugerberg Finanz</strong> ${T('Monthly Reports 12/2023, 12/2024, 11/2025', 'Monthly Reports 12/2023, 12/2024, 11/2025')} · zugerberg-finanz.ch/news<br>
+      • <strong>Generali</strong> ${T('Multi Index 100 Bedingungen', 'Multi Index 100 conditions')} · generali.ch<br>
+      • <strong>Swiss Life</strong> ${T('Index Strategy Chance 75 Factsheet', 'Index Strategy Chance 75 factsheet')} · swisslife.ch
+    </div>
+  </div>
+
+  <div class="footer">
+    <span style="color: #CC2936;">${T('VERTRAULICH — NUR FÜR BERATER, NICHT AN KUNDEN ABGEBEN', 'CONFIDENTIAL — ADVISOR ONLY, NOT FOR CLIENT DISTRIBUTION')}</span>
+    <span class="pagenum">${dateStr}  ·  B2 / B2</span>
+  </div>
+</section>
+` : ''}
+
 <script>
   // Auto-trigger print after fonts have loaded (small delay for Mont OTF)
   if (document.fonts && document.fonts.ready) {
@@ -4638,7 +5520,7 @@
 
       const win = window.open('', '_blank', 'width=900,height=1100');
       if (!win) {
-        alert('Bitte erlaube Pop-ups für diese Seite, um den PDF-Report zu öffnen.');
+        alert(T('Bitte erlaube Pop-ups für diese Seite, um den PDF-Report zu öffnen.', 'Please allow pop-ups for this page to open the PDF report.'));
         return;
       }
       win.document.open();
@@ -4670,6 +5552,180 @@
         });
       }, { threshold: 0.3 });
       sObs.observe(sChart);
+    }
+
+    // ── Chart-Tooltip (Hover/Touch) ───────────────────────────
+    (function wireChartTooltip() {
+      const hoverArea = document.getElementById('sHoverArea');
+      const tooltip   = document.getElementById('sTooltip');
+      const tipLine   = document.getElementById('sTooltipLine');
+      const tipDot    = document.getElementById('sTooltipDot');
+      const tipBox    = document.getElementById('sTooltipBox');
+      const chartSvg  = document.getElementById('sChart');
+      if (!hoverArea || !tooltip || !chartSvg) return;
+
+      const isEn = () => document.documentElement.lang === 'en';
+      const lTitle  = () => isEn() ? 'Age' : 'Alter';
+      const lExp    = () => isEn() ? 'Expected' : 'Erwartet';
+      const lRange  = () => isEn() ? 'Range' : 'Bandbreite';
+      const lInvest = () => isEn() ? 'Paid in' : 'Einzahlung';
+      const lGrow   = () => isEn() ? 'Growth' : 'Wertzuwachs';
+
+      function svgPointFromEvent(evt) {
+        const pt = chartSvg.createSVGPoint();
+        const t = evt.touches ? evt.touches[0] : evt;
+        pt.x = t.clientX; pt.y = t.clientY;
+        return pt.matrixTransform(chartSvg.getScreenCTM().inverse());
+      }
+
+      function update(evt) {
+        const res = window.__sLastRes;
+        const maxY = window.__sLastMaxY;
+        const geom = window.__sChartGeom;
+        if (!res || !geom) return;
+        const { P, innerW, innerH } = geom;
+        const pt = svgPointFromEvent(evt);
+        // Berechne nächsten Datenpunkt-Index aus mouseX
+        const px = Math.max(P.l, Math.min(P.l + innerW, pt.x));
+        const ratio = (px - P.l) / innerW;
+        const idx = Math.round(ratio * (res.data.length - 1));
+        const d = res.data[idx];
+        const xScale = (i) => P.l + (i / (res.data.length - 1)) * innerW;
+        const yScale = (v) => P.t + innerH - (v / maxY) * innerH;
+        const x = xScale(idx), y = yScale(d.with3a);
+
+        // Tooltip-Linie + Dot
+        tipLine.setAttribute('x1', x); tipLine.setAttribute('x2', x);
+        tipLine.setAttribute('y1', P.t); tipLine.setAttribute('y2', P.t + innerH);
+        tipDot.setAttribute('cx', x);
+        tipDot.setAttribute('cy', y);
+
+        // Daten für Box
+        const cumIn = sState.contribution * d.year;
+        const growth = Math.max(0, d.with3a - cumIn);
+        const expectedTxt = 'CHF ' + fmt(d.with3a);
+        const rangeTxt    = 'CHF ' + fmt(d.with3aLow) + ' – ' + fmt(d.with3aHigh);
+        const investTxt   = 'CHF ' + fmt(cumIn);
+        const growthTxt   = '+CHF ' + fmt(growth);
+
+        // Box-Position: rechts vom Punkt; bei zu wenig Platz nach links flippen
+        const boxW = 158, boxH = 88;
+        const onRight = (x + 10 + boxW) <= 590;
+        const bx = onRight ? x + 10 : x - 10 - boxW;
+        const by = Math.max(P.t, Math.min(P.t + innerH - boxH, y - boxH / 2));
+
+        tipBox.innerHTML = `
+          <rect x="${bx}" y="${by}" width="${boxW}" height="${boxH}" rx="4" fill="#0A0A0A" fill-opacity="0.94"/>
+          <text x="${bx + 8}" y="${by + 14}" font-family="Mont,Outfit,sans-serif" font-size="9" fill="#A3A3A3" letter-spacing="0.06em">${lTitle().toUpperCase()} ${d.age}</text>
+          <text x="${bx + 8}" y="${by + 30}" font-family="Mont,Outfit,sans-serif" font-size="8" fill="#CC2936">${lExp()}</text>
+          <text x="${bx + 8}" y="${by + 41}" font-family="Mont,Outfit,sans-serif" font-size="11" font-weight="700" fill="#fff">${expectedTxt}</text>
+          <text x="${bx + 8}" y="${by + 54}" font-family="Mont,Outfit,sans-serif" font-size="7.5" fill="#737373">${lRange()}: ${rangeTxt}</text>
+          <line x1="${bx + 8}" y1="${by + 60}" x2="${bx + boxW - 8}" y2="${by + 60}" stroke="#404040" stroke-width="0.5"/>
+          <text x="${bx + 8}" y="${by + 72}" font-family="Mont,Outfit,sans-serif" font-size="8" fill="#A3A3A3">${lInvest()}: ${investTxt}</text>
+          <text x="${bx + 8}" y="${by + 82}" font-family="Mont,Outfit,sans-serif" font-size="8" fill="#10b981">${lGrow()}: ${growthTxt}</text>
+        `;
+        tooltip.style.display = '';
+      }
+      function hide() { tooltip.style.display = 'none'; }
+
+      hoverArea.addEventListener('mousemove', update);
+      hoverArea.addEventListener('mouseleave', hide);
+      hoverArea.addEventListener('touchstart', (e) => { update(e); e.preventDefault(); }, { passive: false });
+      hoverArea.addEventListener('touchmove',  (e) => { update(e); e.preventDefault(); }, { passive: false });
+      hoverArea.addEventListener('touchend', hide);
+    })();
+
+    // ── Performance-Historie: Zugerberg Revo Bar Chart ────────
+    const PERF_DATA = {
+      years: ['2023', '2024', '2025 YTD'],
+      portfolios: [
+        { name: 'Revo 1',         descDe: 'defensiv',         descEn: 'defensive',          color: '#FBC8CC', equityPct: '0–25 %' },
+        { name: 'Revo 2',         descDe: 'eher defensiv',    descEn: 'rather defensive',   color: '#F49AA1', equityPct: '25–45 %' },
+        { name: 'Revo 3',         descDe: 'ausgewogen',       descEn: 'balanced',           color: '#EC6C75', equityPct: '45–65 %' },
+        { name: 'Revo 4',         descDe: 'eher offensiv',    descEn: 'rather aggressive',  color: '#DC4750', equityPct: '65–85 %' },
+        { name: 'Revo 5',         descDe: 'offensiv',         descEn: 'aggressive',         color: '#CC2936', equityPct: '85–100 %' },
+        { name: 'Revo Dividends', descDe: 'Dividenden-Fokus', descEn: 'dividend focus',     color: '#0A0A0A', equityPct: 'CH-Aktien' },
+      ],
+      // returns[yearIdx][portfolioIdx] in %
+      returns: [
+        [ 4.8,  7.1,  8.2,  9.3, 10.4, 13.5],   // 2023 (Dec Annual)
+        [ 2.2,  6.2,  9.1, 11.4, 13.1,  9.1],   // 2024 (Dec Annual)
+        [ 2.3,  2.8,  3.8,  4.3,  5.0, 10.7],   // 2025 YTD per Nov
+      ],
+    };
+
+    function renderPerfChart() {
+      const svg = document.getElementById('perfChart');
+      const legend = document.getElementById('perfLegend');
+      if (!svg || !legend) return;
+      const isEn = document.documentElement.lang === 'en';
+
+      const W = 800, H = 340, P = { l: 56, r: 16, t: 24, b: 76 };
+      const innerW = W - P.l - P.r, innerH = H - P.t - P.b;
+      const groupCount = PERF_DATA.years.length;
+      const barCount   = PERF_DATA.portfolios.length;
+      const groupGap   = 36;
+      const groupW     = (innerW - groupGap * (groupCount - 1)) / groupCount;
+      const barW       = (groupW - 4) / barCount; // 4px slop within group
+      const maxY       = 16; // %
+      const yScale = (v) => P.t + innerH - (v / maxY) * innerH;
+
+      // Gridlines + Y axis
+      let grid = '<g stroke="#E5E5E5" stroke-dasharray="2 4">';
+      let yAxis = '<g font-family="JetBrains Mono, monospace" font-size="10" fill="#737373">';
+      for (let v = 0; v <= maxY; v += 4) {
+        const y = yScale(v).toFixed(1);
+        grid  += `<line x1="${P.l}" y1="${y}" x2="${W - P.r}" y2="${y}"/>`;
+        yAxis += `<text x="${P.l - 8}" y="${y}" text-anchor="end" dominant-baseline="middle">${v}%</text>`;
+      }
+      grid += '</g>'; yAxis += '</g>';
+
+      // Baseline (0%)
+      const baseline = `<line x1="${P.l}" y1="${yScale(0)}" x2="${W - P.r}" y2="${yScale(0)}" stroke="#0A0A0A" stroke-width="0.6"/>`;
+
+      // Bars + value labels + group labels
+      let bars = '', xLabels = '<g font-family="Mont,Outfit,sans-serif" font-size="11" font-weight="600" fill="#0A0A0A">';
+      PERF_DATA.years.forEach((year, gi) => {
+        const groupX = P.l + gi * (groupW + groupGap);
+        // Group label below
+        xLabels += `<text x="${groupX + groupW/2}" y="${H - 44}" text-anchor="middle">${year}</text>`;
+        if (gi === 2) {
+          xLabels += `<text x="${groupX + groupW/2}" y="${H - 30}" font-size="8" font-weight="400" fill="#737373">${isEn ? '(Nov)' : '(Nov)'}</text>`;
+        }
+        PERF_DATA.portfolios.forEach((p, bi) => {
+          const v = PERF_DATA.returns[gi][bi];
+          const x = groupX + 2 + bi * barW;
+          const y = v >= 0 ? yScale(v) : yScale(0);
+          const h = Math.abs(yScale(v) - yScale(0));
+          bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(barW - 2).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${p.color}">
+            <title>${p.name} (${isEn ? p.descEn : p.descDe}) · ${year}: ${v > 0 ? '+' : ''}${v.toFixed(1)}%</title>
+          </rect>`;
+          // value label on top
+          bars += `<text x="${(x + barW/2 - 1).toFixed(1)}" y="${(y - 4).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#404040" font-weight="600">${v > 0 ? '+' : ''}${v.toFixed(1)}</text>`;
+        });
+      });
+      xLabels += '</g>';
+
+      svg.innerHTML = grid + yAxis + baseline + bars + xLabels;
+
+      // Legend
+      legend.innerHTML = PERF_DATA.portfolios.map((p) => `
+        <div class="flex items-start gap-2">
+          <div class="w-3 h-3 rounded-sm shrink-0 mt-0.5" style="background: ${p.color};"></div>
+          <div class="leading-tight">
+            <div class="text-xs font-semibold text-ink-900">${p.name}</div>
+            <div class="text-[10px] text-ink-500">${isEn ? p.descEn : p.descDe} · ${p.equityPct}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    if (document.getElementById('perfChart')) {
+      renderPerfChart();
+      // Re-render on language switch (listen on the lang-toggle buttons)
+      document.querySelectorAll('[data-lang]').forEach((btn) => {
+        btn.addEventListener('click', () => setTimeout(renderPerfChart, 0));
+      });
     }
 
     /* ── i18n DE/EN ─────────────────────────────── */
@@ -4718,6 +5774,128 @@
         'calc.top3': 'Top 3 alternatives',
         'calc.disclaimer': 'Estimates for demonstration purposes — based on averaged market prices. You will receive a binding offer after a 30-minute consultation.',
         'calc.cta': 'Request a personal quote',
+        'cust.title': 'Your data — entered once, used everywhere',
+        'cust.sub': 'Used for health insurance, pension, and supplementary insurance comparisons.',
+        'cust.empty': 'not yet entered',
+        'cust.first': 'First name',
+        'cust.last': 'Last name',
+        'cust.birth': 'Date of birth',
+        'cust.plz': 'Postal code / city',
+        'cust.email': 'Email (optional)',
+        'strat.legend.band': 'Range ±2.5 % return',
+        'perf.eyebrow': '— Performance history',
+        'perf.title.1': 'What our',
+        'perf.title.2': 'bank providers',
+        'perf.title.3': 'have actually delivered.',
+        'perf.sub': 'Net returns after all running costs — straight from the providers\' official monthly reports. No marketing numbers.',
+        'perf.scale': 'Net performance p.a. · Source: Zugerberg Monthly Reports',
+        'perf.everon.tag': 'Direct investment in ETFs',
+        'perf.everon.text': 'Everon is a direct-investment platform — performance equals 1:1 the chosen ETF strategy. A broadly diversified Global 100 variant (e.g. MSCI World) delivered around <strong>+15 %</strong> in 2023 and <strong>+27 %</strong> in 2024 (in CHF). We configure the right mix individually with you — exact performance follows from your ETF picks, not from a provider strategy.',
+        'perf.disclaimer': '<strong>Sources:</strong> Zugerberg Finanz Monthly Reports 12/2023, 12/2024 and 11/2025 — performance is net of all running costs, before contract conclusion costs. 2025 values are year-to-date as of November and will annualize at year-end. MSCI World CHF view from public index data. <strong>Past performance is not a reliable indicator of future returns.</strong> Capital investments carry the risk of loss.',
+        'trust.head': 'Sources & certifications',
+        'trust.estv': 'Tax data per municipality',
+        'trust.bag': 'Health insurance premiums',
+        'trust.bfs': 'Population statistics',
+        'trust.cicero': 'certified',
+        'cmp.eyebrow': '— Side-by-side comparison',
+        'cmp.title.1': 'Three paths.',
+        'cmp.title.2': 'One goal.',
+        'cmp.sub': 'What separates us from the cheapest discount tool — and from doing nothing? Using your values from the calculator above.',
+        'cmp.final.lbl': 'Net final capital after <span id="cmpYrs1">35</span> years',
+        'cmp.vs.nothing': 'vs. doing nothing',
+        'cmp.vs.self': 'vs. self-investing',
+        'cmp.c1.tag': 'Status quo',
+        'cmp.c1.title': 'Do nothing',
+        'cmp.c1.sub': 'Savings account · 0 % interest · contribution fully taxed',
+        'cmp.c1.basis': 'Baseline scenario',
+        'cmp.c1.l1': 'No tax deduction · contribution to savings account post-tax',
+        'cmp.c1.l2': 'Inflation erodes real value',
+        'cmp.c1.l3': 'No death benefit · no disability coverage',
+        'cmp.c1.l4': 'Full withdrawal tax progression on pension fund',
+        'cmp.c2.tag': 'Discount online',
+        'cmp.c2.title': 'Self-invest',
+        'cmp.c2.sub': 'VIAC · finpension · 100 % bank · TER ~0.4 %',
+        'cmp.c2.l1': 'Tax deduction on contribution · tax-free growth',
+        'cmp.c2.l2': 'Full ETF selection · annually adjustable',
+        'cmp.c2.l3': 'No death benefit · no premium waiver on disability',
+        'cmp.c2.l4': 'You alone are responsible for strategy & staggering',
+        'cmp.c3.badge': 'Recommended',
+        'cmp.c3.tag': 'With Glatt Broker',
+        'cmp.c3.title': 'Fully supported',
+        'cmp.c3.sub': 'Bank + insurance mix · staggered withdrawal · annual review',
+        'cmp.c3.l1': '<strong>Everything from card 2</strong> · same tax advantages',
+        'cmp.c3.l2': '<strong>Protection included:</strong> death benefit, disability pension, premium waiver',
+        'cmp.c3.l3': '<strong>Staggered withdrawal</strong> · avg. 30-40 % less withdrawal tax',
+        'cmp.c3.l4': '<strong>Cross-advice:</strong> health, tax, pension from a single source',
+        'cmp.fine': 'Amounts are net of withdrawal tax. "Self-invest" assumes 100 % bank share with your selected return, no protection, no staggering. "With Glatt" uses your current mix with staggered withdrawal. "Do nothing" = contribution after taxes on a savings account, 0 % interest.',
+        'abl.eyebrow': '— How it works',
+        'abl.title': 'From first conversation to contract in 14 days.',
+        'abl.s1.t': 'First conversation',
+        'abl.s1.d': '30 minutes · free · phone, video or in person. We listen — no sales decks.',
+        'abl.s1.k': 'Time: 30 min',
+        'abl.s2.t': 'Plan creation',
+        'abl.s2.d': 'We build your individual plan based on income, tax situation, life stage — as a PDF to take with you.',
+        'abl.s2.k': 'Your effort: 0',
+        'abl.s3.t': 'You decide',
+        'abl.s3.d': 'Yes or no — no pressure, no obligation. If yes: application electronically in < 30 min, account opening in 7-14 days.',
+        'abl.s3.k': 'Time: 30 min',
+        'abl.s4.t': 'Annual review',
+        'abl.s4.d': 'Once per year, 30 min: strategy check, provider switch if better, tax optimization — automatic in the service.',
+        'abl.s4.k': 'Time: 30 min/year',
+        'faq.eyebrow': '— Frequently asked',
+        'faq.title': 'What clients keep asking us.',
+        'faq.sub': 'Something else on your mind? Call directly or send a quick message via <a class="text-brand-600 underline" href="kontakt.html">contact</a>.',
+        'faq.q1.q': 'Can I go bank-only — without an insurance share?',
+        'faq.q1.a': 'Yes. Some profiles fit better with 100 % bank: young singles without credit, already-strong safety cushion, clear investment preference. We only recommend mix where the protection value (death, disability) justifies the 1-2 % return trade-off. In the calculator above, simply set the insurance share to 0 %.',
+        'faq.q2.q': 'What happens if I emigrate?',
+        'faq.q2.a': 'You can liquidate the 3rd pillar when leaving Switzerland — capital withdrawal tax applies once. In EU/EFTA the source tax is reduced under double-taxation treaties. Before liquidation, we check whether deferring (until retirement, withdrawal on-site) is cheaper. With concrete plans, contact us early — the bank/insurance provider choice affects flexibility.',
+        'faq.q3.q': 'Can I access the money before 60?',
+        'faq.q3.a': 'Only in four cases: purchase of owner-occupied property (every 5 years, any amount), start of self-employment (giving up employee status), emigration from Switzerland, full disability pension. In all cases capital withdrawal tax applies — amount depends on canton and withdrawal sum (see table in the calculator above).',
+        'faq.q4.q': 'Why "mix" and not 100 % bank?',
+        'faq.q4.a': 'Bank 3a builds wealth but has no protection component. Insurance 3a provides death benefit, disability pension and premium waiver — on disability the plan continues without your contribution. For young families, mortgage debt, self-employment that is material protection of 50-300k over the remaining term. We recommend 30-50 % insurance share. Singles without credit can also go 0 %.',
+        'faq.q5.q': 'What does your service cost?',
+        'faq.q5.a': 'For you: <strong>nothing</strong>. We are a FINMA-registered broker and are compensated by providers (Cicero-certified commissions). Plan creation, annual review, contract switching — all in the service. Advantage: one contact for health insurance, 3a, tax, pension instead of multiple online tools. Disadvantage: advice is not "neutral" like a fee-based advisor — in exchange it is free and integrated.',
+        'faq.q6.q': 'What if the market crashes?',
+        'faq.q6.a': 'Drawdowns are normal: 2008 −38 %, 2020 −20 %. Historical recovery is 2-3 years. Over 30+ years of investment horizon, this evens out several times. The insurance share guarantees a minimum final capital — that\'s your downside safety net. Approaching retirement, we automatically shift to more defensive strategies (lifecycle shifting) so a crash just before 65 doesn\'t hit you.',
+        'story.eyebrow': '— What it looks like in practice',
+        'story.title.1': 'Three lives.',
+        'story.title.2': 'Three plans.',
+        'story.title.3': 'One logic.',
+        'story.sub': 'Sample profiles from our practice — anonymized but structurally real. What happens when someone like you comes to us?',
+        'story.p1.who': 'Anna · 28 · single',
+        'story.p1.role': 'Architect · City of Zurich · CHF 85,000',
+        'story.p1.painLbl': 'Pain',
+        'story.p1.pain': '"I keep hearing \'do 3a\', but I don\'t want to deal with VIAC apps and I have no idea whether it even applies to me."',
+        'story.p1.fixLbl': 'Plan',
+        'story.p1.fix': '80 % bank (Zugerberg Revo 4, balanced-aggressive) + 20 % insurance Generali for disability coverage. Contribution CHF 7,258/year (max).',
+        'story.p1.r1.lbl': 'Tax savings',
+        'story.p1.r2.lbl': 'Final capital at 65',
+        'story.p2.badge': 'Family classic',
+        'story.p2.who': 'Marco & Lea · 38 · family',
+        'story.p2.role': '2 kids · home in Wallisellen · CHF 160,000 household',
+        'story.p2.painLbl': 'Pain',
+        'story.p2.pain': '"Mortgage 800k, two kids — if one of us drops out, the plan collapses. I need security, not just yield."',
+        'story.p2.fixLbl': 'Plan',
+        'story.p2.fix': '50 / 50 bank-insurance per person. Both max 7,258. Insurance component Generali secures death benefit, premium waiver, disability pension — plan continues even if one is out.',
+        'story.p2.r1.lbl': 'Total death coverage',
+        'story.p2.r2.lbl': 'Tax savings',
+        'story.p3.who': 'Bruno · 55 · self-employed',
+        'story.p3.role': 'No PK · kids moved out · CHF 180,000',
+        'story.p3.painLbl': 'Pain',
+        'story.p3.pain': '"8 years to retirement, no pension fund cushion, four 3a accounts opened loosely over the years — no strategy."',
+        'story.p3.fixLbl': 'Plan',
+        'story.p3.fix': 'Contribution raised to max (CHF 36,288/year, 20 % of income). 4 accounts kept for staggering: withdrawal 2031/32/33/34 reduces withdrawal tax by ~38 %. More defensive mix (Revo 3) due to short horizon.',
+        'story.p3.r1.lbl': 'Withdrawal-tax savings',
+        'story.p3.r2.lbl': 'Marginal-rate lever',
+        'story.fine': 'Sample calculations with stored Glatt strategies · City of Zurich 2026 · values rounded. Actual plans are tailored individually to your situation.',
+        'faq.q7.q': 'How much can I deposit max in 2026?',
+        'faq.q7.a': 'With pension fund: <strong>CHF 7,258</strong>. Without pension fund (self-employed not in a 2nd pillar): <strong>20 % of net earned income, max. CHF 36,288</strong>. Amounts apply per person. Both spouses can contribute the full max. Contribution must be received by 31 December (bank credit date, not order date).',
+        'strat.who': 'Client · for PDF report',
+        'strat.who.hint': 'Postal code determines exact withdrawal tax (FTA data per municipality) · everything optional',
+        'strat.bsplit': 'Bank allocation',
+        'strat.bsplit.hint': 'Within the bank share: Everon (aggressive, ETF) vs. Zugerberg (more balanced)',
+        'strat.vp': 'Insurance provider',
+        'strat.vp.hint': 'Generali Multi Index 100 · broadly diversified index strategy',
         'strat.title.1': 'What does the',
         'strat.title.2': '3rd pillar',
         'strat.title.3': 'really get you?',
@@ -4956,10 +6134,364 @@
         }
       });
     })();
+
+    /* ════════════════════════════════════════════════════════════
+       PK-EINKAUF-RECHNER + 3a-BEZUGS-TRANCHEN-OPTIMIERER
+       Beide Tools nutzen ESTV-Tarife 2026 (vereinfacht)
+       ════════════════════════════════════════════════════════════ */
+    (function vorsorgeRechner() {
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n) => Math.round(n).toLocaleString('de-CH').replace(/,/g, "'");
+      const PI = (id, def) => parseFloat($(id)?.value || def) || 0;
+      const PS = (id) => $(id)?.value || '';
+
+      // Marginalsätze 2026 vereinfacht (Bund + Kanton + Gemeinde)
+      // ZH-ledig identisch zum Strategie-Grenzsatz oben (STRAT.marginalRate) — eine gemeinsame Quelle.
+      const MARG = {
+        zh:    [[0,5],[20000,13],[35000,20],[55000,26],[80000,30],[110000,34],[150000,37],[200000,40],[300000,42]],
+        'zh-v':[[0,0],[60000,11],[100000,18],[150000,24],[200000,28],[300000,33],[500000,38]],
+        zg:    [[0,0],[40000,8],[80000,14],[120000,18],[200000,22],[300000,24],[500000,26]],
+        ge:    [[0,0],[50000,16],[100000,28],[150000,34],[200000,38],[300000,43],[500000,45]],
+        ti:    [[0,0],[40000,11],[80000,20],[150000,28],[200000,33],[300000,37],[500000,40]],
+        be:    [[0,0],[40000,14],[80000,23],[150000,30],[200000,35],[300000,38],[500000,41]],
+        bs:    [[0,0],[50000,15],[100000,24],[150000,30],[200000,34],[300000,38],[500000,40]],
+      };
+      function margRate(kt, eink) {
+        const rows = MARG[kt] || MARG.zh;
+        let r = 0;
+        for (const [thr, pct] of rows) if (eink >= thr) r = pct;
+        return r;
+      }
+
+      // Kapitalbezugs-Steuer — identische Basis wie Strategie- & KLST-Rechner:
+      // interpolierte ZH-Tabelle (STRAT.withdrawalTable, effektiver Satz auf gesamte Tranche)
+      // × geografischer Kantonsfaktor × Splitting. So stimmen alle Bezugssteuer-Werte der Site überein.
+      function bezSteuer(kapital, kanton, zivil) {
+        if (kapital <= 0) return 0;
+        // Geografischer Kantonsfaktor relativ zu ZH (gleiche Werte wie STRAT.cantonFactor)
+        const KT = { zh: 1.0, 'zh-v': 1.0, zg: 0.44, ge: 1.25, ti: 1.08, be: 1.18, bs: 1.08 };
+        const ktFactor = KT[kanton] ?? 1.0;
+        // Verheiratete / eingetr. Partnerschaft: Splitting-Rabatt, nur einmal angewendet
+        // (−15 %, konsistent mit dem KLST-Rechner in steuern.html).
+        const married = zivil === 'verh' || kanton === 'zh-v';
+        const split = married ? 0.85 : 1.0;
+        return kapital * STRAT.withdrawalRate(kapital) * ktFactor * split;
+      }
+
+      // ── PK-Einkauf-Rechner ──────────────────────
+      function calcPk() {
+        const luecke = PI('pkLuecke');
+        let einkauf = PI('pkEinkauf');
+        const eink   = PI('pkEink');
+        const kanton = PS('pkKanton');
+        const tranchen = PI('pkStaffel');
+
+        // Einkauf kann max. = Lücke
+        if (einkauf > luecke) einkauf = luecke;
+
+        const marg = margRate(kanton, eink);
+        const totalSave = einkauf * (marg / 100);
+        const netto = einkauf - totalSave;
+        const proTr = einkauf / tranchen;
+        const proTrSave = proTr * (marg / 100);
+
+        $('pkLueckeOut').textContent = fmt(luecke);
+        $('pkEinkOut').textContent = fmt(einkauf);
+        $('pkMarg').textContent = marg;
+        $('pkMargOut').textContent = marg;
+        $('pkSave').textContent = fmt(totalSave);
+        $('pkNetto').textContent = fmt(netto);
+        $('pkStaffelN').textContent = tranchen;
+        $('pkProTr').textContent = fmt(proTr);
+        $('pkProTrSave').textContent = fmt(proTrSave);
+        $('pkTotalSave').textContent = fmt(totalSave);
+      }
+      ['pkLuecke','pkEinkauf','pkEink','pkKanton','pkStaffel'].forEach((id) => {
+        const el = $(id);
+        if (el) {
+          el.addEventListener('input', calcPk);
+          el.addEventListener('change', calcPk);
+        }
+      });
+      if ($('pkLuecke')) calcPk();
+
+      // ── 3a-Bezugs-Tranchen-Optimierer ──────────
+      function calcBz() {
+        const kap = PI('bzKap');
+        const n = PI('bzTranchen');
+        const kanton = PS('bzKanton');
+        const zivil = PS('bzZivil');
+
+        const steuer1 = bezSteuer(kap, kanton, zivil);
+        // Bei n Tranchen: jede zahlt die Steuer für ihre Tranchengrösse
+        const proTr = kap / n;
+        const steuerN = bezSteuer(proTr, kanton, zivil) * n;
+        const save = Math.max(0, steuer1 - steuerN);
+        const pct1 = kap > 0 ? (steuer1 / kap) * 100 : 0;
+        const pctN = kap > 0 ? (steuerN / kap) * 100 : 0;
+
+        $('bzKapOut').textContent = fmt(kap);
+        $('bz1').textContent = fmt(steuer1);
+        $('bz1pct').textContent = pct1.toFixed(2);
+        $('bz1net').textContent = fmt(kap - steuer1);
+        $('bzN').textContent = fmt(steuerN);
+        $('bzNpct').textContent = pctN.toFixed(2);
+        $('bzNnet').textContent = fmt(kap - steuerN);
+        $('bzSave').textContent = fmt(save);
+        $('bzNshow').textContent = n;
+        $('bzN2show').textContent = n;
+      }
+      ['bzKap','bzTranchen','bzKanton','bzZivil'].forEach((id) => {
+        const el = $(id);
+        if (el) {
+          el.addEventListener('input', calcBz);
+          el.addEventListener('change', calcBz);
+        }
+      });
+      if ($('bzKap')) calcBz();
+    })();
+  </script>
+
+  <!-- ═══════════════════ BERATER-COCKPIT ═══════════════════ -->
+  <!-- Aktivierung: ?mode=advisor in URL · oder localStorage flag · Toggle persistent -->
+  <style>
+    .advisor-only { display: none; }
+    body.advisor-mode .advisor-only { display: block; }
+    body.advisor-mode .advisor-only-inline { display: inline-block; }
+    body.advisor-stealth #advisorPanel,
+    body.advisor-stealth #advisorPanelMini,
+    body.advisor-stealth .advisor-only,
+    body.advisor-stealth .advisor-only-inline { display: none !important; }
+    #advisorPanel .advisor-tab { color: rgba(255,255,255,0.55); border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+    #advisorPanel .advisor-tab.active { color: #fff; border-bottom-color: #CC2936; }
+    #advisorPanel .advisor-pane { display: none; }
+    #advisorPanel .advisor-pane.active { display: block; }
+    .advisor-objection summary { cursor: pointer; padding: 8px 10px; background: rgba(255,255,255,0.04); border-radius: 6px; font-weight: 600; color: #fff; }
+    .advisor-objection summary:hover { background: rgba(255,255,255,0.08); }
+    .advisor-objection[open] summary { background: rgba(204,41,54,0.15); }
+    .advisor-objection .answer { padding: 8px 10px 4px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+    .advisor-hint { background: rgba(204,41,54,0.06); border-left: 2.5px solid #CC2936; padding: 8px 12px; border-radius: 4px; font-size: 11px; color: #404040; }
+    .advisor-hint::before { content: '💼 Berater-Hinweis · '; font-weight: 700; color: #CC2936; }
+  </style>
+
+  <!-- Minimized chip -->
+  <button id="advisorPanelMini" type="button" class="advisor-only fixed bottom-4 right-4 z-50 bg-ink-950 text-white px-4 py-2.5 rounded-full shadow-2xl text-xs font-semibold flex items-center gap-2 hover:bg-ink-900" style="display: none;">
+    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+    <span>Berater-Cockpit</span>
+  </button>
+
+  <!-- Full panel -->
+  <aside id="advisorPanel" class="advisor-only fixed bottom-4 right-4 z-50 w-[380px] max-w-[calc(100vw-2rem)] bg-ink-950 text-white rounded-2xl shadow-2xl flex flex-col" style="display: none; max-height: calc(100vh - 2rem);">
+    <header class="px-4 py-3 border-b border-white/10 flex items-center justify-between flex-shrink-0">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        <span class="text-xs font-semibold tracking-wide uppercase">Berater-Cockpit</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <button id="advisorStealthBtn" type="button" class="text-[10px] px-2 py-1 rounded text-white/55 hover:text-white hover:bg-white/10" title="5s Kundensicht zeigen">👁 Stealth</button>
+        <button id="advisorMinBtn" type="button" class="text-[10px] px-2 py-1 rounded text-white/55 hover:text-white hover:bg-white/10" title="Minimieren">_</button>
+        <button id="advisorOffBtn" type="button" class="text-[10px] px-2 py-1 rounded text-white/55 hover:text-white hover:bg-white/10" title="Beenden">×</button>
+      </div>
+    </header>
+
+    <nav class="flex border-b border-white/10 text-[11px] flex-shrink-0">
+      <button type="button" data-tab="objections" class="advisor-tab active flex-1 py-2.5">Einwände</button>
+      <button type="button" data-tab="cross"      class="advisor-tab flex-1 py-2.5">Cross-Sell</button>
+      <button type="button" data-tab="math"       class="advisor-tab flex-1 py-2.5">Math</button>
+      <button type="button" data-tab="notes"      class="advisor-tab flex-1 py-2.5">Notizen</button>
+    </nav>
+
+    <div class="overflow-y-auto flex-1" style="min-height: 240px;">
+      <div data-pane="objections" class="advisor-pane active p-4 space-y-2 text-xs">
+        <!-- gefüllt von JS -->
+      </div>
+      <div data-pane="cross" class="advisor-pane p-4 space-y-2 text-xs">
+        <!-- gefüllt von JS -->
+      </div>
+      <div data-pane="math" class="advisor-pane p-4 space-y-3 text-xs">
+        <!-- gefüllt von JS, live aus sState -->
+      </div>
+      <div data-pane="notes" class="advisor-pane p-4">
+        <textarea id="advisorNotes" placeholder="Beratungs-Notizen (lokal gespeichert)…" class="w-full h-40 bg-white/5 border border-white/10 rounded p-2 text-xs text-white placeholder-white/30 font-mono" style="resize: vertical;"></textarea>
+        <div class="flex items-center justify-between mt-2 text-[10px] text-white/40">
+          <span id="advisorNotesStatus">Auto-Save aktiv · localStorage</span>
+          <button id="advisorNotesClear" type="button" class="text-white/40 hover:text-brand-500">Zurücksetzen</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="px-4 py-2 border-t border-white/10 text-[10px] text-white/50 flex items-center justify-between flex-shrink-0">
+      <span>v1 · Stand 2026-05-20</span>
+      <button id="advisorPdfBtn" type="button" class="px-2.5 py-1 bg-brand-600 hover:bg-brand-700 rounded text-white text-[10px] font-semibold">Berater-PDF</button>
+    </footer>
+  </aside>
+
+  <script>
+    /* ── Berater-Cockpit Logik ─────────────────────────────── */
+    (function advisorMode() {
+      const url = new URL(window.location.href);
+      const param = url.searchParams.get('mode');
+      const LS_ON = 'glatt.advisor.on';
+      const LS_NOTES = 'glatt.advisor.notes';
+
+      // Activation
+      if (param === 'advisor') { localStorage.setItem(LS_ON, '1'); }
+      if (param === 'customer') { localStorage.removeItem(LS_ON); }
+      const isOn = localStorage.getItem(LS_ON) === '1';
+      if (!isOn) return;
+
+      document.body.classList.add('advisor-mode');
+      const panel = document.getElementById('advisorPanel');
+      const mini  = document.getElementById('advisorPanelMini');
+      if (!panel || !mini) return;
+      panel.style.display = 'flex';
+
+      // Controls
+      document.getElementById('advisorMinBtn').addEventListener('click', () => {
+        panel.style.display = 'none';
+        mini.style.display = 'inline-flex';
+      });
+      mini.addEventListener('click', () => {
+        mini.style.display = 'none';
+        panel.style.display = 'flex';
+      });
+      document.getElementById('advisorOffBtn').addEventListener('click', () => {
+        if (!confirm('Berater-Modus beenden? URL ?mode=advisor reaktiviert.')) return;
+        localStorage.removeItem(LS_ON);
+        document.body.classList.remove('advisor-mode');
+        panel.style.display = 'none';
+        mini.style.display = 'none';
+      });
+      document.getElementById('advisorStealthBtn').addEventListener('click', () => {
+        document.body.classList.add('advisor-stealth');
+        setTimeout(() => document.body.classList.remove('advisor-stealth'), 5000);
+      });
+
+      // Tabs
+      document.querySelectorAll('#advisorPanel .advisor-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('#advisorPanel .advisor-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('#advisorPanel .advisor-pane').forEach(p => p.classList.remove('active'));
+          tab.classList.add('active');
+          const t = tab.dataset.tab;
+          document.querySelector(`#advisorPanel .advisor-pane[data-pane="${t}"]`).classList.add('active');
+          if (t === 'math') renderAdvisorMath();
+        });
+      });
+
+      // Content: Einwände
+      const OBJECTIONS = [
+        { q: 'Zu wenig flexibel — ich will jederzeit ran',
+          a: 'Bank-Anteil ist <strong>jährlich anpassbar</strong> (Strategie-Switch, Anbieter-Wechsel ohne Steuerfolgen innerhalb 3a). Versicherungs-Sparplan ist ebenfalls jährlich änderbar. Was nicht flexibel ist: Bezug vor 60 — ausser bei Wohneigentum, Selbstständigkeit, Auswanderung, IV.' },
+        { q: 'Versicherung = Provisionsmaximierung',
+          a: 'Konter mit Zahlen: Steuerersparnis (Beitrag × Marginalrate) ist deutlich grösser als die jährliche Vermittlungs-Marge. Plus Schutzleistungen (Todesfallkapital, IV-Rente, Prämienbefreiung), die reine Bank-3a nicht hat. Zeige Marginalrate-Box: bei 30% Marginal = ca. CHF 1950 Steuerersparnis bei 6500 Beitrag.' },
+        { q: 'VIAC / finpension ist günstiger',
+          a: 'VIAC ist Top für reine Bank-3a (TER ~0.4%, voller ETF-Zugang). Aber: <strong>kein Todesfallkapital, keine IV-Rente, keine Prämienbefreiung</strong>. Für Singles in 20ern OK — ab Familie/Kredit wird Risiko substanziell. Wir empfehlen daher Mix.' },
+        { q: 'Warum nicht alles ins Maximum?',
+          a: 'Wir empfehlen IMMER Max ausschöpfen (CHF 7\'258 mit PK, CHF 36\'288 ohne in 2026). Diese Aufteilung hier ist <em>innerhalb</em> des Max. Wenn Kunde unter Max ist → Cross-Sell zu Säule 3b oder Sondereinkauf PK.' },
+        { q: 'Was wenn Markt crashed?',
+          a: 'Drawdowns sind normal (2008: −38%, 2020: −20%). Historische Erholung: ~2-3 Jahre. Bei 30+ Jahren Anlagedauer egalisiert sich das. Versicherungs-Komponente garantiert Mindest-Endkapital — Schutz nach unten. Bei Pensionierungsnähe automatisch Lifecycle-Shift.' },
+        { q: 'Bei Auswanderung — was passiert?',
+          a: 'EU/EFTA: Bezug am Wohnsitz, Quellensteuer reduziert (Doppelbesteuerungs-Abkommen). Drittland: Schwarzlisten-Prüfung. Bei Plänen für Auswanderung in nächsten 5 Jahren: eher konservativer Mix, kürzerer Zeit-Puffer.' },
+        { q: 'Kann ich vorzeitig auflösen?',
+          a: 'Ja, bei: Wohneigentum (Anzahlung), Selbstständigkeit (Aufgabe Erwerb), Auswanderung, IV-Vollrente, oder ab Alter 60. Alle Gründe lösen Kapitalauszahlungssteuer aus (siehe Bezugssteuer-Tabelle in der Seite).' },
+      ];
+      document.querySelector('[data-pane="objections"]').innerHTML = OBJECTIONS.map((o) => `
+        <details class="advisor-objection">
+          <summary>${o.q}</summary>
+          <div class="answer">${o.a}</div>
+        </details>
+      `).join('');
+
+      // Content: Cross-Sell
+      const CROSS = [
+        { url: 'krankenkasse.html', t: 'KK-Vergleich', why: 'Sofort-Win: ø CHF 1\'200 Ersparnis/Jahr durch Wechsel. Bridge: "Während wir 3a einrichten, schauen wir KK an?" Top-Anker für nervöse Kunden — schnelle Wertbestätigung.' },
+        { url: 'steuern.html', t: 'Steueroptimierung', why: 'Marginalrate >26%? Säule 3b, Schuldzinsabzug, Sondereinkauf PK sind weitere Hebel. Hook: "2-3 Stellschrauben hätten wir noch."' },
+        { url: 'krankenkasse.html#vvg', t: 'VVG / Zusatz', why: 'Ab Familie/Eigenheim: Hospitalisation Halbprivat ø CHF 80/Monat, oft tax-optimiert mit 3a kombinierbar.' },
+        { url: 'finanzen.html', t: 'Vermögensaufbau ausserhalb 3a', why: 'Wenn Beitrag bei Max & noch Kapital frei: Säule 3b / Vermögensverwaltung-Mandat ergänzend. Glatt-Marge dort höher.' },
+        { url: 'firmenkunden.html', t: 'Sachversicherung Bundle', why: 'Selbstständig? Hausrat + Privathaftpflicht + Gebäude = 15-20% Bundle-Rabatt.' },
+        { url: 'partner.html', t: 'Tippgeber-Programm', why: 'Bestandskunde zufrieden? Bittet Empfehlung — CHF 30-300 pro qualifizierter Lead je Sparte. Direkt-Mention nach Vertragsabschluss.' },
+      ];
+      document.querySelector('[data-pane="cross"]').innerHTML = CROSS.map((c) => `
+        <a href="${c.url}" target="_blank" class="block p-3 rounded bg-white/5 hover:bg-white/10 border border-white/10">
+          <div class="font-semibold text-white text-[11.5px]">→ ${c.t}</div>
+          <div class="text-white/65 mt-1 leading-relaxed">${c.why}</div>
+        </a>
+      `).join('');
+
+      // Content: Math (live, re-render on tab open)
+      function renderAdvisorMath() {
+        const pane = document.querySelector('[data-pane="math"]');
+        if (!pane) return;
+        const res = window.__sLastRes;
+        if (!res) { pane.innerHTML = '<div class="text-white/50">Strategie-Sektion noch nicht geladen.</div>'; return; }
+        const mr = (res.marginalRate * 100).toFixed(1);
+        const cf = res.cantonFactor.toFixed(2);
+        const ra = res.rateAll * 100, rt = res.rateTranche * 100;
+        pane.innerHTML = `
+          <div class="rounded bg-white/5 p-3 border border-white/10">
+            <div class="text-white/45 uppercase tracking-wide text-[10px] mb-1">Marginalrate</div>
+            <div class="text-white text-base font-bold">${mr} %</div>
+            <div class="text-white/60 mt-1 text-[11px]">Stufenfunktion Stadt ZH 8002, ledig, 2026: &lt;20k=5% · &lt;35k=13% · &lt;55k=20% · &lt;80k=26% · &lt;110k=30% · &lt;150k=34% · &lt;200k=37% · &lt;300k=40% · ≥300k=42%</div>
+          </div>
+          <div class="rounded bg-white/5 p-3 border border-white/10">
+            <div class="text-white/45 uppercase tracking-wide text-[10px] mb-1">Bezugssteuer (Quelle: ${res.rateSource})</div>
+            <div class="grid grid-cols-2 gap-2 text-white">
+              <div><div class="text-white/50 text-[10px]">1 Tranche</div><div class="font-bold">${ra.toFixed(2)} %</div></div>
+              <div><div class="text-white/50 text-[10px]">${sState.staff} Tranchen</div><div class="font-bold">${rt.toFixed(2)} %</div></div>
+            </div>
+            <div class="text-white/55 mt-1 text-[11px]">Kantonsfaktor ${res.cantonFactor === 1 ? 'ZH (Basis)' : `${cf} × ZH-Basis (${sState.canton})`}</div>
+          </div>
+          <div class="rounded bg-white/5 p-3 border border-white/10">
+            <div class="text-white/45 uppercase tracking-wide text-[10px] mb-1">Rendite-Modell</div>
+            <div class="text-white/85 text-[11px] leading-relaxed">
+              Bank: ${(res.rExpected*100).toFixed(1)} % p.a. (User-Slider, Default 6.5%) · Bandbreite ±2.5pp<br>
+              Vers: ~4.5 % p.a. (fix, nach Risikokosten)<br>
+              Ohne Strategie: Sparkonto 0% · Beitrag versteuert vor Anlage
+            </div>
+          </div>
+          <div class="rounded bg-white/5 p-3 border border-white/10">
+            <div class="text-white/45 uppercase tracking-wide text-[10px] mb-1">Anbieter-Kurzprofil</div>
+            <div class="text-white/85 text-[11px] leading-relaxed">
+              <strong>Everon</strong> · Direktanlage ETF · TER ~0.4% · keine Garantie<br>
+              <strong>Zugerberg</strong> · aktive Vermögensverwaltung Revo · 2024 ø +9.1% (R3)<br>
+              <strong>Generali Multi Index 100</strong> · indexnah, Schutz inkl.<br>
+              <strong>Swiss Life Index Strategy Chance 75</strong> · 75% Aktien max, Schutz inkl.
+            </div>
+          </div>
+        `;
+      }
+
+      // Notizen
+      const notesEl = document.getElementById('advisorNotes');
+      notesEl.value = localStorage.getItem(LS_NOTES) || '';
+      let saveTimer;
+      notesEl.addEventListener('input', () => {
+        clearTimeout(saveTimer);
+        document.getElementById('advisorNotesStatus').textContent = 'Speichere…';
+        saveTimer = setTimeout(() => {
+          localStorage.setItem(LS_NOTES, notesEl.value);
+          document.getElementById('advisorNotesStatus').textContent = 'Gespeichert · ' + new Date().toLocaleTimeString('de-CH', {hour:'2-digit',minute:'2-digit'});
+        }, 400);
+      });
+      document.getElementById('advisorNotesClear').addEventListener('click', () => {
+        if (!confirm('Alle Notizen löschen?')) return;
+        notesEl.value = ''; localStorage.removeItem(LS_NOTES);
+        document.getElementById('advisorNotesStatus').textContent = 'Zurückgesetzt';
+      });
+
+      // Berater-PDF Button — Stub (Phase 2b)
+      document.getElementById('advisorPdfBtn').addEventListener('click', () => {
+        // Generiere Standard-PDF, aber mit Hinweis dass Berater-Variante in Arbeit
+        if (typeof sGeneratePdf === 'function') {
+          window.__advisorPdfActive = true;
+          sGeneratePdf();
+          window.__advisorPdfActive = false;
+        }
+      });
+    })();
   </script>
 
 </body>
 </html>
-
-
 

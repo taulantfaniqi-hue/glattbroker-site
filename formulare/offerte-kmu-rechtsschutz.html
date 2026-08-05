@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rechtsschutzversicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="vorlagen/kmu-rechtsschutz-template.js"></script>
+<script src="assets/mandat-fill.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-rechtsschutz',
+  title: 'Rechtsschutzversicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  pdfTemplate: 'KMURS_TPL_B64',
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full', pdf: 'Text 329' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full', pdf: 'Text 331' },
+            { id: 'plz_ort', label: 'PLZ / Ort', type: 'text', required: true, pdf: 'Text 333' },
+            { id: 'telefon', label: 'Telefon', type: 'tel', pdf: 'Text 334' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full', pdf: 'Text 335' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true, pdf: 'Text 338' },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'https://', pdf: 'Text 339' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['Einzelfirma', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'], pdf: 'Text 340' },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date', pdf: 'Text 347' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-000.000.000', col: 'full', pdf: 'Text 348' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text', pdf: 'Text 350' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text', pdf: 'Text 351' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verband_mitglied', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'], pdfMap: { 'Nein': 'Kontrollkästchen 5', 'Ja': 'Kontrollkästchen 6' } },
+            { id: 'verband_welcher', label: 'Wenn ja, welche?', type: 'text', col: 'full', pdf: 'Text 353' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full', pdf: 'Text 357' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ / Ort', type: 'text', pdf: 'Text 358' },
+            { id: 'standort_a_benuetzung', label: 'Standort A – Benützung / Gefahr', type: 'text', pdf: 'Text 359' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full', pdf: 'Text 362' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ / Ort', type: 'text', pdf: 'Text 363' },
+            { id: 'standort_b_benuetzung', label: 'Standort B – Benützung / Gefahr', type: 'text', pdf: 'Text 364' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full', pdf: 'Text 367' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ / Ort', type: 'text', pdf: 'Text 368' },
+            { id: 'standort_c_benuetzung', label: 'Standort C – Benützung / Gefahr', type: 'text', pdf: 'Text 369' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'Kontrollkästchen 10', 'Nein': 'Kontrollkästchen 11' } },
+            { id: 'eigentuemer_gebaeude_adresse', label: 'Adresse des Gebäudes', type: 'text', col: 'full', pdf: 'Text 372' },
+            { id: 'eigentuemer_gebaeude_plz_ort', label: 'PLZ / Ort des Gebäudes', type: 'text', pdf: 'Text 433' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Beschäftigte',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF', pdf: 'Text 330' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z. B. 2024', pdf: 'Text 378' },
+            { id: 'anzahl_beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number', pdf: 'Text 336' },
+            { id: 'anzahl_beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number', pdf: 'Text 337' },
+            { id: 'anzahl_beschaeftigte_total', label: 'Anzahl Beschäftigte – Total', type: 'number', pdf: 'Text 341' },
+            { id: 'davon_familienmitglieder', label: 'Davon mitarbeitende Familienmitglieder', type: 'number', pdf: 'Text 346' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Bitte alle Lohnsummen in CHF angeben.',
+          fields: [
+            { id: 'lohn_uvg_maenner', label: 'Lohnsumme – Gesamtes Personal UVG-Lohnsumme (Männer)', type: 'number', suffix: 'CHF', pdf: 'Text 379' },
+            { id: 'lohn_uvg_frauen', label: 'Lohnsumme – Gesamtes Personal UVG-Lohnsumme (Frauen)', type: 'number', suffix: 'CHF', pdf: 'Text 383' },
+            { id: 'lohn_uvg_total', label: 'Lohnsumme – Gesamtes Personal UVG-Lohnsumme (Total)', type: 'number', suffix: 'CHF', pdf: 'Text 387' },
+            { id: 'lohn_ueberschuss_maenner', label: 'Lohnsumme – Gesamtes Personal Überschuss-Lohnsumme (Männer)', type: 'number', suffix: 'CHF', pdf: 'Text 380' },
+            { id: 'lohn_ueberschuss_frauen', label: 'Lohnsumme – Gesamtes Personal Überschuss-Lohnsumme (Frauen)', type: 'number', suffix: 'CHF', pdf: 'Text 385' },
+            { id: 'lohn_ueberschuss_total', label: 'Lohnsumme – Gesamtes Personal Überschuss-Lohnsumme (Total)', type: 'number', suffix: 'CHF', pdf: 'Text 389' },
+            { id: 'lohn_ahv_maenner', label: 'Lohnsumme – Gesamtes Personal AHV-Lohnsumme (Männer)', type: 'number', suffix: 'CHF', pdf: 'Text 381' },
+            { id: 'lohn_ahv_frauen', label: 'Lohnsumme – Gesamtes Personal AHV-Lohnsumme (Frauen)', type: 'number', suffix: 'CHF', pdf: 'Text 384' },
+            { id: 'lohn_ahv_total', label: 'Lohnsumme – Gesamtes Personal AHV-Lohnsumme (Total)', type: 'number', suffix: 'CHF', pdf: 'Text 388' },
+            { id: 'lohn_ahv_unter8h_maenner', label: 'Lohnsumme – Personal < 8 h/Woche AHV-Lohnsumme (Männer)', type: 'number', suffix: 'CHF', pdf: 'Text 382' },
+            { id: 'lohn_ahv_unter8h_frauen', label: 'Lohnsumme – Personal < 8 h/Woche AHV-Lohnsumme (Frauen)', type: 'number', suffix: 'CHF', pdf: 'Text 386' },
+            { id: 'lohn_ahv_unter8h_total', label: 'Lohnsumme – Personal < 8 h/Woche AHV-Lohnsumme (Total)', type: 'number', suffix: 'CHF', pdf: 'Text 390' }
+          ]
+        },
+        {
+          label: 'Besondere Arbeitsverhältnisse',
+          fields: [
+            { id: 'mitarbeiter_arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'], pdfMap: { 'Nein': 'Kontrollkästchen 12', 'Ja': 'Kontrollkästchen 13' } },
+            { id: 'mitarbeiter_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'], pdfMap: { 'Nein': 'Kontrollkästchen 14', 'Ja': 'Kontrollkästchen 15' } },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF', pdf: 'Text 434' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Rechtsschutz-Module',
+      sections: [
+        {
+          label: 'Gewünschte Module',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'], pdfMap: { 'Ja': 'Kontrollkästchen 283', 'Nein': 'Kontrollkästchen 284' } },
+            {
+              id: 'varianten_produkt',
+              label: 'Varianten im Produkt',
+              type: 'checkboxgroup',
+              vertical: true,
+              options: [
+                'Betriebsrechtsschutz',
+                'Vertragsrechtsschutz',
+                'Multi Risk Rechtsschutz',
+                'Verkehrsrechtsschutz',
+                'Vereinsrechtsschutz'
+              ],
+              pdfMap: {
+                'Betriebsrechtsschutz': 'Kontrollkästchen 467',
+                'Vertragsrechtsschutz': 'Kontrollkästchen 468',
+                'Multi Risk Rechtsschutz': 'Kontrollkästchen 469',
+                'Verkehrsrechtsschutz': 'Kontrollkästchen 470',
+                'Vereinsrechtsschutz': 'Kontrollkästchen 471'
+              }
+            },
+            { id: 'verkehrsrechtsschutz_fahrzeuge', label: 'Verkehrsrechtsschutz – Anzahl Fahrzeuge', type: 'number', pdf: 'Text 40168' },
+            { id: 'vereinsrechtsschutz_mitglieder', label: 'Vereinsrechtsschutz – Anzahl Mitglieder', type: 'number', pdf: 'Text 40359' }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertragsdauer_beginn', label: 'Beginn', type: 'date', pdf: 'Text 40165' },
+            { id: 'vertragsdauer_ablauf', label: 'Ablauf', type: 'date', pdf: 'Text 40166' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Vorversicherer & Schadenhistorie',
+      sections: [
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'bisheriger_versicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full', pdf: 'Text 40161' },
+            { id: 'police_nr', label: 'Police Nr.', type: 'text', pdf: 'Text 40160' },
+            { id: 'police_ablauf', label: 'Ablauf', type: 'date', pdf: 'Text 40163' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'], pdfMap: { 'laufend': 'Kontrollkästchen 285', 'gekündigt von VN': 'Kontrollkästchen 286', 'gekündigt von VG': 'Kontrollkästchen 287' } }
+          ]
+        },
+        {
+          label: 'Risikoprüfung',
+          fields: [
+            {
+              id: 'antrag_abgelehnt',
+              label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?',
+              type: 'radio',
+              options: ['Ja', 'Nein'],
+              col: 'full',
+              pdfMap: { 'Ja': 'Kontrollkästchen 288', 'Nein': 'Kontrollkästchen 289' }
+            },
+            { id: 'antrag_abgelehnt_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full', pdf: 'Text 40162' }
+          ]
+        },
+        {
+          label: 'Leistungsfälle in den letzten 5 Jahren',
+          fields: [
+            { id: 'leistungsfaelle_anzahl', label: 'Anzahl Leistungsfälle (letzte 5 Jahre)', type: 'number', pdf: 'Text 40164' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme (inkl. Reserven)', type: 'number', suffix: 'CHF', pdf: 'Text 40167' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 4, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

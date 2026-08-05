@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rechtsschutzversicherung</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-rechtsschutz-privat',
+  title: 'Rechtsschutzversicherung',
+  subtitle: 'Offertenanfrage (Privat)',
+  signature: false,
+  steps: [
+    {
+      label: 'Offertenanfrage',
+      sections: [
+        {
+          label: 'Versicherungsnehmer',
+          fields: [
+            { id: 'vertragstyp', label: 'Vertragsart', type: 'radio', options: ['Einzel', 'Familie'] },
+            { id: 'geschlecht', label: 'Anrede', type: 'radio', options: ['Herr', 'Frau'] },
+            { id: 'vorname', label: 'Vorname', type: 'text', required: true },
+            { id: 'name', label: 'Name', type: 'text', required: true },
+            { id: 'adresse_plz_ort', label: 'Adresse, PLZ / Ort', type: 'text', col: 'full' },
+            { id: 'geburtsdatum', label: 'Geburtsdatum', type: 'date' },
+            { id: 'nationalitaet', label: 'Nationalität', type: 'text' },
+            { id: 'aufenthaltsbewilligung', label: 'Aufenthaltsbewilligung', type: 'text', placeholder: 'z. B. C-Ausweis' },
+          ]
+        },
+        {
+          label: 'Kinder im Haushalt',
+          note: 'Bis zu zwei Kinder eintragen (Name und Geburtsdatum)',
+          fields: [
+            { id: 'kind1_name', label: 'Kind 1 — Name', type: 'text' },
+            { id: 'kind1_geb', label: 'Kind 1 — Geburtsdatum', type: 'date' },
+            { id: 'kind2_name', label: 'Kind 2 — Name', type: 'text' },
+            { id: 'kind2_geb', label: 'Kind 2 — Geburtsdatum', type: 'date' },
+          ]
+        },
+        {
+          label: 'Vertragsdaten',
+          fields: [
+            { id: 'versicherungsbeginn', label: 'Versicherungsbeginn', type: 'date' },
+          ]
+        },
+        {
+          label: 'Gewünschte Deckung',
+          fields: [
+            { id: 'privatrechtsschutz', label: 'Privatrechtsschutz', type: 'checkbox', label: 'Privatrechtsschutz gewünscht' },
+            { id: 'verkehrsrechtsschutz', label: 'Verkehrsrechtsschutz', type: 'checkbox', label: 'Verkehrsrechtsschutz gewünscht' },
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: '', type: 'textarea', rows: 4 },
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

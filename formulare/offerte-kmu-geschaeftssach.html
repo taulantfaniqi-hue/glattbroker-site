@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geschäftssachversicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-geschaeftssach',
+  title: 'Geschäftssachversicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+
+    /* ══════════════════════════════════════════
+       STEP 1 – UNTERNEHMENSDATEN
+    ══════════════════════════════════════════ */
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname',      label: 'Firmenname',      type: 'text',   required: true, col: 'full' },
+            { id: 'adresse',         label: 'Adresse',         type: 'text',   required: true, col: 'full' },
+            { id: 'plz_ort',         label: 'PLZ/Ort',         type: 'text',   required: true },
+            { id: 'telefon',         label: 'Telefon',         type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text',   col: 'full' },
+            { id: 'email',           label: 'E-Mail',          type: 'email',  required: true },
+            { id: 'webseite',        label: 'Webseite',        type: 'text',   placeholder: 'https://' },
+            { id: 'rechtsform',      label: 'Rechtsform',      type: 'select', options: ['Einzelunternehmen', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum',  type: 'date' },
+            { id: 'uid_nummer',      label: 'UID-Nummer',      type: 'text',   placeholder: 'CHE-123.456.789', col: 'full' }
+          ]
+        },
+        {
+          label: 'Tätigkeiten & Klassifikation',
+          fields: [
+            { id: 'taetigkeiten',      label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code',         label: 'NOGA-Code',                   type: 'text' },
+            { id: 'uvg_risikonummer',  label: 'UVG-Risikonummer',            type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verbandszugehoerigkeit', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche',         label: 'Wenn ja, welche?',       type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse',   label: 'Standort A – Adresse',         type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort',   label: 'Standort A – PLZ/Ort',         type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigenmiete',label: 'Standort A – Eigentum/Miete',   type: 'select', options: ['Eigentum', 'Miete'] },
+
+            { id: 'standort_b_adresse',   label: 'Standort B – Adresse',         type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort',   label: 'Standort B – PLZ/Ort',         type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigenmiete',label: 'Standort B – Eigentum/Miete',   type: 'select', options: ['Eigentum', 'Miete'] },
+
+            { id: 'standort_c_adresse',   label: 'Standort C – Adresse',         type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort',   label: 'Standort C – PLZ/Ort',         type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigenmiete',label: 'Standort C – Eigentum/Miete',   type: 'select', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_nichtbetrieb',      label: 'Eigentümer von betriebsfremden Gebäuden', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'eigentuemer_nichtbetrieb_adresse', label: 'Adresse',  type: 'text', col: 'full' },
+            { id: 'eigentuemer_nichtbetrieb_plzort',  label: 'PLZ/Ort', type: 'text' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 2 – UNTERNEHMENSKENNZAHLEN
+    ══════════════════════════════════════════ */
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz & Personal',
+          fields: [
+            { id: 'jahresumsatz',   label: 'Jahresumsatz (CHF)',  type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr',       type: 'text',   placeholder: 'z.B. 2024' },
+            { id: 'beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'beschaeftigte_frauen',  label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'familienmitglieder',    label: 'davon mitarbeitende Familienmitglieder', type: 'number', col: 'full' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Alle Beträge in CHF',
+          fields: [
+            { id: 'lohn_maenner_uvg',       label: 'Männer – Gesamtes Personal UVG-Lohnsumme (CHF)',          type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ueberschuss',label: 'Männer – Gesamtes Personal Überschuss-Lohnsumme (CHF)',  type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ahv',        label: 'Männer – Gesamtes Personal AHV-Lohnsumme (CHF)',         type: 'number', suffix: 'CHF' },
+            { id: 'lohn_maenner_ahv_u8',     label: 'Männer – Personal < 8 h/Woche AHV-Lohnsumme (CHF)',     type: 'number', suffix: 'CHF' },
+
+            { id: 'lohn_frauen_uvg',         label: 'Frauen – Gesamtes Personal UVG-Lohnsumme (CHF)',         type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ueberschuss', label: 'Frauen – Gesamtes Personal Überschuss-Lohnsumme (CHF)',  type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ahv',         label: 'Frauen – Gesamtes Personal AHV-Lohnsumme (CHF)',         type: 'number', suffix: 'CHF' },
+            { id: 'lohn_frauen_ahv_u8',      label: 'Frauen – Personal < 8 h/Woche AHV-Lohnsumme (CHF)',     type: 'number', suffix: 'CHF' },
+
+            { id: 'lohn_total_uvg',          label: 'Total – Gesamtes Personal UVG-Lohnsumme (CHF)',          type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ueberschuss',  label: 'Total – Gesamtes Personal Überschuss-Lohnsumme (CHF)',   type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ahv',          label: 'Total – Gesamtes Personal AHV-Lohnsumme (CHF)',          type: 'number', suffix: 'CHF' },
+            { id: 'lohn_total_ahv_u8',       label: 'Total – Personal < 8 h/Woche AHV-Lohnsumme (CHF)',      type: 'number', suffix: 'CHF' },
+
+            { id: 'ma_arbeitsunfaehig', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'ma_iv_rente',        label: 'Mitarbeiter, welche eine IV-Rente beziehen',                               type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohn_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 3 – INVENTARLISTE & STANDORTEIGENSCHAFTEN
+    ══════════════════════════════════════════ */
+    {
+      label: 'Inventarliste',
+      sections: [
+        {
+          label: 'Standorteigenschaften',
+          note: 'Angaben für Standorte A, B und C',
+          fields: [
+            { id: 'offerte_erstellen_inventar', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] },
+
+            { id: 'bauart_massiv_a', label: 'Standort A – Bauart massiv', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'bauart_massiv_b', label: 'Standort B – Bauart massiv', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'bauart_massiv_c', label: 'Standort C – Bauart massiv', type: 'radio', options: ['Nein', 'Ja'] },
+
+            { id: 'hydrant_a', label: 'Standort A – Hydrant vorhanden', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'hydrant_b', label: 'Standort B – Hydrant vorhanden', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'hydrant_c', label: 'Standort C – Hydrant vorhanden', type: 'radio', options: ['Nein', 'Ja'] },
+
+            { id: 'sicherheitseinrichtung_a', label: 'Standort A – Sicherheitseinrichtung', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'sicherheitseinrichtung_b', label: 'Standort B – Sicherheitseinrichtung', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'sicherheitseinrichtung_c', label: 'Standort C – Sicherheitseinrichtung', type: 'radio', options: ['Nein', 'Ja'] }
+          ]
+        },
+        {
+          label: 'Geschäftsfahrhabe – Versicherungssummen CHF',
+          note: 'Versicherungssummen je Standort A / B / C',
+          fields: [
+            { id: 'waren_a',        label: 'Waren (Marktpreis) – Standort A (CHF)',                                    type: 'number', suffix: 'CHF' },
+            { id: 'waren_b',        label: 'Waren (Marktpreis) – Standort B (CHF)',                                    type: 'number', suffix: 'CHF' },
+            { id: 'waren_c',        label: 'Waren (Marktpreis) – Standort C (CHF)',                                    type: 'number', suffix: 'CHF' },
+
+            { id: 'einrichtungen_a',label: 'Einrichtungen (Neuwert) – Standort A (CHF)',                               type: 'number', suffix: 'CHF' },
+            { id: 'einrichtungen_b',label: 'Einrichtungen (Neuwert) – Standort B (CHF)',                               type: 'number', suffix: 'CHF' },
+            { id: 'einrichtungen_c',label: 'Einrichtungen (Neuwert) – Standort C (CHF)',                               type: 'number', suffix: 'CHF' },
+
+            { id: 'diebstahl_waren_a', label: 'Diebstahlgefährdete Waren (Aussteuerung Fachabteilung) – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'diebstahl_waren_b', label: 'Diebstahlgefährdete Waren (Aussteuerung Fachabteilung) – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'diebstahl_waren_c', label: 'Diebstahlgefährdete Waren (Aussteuerung Fachabteilung) – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'dritteigentum_a',label: 'Dritteigentum – Standort A (CHF)',                                         type: 'number', suffix: 'CHF' },
+            { id: 'dritteigentum_b',label: 'Dritteigentum – Standort B (CHF)',                                         type: 'number', suffix: 'CHF' },
+            { id: 'dritteigentum_c',label: 'Dritteigentum – Standort C (CHF)',                                         type: 'number', suffix: 'CHF' },
+
+            { id: 'wohnwagen_a',    label: 'Wohnwagen, Mobilheime, Anhänger – Standort A (CHF)',                       type: 'number', suffix: 'CHF' },
+            { id: 'wohnwagen_b',    label: 'Wohnwagen, Mobilheime, Anhänger – Standort B (CHF)',                       type: 'number', suffix: 'CHF' },
+            { id: 'wohnwagen_c',    label: 'Wohnwagen, Mobilheime, Anhänger – Standort C (CHF)',                       type: 'number', suffix: 'CHF' },
+
+            { id: 'all_risk_a',     label: 'All Risk – Standort A',                                                    type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'all_risk_b',     label: 'All Risk – Standort B',                                                    type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'all_risk_c',     label: 'All Risk – Standort C',                                                    type: 'radio', options: ['Nein', 'Ja'] }
+          ]
+        },
+        {
+          label: 'Landwirtschaftsfahrhabe – Versicherungssummen CHF',
+          fields: [
+            { id: 'lw_betrieb_a',   label: 'Landwirtschaftliche Betriebsfahrhabe – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lw_betrieb_b',   label: 'Landwirtschaftliche Betriebsfahrhabe – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'lw_betrieb_c',   label: 'Landwirtschaftliche Betriebsfahrhabe – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'ernte_a',        label: 'Ernteerzeugnisse – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ernte_b',        label: 'Ernteerzeugnisse – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ernte_c',        label: 'Ernteerzeugnisse – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'rinder_a',       label: 'Tiere der Rindergattung – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'rinder_b',       label: 'Tiere der Rindergattung – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'rinder_c',       label: 'Tiere der Rindergattung – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'ziegen_schafe_a',label: 'Ziegen, Schafe – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ziegen_schafe_b',label: 'Ziegen, Schafe – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'ziegen_schafe_c',label: 'Ziegen, Schafe – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'pferde_a',       label: 'Tiere der Pferdegattung (Marktwert max. CHF 25\'000.– pro Tier) – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'pferde_b',       label: 'Tiere der Pferdegattung (Marktwert max. CHF 25\'000.– pro Tier) – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'pferde_c',       label: 'Tiere der Pferdegattung (Marktwert max. CHF 25\'000.– pro Tier) – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'bisons_a',       label: 'Bisons, Dam- und Rothirsche, Kamele etc. – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'bisons_b',       label: 'Bisons, Dam- und Rothirsche, Kamele etc. – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'bisons_c',       label: 'Bisons, Dam- und Rothirsche, Kamele etc. – Standort C (CHF)', type: 'number', suffix: 'CHF' },
+
+            { id: 'kleinvieh_a',    label: 'Kleinvieh/übrige Tiere – Standort A (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'kleinvieh_b',    label: 'Kleinvieh/übrige Tiere – Standort B (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'kleinvieh_c',    label: 'Kleinvieh/übrige Tiere – Standort C (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 4 – FAHRHABE (FEUER)
+    ══════════════════════════════════════════ */
+    {
+      label: 'Fahrhabe – Feuer',
+      sections: [
+        {
+          label: 'Feuer – Allgemein',
+          fields: [
+            { id: 'offerte_erstellen_fahrhabe', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Feuer – Grunddeckungen',
+          note: 'VW = zum Vollwert | ER = auf erstes Risiko',
+          fields: [
+            { id: 'feuer_selbstbehalt',            label: 'Selbstbehalt (CHF)',                                                          type: 'number', suffix: 'CHF' },
+            { id: 'feuer_waren_einrichtungen_vw',   label: 'Waren, Einrichtungen und gemietetes/geleastes Dritteigentum – VW (CHF)',     type: 'number', suffix: 'CHF' },
+            { id: 'feuer_dritteig_er',              label: 'Dritteigentum (nicht gemietet/nicht geleast) – ER (CHF)',                    type: 'number', suffix: 'CHF' },
+            { id: 'feuer_dritteig_elementar',       label: 'inkl. Elementar Spezial – ER (CHF)',                                        type: 'number', suffix: 'CHF' },
+            { id: 'feuer_geld_gewoehnlich',         label: 'Geldwerte – Gewöhnliche Aufbewahrung – ER (CHF)',                           type: 'number', suffix: 'CHF' },
+            { id: 'feuer_geld_sicherheit',          label: 'Geldwerte – In Sicherheitsbehältnissen – ER (CHF)',                         type: 'number', suffix: 'CHF' },
+            { id: 'feuer_uebrige_sachen_vw',        label: 'Übrige Sachen – VW (CHF)',                                                  type: 'number', suffix: 'CHF' },
+            { id: 'feuer_uebrige_elementar',        label: 'Übrige Sachen inkl. Elementar Spezial – ER (CHF)',                          type: 'number', suffix: 'CHF' },
+            { id: 'feuer_leicht_vers_bauten_vw',    label: 'Leicht versetzbare Bauten samt Inhalt – VW (CHF)',                          type: 'number', suffix: 'CHF' },
+            { id: 'feuer_leicht_vers_elementar',    label: 'Leicht versetzbare Bauten inkl. Elementar Spezial – ER (CHF)',              type: 'number', suffix: 'CHF' },
+            { id: 'feuer_treibhaeuser_vw',          label: 'Treibhäuser, Treibbeetfenster samt Inhalt – VW (CHF)',                     type: 'number', suffix: 'CHF' },
+            { id: 'feuer_treibhaeuser_elementar',   label: 'Treibhäuser inkl. Elementar Spezial – ER (CHF)',                           type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Feuer – Zusatzdeckungen',
+          fields: [
+            { id: 'feuer_mfz_handelsware_gebaeude_vw',  label: 'Mfz als Handelsware in Gebäuden – VW (CHF)',                           type: 'number', suffix: 'CHF' },
+            { id: 'feuer_eigene_mfz_mit_vw',            label: 'Eigene Mfz mit Kontrollschildern – VW (CHF)',                          type: 'number', suffix: 'CHF' },
+            { id: 'feuer_eigene_mfz_mit_elementar',     label: 'Eigene Mfz mit Kontrollschildern inkl. Elementar Spezial – ER (CHF)',  type: 'number', suffix: 'CHF' },
+            { id: 'feuer_eigene_mfz_ohne',              label: 'Eigene Mfz ohne Kontrollschilder (CHF)',                               type: 'number', suffix: 'CHF' },
+            { id: 'feuer_mfz_handelsware_freien_vw',    label: 'Mfz als Handelsware im Freien (am Versicherungsort + Zirkulation) – VW (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'feuer_mfz_handelsware_freien_elementar', label: 'Mfz als Handelsware im Freien inkl. Elementar Spezial – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'feuer_fremde_mfz_er',                label: 'Fremde Mfz am Versicherungsort – ER (CHF)',                            type: 'number', suffix: 'CHF' },
+            { id: 'feuer_fremde_mfz_elementar',         label: 'Fremde Mfz am Versicherungsort inkl. Elementar Spezial – ER (CHF)',   type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Feuer – Standortunabhängige Deckungen',
+          fields: [
+            { id: 'feuer_selbst_aussenvers',    label: 'Selbstständige Aussenversicherung (CH/FL) – ER (CHF)',  type: 'number', suffix: 'CHF' },
+            { id: 'feuer_aussenvers',           label: 'Aussenversicherung – ER (CHF)',                         type: 'number', suffix: 'CHF' },
+            { id: 'feuer_besondere_sachen',     label: 'Besondere Sachen und Kosten – ER (CHF)',                type: 'number', suffix: 'CHF' },
+            { id: 'feuer_umgebungsschaeden',    label: 'Umgebungsschäden – ER (CHF)',                           type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Feuer – Betriebsunterbrechung/Mehrkosten',
+          fields: [
+            { id: 'feuer_bu',                   label: 'Betriebsunterbrechung infolge Feuer (CHF)',             type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 5 – DIEBSTAHL
+    ══════════════════════════════════════════ */
+    {
+      label: 'Diebstahl',
+      sections: [
+        {
+          label: 'Diebstahl – Grunddeckungen',
+          note: 'Versicherungssumme in CHF | VW = zum Vollwert | ER = auf erstes Risiko',
+          fields: [
+            { id: 'dieb_waren_einrichtungen_vw',        label: 'Waren, Einrichtungen und gesamtes Dritteigentum – VW (CHF)',           type: 'number', suffix: 'CHF' },
+            { id: 'dieb_geld_er',                       label: 'Geldwerte – ER (CHF)',                                                  type: 'number', suffix: 'CHF' },
+            { id: 'dieb_geld_gewoehnlich',               label: 'Geldwerte – Gewöhnliche Aufbewahrung – ER (CHF)',                     type: 'number', suffix: 'CHF' },
+            { id: 'dieb_kassenschraenke',               label: 'In Sicherheitsbehältnissen Kassenschränke – ER (CHF)',                  type: 'number', suffix: 'CHF' },
+            { id: 'dieb_hoechsthaftung_bargeld',        label: 'Höchsthaftungslimite für Bargeld je Kassenschrank – ER (CHF)',         type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Diebstahl – Zusatzdeckungen Motorfahrzeuge, Anhänger, Boote',
+          fields: [
+            { id: 'dieb_mfz_handelsware_gebaeude',      label: 'Mfz als Handelsware in Gebäuden – ER (CHF)',                          type: 'number', suffix: 'CHF' },
+            { id: 'dieb_eigene_mfz_mit',                label: 'Eigene Mfz mit Kontrollschildern – ER (CHF)',                         type: 'number', suffix: 'CHF' },
+            { id: 'dieb_eigene_mfz_ohne',               label: 'Eigene Mfz ohne Kontrollschilder – ER (CHF)',                         type: 'number', suffix: 'CHF' },
+            { id: 'dieb_mfz_handelsware_freien',        label: 'Mfz als Handelsware im Freien (am Versicherungsort + Zirkulation) – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_fremde_mfz',                    label: 'Fremde Mfz am Versicherungsort – ER (CHF)',                           type: 'number', suffix: 'CHF' },
+            { id: 'dieb_einf_diebstahl_limit',          label: 'Einfacher Diebstahl Mfz: Leistungslimite CHF – ER',                  type: 'number', suffix: 'CHF' },
+            { id: 'dieb_mfz_fahrraeder_handelsware',    label: 'Motorfahrräder und Fahrräder als Handelsware gg. einf. Diebstahl – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_geld_logiergaeste',             label: 'Geldwerte/Schmucksachen von Logiergästen in Zimmertresoren – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_automaten_innen',               label: 'Automaten (samt Inhalt) im Innern von Gebäuden – ER (CHF)',           type: 'number', suffix: 'CHF' },
+            { id: 'dieb_automaten_aussen',              label: 'Automaten (samt Inhalt) ausserhalb von Gebäuden – ER (CHF)',          type: 'number', suffix: 'CHF' },
+            { id: 'dieb_container_tankstellen',         label: 'Container von Tankstellen-Shops samt Inhalt – ER (CHF)',              type: 'number', suffix: 'CHF' },
+            { id: 'dieb_schaukaesten',                  label: 'Schaukästen samt Inhalt (ohne diebstahlgefährdete Waren) – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_skulpturen',                    label: 'Skulpturen im Freien (Beschädigung und Diebstahl) – ER (CHF)',        type: 'number', suffix: 'CHF' },
+            { id: 'dieb_betriebs_fahrraeder',           label: 'Betriebseigene Fahrräder/Motorfahrräder gg. einf. Diebstahl – ER (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Diebstahl – Standortunabhängige Deckungen',
+          fields: [
+            { id: 'dieb_selbst_aussenvers',             label: 'Selbstständige Aussenversicherung (CH/FL) – ER (CHF)',                type: 'number', suffix: 'CHF' },
+            { id: 'dieb_abhaengige_aussenvers',         label: 'Abhängige Aussenversicherung – ER (CHF)',                            type: 'number', suffix: 'CHF' },
+            { id: 'dieb_einbruch_welt',                 label: 'Einbruch aus abgeschlossenen Gebäuden/Räumen von Gebäuden: Welt – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_baracken_welt',                 label: 'Diebstahl aus abgeschlossenen Baracken/unvollendeten Bauten/Fahrzeuge (Welt) – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_baracken_chfl',                 label: 'Erhöhung aus abgeschlossenen Baracken/unvollendeten Bauten/Fahrzeuge CH/FL – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'dieb_beraubung',                     label: 'Beraubung (inkl. Geldwerte) Welt – ER (CHF)',                        type: 'number', suffix: 'CHF' },
+            { id: 'dieb_besondere_sachen',              label: 'Besondere Sachen und Kosten – ER (CHF)',                             type: 'number', suffix: 'CHF' },
+            { id: 'dieb_schlossaenderung',              label: 'Schlossänderungskosten – ER (CHF)',                                  type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Diebstahl – Betriebsunterbrechung/Mehrkosten',
+          fields: [
+            { id: 'dieb_bu',                            label: 'Betriebsunterbrechung infolge von Diebstahl', type: 'checkbox' },
+            { id: 'dieb_schaeden_er',                   label: 'Diebstahlschäden – ER (CHF)',                                        type: 'number', suffix: 'CHF' },
+            { id: 'dieb_extended_coverage',             label: 'Extended-Coverage-Schäden – ER (CHF)',                               type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 6 – WASSER
+    ══════════════════════════════════════════ */
+    {
+      label: 'Wasser',
+      sections: [
+        {
+          label: 'Wasser – Grunddeckungen',
+          note: 'Versicherungssumme in CHF | VW = zum Vollwert | ER = auf erstes Risiko',
+          fields: [
+            { id: 'wasser_waren_einrichtungen_vw',      label: 'Waren, Einrichtungen und gesamtes Dritteigentum – VW (CHF)',         type: 'number', suffix: 'CHF' },
+            { id: 'wasser_geld_er',                     label: 'Geldwerte – ER (CHF)',                                               type: 'number', suffix: 'CHF' },
+            { id: 'wasser_geld_gewoehnlich',             label: 'Geldwerte – Gewöhnliche Aufbewahrung – ER (CHF)',                   type: 'number', suffix: 'CHF' },
+            { id: 'wasser_treibhaeuser',                label: 'Treibhäuser, Treibbeetfenster samt Inhalt – ER (CHF)',               type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Wasser – Zusatzdeckungen Motorfahrzeuge, Anhänger, Boote',
+          fields: [
+            { id: 'wasser_mfz_handelsware_gebaeude',    label: 'Mfz als Handelsware in Gebäuden – ER (CHF)',                        type: 'number', suffix: 'CHF' },
+            { id: 'wasser_eigene_mfz_mit',              label: 'Eigene Mfz mit Kontrollschildern – ER (CHF)',                       type: 'number', suffix: 'CHF' },
+            { id: 'wasser_eigene_mfz_ohne',             label: 'Eigene Mfz ohne Kontrollschilder – ER (CHF)',                       type: 'number', suffix: 'CHF' },
+            { id: 'wasser_mfz_handelsware_freien',      label: 'Mfz als Handelsware im Freien (am Versicherungsort + Zirkulation) – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'wasser_fremde_mfz',                  label: 'Fremde Mfz am Versicherungsort – ER (CHF)',                         type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Wasser – Standortunabhängige Deckungen',
+          fields: [
+            { id: 'wasser_selbst_aussenvers',           label: 'Selbstständige Aussenversicherung (CH/FL) – ER (CHF)',              type: 'number', suffix: 'CHF' },
+            { id: 'wasser_weltweite_aussenvers',        label: 'Weltweite abhängige Aussenversicherung (CHF)',                      type: 'number', suffix: 'CHF' },
+            { id: 'wasser_besondere_sachen',            label: 'Besondere Sachen und Kosten (CHF)',                                 type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Wasser – Betriebsunterbrechung',
+          fields: [
+            { id: 'wasser_bu',                          label: 'Betriebsunterbrechung infolge von Wasser', type: 'checkbox' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 7 – ERDBEBEN
+    ══════════════════════════════════════════ */
+    {
+      label: 'Erdbeben',
+      sections: [
+        {
+          label: 'Erdbeben – Grunddeckungen',
+          note: 'Versicherungssumme in CHF | VW = zum Vollwert | ER = auf erstes Risiko',
+          fields: [
+            { id: 'erd_waren_einrichtungen_vw',         label: 'Waren, Einrichtungen und gesamtes Dritteigentum – VW (CHF)',         type: 'number', suffix: 'CHF' },
+            { id: 'erd_geld_gewoehnlich',               label: 'Geldwerte – Gewöhnliche Aufbewahrung – ER (CHF)',                    type: 'number', suffix: 'CHF' },
+            { id: 'erd_geld_sicherheit',                label: 'Geldwerte – In Sicherheitsbehältnissen – ER (CHF)',                  type: 'number', suffix: 'CHF' },
+            { id: 'erd_uebrige_sachen',                 label: 'Übrige Sachen – ER (CHF)',                                           type: 'number', suffix: 'CHF' },
+            { id: 'erd_leicht_vers_bauten',             label: 'Leicht versetzbare Bauten samt Inhalt – ER (CHF)',                   type: 'number', suffix: 'CHF' },
+            { id: 'erd_treibhaeuser',                   label: 'Treibhäuser, Treibbeetfenster samt Inhalt – ER (CHF)',               type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Erdbeben – Zusatzdeckungen Motorfahrzeuge, Anhänger, Boote',
+          fields: [
+            { id: 'erd_mfz_handelsware_gebaeude',       label: 'Mfz als Handelsware in Gebäuden – ER (CHF)',                        type: 'number', suffix: 'CHF' },
+            { id: 'erd_eigene_mfz',                     label: 'Eigene Mfz mit/ohne Kontrollschilder – ER (CHF)',                   type: 'number', suffix: 'CHF' },
+            { id: 'erd_mfz_handelsware_freien',         label: 'Mfz als Handelsware im Freien (am Vers.ort + Zirk.) – ER (CHF)',   type: 'number', suffix: 'CHF' },
+            { id: 'erd_fremde_mfz',                     label: 'Fremde Mfz am Versicherungsort – ER (CHF)',                         type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Erdbeben – Standortunabhängige Deckungen',
+          fields: [
+            { id: 'erd_besondere_sachen',               label: 'Besondere Sachen und Kosten – ER (CHF)',                            type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Erdbeben – Betriebsunterbrechung',
+          fields: [
+            { id: 'erd_bu',                             label: 'Betriebsunterbrechung infolge Erdbeben', type: 'checkbox' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 8 – GLAS & ZUSÄTZLICHE GEFAHREN
+    ══════════════════════════════════════════ */
+    {
+      label: 'Glas & Zusätzliche Gefahren',
+      sections: [
+        {
+          label: 'Glas',
+          note: 'Versicherungssumme in CHF | ER = auf erstes Risiko',
+          fields: [
+            { id: 'glas_gebaeude_mobiliar', label: 'Gebäude- und Mobiliarverglasungen – ER (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'glas_mobiliar',          label: 'Mobiliarverglasungen – ER (CHF)',               type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Zusätzliche Gefahren',
+          note: 'Versicherungssumme in CHF | ER = auf erstes Risiko',
+          fields: [
+            { id: 'zusatz_jahreshoechst',       label: 'Jahreshöchstentschädigung für vorerwähnte versicherte Sachen – ER (CHF)',   type: 'number', suffix: 'CHF' },
+            { id: 'zusatz_notfallkoffer',       label: 'Notfallkoffer zirkulierend ganze Welt – ER (CHF)',                          type: 'number', suffix: 'CHF' },
+            { id: 'zusatz_warenverderb',        label: 'Verderb von Waren – ER (CHF)',                                              type: 'number', suffix: 'CHF' },
+            { id: 'zusatz_uebergaerung',        label: 'Übergärung an Dürrfutter/Verderb von Gras-/Maiswürfeln – ER (CHF)',        type: 'number', suffix: 'CHF' },
+            { id: 'zusatz_nagerfrass',          label: 'Nagerfrass an Elektrokabeln – ER (CHF)',                                    type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Hygiene – Mehrkosten infolge von',
+          note: 'Versicherungssumme in CHF | ER = auf erstes Risiko',
+          fields: [
+            { id: 'hygiene_waren',              label: 'Schäden an Waren – ER (CHF)',                                               type: 'number', suffix: 'CHF' },
+            { id: 'hygiene_arzt_kosten',        label: 'Kosten für Arzt/Aufräumung/Entsorgung/Reinigung – ER (CHF)',               type: 'number', suffix: 'CHF' },
+            { id: 'hygiene_tiefkuehl',          label: 'Warenverderb in Tiefkühl- und Kühlanlagen – ER (CHF)',                     type: 'number', suffix: 'CHF' },
+            { id: 'hygiene_taggeld',            label: 'Taggeld bei Tätigkeitsverbot – ER (CHF)',                                   type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+
+    /* ══════════════════════════════════════════
+       STEP 9 – VERTRAGSANGABEN & VORVERSICHERER
+    ══════════════════════════════════════════ */
+    {
+      label: 'Vertragsangaben',
+      sections: [
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Beginn',  type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Ablauf',  type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'vorversicherer',         label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'police_nr',              label: 'Police Nr.',             type: 'text' },
+            { id: 'police_ablauf',          label: 'Ablauf',                 type: 'date' },
+            { id: 'vertragsstatus',         label: 'Vertragsstatus',         type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] }
+          ]
+        },
+        {
+          label: 'Risikoangaben Vorversicherer',
+          fields: [
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_details', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'leistungsfaelle_anzahl',   label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_summe',    label: 'Schadensumme (inkl. Reserven) CHF',               type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / Besonderheiten', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+
+  ]
+});
+</script>
+</body></html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTG / UVG / UVGZ – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-ktg-uvg-uvgz',
+  title: 'KTG / UVG / UVGZ',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ/Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'text' },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', col: 'full', placeholder: 'CHE-123.456.789' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verband_mitglied', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welche', label: 'Wenn ja, welche?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ/Ort', type: 'text' },
+            { id: 'standort_a_benutzung', label: 'Standort A – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_a_eigentumsverh', label: 'Standort A – Eigentum/Miete', type: 'select', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ/Ort', type: 'text' },
+            { id: 'standort_b_benutzung', label: 'Standort B – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_b_eigentumsverh', label: 'Standort B – Eigentum/Miete', type: 'select', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ/Ort', type: 'text' },
+            { id: 'standort_c_benutzung', label: 'Standort C – Benützung/Gefahr', type: 'text' },
+            { id: 'standort_c_eigentumsverh', label: 'Standort C – Eigentum/Miete', type: 'select', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentumer_gebaude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'gebaude_adresse', label: 'Adresse', type: 'text', col: 'full' },
+            { id: 'gebaude_plz_ort', label: 'PLZ/Ort', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Jahresumsatz & Personal',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z.B. 2024' },
+            { id: 'anzahl_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'anzahl_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'davon_familienmitglieder_maenner', label: 'Davon mitarbeitende Familienmitglieder – Männer', type: 'number' },
+            { id: 'davon_familienmitglieder_frauen', label: 'Davon mitarbeitende Familienmitglieder – Frauen', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          fields: [
+            {
+              id: 'lohnsummen_tabelle',
+              label: 'Lohnsummen (CHF)',
+              type: 'table',
+              columns: [
+                'Kategorie',
+                'Gesamtes Personal UVG-Lohnsumme',
+                'Gesamtes Personal Überschuss-Lohnsumme',
+                'Gesamtes Personal AHV-Lohnsumme',
+                'Personal < 8 h/Woche AHV-Lohnsumme'
+              ],
+              rows: 3
+            }
+          ]
+        },
+        {
+          label: 'Besondere Verhältnisse',
+          fields: [
+            { id: 'voruebergehende_arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Krankentaggeld (KTG)',
+      sections: [
+        {
+          label: 'Krankentaggeldversicherung',
+          fields: [
+            { id: 'ktg_offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Versicherungsparameter KTG',
+          fields: [
+            { id: 'ktg_versicherte_personen', label: 'Versicherte Personen', type: 'checkboxgroup', options: ['gesamtes Personal', 'Kader'], vertical: false },
+            { id: 'ktg_versicherte_personen_andere', label: 'Versicherte Personen – andere', type: 'text' },
+            { id: 'ktg_leistungsdauer', label: 'Leistungsdauer', type: 'checkboxgroup', options: ['730 Tage abzgl. WF', '720 Tage innert 900'], vertical: false },
+            { id: 'ktg_leistungsdauer_andere', label: 'Leistungsdauer – andere', type: 'text' },
+            { id: 'ktg_taggeldhoehe', label: 'Taggeldhöhe', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false },
+            { id: 'ktg_taggeldhoehe_andere', label: 'Taggeldhöhe – andere', type: 'text' },
+            { id: 'ktg_wartefrist', label: 'Wartefrist', type: 'checkboxgroup', options: ['14 Tage', '30 Tage', '60 Tage'], vertical: false },
+            { id: 'ktg_wartefrist_andere', label: 'Wartefrist – andere', type: 'text' }
+          ]
+        },
+        {
+          label: 'Fixe Leistung für Einzelpersonen',
+          fields: [
+            {
+              id: 'ktg_fixe_leistung_tabelle',
+              label: 'Fixe Leistung für (Einzelpersonen)',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geburtsdatum', 'Jahreslohn (CHF)', 'Wartefrist', 'Unfall mitversichert'],
+              rows: 4
+            }
+          ]
+        },
+        {
+          label: 'Weitere KTG-Optionen',
+          fields: [
+            { id: 'ktg_lohnnachgenuss', label: 'Lohnnachgenuss', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'ktg_mutterschaft_ergaenzung', label: 'Mutterschaftsergänzung', type: 'checkboxgroup', options: ['10%', '20%'], vertical: false },
+            { id: 'ktg_mutterschaft_zudem', label: 'Mutterschaftsergänzung zudem (vom 99. bis 112. Tag)', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer KTG',
+          fields: [
+            { id: 'ktg_vertrag_beginn', label: 'Beginn', type: 'date' },
+            { id: 'ktg_vertrag_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'ktg_zahlweise', label: 'Zahlweise', type: 'radio', options: ['jährlich', 'halbjährlich', 'vierteljährlich'] }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer KTG',
+          fields: [
+            { id: 'ktg_vorversicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'ktg_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'ktg_police_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'ktg_vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] },
+            { id: 'ktg_antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'ktg_antrag_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' },
+            { id: 'ktg_leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'ktg_leistungsfaelle_schadensumme', label: 'Leistungsfälle – Schadensumme (inkl. Reserven)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unfallversicherung (UVG)',
+      sections: [
+        {
+          label: 'Unfallversicherung gemäss UVG',
+          fields: [
+            { id: 'uvg_offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Betriebsart & Deckungsumfang',
+          fields: [
+            { id: 'uvg_suva_unterstellt', label: 'Der Suva unterstellter Betrieb (UVG Art. 66)', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'uvg_obligatorisch_offerte', label: 'Obligatorische Unfallversicherung – Offerte erwünscht (für alle in der Schweiz beschäftigten Arbeitnehmenden gemäss UVG Art. 1a)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'uvg_freiwillig_offerte', label: 'Freiwillige Versicherung – Offerte erwünscht (für Selbstständigerwerbende und mitarbeitende Familienangehörige gemäss UVG Art. 4)', type: 'radio', options: ['Ja', 'Nein'], col: 'full' }
+          ]
+        },
+        {
+          label: 'Freiwillig Versicherte Personen (UVG Art. 4)',
+          fields: [
+            {
+              id: 'uvg_freiwillig_personen_tabelle',
+              label: 'Freiwillig Versicherte Personen',
+              type: 'table',
+              columns: ['Name', 'Vorname', 'Geburtsdatum', 'Selbstständigerwerbende', 'Familienangehörige', 'Jahreslohn (CHF)'],
+              rows: 4
+            }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer UVG',
+          fields: [
+            { id: 'uvg_vertrag_beginn', label: 'Beginn', type: 'date' },
+            { id: 'uvg_vertrag_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'uvg_zahlweise', label: 'Zahlweise', type: 'radio', options: ['jährlich', 'halbjährlich', 'vierteljährlich'] }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer UVG',
+          fields: [
+            { id: 'uvg_vorversicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'uvg_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'uvg_police_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'uvg_vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] },
+            { id: 'uvg_antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'uvg_antrag_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' },
+            { id: 'uvg_leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'uvg_leistungsfaelle_schadensumme', label: 'Leistungsfälle – Schadensumme (inkl. Reserven)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unfallversicherung Zusatz (UVGZ)',
+      sections: [
+        {
+          label: 'Unfallversicherung Zusatz',
+          fields: [
+            { id: 'uvgz_offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Versicherungsparameter UVGZ',
+          fields: [
+            { id: 'uvgz_versicherte_personen', label: 'Versicherte Personen', type: 'checkboxgroup', options: ['gesamtes Personal', 'Kader'], vertical: false },
+            { id: 'uvgz_versicherte_personen_andere', label: 'Versicherte Personen – andere', type: 'text' },
+            { id: 'uvgz_leistungsdauer', label: 'Leistungsdauer', type: 'radio', options: ['Lohnsystem', 'Kopfsystem (Formular nicht verwenden)'] }
+          ]
+        },
+        {
+          label: 'Taggeld UVGZ',
+          note: 'UVG-Lohn und Überschusslohn separat angeben',
+          fields: [
+            { id: 'uvgz_taggeld_1_2_tag_uvg', label: 'Taggeld 1. und 2. Tag – UVG-Lohn', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false },
+            { id: 'uvgz_ergaenzung_uvg', label: 'Ergänzung – UVG-Lohn', type: 'checkboxgroup', options: ['10%', '20%'], vertical: false },
+            { id: 'uvgz_wartefrist_uvg', label: 'Wartefrist in Tagen – UVG-Lohn', type: 'checkboxgroup', options: ['2', '14', '30'], vertical: false },
+            { id: 'uvgz_ergaenzung_ueberschuss', label: 'Ergänzung – Überschusslohn', type: 'checkboxgroup', options: ['80%', '90%', '100%'], vertical: false },
+            { id: 'uvgz_wartefrist_ueberschuss', label: 'Wartefrist in Tagen – Überschusslohn', type: 'checkboxgroup', options: ['2', '14', '30'], vertical: false },
+            { id: 'uvgz_wartefrist_ueberschuss_andere', label: 'Wartefrist Überschusslohn – andere', type: 'text' }
+          ]
+        },
+        {
+          label: 'Kapitalien UVGZ',
+          fields: [
+            { id: 'uvgz_todesfallkapital_uvg', label: 'Todesfallkapital – UVG-Lohn (x-facher Jahreslohn)', type: 'number' },
+            { id: 'uvgz_todesfallkapital_ueberschuss', label: 'Todesfallkapital – Überschusslohn (x-facher Jahreslohn)', type: 'number' },
+            { id: 'uvgz_invaliditaetskapital_uvg', label: 'Invaliditätskapital – UVG-Lohn (x-facher Jahreslohn)', type: 'number' },
+            { id: 'uvgz_invaliditaetskapital_ueberschuss', label: 'Invaliditätskapital – Überschusslohn (x-facher Jahreslohn)', type: 'number' },
+            { id: 'uvgz_progression_uvg', label: 'Progression – UVG-Lohn', type: 'radio', options: ['ohne', '225%', '350%'] },
+            { id: 'uvgz_progression_ueberschuss', label: 'Progression – Überschusslohn', type: 'radio', options: ['ohne', '225%', '350%'] }
+          ]
+        },
+        {
+          label: 'Weitere UVGZ-Optionen',
+          fields: [
+            { id: 'uvgz_heilungskosten', label: 'Heilungskosten', type: 'checkboxgroup', options: ['privat', 'halbprivat', 'ohne Zahnschaden'], vertical: false },
+            { id: 'uvgz_differenzdeckung', label: 'Differenzdeckung – Erstattung bei UVG-Leistungskürzungen infolge von Grobfahrlässigkeit und Wagnissen', type: 'checkbox' },
+            { id: 'uvgz_lohnnachgenuss', label: 'Lohnnachgenuss – Lohnnachgenuss und Taggeldleistungen bei Folgen früherer Unfälle', type: 'checkbox' }
+          ]
+        },
+        {
+          label: 'Gewünschte Vertragsdauer UVGZ',
+          fields: [
+            { id: 'uvgz_vertrag_beginn', label: 'Beginn', type: 'date' },
+            { id: 'uvgz_vertrag_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'uvgz_zahlweise', label: 'Zahlweise', type: 'radio', options: ['jährlich', 'halbjährlich', 'vierteljährlich'] }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer UVGZ',
+          fields: [
+            { id: 'uvgz_vorversicherer', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'uvgz_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'uvgz_police_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'uvgz_vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['laufend', 'gekündigt von VN', 'gekündigt von VG'] },
+            { id: 'uvgz_antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'uvgz_antrag_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' },
+            { id: 'uvgz_leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'uvgz_leistungsfaelle_schadensumme', label: 'Leistungsfälle – Schadensumme (inkl. Reserven)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Bemerkungen',
+      sections: [
+        {
+          label: 'Bemerkungen & Zusatzinformationen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen', type: 'textarea', rows: 6, col: 'full', placeholder: 'Weitere Angaben, besondere Verhältnisse, Fragen...' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>

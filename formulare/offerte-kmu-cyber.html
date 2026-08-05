@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber-Risk-Versicherung – Offertenanfrage KMU</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</head><body>
+<div id="gb-root"></div>
+<script>
+GBForm.render({
+  id: 'offerte-kmu-cyber',
+  title: 'Cyber-Risk-Versicherung',
+  subtitle: 'Offertenanfrage KMU',
+  signature: false,
+  steps: [
+    {
+      label: 'Unternehmensdaten',
+      sections: [
+        {
+          label: 'Firmenangaben',
+          fields: [
+            { id: 'firmenname', label: 'Firmenname', type: 'text', required: true, col: 'full' },
+            { id: 'adresse', label: 'Adresse', type: 'text', required: true, col: 'full' },
+            { id: 'plz_ort', label: 'PLZ / Ort', type: 'text', required: true },
+            { id: 'telefon', label: 'Telefon', type: 'tel' },
+            { id: 'ansprechpartner', label: 'Ansprechpartner', type: 'text', col: 'full' },
+            { id: 'email', label: 'E-Mail', type: 'email', required: true },
+            { id: 'webseite', label: 'Webseite', type: 'text', placeholder: 'https://' },
+            { id: 'rechtsform', label: 'Rechtsform', type: 'select', options: ['Einzelfirma', 'GmbH', 'AG', 'Kollektivgesellschaft', 'Genossenschaft', 'Verein', 'Stiftung', 'Andere'] },
+            { id: 'gruendungsdatum', label: 'Gründungsdatum', type: 'date' },
+            { id: 'uid_nummer', label: 'UID-Nummer', type: 'text', placeholder: 'CHE-000.000.000', col: 'full' }
+          ]
+        },
+        {
+          label: 'Haupt- und Nebentätigkeiten',
+          fields: [
+            { id: 'taetigkeiten', label: 'Haupt- und Nebentätigkeiten', type: 'textarea', rows: 3, col: 'full' },
+            { id: 'noga_code', label: 'NOGA-Code', type: 'text' },
+            { id: 'uvg_risikonummer', label: 'UVG-Risikonummer', type: 'text' }
+          ]
+        },
+        {
+          label: 'Verbandszugehörigkeit',
+          fields: [
+            { id: 'verband_mitglied', label: 'Verbandszugehörigkeit', type: 'radio', options: ['Nein', 'Ja'] },
+            { id: 'verband_welcher', label: 'Wenn ja, welcher Verband?', type: 'text', col: 'full' }
+          ]
+        },
+        {
+          label: 'Standorte | Mobile Standorte | Container',
+          fields: [
+            { id: 'standort_a_adresse', label: 'Standort A – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_a_plz_ort', label: 'Standort A – PLZ / Ort', type: 'text' },
+            { id: 'standort_a_benuetzung', label: 'Standort A – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_a_eigentum', label: 'Standort A – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_b_adresse', label: 'Standort B – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_b_plz_ort', label: 'Standort B – PLZ / Ort', type: 'text' },
+            { id: 'standort_b_benuetzung', label: 'Standort B – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_b_eigentum', label: 'Standort B – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] },
+            { id: 'standort_c_adresse', label: 'Standort C – Adresse', type: 'text', col: 'full' },
+            { id: 'standort_c_plz_ort', label: 'Standort C – PLZ / Ort', type: 'text' },
+            { id: 'standort_c_benuetzung', label: 'Standort C – Benützung / Gefahr', type: 'text' },
+            { id: 'standort_c_eigentum', label: 'Standort C – Eigentum / Miete', type: 'radio', options: ['Eigentum', 'Miete'] }
+          ]
+        },
+        {
+          label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen',
+          fields: [
+            { id: 'eigentuemer_gebaeude', label: 'Eigentümer von Gebäuden, die nicht dem Betrieb dienen', type: 'radio', options: ['Ja', 'Nein'] },
+            { id: 'eigentuemer_gebaeude_adresse', label: 'Adresse des Gebäudes', type: 'text', col: 'full' },
+            { id: 'eigentuemer_gebaeude_plz_ort', label: 'PLZ / Ort des Gebäudes', type: 'text' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Unternehmenskennzahlen',
+      sections: [
+        {
+          label: 'Umsatz und Beschäftigte',
+          fields: [
+            { id: 'jahresumsatz', label: 'Jahresumsatz (CHF)', type: 'number', suffix: 'CHF' },
+            { id: 'geschaeftsjahr', label: 'Geschäftsjahr', type: 'text', placeholder: 'z. B. 2024' },
+            { id: 'anzahl_beschaeftigte_maenner', label: 'Anzahl Beschäftigte – Männer', type: 'number' },
+            { id: 'anzahl_beschaeftigte_frauen', label: 'Anzahl Beschäftigte – Frauen', type: 'number' },
+            { id: 'anzahl_beschaeftigte_total', label: 'Anzahl Beschäftigte – Total', type: 'number' },
+            { id: 'davon_familienmitglieder', label: 'Davon mitarbeitende Familienmitglieder', type: 'number' }
+          ]
+        },
+        {
+          label: 'Lohnsummen',
+          note: 'Alle Beträge in CHF',
+          fields: [
+            {
+              id: 'lohnsummen_tabelle',
+              label: 'Lohnsummen nach Kategorie',
+              type: 'table',
+              columns: ['Gruppe', 'Gesamtes Personal UVG-Lohnsumme (CHF)', 'Gesamtes Personal Überschuss-Lohnsumme (CHF)', 'Gesamtes Personal AHV-Lohnsumme (CHF)', 'Personal < 8 h/Woche AHV-Lohnsumme (CHF)'],
+              rows: 3
+            },
+            { id: 'mitarbeiter_arbeitsunfaehigkeit', label: 'Mitarbeiter mit vorübergehender Arbeitsunfähigkeit (Krankheit oder Unfall)', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'mitarbeiter_iv_rente', label: 'Mitarbeiter, welche eine IV-Rente beziehen', type: 'radio', options: ['Nein', 'Ja'], col: 'full' },
+            { id: 'lohnsumme_freiwillig_versicherte', label: 'Lohnsumme freiwillig Versicherte (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Risikomerkmale & Deckung',
+      sections: [
+        {
+          label: 'Offerte erstellen',
+          fields: [
+            { id: 'offerte_erstellen', label: 'Offerte erstellen', type: 'radio', options: ['Ja', 'Nein'] }
+          ]
+        },
+        {
+          label: 'Risikomerkmale',
+          note: 'Bitte bestätigen Sie die folgenden Aussagen durch Ankreuzen.',
+          fields: [
+            { id: 'risiko_keine_finanzdienstleistungen', label: 'Das Unternehmen erbringt keine Finanz- und Versicherungsdienstleistungen (insb. Banken, Vermögensverwalter, Fondsgesellschaften, Versicherungsbroker) und hat keine Aktivitäten in den Bereichen Online-Gambling, Flugleitung/Flugsicherung, Pornografie, Waffen, Militärausrüstung, Dual-Use-Güter oder Nukleartechnologie.', type: 'checkbox', col: 'full' },
+            { id: 'risiko_ecommerce_unter_50', label: 'Das Unternehmen erzielt weniger als 50% seines Umsatzes mit E-Commerce, Cloud Services (z. B. Hosting), Datensammlung und Datenspeicherung.', type: 'checkbox', col: 'full' },
+            { id: 'risiko_daten_max_100000', label: 'Das Unternehmen verwaltet die personenbezogenen Daten von maximal hunderttausend Dateninhabern.', type: 'checkbox', col: 'full' }
+          ]
+        },
+        {
+          label: 'Versicherungsschutz und Vertragsdetails',
+          fields: [
+            { id: 'versicherungssumme', label: 'Versicherungssumme', type: 'select', options: ['CHF 250\'000', 'CHF 500\'000', 'CHF 1\'000\'000', 'CHF 2\'000\'000', 'CHF 5\'000\'000', 'Andere'] },
+            { id: 'selbstbehalt', label: 'Selbstbehalt pro Ereignis', type: 'select', options: ['CHF 1\'000', 'CHF 2\'000', 'CHF 5\'000', 'CHF 10\'000', 'Andere'] }
+          ]
+        },
+        {
+          label: 'Optionale Deckungserweiterung',
+          fields: [
+            { id: 'deckung_cyber_crime', label: 'Cyber Crime – Social Engineering', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'deckung_rechtsschutz', label: 'Cyber Risk Rechtsschutz', type: 'radio', options: ['Ja', 'Nein'], col: 'full' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Vorversicherung & Abschluss',
+      sections: [
+        {
+          label: 'Gewünschte Vertragsdauer',
+          fields: [
+            { id: 'vertrag_beginn', label: 'Vertragsbeginn', type: 'date' },
+            { id: 'vertrag_ablauf', label: 'Vertragsablauf', type: 'date' }
+          ]
+        },
+        {
+          label: 'Bisheriger Versicherer',
+          fields: [
+            { id: 'vorversicherer_name', label: 'Bisheriger Versicherer', type: 'text', col: 'full' },
+            { id: 'vorversicherer_police_nr', label: 'Police Nr.', type: 'text' },
+            { id: 'vorversicherer_ablauf', label: 'Ablauf', type: 'date' },
+            { id: 'vertragsstatus', label: 'Vertragsstatus', type: 'radio', options: ['Laufend', 'Gekündigt von VN', 'Gekündigt von VG'], col: 'full' },
+            { id: 'antrag_abgelehnt', label: 'Wurde in den letzten 5 Jahren ein Antrag für das zu versichernde Risiko abgelehnt oder ein Vertrag vom Vorversicherer nur zu erschwerten Bedingungen angenommen, weitergeführt bzw. teilweise oder vollumfänglich gekündigt?', type: 'radio', options: ['Ja', 'Nein'], col: 'full' },
+            { id: 'antrag_abgelehnt_gesellschaft_grund', label: 'Wenn ja, Gesellschaft und Grund', type: 'textarea', rows: 2, col: 'full' },
+            { id: 'leistungsfaelle_anzahl', label: 'Leistungsfälle in den letzten 5 Jahren – Anzahl', type: 'number' },
+            { id: 'leistungsfaelle_schadensumme', label: 'Schadensumme inkl. Reserven (CHF)', type: 'number', suffix: 'CHF' }
+          ]
+        },
+        {
+          label: 'Bemerkungen',
+          fields: [
+            { id: 'bemerkungen', label: 'Bemerkungen / weitere Angaben', type: 'textarea', rows: 5, col: 'full' }
+          ]
+        }
+      ]
+    }
+  ]
+});
+</script>
+</body></html>
