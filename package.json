@@ -1,5 +1,8 @@
 {
   "name": "glattbroker-site",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "nodemailer": "^10.0.13"
+  }
 }

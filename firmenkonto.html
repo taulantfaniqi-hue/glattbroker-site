@@ -163,6 +163,73 @@
   .beleg .ac a { padding: 7px 12px; font-size: 13px; }
   .card.list { padding: 0; overflow: hidden; }
 
+  /* Formulare */
+  .field select, .field textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 15px; outline: none; resize: vertical; }
+  .field select:focus, .field textarea:focus { border-color: var(--ink); }
+  .field input[type=file] { padding: 9px; font-size: 13px; }
+  .form-card { margin-bottom: 16px; }
+  .form-card h2 { margin-bottom: 14px; }
+  .form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 0 12px; }
+  .form-grid .wide { grid-column: span 2; }
+  .form-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+  .form-actions .msg { margin: 0 0 0 6px; }
+  .tabs { overflow-x: auto; scrollbar-width: none; }
+  .tabs button { white-space: nowrap; }
+  .tabs .count.neu { background: var(--red); color: #fff; }
+  .tabs .count:empty { display: none; }
+
+  /* Status-/Prioritäts-Pillen */
+  .pill.p-rot { background: #FDE8EA; color: #B0202D; }
+  .pill.p-gelb { background: #FFF4D6; color: #8A6100; }
+  .pill.p-grau { background: var(--soft); color: #4A4F57; }
+  .pill.p-gruen { background: #E3F5F1; color: #13705F; }
+  .pill.p-blau { background: #E7EEFF; color: #2B4FC7; }
+
+  /* Ordner-Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .chips button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 13px; font-size: 13.5px; cursor: pointer; }
+  .chips button span { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 3px; }
+  .chips button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chips button.on span { color: rgba(255,255,255,.7); }
+
+  /* Rechnungen */
+  .rech { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto auto; gap: 14px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--soft); }
+  .rech:last-child { border-bottom: 0; }
+  .rech .rang { width: 28px; height: 28px; border-radius: 99px; background: var(--soft); display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+  .rech .ti b { display: block; font-weight: 600; }
+  .rech .ti > span { font-size: 13px; color: var(--muted); }
+  .rech .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center; }
+  .rech .be { text-align: right; font-weight: 600; white-space: nowrap; }
+  .rech .be small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+  .rech .ac { display: flex; gap: 6px; }
+  .att { font-size: 13px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .att:hover { border-color: var(--ink); }
+
+  /* Anfragen */
+  .anfrage { padding: 0; margin-bottom: 10px; overflow: hidden; }
+  .anfrage.ungelesen { border-color: var(--red); }
+  .anfrage-h { width: 100%; display: flex; align-items: center; gap: 10px; padding: 16px 18px; background: none; border: 0; text-align: left; cursor: pointer; }
+  .anfrage-h .ti { flex: 1; min-width: 0; }
+  .anfrage-h .ti b { display: block; font-weight: 600; }
+  .anfrage-h .ti span { font-size: 13px; color: var(--muted); }
+  .thread { border-top: 1px solid var(--soft); padding: 16px 18px; display: grid; gap: 10px; background: #FCFCFB; }
+  .msg-b { max-width: 82%; padding: 12px 14px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); }
+  .msg-b.host { justify-self: start; background: #F4F6FA; }
+  .msg-b.firma { justify-self: end; background: var(--ink); color: #fff; border-color: var(--ink); }
+  .msg-b.firma .att { color: #fff; border-color: rgba(255,255,255,.4); }
+  .msg-k { font-size: 11.5px; opacity: .65; margin-bottom: 4px; }
+  .msg-t { white-space: pre-wrap; line-height: 1.5; font-size: 14.5px; }
+  .reply textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; font-size: 14.5px; resize: vertical; margin-bottom: 8px; }
+  .reply input[type=file] { font-size: 13px; max-width: 260px; }
+
+  @media (max-width: 760px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid .field:first-child, .form-grid .wide { grid-column: 1 / -1; }
+    .rech { grid-template-columns: 28px minmax(0, 1fr) auto; }
+    .rech .ac { grid-column: 2 / -1; }
+    .msg-b { max-width: 95%; }
+  }
+
   @media (max-width: 1100px) { .grid, .grid.even { grid-template-columns: 1fr; } }
   @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) {
@@ -202,7 +269,7 @@
     <div class="label">Firmenkunden · Login</div>
     <h1>Ihr Firmenkonto</h1>
     <p class="lead">Ihre Ausgaben auf einen Blick: wofür, wo und wie viel. Aufbereitet aus Ihrer Buchhaltung.</p>
-    <label class="field"><span>E-Mail</span><input type="email" name="email" autocomplete="username" required></label>
+    <label class="field"><span>Benutzername oder E-Mail</span><input type="text" name="benutzer" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
     <label class="field"><span>Passwort</span><input type="password" name="passwort" autocomplete="current-password" required></label>
     <button class="btn primary" type="submit">Anmelden</button>
     <div class="msg" id="loginMsg" role="alert"></div>
@@ -226,7 +293,9 @@
 
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="uebersicht" class="on">Übersicht</button>
-    <button role="tab" data-tab="belege">Belege <span class="count" id="belegCount"></span></button>
+    <button role="tab" data-tab="rechnungen">Offene Rechnungen <span class="count" id="rechCount"></span></button>
+    <button role="tab" data-tab="dokumente">Dokumente <span class="count" id="belegCount"></span></button>
+    <button role="tab" data-tab="anfragen">Anfragen <span class="count" id="anfCount"></span></button>
   </nav>
 
   <div id="tabUebersicht">
@@ -292,17 +361,60 @@
   </div>
   </div>
 
-  <!-- Belege -->
-  <div id="tabBelege" hidden>
+  <!-- Offene Rechnungen -->
+  <div id="tabRechnungen" hidden>
+    <div class="kpis" id="rKpis"></div>
     <div class="beleg-head">
-      <div class="seg" role="group" aria-label="Belegart">
-        <button data-art="A" class="on">Ausgaben <span id="segA"></span></button>
-        <button data-art="E">Einnahmen <span id="segE"></span></button>
-        <button data-art="">Alle <span id="segAll"></span></button>
+      <div class="seg" role="group" aria-label="Status">
+        <button data-rstatus="offen" class="on">Offen <span id="rsOffen"></span></button>
+        <button data-rstatus="bezahlt">Bezahlt <span id="rsBezahlt"></span></button>
       </div>
-      <input class="search" id="belegSuche" type="search" placeholder="Beleg suchen …">
+      <button class="btn primary" id="rNeuBtn">+ Rechnung hinzufügen</button>
+    </div>
+    <form class="card form-card" id="rForm" hidden>
+      <h2>Offene Rechnung erfassen</h2>
+      <div class="form-grid">
+        <label class="field"><span>Rechnungssteller *</span><input name="glaeubiger" required placeholder="z.B. Swisscom, Vermieter, Lieferant"></label>
+        <label class="field"><span>Betrag (CHF)</span><input name="betrag" inputmode="decimal" placeholder="0.00"></label>
+        <label class="field"><span>Fällig am *</span><input name="faellig" type="date" required></label>
+        <label class="field"><span>Priorität</span><select name="prioritaet"><option value="normal">Normal</option><option value="hoch">Hoch</option><option value="tief">Tief</option></select></label>
+        <label class="field wide"><span>Beschreibung</span><input name="titel" placeholder="z.B. Miete November, Rechnung Nr. 4711"></label>
+        <label class="field wide"><span>Notiz</span><input name="notiz" placeholder="optional"></label>
+        <label class="field wide"><span>Rechnung als PDF / Foto (optional, max. 3 MB)</span><input name="datei" type="file" accept=".pdf,image/*"></label>
+      </div>
+      <div class="form-actions"><button class="btn primary" type="submit">Speichern</button><button class="btn" type="button" id="rAbbrechen">Abbrechen</button><span class="msg" id="rMsg"></span></div>
+    </form>
+    <div id="rListe"></div>
+  </div>
+
+  <!-- Dokumente -->
+  <div id="tabDokumente" hidden>
+    <div class="chips" id="ordnerChips"></div>
+    <div class="beleg-head">
+      <div class="seg" role="group" aria-label="Belegart" id="artSeg">
+        <button data-art="" class="on">Alle <span id="segAll"></span></button>
+        <button data-art="A">Ausgaben <span id="segA"></span></button>
+        <button data-art="E">Einnahmen <span id="segE"></span></button>
+      </div>
+      <input class="search" id="belegSuche" type="search" placeholder="Dokument suchen …">
     </div>
     <div id="belegListe"></div>
+  </div>
+
+  <!-- Anfragen -->
+  <div id="tabAnfragen" hidden>
+    <div class="beleg-head">
+      <p class="hint" style="margin:0">Fragen, Aufträge oder Unterlagen an Glatt Broker. Wir werden direkt benachrichtigt und antworten hier.</p>
+      <button class="btn primary" id="aNeuBtn">+ Neue Anfrage</button>
+    </div>
+    <form class="card form-card" id="aForm" hidden>
+      <h2>Neue Anfrage</h2>
+      <label class="field"><span>Betreff *</span><input name="betreff" required maxlength="140"></label>
+      <label class="field"><span>Nachricht *</span><textarea name="text" rows="5" required></textarea></label>
+      <label class="field"><span>Anhang (optional, max. 3 MB)</span><input name="datei" type="file" accept=".pdf,image/*"></label>
+      <div class="form-actions"><button class="btn primary" type="submit">Senden</button><button class="btn" type="button" id="aAbbrechen">Abbrechen</button><span class="msg" id="aMsg"></span></div>
+    </form>
+    <div id="aListe"></div>
   </div>
   <p class="foot" id="foot"></p>
 </main>
@@ -359,7 +471,7 @@ $('loginForm').addEventListener('submit', async (ev) => {
   const btn = ev.target.querySelector('button');
   btn.disabled = true;
   try {
-    await api('/api/auth?action=login', { method: 'POST', body: JSON.stringify({ email: f.get('email'), passwort: f.get('passwort') }) });
+    await api('/api/auth?action=login', { method: 'POST', body: JSON.stringify({ benutzer: f.get('benutzer'), passwort: f.get('passwort') }) });
     ev.target.reset();
     await laden();
   } catch (e) { $('loginMsg').textContent = e.message; }
@@ -426,12 +538,16 @@ function render() {
   $('headTitle').textContent = state.zeit === 'jahr' ? `Geschäftsjahr ${d.jahr}` : `${zeitText} ${d.jahr}`;
   $('headLabel').textContent = d.firma.name;
   $('belegCount').textContent = d.anzBelege || '';
+  $('rechCount').textContent = d.anzOffeneRechnungen ? d.anzOffeneRechnungen + (d.anzUeberfaellig ? ' · ' + d.anzUeberfaellig + ' überfällig' : '') : '';
+  $('rechCount').classList.toggle('neu', !!d.anzUeberfaellig);
+  $('anfCount').textContent = d.anzAnfragenUngelesen ? d.anzAnfragenUngelesen + ' neu' : '';
+  $('anfCount').classList.toggle('neu', !!d.anzAnfragenUngelesen);
 
   const leer = aus.length === 0 && ein.length === 0;
   $('emptyState').hidden = !leer;
   $('content').hidden = leer;
   $('foot').textContent = d.aktualisiert ? `Stand der Daten: ${new Date(d.aktualisiert).toLocaleDateString('de-CH')} · Aufbereitet durch Glatt Broker AG` : '';
-  if (state.tab === 'belege') renderBelege();
+  if (state.tab !== 'uebersicht') renderTab();
   if (leer) return;
 
   const total = summe(aus);
@@ -607,36 +723,166 @@ function renderMonatTabelle(alle, ms) {
 }
 
 // ─── Tabs ────────────────────────────────────────────────────────────
-document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => {
-  state.tab = b.dataset.tab;
-  document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('on', x === b));
-  $('tabUebersicht').hidden = state.tab !== 'uebersicht';
-  $('tabBelege').hidden = state.tab !== 'belege';
-  if (state.tab === 'belege') renderBelege();
-});
+const TABS = { uebersicht: 'tabUebersicht', rechnungen: 'tabRechnungen', dokumente: 'tabDokumente', anfragen: 'tabAnfragen' };
+function zeigeTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('on', x.dataset.tab === tab));
+  Object.entries(TABS).forEach(([t, id]) => $(id).hidden = t !== tab);
+  $('selJahr').hidden = $('selZeit').hidden = !['uebersicht', 'dokumente'].includes(tab);
+  renderTab();
+}
+function renderTab() {
+  if (state.tab === 'dokumente') renderBelege();
+  if (state.tab === 'rechnungen') renderRechnungen();
+  if (state.tab === 'anfragen') renderAnfragen();
+}
+document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => zeigeTab(b.dataset.tab));
 
-// ─── Belege ──────────────────────────────────────────────────────────
+// Datei → { dateiname, mime, daten } (Base64), max. 3 MB
+const MAX_DATEI = 3 * 1024 * 1024;
+function leseDatei(input) {
+  const file = input?.files?.[0];
+  if (!file) return Promise.resolve(null);
+  if (file.size > MAX_DATEI) return Promise.reject(new Error('Datei ist grösser als 3 MB.'));
+  const mime = file.type || (file.name.toLowerCase().endsWith('.heic') ? 'image/heic' : '');
+  return new Promise((ok, fail) => {
+    const r = new FileReader();
+    r.onload = () => ok({ dateiname: file.name, mime, daten: String(r.result).split(',')[1] });
+    r.onerror = () => fail(new Error('Datei konnte nicht gelesen werden.'));
+    r.readAsDataURL(file);
+  });
+}
+const dokUrl = (id) => '/api/firma?action=beleg&id=' + encodeURIComponent(id);
+const anhangLink = (a) => a ? `<a class="att" href="${dokUrl(a.id)}" target="_blank" rel="noopener">📎 ${esc(a.dateiname || 'Anhang')}</a>` : '';
+const tageBis = (d) => Math.round((new Date(d + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+const fmtZeit = (iso) => new Date(iso).toLocaleString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+// ─── Offene Rechnungen ───────────────────────────────────────────────
+state.rStatus = 'offen';
+async function ladeRechnungen() {
+  state.rechnungen = (await api('/api/firma?action=rechnungen')).rechnungen;
+}
+
+function dringlichkeit(r) {
+  const t = tageBis(r.faellig);
+  if (t < 0) return { rang: 0, cls: 'p-rot', text: `${-t} Tag${t === -1 ? '' : 'e'} überfällig` };
+  if (t === 0) return { rang: 1, cls: 'p-rot', text: 'heute fällig' };
+  if (t <= 7) return { rang: 2, cls: 'p-gelb', text: `fällig in ${t} Tag${t === 1 ? '' : 'en'}` };
+  if (t <= 30) return { rang: 3, cls: 'p-grau', text: `fällig in ${t} Tagen` };
+  return { rang: 4, cls: 'p-grau', text: `fällig am ${fmtDatum(r.faellig)}` };
+}
+const PRIO_RANG = { hoch: 0, normal: 1, tief: 2 };
+
+async function renderRechnungen() {
+  if (!state.rechnungen) {
+    $('rListe').innerHTML = '<p class="hint" style="text-align:center;padding:40px">Wird geladen …</p>';
+    try { await ladeRechnungen(); } catch (e) { $('rListe').innerHTML = `<p class="msg">${esc(e.message)}</p>`; return; }
+  }
+  const alle = state.rechnungen;
+  const offen = alle.filter((r) => r.status !== 'bezahlt')
+    .sort((a, b) => dringlichkeit(a).rang - dringlichkeit(b).rang || PRIO_RANG[a.prioritaet] - PRIO_RANG[b.prioritaet] || a.faellig.localeCompare(b.faellig));
+  const bezahlt = alle.filter((r) => r.status === 'bezahlt').sort((a, b) => (b.bezahltAm || '').localeCompare(a.bezahltAm || ''));
+  $('rsOffen').textContent = offen.length;
+  $('rsBezahlt').textContent = bezahlt.length;
+  $('rechCount').textContent = offen.length ? offen.length + (offen.some((r) => tageBis(r.faellig) < 0) ? ' · ' + offen.filter((r) => tageBis(r.faellig) < 0).length + ' überfällig' : '') : '';
+  $('rechCount').classList.toggle('neu', offen.some((r) => tageBis(r.faellig) < 0));
+
+  const summe = offen.reduce((s, r) => s + (r.betrag || 0), 0);
+  const ueber = offen.filter((r) => tageBis(r.faellig) < 0);
+  const woche = offen.filter((r) => { const t = tageBis(r.faellig); return t >= 0 && t <= 7; });
+  const naechste = offen.find((r) => tageBis(r.faellig) >= 0);
+  $('rKpis').innerHTML = `
+    <div class="kpi accent"><div class="label">Offen total</div><div class="v num">${chf.format(summe)}</div><div class="s">${offen.length} Rechnung${offen.length === 1 ? '' : 'en'}</div></div>
+    <div class="kpi"><div class="label">Überfällig</div><div class="v num" style="${ueber.length ? 'color:var(--neg)' : ''}">${ueber.length}</div><div class="s num">${ueber.length ? chf.format(ueber.reduce((s, r) => s + (r.betrag || 0), 0)) : 'alles im grünen Bereich'}</div></div>
+    <div class="kpi"><div class="label">Fällig in 7 Tagen</div><div class="v num">${woche.length}</div><div class="s num">${woche.length ? chf.format(woche.reduce((s, r) => s + (r.betrag || 0), 0)) : '–'}</div></div>
+    <div class="kpi"><div class="label">Als Nächstes fällig</div><div class="v" style="font-size:20px">${naechste ? esc(naechste.glaeubiger) : '–'}</div><div class="s num">${naechste ? fmtDatum(naechste.faellig) + (naechste.betrag != null ? ' · ' + chf2.format(naechste.betrag) : '') : ''}</div></div>`;
+
+  const list = state.rStatus === 'offen' ? offen : bezahlt;
+  if (!list.length) {
+    $('rListe').innerHTML = `<div class="card empty"><h2>${state.rStatus === 'offen' ? 'Keine offenen Rechnungen' : 'Noch keine bezahlten Rechnungen'}</h2><p>${state.rStatus === 'offen' ? 'Sobald Glatt Broker oder Sie eine Rechnung erfassen, erscheint sie hier mit Fälligkeit und Priorität.' : ''}</p></div>`;
+    return;
+  }
+  $('rListe').innerHTML = `<div class="card list">${list.map((r, i) => {
+    const dr = dringlichkeit(r);
+    return `<div class="rech">
+      <span class="rang num">${state.rStatus === 'offen' ? i + 1 : '✓'}</span>
+      <span class="ti"><b>${esc(r.glaeubiger)}</b><span>${esc(r.titel || '')}${r.referenz ? ' · ' + esc(r.referenz) : ''}${r.notiz ? ' · ' + esc(r.notiz) : ''}</span>
+        <span class="tags">${state.rStatus === 'offen' ? `<span class="pill ${dr.cls}">${dr.text}</span>` : `<span class="pill p-gruen">bezahlt ${r.bezahltAm ? fmtDatum(r.bezahltAm) : ''}</span>`}
+        ${r.prioritaet === 'hoch' ? '<span class="pill p-rot">Priorität hoch</span>' : r.prioritaet === 'tief' ? '<span class="pill">Priorität tief</span>' : ''}
+        <span class="pill">${r.von === 'host' ? 'von Glatt Broker' : 'selbst erfasst'}</span>${anhangLink(r.anhang)}</span></span>
+      <span class="be num">${r.betrag != null ? chf2.format(r.betrag) : ''}<small>fällig ${fmtDatum(r.faellig)}</small></span>
+      <span class="ac">${r.status === 'bezahlt'
+        ? `<button class="btn" data-r="${r.id}" data-s="offen">Wieder offen</button>`
+        : `<button class="btn primary" data-r="${r.id}" data-s="bezahlt">Bezahlt</button>`}
+        ${r.von === 'firma' ? `<button class="btn" data-del="${r.id}" title="Löschen">✕</button>` : ''}</span>
+    </div>`;
+  }).join('')}</div>`;
+  $('rListe').querySelectorAll('[data-s]').forEach((b) => b.onclick = async () => {
+    b.disabled = true;
+    try { await api('/api/firma?action=rechnung-status', { method: 'POST', body: JSON.stringify({ id: b.dataset.r, status: b.dataset.s }) }); await ladeRechnungen(); renderRechnungen(); }
+    catch (e) { alert(e.message); b.disabled = false; }
+  });
+  $('rListe').querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
+    if (!confirm('Diese Rechnung löschen?')) return;
+    try { await api('/api/firma?action=rechnung-loeschen', { method: 'POST', body: JSON.stringify({ id: b.dataset.del }) }); await ladeRechnungen(); renderRechnungen(); }
+    catch (e) { alert(e.message); }
+  });
+}
+document.querySelectorAll('[data-rstatus]').forEach((b) => b.onclick = () => {
+  state.rStatus = b.dataset.rstatus;
+  document.querySelectorAll('[data-rstatus]').forEach((x) => x.classList.toggle('on', x === b));
+  renderRechnungen();
+});
+$('rNeuBtn').onclick = () => { $('rForm').hidden = false; $('rForm').faellig.focus(); $('rForm').glaeubiger.focus(); };
+$('rAbbrechen').onclick = () => { $('rForm').hidden = true; $('rForm').reset(); };
+$('rForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target; const btn = f.querySelector('[type=submit]');
+  btn.disabled = true; $('rMsg').textContent = '';
+  try {
+    const datei = await leseDatei(f.datei);
+    await api('/api/firma?action=rechnung', { method: 'POST', body: JSON.stringify({
+      glaeubiger: f.glaeubiger.value, betrag: f.betrag.value, faellig: f.faellig.value, prioritaet: f.prioritaet.value,
+      titel: f.titel.value, notiz: f.notiz.value, datei,
+    }) });
+    f.reset(); f.hidden = true;
+    await ladeRechnungen(); state.belegJahr = null; renderRechnungen();
+  } catch (err) { $('rMsg').textContent = err.message; }
+  btn.disabled = false;
+};
+
+// ─── Dokumente ───────────────────────────────────────────────────────
+const ORDNER = ['Belege', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+state.ordner = '';
 async function renderBelege() {
   const jahr = state.data.jahr;
   if (state.belegJahr !== jahr) {
-    $('belegListe').innerHTML = '<p class="hint" style="text-align:center;padding:40px">Belege werden geladen …</p>';
+    $('belegListe').innerHTML = '<p class="hint" style="text-align:center;padding:40px">Dokumente werden geladen …</p>';
     try {
-      state.belege = (await api('/api/firma?action=belege&jahr=' + jahr)).belege;
+      state.belege = (await api('/api/firma?action=dokumente&jahr=' + jahr)).dokumente;
       state.belegJahr = jahr;
     } catch (e) { $('belegListe').innerHTML = `<p class="msg">${esc(e.message)}</p>`; return; }
   }
   const ms = monate();
   const imZeit = state.belege.filter((b) => ms.includes(+b.datum.slice(5, 7)));
-  $('segA').textContent = imZeit.filter((b) => b.typ === 'A').length;
-  $('segE').textContent = imZeit.filter((b) => b.typ === 'E').length;
-  $('segAll').textContent = imZeit.length;
+  const proOrdner = (o) => imZeit.filter((b) => (b.ordner || 'Belege') === o).length;
+  $('ordnerChips').innerHTML = [['', 'Alle', imZeit.length], ...ORDNER.map((o) => [o, o, proOrdner(o)]).filter(([, , n]) => n)]
+    .map(([v, t, n]) => `<button class="${state.ordner === v ? 'on' : ''}" data-o="${esc(v)}">${esc(t)} <span>${n}</span></button>`).join('');
+  $('ordnerChips').querySelectorAll('button').forEach((b) => b.onclick = () => { state.ordner = b.dataset.o; renderBelege(); });
+
+  const imOrdner = imZeit.filter((b) => !state.ordner || (b.ordner || 'Belege') === state.ordner);
+  const mitArt = !state.ordner || state.ordner === 'Belege';
+  $('artSeg').hidden = !mitArt;
+  $('segA').textContent = imOrdner.filter((b) => b.typ === 'A').length;
+  $('segE').textContent = imOrdner.filter((b) => b.typ === 'E').length;
+  $('segAll').textContent = imOrdner.length;
 
   const q = state.belegSuche.toLowerCase();
-  const list = imZeit.filter((b) => (!state.art || b.typ === state.art) &&
-    (!q || [b.lieferant, b.titel, b.kategorie, b.dateiname].join(' ').toLowerCase().includes(q)));
+  const list = imOrdner.filter((b) => (!mitArt || !state.art || b.typ === state.art) &&
+    (!q || [b.lieferant, b.titel, b.kategorie, b.dateiname, b.ordner].join(' ').toLowerCase().includes(q)));
 
   if (!list.length) {
-    $('belegListe').innerHTML = `<div class="card empty"><h2>Keine Belege</h2><p>Für diesen Zeitraum sind ${state.art === 'E' ? 'keine Einnahmen-Belege' : state.art === 'A' ? 'keine Ausgaben-Belege' : 'keine Belege'} hinterlegt.</p></div>`;
+    $('belegListe').innerHTML = `<div class="card empty"><h2>Keine Dokumente</h2><p>Für diesen Zeitraum ${state.ordner ? `sind im Ordner «${esc(state.ordner)}» ` : 'sind '}keine Dokumente hinterlegt.</p></div>`;
     return;
   }
 
@@ -648,10 +894,11 @@ async function renderBelege() {
     gruppen.get(m).push(b);
   }
   $('belegListe').innerHTML = [...gruppen.entries()].sort((a, b) => a[0] - b[0]).map(([m, bs]) => {
-    const sE = bs.filter((b) => b.typ === 'E').reduce((s, b) => s + (b.betrag || 0), 0);
-    const sA = bs.filter((b) => b.typ === 'A').reduce((s, b) => s + (b.betrag || 0), 0);
+    const belege = bs.filter((b) => (b.ordner || 'Belege') === 'Belege');
+    const sE = belege.filter((b) => b.typ === 'E').reduce((s, b) => s + (b.betrag || 0), 0);
+    const sA = belege.filter((b) => b.typ === 'A').reduce((s, b) => s + (b.betrag || 0), 0);
     return `<section class="monat">
-      <div class="monat-h"><h3>${MONATE_LANG[m - 1]} ${state.data.jahr}</h3><span class="meta">${bs.length} Beleg${bs.length === 1 ? '' : 'e'}</span><span class="sp"></span>
+      <div class="monat-h"><h3>${MONATE_LANG[m - 1]} ${state.data.jahr}</h3><span class="meta">${bs.length} Dokument${bs.length === 1 ? '' : 'e'}</span><span class="sp"></span>
         ${sE ? `<span class="meta num pos">Einnahmen ${chf2.format(sE)}</span>` : ''}${sA ? `<span class="meta num">Ausgaben ${chf2.format(sA)}</span>` : ''}</div>
       <div class="card list">${bs.map(belegZeile).join('')}</div>
     </section>`;
@@ -660,25 +907,98 @@ async function renderBelege() {
 
 function belegZeile(b) {
   const ext = (b.mime.split('/')[1] || 'datei').replace('jpeg', 'jpg').toUpperCase().slice(0, 4);
-  const col = b.typ === 'E' ? 'var(--pos)' : (b.kategorie ? farbe(b.kategorie) : '#8C9096');
-  const url = '/api/firma?action=beleg&id=' + encodeURIComponent(b.id);
-  const titel = b.lieferant || b.titel || b.dateiname || 'Beleg';
-  const sub = [b.lieferant && b.titel ? b.titel : '', b.kategorie || (b.typ === 'E' ? 'Einnahme' : 'Ausgabe')].filter(Boolean).join(' · ');
+  const ordner = b.ordner || 'Belege';
+  const istBeleg = ordner === 'Belege';
+  const col = istBeleg ? (b.typ === 'E' ? 'var(--pos)' : (b.kategorie ? farbe(b.kategorie) : '#8C9096')) : '#3D4450';
+  const url = dokUrl(b.id);
+  const titel = b.lieferant || b.titel || b.dateiname || 'Dokument';
+  const sub = [b.lieferant && b.titel ? b.titel : '', istBeleg ? (b.kategorie || (b.typ === 'E' ? 'Einnahme' : 'Ausgabe')) : ordner].filter(Boolean).join(' · ');
   return `<div class="beleg">
     <span class="dt num">${fmtDatum(b.datum)}</span>
     <span class="ic" style="background:${col}">${esc(ext)}</span>
     <span class="ti"><b>${esc(titel)}</b><span>${esc(sub)}</span></span>
-    <span class="be num" style="${b.typ === 'E' ? 'color:var(--pos)' : ''}">${b.betrag != null ? (b.typ === 'E' ? '+' : '') + chf2.format(b.betrag) : ''}</span>
+    <span class="be num" style="${istBeleg && b.typ === 'E' ? 'color:var(--pos)' : ''}">${b.betrag != null ? (istBeleg && b.typ === 'E' ? '+' : '') + chf2.format(b.betrag) : ''}</span>
     <span class="ac"><a class="btn" href="${url}" target="_blank" rel="noopener">Ansehen</a><a class="btn hide-sm" href="${url}&download=1">Laden</a></span>
   </div>`;
 }
 
-document.querySelectorAll('.seg button').forEach((b) => b.onclick = () => {
+document.querySelectorAll('[data-art]').forEach((b) => b.onclick = () => {
   state.art = b.dataset.art;
-  document.querySelectorAll('.seg button').forEach((x) => x.classList.toggle('on', x === b));
+  document.querySelectorAll('[data-art]').forEach((x) => x.classList.toggle('on', x === b));
   renderBelege();
 });
 let tb; $('belegSuche').addEventListener('input', (e) => { clearTimeout(tb); tb = setTimeout(() => { state.belegSuche = e.target.value; renderBelege(); }, 150); });
+
+// ─── Anfragen ────────────────────────────────────────────────────────
+const STATUS_CLS = { 'neu': 'p-blau', 'in Bearbeitung': 'p-gelb', 'pendent': 'p-grau', 'erledigt': 'p-gruen' };
+state.offeneAnfrage = null;
+async function ladeAnfragen() { state.anfragen = (await api('/api/firma?action=anfragen')).anfragen; }
+
+async function renderAnfragen() {
+  if (!state.anfragen) {
+    $('aListe').innerHTML = '<p class="hint" style="text-align:center;padding:40px">Wird geladen …</p>';
+    try { await ladeAnfragen(); } catch (e) { $('aListe').innerHTML = `<p class="msg">${esc(e.message)}</p>`; return; }
+  }
+  const ungelesen = state.anfragen.filter((a) => a.ungelesenFirma).length;
+  $('anfCount').textContent = ungelesen ? ungelesen + ' neu' : '';
+  $('anfCount').classList.toggle('neu', !!ungelesen);
+  if (!state.anfragen.length) {
+    $('aListe').innerHTML = '<div class="card empty"><h2>Noch keine Anfragen</h2><p>Stellen Sie uns hier Fragen oder senden Sie Unterlagen. Wir antworten direkt in Ihrem Firmenkonto.</p></div>';
+    return;
+  }
+  $('aListe').innerHTML = state.anfragen.map((a) => {
+    const offen = state.offeneAnfrage === a.id;
+    return `<section class="card anfrage ${a.ungelesenFirma ? 'ungelesen' : ''}">
+      <button class="anfrage-h" data-id="${a.id}">
+        <span class="ti"><b>${esc(a.betreff)}</b><span>${a.nachrichten.length} Nachricht${a.nachrichten.length === 1 ? '' : 'en'} · zuletzt ${fmtZeit(a.aktualisiert)}</span></span>
+        ${a.ungelesenFirma ? '<span class="pill p-rot">neue Antwort</span>' : ''}
+        <span class="pill ${STATUS_CLS[a.status] || ''}">${esc(a.status)}</span>
+      </button>
+      ${offen ? `<div class="thread">${a.nachrichten.map((n) => `
+        <div class="msg-b ${n.von}"><div class="msg-k">${n.von === 'host' ? 'Glatt Broker' : esc(n.name || 'Sie')} · ${fmtZeit(n.zeit)}</div>
+          ${n.text ? `<div class="msg-t">${esc(n.text)}</div>` : ''}${anhangLink(n.anhang)}</div>`).join('')}
+        <form class="reply" data-id="${a.id}">
+          <textarea name="text" rows="3" placeholder="Antwort schreiben …"></textarea>
+          <div class="form-actions"><input name="datei" type="file" accept=".pdf,image/*"><button class="btn primary" type="submit">Senden</button><span class="msg"></span></div>
+        </form></div>` : ''}
+    </section>`;
+  }).join('');
+  $('aListe').querySelectorAll('.anfrage-h').forEach((b) => b.onclick = async () => {
+    const id = b.dataset.id;
+    state.offeneAnfrage = state.offeneAnfrage === id ? null : id;
+    const a = state.anfragen.find((x) => x.id === id);
+    if (a.ungelesenFirma && state.offeneAnfrage) {
+      a.ungelesenFirma = false;
+      api('/api/firma?action=gelesen', { method: 'POST', body: JSON.stringify({ id }) }).catch(() => {});
+    }
+    renderAnfragen();
+  });
+  $('aListe').querySelectorAll('form.reply').forEach((f) => f.onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = f.querySelector('[type=submit]'); const m = f.querySelector('.msg');
+    btn.disabled = true; m.textContent = '';
+    try {
+      const datei = await leseDatei(f.datei);
+      await api('/api/firma?action=antwort', { method: 'POST', body: JSON.stringify({ id: f.dataset.id, text: f.text.value, datei }) });
+      await ladeAnfragen(); state.belegJahr = null; renderAnfragen();
+    } catch (err) { m.textContent = err.message; btn.disabled = false; }
+  });
+}
+$('aNeuBtn').onclick = () => { $('aForm').hidden = false; $('aForm').betreff.focus(); };
+$('aAbbrechen').onclick = () => { $('aForm').hidden = true; $('aForm').reset(); };
+$('aForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target; const btn = f.querySelector('[type=submit]');
+  btn.disabled = true; $('aMsg').textContent = '';
+  try {
+    const datei = await leseDatei(f.datei);
+    const r = await api('/api/firma?action=anfrage', { method: 'POST', body: JSON.stringify({ betreff: f.betreff.value, text: f.text.value, datei }) });
+    f.reset(); f.hidden = true;
+    state.offeneAnfrage = r.anfrage.id;
+    await ladeAnfragen(); state.belegJahr = null; renderAnfragen();
+  } catch (err) { $('aMsg').textContent = err.message; }
+  btn.disabled = false;
+};
 
 function waehleKat(k) { state.kat = state.kat === k ? null : k; state.limit = 50; render(); }
 $('catChip').onclick = () => waehleKat(state.kat);

@@ -5,7 +5,7 @@
 //   node tools/glatt-import.mjs buchungen --firma muster-ag --jahr 2026 --datei export.csv [--modus anfuegen]
 //   node tools/glatt-import.mjs buchungen --firma muster-ag --jahr 2026 --json buchungen.json [--modus anfuegen]
 //   node tools/glatt-import.mjs beleg --firma muster-ag --datei rechnung.pdf --datum 2026-03-14 --typ A \
-//        --kategorie "Essen & Verpflegung" --betrag 84.50 --lieferant "Restaurant Krone" [--titel "Teamessen"]
+//        --kategorie "Essen & Verpflegung" --betrag 84.50 --lieferant "Restaurant Krone" [--titel "Teamessen"] [--ordner Rechnungen]
 //   node tools/glatt-import.mjs belege --firma muster-ag --json belege.json   (Liste wie bei «beleg», Feld «datei»)
 //
 // Konfiguration (tools/.env.local, nicht im Git):
@@ -53,7 +53,7 @@ async function beleg(b) {
   if (buf.length > 3 * 1024 * 1024) throw new Error(`Grösser als 3 MB: ${file}`);
   const typ = b.typ === 'E' ? 'E' : 'A';
   return api('action=beleg', 'POST', {
-    firma: b.firma, datum: b.datum, typ,
+    firma: b.firma, datum: b.datum, typ, ordner: b.ordner || 'Belege',
     kategorie: b.kategorie || (typ === 'E' ? 'Umsatz' : kategorisiere({ text: b.titel || '', lieferant: b.lieferant || '' })),
     betrag: b.betrag ?? '', lieferant: b.lieferant || '', titel: b.titel || '',
     dateiname: path.basename(file), mime, daten: buf.toString('base64'),

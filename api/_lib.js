@@ -48,6 +48,8 @@ export const key = {
   buch: (slug, jahr) => P + 'buch:' + slug + ':' + jahr,
   belege: (slug, jahr) => P + 'belege:' + slug + ':' + jahr,   // HASH id → Metadaten
   belegDatei: (slug, id) => P + 'belegdatei:' + slug + ':' + id, // Base64-Inhalt
+  rechnungen: (slug) => P + 'rechnungen:' + slug,              // HASH id → Rechnung
+  anfragen: (slug) => P + 'anfragen:' + slug,                  // HASH id → Anfrage inkl. Nachrichten
   user: (email) => P + 'user:' + email,
   rate: (what, ip) => P + 'rl:' + what + ':' + ip,
 };
@@ -182,6 +184,13 @@ export async function rateLimit(req, what, max = 10, windowSec = 900) {
 // ─── Validierung ─────────────────────────────────────────────────────
 export const normEmail = (e) => String(e || '').trim().toLowerCase();
 
+// Login-Name: E-Mail oder Benutzername (3–40 Zeichen: a–z, 0–9, Punkt, Bindestrich, Unterstrich)
+export function cleanLoginName(v) {
+  const s = normEmail(v);
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s) || /^[a-z0-9][a-z0-9._-]{2,39}$/.test(s)) return s;
+  throw new HttpError(400, 'Benutzername (min. 3 Zeichen: a–z, 0–9, . _ -) oder E-Mail eingeben.');
+}
+
 export function slugify(s) {
   return String(s || '')
     .toLowerCase()
@@ -204,18 +213,131 @@ export const BELEG_TYPEN = {
 };
 export const BELEG_MAX = 3 * 1024 * 1024; // 3 MB pro Datei (Vercel-Limit 4.5 MB inkl. Base64)
 
+// Dokument-Ordner (Belege = Buchhaltung; Rechnungen/Anfragen-Anhänge landen automatisch im passenden Ordner)
+export const ORDNER = ['Belege', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+
+export const heute = () => new Date().toISOString().slice(0, 10);
+const betragOderNull = (v) => {
+  if (v === '' || v == null) return null;
+  const n = Math.round(Math.abs(Number(String(v).replace(/[^\d.,-]/g, '').replace(',', '.'))) * 100) / 100;
+  return Number.isFinite(n) ? n : null;
+};
+
 export function cleanBelegMeta(x) {
   const d = String(x.datum || x.d || '').slice(0, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new HttpError(400, 'Belegdatum fehlt (JJJJ-MM-TT).');
-  const betrag = x.betrag === '' || x.betrag == null ? null : Math.round(Math.abs(Number(x.betrag)) * 100) / 100;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new HttpError(400, 'Dokumentdatum fehlt (JJJJ-MM-TT).');
   return {
     datum: d,
+    ordner: ORDNER.includes(x.ordner) ? x.ordner : 'Belege',
     typ: x.typ === 'E' || x.typ === 'einnahme' ? 'E' : 'A',
     kategorie: String(x.kategorie || '').slice(0, 60),
-    betrag: Number.isFinite(betrag) ? betrag : null,
+    betrag: betragOderNull(x.betrag),
     lieferant: String(x.lieferant || '').slice(0, 80),
     titel: String(x.titel || '').slice(0, 120),
   };
+}
+
+// Datei prüfen und speichern → Metadaten. «datei» = { dateiname, mime, daten (Base64) }
+export async function speichereDokument(slug, meta, datei, von) {
+  const mime = String(datei?.mime || '');
+  if (!BELEG_TYPEN[mime]) throw new HttpError(400, 'Dateityp nicht erlaubt (PDF, JPG, PNG, WEBP, HEIC, GIF).');
+  const daten = String(datei.daten || '').replace(/^data:[^,]*,/, '');
+  const groesse = Math.floor(daten.length * 3 / 4);
+  if (!groesse) throw new HttpError(400, 'Datei fehlt.');
+  if (groesse > BELEG_MAX) throw new HttpError(413, 'Datei ist grösser als 3 MB.');
+  const m = cleanBelegMeta(meta);
+  const jahr = Number(m.datum.slice(0, 4));
+  const id = `${jahr}-${crypto.randomUUID().slice(0, 13)}`;
+  const doc = {
+    id, ...m, mime, groesse, von: von || 'host',
+    dateiname: String(datei.dateiname || '').slice(0, 120),
+    hochgeladen: new Date().toISOString(),
+  };
+  await pipeline([
+    ['SET', key.belegDatei(slug, id), daten],
+    ['HSET', key.belege(slug, jahr), id, JSON.stringify(doc)],
+    ['SADD', key.jahre(slug), jahr],
+  ]);
+  return doc;
+}
+
+// Datei einer Firma ausliefern (Firmen- und Host-Zugriff)
+export async function sendeDatei(slug, id, req, res) {
+  if (!/^[a-z0-9-]{8,40}$/.test(id)) throw new HttpError(400, 'Ungültige Dokument-ID.');
+  const jahr = cleanJahr(id.slice(0, 4));
+  const [metaRaw, b64] = await pipeline([
+    ['HGET', key.belege(slug, jahr), id],
+    ['GET', key.belegDatei(slug, id)],
+  ]);
+  if (!metaRaw || !b64) throw new HttpError(404, 'Dokument nicht gefunden.');
+  const meta = JSON.parse(metaRaw);
+  const mime = BELEG_TYPEN[meta.mime] ? meta.mime : 'application/octet-stream';
+  const name = (meta.dateiname || `dokument-${id}.${BELEG_TYPEN[mime] || 'bin'}`).replace(/[^\w.\- ]/g, '_');
+  res.setHeader('Content-Type', mime);
+  res.setHeader('Content-Disposition', `${req.query.download ? 'attachment' : 'inline'}; filename="${name}"`);
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.status(200).send(Buffer.from(b64, 'base64'));
+}
+
+// Kurzinfo eines Anhangs für Rechnungen/Anfragen
+export const anhangInfo = (doc) => doc && { id: doc.id, dateiname: doc.dateiname, mime: doc.mime };
+
+// ─── Offene Rechnungen ───────────────────────────────────────────────
+export const PRIORITAETEN = ['hoch', 'normal', 'tief'];
+
+export function cleanRechnung(x, alt = {}) {
+  const faellig = String(x.faellig ?? alt.faellig ?? '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(faellig)) throw new HttpError(400, 'Fälligkeitsdatum fehlt.');
+  const glaeubiger = String(x.glaeubiger ?? alt.glaeubiger ?? '').trim().slice(0, 80);
+  if (!glaeubiger) throw new HttpError(400, 'Rechnungssteller fehlt.');
+  return {
+    glaeubiger,
+    titel: String(x.titel ?? alt.titel ?? '').slice(0, 120),
+    betrag: x.betrag !== undefined ? betragOderNull(x.betrag) : (alt.betrag ?? null),
+    faellig,
+    prioritaet: PRIORITAETEN.includes(x.prioritaet) ? x.prioritaet : (alt.prioritaet || 'normal'),
+    notiz: String(x.notiz ?? alt.notiz ?? '').slice(0, 500),
+    referenz: String(x.referenz ?? alt.referenz ?? '').slice(0, 60),
+  };
+}
+
+// ─── Anfragen ────────────────────────────────────────────────────────
+export const ANFRAGE_STATUS = ['neu', 'in Bearbeitung', 'pendent', 'erledigt'];
+
+// ─── E-Mail-Benachrichtigung ─────────────────────────────────────────
+// Variante A: RESEND_API_KEY (+ MAIL_FROM). Variante B: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS (+ MAIL_FROM).
+// Empfänger: MAIL_TO (Standard: online@glattbroker.ch)
+export function mailKonfiguriert() {
+  return Boolean(process.env.RESEND_API_KEY || process.env.SMTP_HOST);
+}
+
+export async function sendeMail(betreff, text) {
+  const to = process.env.MAIL_TO || 'online@glattbroker.ch';
+  const from = process.env.MAIL_FROM || process.env.SMTP_USER || 'portal@glatt-broker.ch';
+  try {
+    if (process.env.RESEND_API_KEY) {
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from, to: to.split(',').map((s) => s.trim()), subject: betreff, text }),
+      });
+      if (!r.ok) throw new Error('Resend ' + r.status + ' ' + (await r.text()).slice(0, 200));
+      return true;
+    }
+    if (process.env.SMTP_HOST) {
+      const { default: nodemailer } = await import('nodemailer');
+      const port = Number(process.env.SMTP_PORT || 465);
+      const t = nodemailer.createTransport({
+        host: process.env.SMTP_HOST, port, secure: port === 465,
+        auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
+      });
+      await t.sendMail({ from, to, subject: betreff, text });
+      return true;
+    }
+  } catch (e) {
+    console.error('Mail fehlgeschlagen:', e.message);
+  }
+  return false;
 }
 
 // Eine Buchung: { d: 'YYYY-MM-DD', b: Betrag (positiv), k: Kategorie, l: Lieferant/Ort, t: Text, typ: 'A' | 'E' }

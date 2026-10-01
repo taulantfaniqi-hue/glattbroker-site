@@ -49,6 +49,9 @@
 
   main.app { max-width: 1240px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; min-width: 0; }
+  #detail, aside { min-width: 0; }
+  @media (max-width: 1100px) { .status .dot:not(:first-child) { display: none; } }
+  @media (max-width: 640px) { .status { display: none !important; } .top-in .btn[href] { display: none; } }
   .card + .card { margin-top: 14px; }
   .card h2 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin: 4px 0 14px; }
   .firmen { list-style: none; padding: 0; margin: 0 -8px 14px; display: grid; gap: 2px; }
@@ -56,6 +59,7 @@
   .firmen li:hover, .firmen li.on { background: var(--soft); }
   .firmen li b { display: block; font-weight: 500; }
   .firmen li span { font-size: 12px; color: var(--muted); }
+  .firmen li > span { display: block; margin-top: 2px; }
   .head { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .head h1 { font-size: 32px; letter-spacing: -.04em; font-weight: 600; line-height: 1; }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -70,10 +74,37 @@
   .preview { margin-top: 12px; font-size: 13.5px; }
   .preview .cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .scroll { overflow-x: auto; }
-  .queue .item { display: grid; grid-template-columns: minmax(0, 1.4fr) 120px 110px minmax(0, 1.2fr) 110px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--soft); font-size: 13px; }
+  .queue .item { display: grid; grid-template-columns: minmax(0, 1.3fr) 130px 120px 105px minmax(0, 1.2fr) 100px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--soft); font-size: 13px; }
   .queue .item .fn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .queue input, .queue select { padding: 7px 9px; font-size: 13px; }
   .note { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .att { font-size: 13px; color: inherit; display: inline-block; margin-top: 4px; }
+  .status { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 6px 10px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); white-space: nowrap; }
+  .dot::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: #B5B8BD; }
+  .dot.ok::before { background: #1F9E89; box-shadow: 0 0 0 3px #1F9E8922; }
+  .dot.warn::before { background: #E0A100; }
+  .dot.err::before { background: var(--red); box-shadow: 0 0 0 3px #CC293622; }
+  .st-row { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--soft); font-size: 13px; color: var(--ink); }
+  .st-row:last-child { border-bottom: 0; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; margin-left: 4px; background: var(--soft); color: var(--muted); }
+  .badge.rot { background: var(--red); color: #fff; }
+  .badge.gelb { background: #FFF4D6; color: #8A6100; }
+  .pill { display: inline-block; font-size: 12px; padding: 2px 9px; border-radius: 99px; background: var(--soft); white-space: nowrap; }
+  .p-rot { background: #FDE8EA; color: #B0202D; } .p-gelb { background: #FFF4D6; color: #8A6100; }
+  .p-gruen { background: #E3F5F1; color: #13705F; } .p-blau { background: #E7EEFF; color: #2B4FC7; }
+  .anf { border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+  .anf.neu { border-color: var(--red); }
+  .anf-h { width: 100%; display: flex; gap: 10px; align-items: center; padding: 12px 14px; background: none; border: 0; text-align: left; cursor: pointer; }
+  .anf-h .t { flex: 1; min-width: 0; } .anf-h .t b { display: block; font-weight: 600; } .anf-h .t span { font-size: 12.5px; color: var(--muted); }
+  .thread { border-top: 1px solid var(--soft); padding: 14px; display: grid; gap: 10px; background: #FCFCFB; }
+  .mb { max-width: 85%; padding: 10px 13px; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
+  .mb.host { justify-self: end; background: var(--ink); color: #fff; border-color: var(--ink); }
+  .mb.host a { color: #fff; }
+  .mb .k { font-size: 11.5px; opacity: .65; margin-bottom: 3px; } .mb .x { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+  .reply textarea { margin-bottom: 8px; resize: vertical; }
+  .reply .acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .reply .acts select { width: auto; } .reply .acts input[type=file] { width: auto; max-width: 240px; font-size: 13px; }
   @media (max-width: 900px) {
     main.app { grid-template-columns: 1fr; padding: 16px; }
     .queue .item { grid-template-columns: 1fr 1fr; }
@@ -86,6 +117,7 @@
   <div class="top-in">
     <a class="brand" href="index.html"><img src="assets/logo-app.png?v=2" alt="Glatt Broker"><span class="label">Host-Bereich</span></a>
     <div class="sp"></div>
+    <div class="status" id="statusBar" hidden></div>
     <a class="btn" href="firmenkonto.html" target="_blank">Firmenkonto-Login</a>
     <button class="btn" id="logout" hidden>Abmelden</button>
   </div>
@@ -95,6 +127,7 @@
   <form id="loginForm">
     <div class="label">Glatt Broker · intern</div>
     <h1>Host-Login</h1>
+    <label class="f" style="margin-bottom:12px"><span>Benutzername</span><input name="benutzer" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
     <label class="f"><span>Passwort</span><input type="password" name="passwort" autocomplete="current-password" required></label>
     <button class="btn primary" type="submit">Anmelden</button>
     <div class="msg err" id="loginMsg"></div>
@@ -112,6 +145,18 @@
         <button class="btn primary sm" style="margin-top:8px" type="submit">Firma anlegen</button>
         <div class="msg" id="firmaMsg"></div>
       </form>
+    </div>
+    <div class="card">
+      <div class="label">Posteingang</div>
+      <h2>Offene Anfragen</h2>
+      <ul class="firmen inbox" id="inbox"></ul>
+    </div>
+    <div class="card">
+      <div class="label">System</div>
+      <h2>Serverstatus</h2>
+      <div id="statusDetail" class="note">Wird geprüft …</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><button class="btn sm" id="statusReload">Neu prüfen</button><button class="btn sm" id="testMail">Test-Mail senden</button></div>
+      <div class="msg" id="statusMsg"></div>
     </div>
   </aside>
 
@@ -133,13 +178,43 @@
         <form id="userForm" style="margin-top:14px">
           <div class="row">
             <label class="f"><span>Name</span><input name="name" placeholder="Vorname Nachname"></label>
-            <label class="f"><span>E-Mail</span><input name="email" type="email" required></label>
-            <label class="f"><span>Passwort (min. 10 Zeichen)</span><input name="passwort" required minlength="10" autocomplete="new-password"></label>
+            <label class="f"><span>Benutzername oder E-Mail</span><input name="email" required autocapitalize="none" spellcheck="false" autocomplete="off"></label>
+            <label class="f"><span>Passwort (min. 8 Zeichen)</span><input name="passwort" required minlength="8" autocomplete="new-password"></label>
             <div style="display:flex;gap:6px"><button class="btn sm" type="button" id="pwGen">Generieren</button><button class="btn primary sm" type="submit">Speichern</button></div>
           </div>
           <div class="msg" id="userMsg"></div>
-          <p class="note">Gleiche E-Mail erneut speichern setzt das Passwort neu. Das Passwort wird nur verschlüsselt gespeichert; bitte direkt sicher an die Firma weitergeben.</p>
+          <p class="note">Gleichen Benutzernamen erneut speichern setzt das Passwort neu. Das Passwort wird nur verschlüsselt gespeichert; bitte direkt sicher an die Firma weitergeben.</p>
         </form>
+      </div>
+
+      <!-- Offene Rechnungen -->
+      <div class="card">
+        <div class="label">Zahlungen</div>
+        <h2>Offene Rechnungen <span class="note" id="rInfo"></span></h2>
+        <div class="scroll"><table><tbody id="rListe"></tbody></table></div>
+        <form id="rForm" style="margin-top:16px">
+          <div class="row">
+            <label class="f"><span>Rechnungssteller *</span><input name="glaeubiger" required></label>
+            <label class="f"><span>Betrag CHF</span><input name="betrag" inputmode="decimal"></label>
+            <label class="f"><span>Fällig am *</span><input name="faellig" type="date" required></label>
+            <label class="f"><span>Priorität</span><select name="prioritaet"><option value="normal">Normal</option><option value="hoch">Hoch</option><option value="tief">Tief</option></select></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label class="f"><span>Beschreibung</span><input name="titel" placeholder="z.B. Miete November"></label>
+            <label class="f"><span>Referenz / Rechnungsnr.</span><input name="referenz"></label>
+            <label class="f"><span>Notiz für die Firma</span><input name="notiz"></label>
+            <label class="f"><span>Rechnung (PDF/Foto)</span><input name="datei" type="file" accept=".pdf,image/*"></label>
+          </div>
+          <div style="margin-top:10px"><button class="btn primary sm" type="submit">Rechnung erfassen</button></div>
+          <div class="msg" id="rMsg"></div>
+        </form>
+      </div>
+
+      <!-- Anfragen -->
+      <div class="card">
+        <div class="label">Kommunikation</div>
+        <h2>Anfragen <span class="note" id="aInfo"></span></h2>
+        <div id="aListe"></div>
       </div>
 
       <!-- Buchhaltung -->
@@ -160,8 +235,9 @@
 
       <!-- Belege -->
       <div class="card">
-        <div class="label">Belege</div>
-        <h2>Belege hochladen</h2>
+        <div class="label">Dokumente</div>
+        <h2>Dokumente hochladen</h2>
+        <p class="note" style="margin:-6px 0 12px">Ordner pro Datei wählen: Belege (Buchhaltung), Rechnungen, Verträge, Lohn &amp; Personal, Steuern, Versicherungen, Korrespondenz, Sonstiges.</p>
         <div class="drop" id="belegDrop"><b>PDF oder Fotos hier ablegen</b> oder klicken<br><span class="note">max. 3 MB pro Datei · PDF, JPG, PNG, WEBP, HEIC</span></div>
         <input type="file" id="belegFile" accept=".pdf,image/*" multiple hidden>
         <div class="queue" id="queue"></div>
@@ -170,13 +246,13 @@
           <button class="btn" id="queueClear">Leeren</button>
         </div>
         <div class="msg" id="belegMsg"></div>
-        <h2 style="margin-top:22px">Hinterlegte Belege <span class="note" id="belegInfo"></span></h2>
+        <h2 style="margin-top:22px">Hinterlegte Dokumente <span class="note" id="belegInfo"></span></h2>
         <div class="scroll"><table><tbody id="belegListe"></tbody></table></div>
       </div>
 
       <div class="card">
         <div class="label">Gefahrenzone</div>
-        <button class="btn danger" id="firmaDel" style="margin-top:8px">Firma inkl. Logins, Buchungen und Belege löschen</button>
+        <button class="btn danger" id="firmaDel" style="margin-top:8px">Firma inkl. Logins, Buchungen, Dokumenten, Rechnungen und Anfragen löschen</button>
       </div>
     </div>
   </div>
@@ -207,7 +283,7 @@ function show(v) {
 }
 
 async function start() {
-  try { await api('/api/auth?action=me&kind=host'); show('app'); await ladeFirmen(); }
+  try { await api('/api/auth?action=me&kind=host'); show('app'); ladeStatus(); await ladeFirmen(); }
   catch { show('login'); }
 }
 
@@ -215,8 +291,8 @@ $('loginForm').onsubmit = async (e) => {
   e.preventDefault();
   msg('loginMsg', '');
   try {
-    await api('/api/auth?action=host-login', { method: 'POST', body: JSON.stringify({ passwort: new FormData(e.target).get('passwort') }) });
-    e.target.reset(); show('app'); await ladeFirmen();
+    await api('/api/auth?action=host-login', { method: 'POST', body: JSON.stringify({ benutzer: new FormData(e.target).get('benutzer'), passwort: new FormData(e.target).get('passwort') }) });
+    e.target.reset(); show('app'); ladeStatus(); await ladeFirmen();
   } catch (err) { msg('loginMsg', err.message); }
 };
 $('logout').onclick = async () => { await api('/api/auth?action=logout', { method: 'POST', body: JSON.stringify({ kind: 'host' }) }).catch(() => {}); location.reload(); };
@@ -224,10 +300,11 @@ $('logout').onclick = async () => { await api('/api/auth?action=logout', { metho
 async function ladeFirmen() {
   firmen = (await api('/api/host?action=firmen')).firmen;
   $('firmenListe').innerHTML = firmen.map((f) =>
-    `<li data-s="${esc(f.slug)}" class="${aktiv === f.slug ? 'on' : ''}"><b>${esc(f.name)}</b><span>${f.benutzer.length} Login${f.benutzer.length === 1 ? '' : 's'} · ${f.jahre.length ? f.jahre.join(', ') : 'noch keine Daten'}</span></li>`).join('')
+    `<li data-s="${esc(f.slug)}" class="${aktiv === f.slug ? 'on' : ''}"><b>${esc(f.name)}</b><span>${f.benutzer.length} Login${f.benutzer.length === 1 ? '' : 's'} · ${f.jahre.length ? f.jahre.join(', ') : 'noch keine Daten'}</span><span>${f.anfragenNeu ? `<span class="badge rot">${f.anfragenNeu} neue Anfrage${f.anfragenNeu === 1 ? '' : 'n'}</span>` : ''}${f.offeneRechnungen ? `<span class="badge ${f.ueberfaellig ? 'gelb' : ''}">${f.offeneRechnungen} offene Rg.${f.ueberfaellig ? ' · ' + f.ueberfaellig + ' überfällig' : ''}</span>` : ''}</span></li>`).join('')
     || '<li class="note" style="cursor:default">Noch keine Firmen.</li>';
   $('firmenListe').querySelectorAll('li[data-s]').forEach((li) => li.onclick = () => waehle(li.dataset.s));
   if (aktiv) renderFirma();
+  ladeInbox();
 }
 
 $('firmaForm').onsubmit = async (e) => {
@@ -257,7 +334,7 @@ async function renderFirma() {
     await api('/api/host?action=benutzer&email=' + encodeURIComponent(b.dataset.del), { method: 'DELETE' });
     ladeFirmen();
   });
-  ladeJahr();
+  ladeJahr(); ladeRechnungen(); ladeAnfragen();
 }
 $('selJahr').onchange = (e) => { jahr = +e.target.value; ladeJahr(); };
 
@@ -271,13 +348,13 @@ async function ladeJahr() {
   $('buchInfo').textContent = n ? `· ${jahr}: ${n} Buchungen (${e} Einnahmen, ${n - e} Ausgaben)${b.aktualisiert ? ' · Stand ' + new Date(b.aktualisiert).toLocaleDateString('de-CH') : ''}` : `· ${jahr}: noch keine`;
   $('belegInfo').textContent = `· ${jahr}: ${bl.belege.length}`;
   $('belegListe').innerHTML = bl.belege.map((x) =>
-    `<tr><td class="num">${fmtDatum(x.datum)}</td><td><span class="tag ${x.typ === 'E' ? 'e' : ''}">${x.typ === 'E' ? 'Einnahme' : 'Ausgabe'}</span></td>
+    `<tr><td class="num">${fmtDatum(x.datum)}</td><td><span class="tag ${x.typ === 'E' && x.ordner === 'Belege' ? 'e' : ''}">${esc(x.ordner || 'Belege')}${x.ordner === 'Belege' ? (x.typ === 'E' ? ' · Einnahme' : ' · Ausgabe') : ''}</span></td>
      <td>${esc(x.lieferant || x.titel || x.dateiname)}<div class="note">${esc(x.kategorie)}</div></td>
      <td class="r num">${x.betrag != null ? chf.format(x.betrag) : ''}</td>
-     <td class="r"><button class="btn danger sm" data-id="${esc(x.id)}">Löschen</button></td></tr>`).join('')
-    || '<tr><td class="note">Keine Belege für dieses Jahr.</td></tr>';
+     <td class="r" style="white-space:nowrap"><a class="btn sm" href="${dateiUrl(x.id)}" target="_blank" rel="noopener">Ansehen</a> <button class="btn danger sm" data-id="${esc(x.id)}">Löschen</button></td></tr>`).join('')
+    || '<tr><td class="note">Keine Dokumente für dieses Jahr.</td></tr>';
   $('belegListe').querySelectorAll('[data-id]').forEach((btn) => btn.onclick = async () => {
-    if (!confirm('Beleg löschen?')) return;
+    if (!confirm('Dokument löschen?')) return;
     await api(`/api/host?action=beleg&firma=${aktiv}&id=${encodeURIComponent(btn.dataset.id)}`, { method: 'DELETE' });
     ladeJahr(); ladeFirmen();
   });
@@ -355,7 +432,7 @@ dropzone($('belegDrop'), $('belegFile'), (files) => {
     const m = file.name.match(/(\d{4})[-_.](\d{2})[-_.](\d{2})/) || file.name.match(/(\d{2})[-_.](\d{2})[-_.](\d{4})/);
     const datum = m ? (m[1].length === 4 ? `${m[1]}-${m[2]}-${m[3]}` : `${m[3]}-${m[2]}-${m[1]}`) : `${jahr}-01-01`;
     const name = file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
-    queue.push({ file, datum, typ: 'A', kategorie: kategorisiere({ text: name }), betrag: '', lieferant: name.slice(0, 60) });
+    queue.push({ file, datum, ordner: ordnerRaten(name), typ: 'A', kategorie: kategorisiere({ text: name }), betrag: '', lieferant: name.slice(0, 60) });
   }
   renderQueue();
 });
@@ -363,6 +440,7 @@ dropzone($('belegDrop'), $('belegFile'), (files) => {
 function renderQueue() {
   $('queue').innerHTML = queue.map((q, i) => `<div class="item" data-i="${i}">
     <span class="fn" title="${esc(q.file.name)}">${esc(q.file.name)} <span class="note">${(q.file.size / 1024).toFixed(0)} KB</span></span>
+    <select data-f="ordner">${ORDNER.map((o) => `<option ${o === q.ordner ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>
     <input type="date" data-f="datum" value="${q.datum}">
     <select data-f="typ"><option value="A" ${q.typ === 'A' ? 'selected' : ''}>Ausgabe</option><option value="E" ${q.typ === 'E' ? 'selected' : ''}>Einnahme</option></select>
     <select data-f="kategorie">${katOptionen(q.typ, q.kategorie)}</select>
@@ -396,17 +474,184 @@ $('queueSave').onclick = async () => {
       if (q.file.size > 3 * 1024 * 1024) throw new Error('grösser als 3 MB');
       const mime = q.file.type || (q.file.name.toLowerCase().endsWith('.heic') ? 'image/heic' : '');
       await api('/api/host?action=beleg', { method: 'POST', body: JSON.stringify({
-        firma: aktiv, datum: q.datum, typ: q.typ, kategorie: q.kategorie, betrag: q.betrag.replace(/[^\d.,-]/g, '').replace(',', '.'),
+        firma: aktiv, ordner: q.ordner, datum: q.datum, typ: q.typ, kategorie: q.kategorie, betrag: q.betrag.replace(/[^\d.,-]/g, '').replace(',', '.'),
         lieferant: q.lieferant, dateiname: q.file.name, mime, daten: await alsBase64(q.file),
       }) });
       queue.splice(queue.indexOf(q), 1); ok++;
     } catch (err) { fehler.push(`${q.file.name}: ${err.message}`); }
   }
   renderQueue();
-  msg('belegMsg', `${ok} Beleg${ok === 1 ? '' : 'e'} hochgeladen.` + (fehler.length ? ' Fehler: ' + fehler.join('; ') : ''), !fehler.length);
+  msg('belegMsg', `${ok} Dokument${ok === 1 ? '' : 'e'} hochgeladen.` + (fehler.length ? ' Fehler: ' + fehler.join('; ') : ''), !fehler.length);
   $('queueSave').disabled = false;
   ladeJahr(); ladeFirmen();
 };
+
+// ─── Hilfen ──────────────────────────────────────────────────────────
+const ORDNER = ['Belege', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+function ordnerRaten(name) {
+  const s = name.toLowerCase();
+  if (/rechnung|invoice|faktura|mahnung/.test(s)) return 'Rechnungen';
+  if (/vertrag|vereinbarung|offerte|agb/.test(s)) return 'Verträge';
+  if (/lohn|salär|gehalt|ahv|bvg|suva|personal/.test(s)) return 'Lohn & Personal';
+  if (/steuer|mwst|estv/.test(s)) return 'Steuern';
+  if (/police|versicherung|prämie/.test(s)) return 'Versicherungen';
+  return 'Belege';
+}
+function leseDatei(input) {
+  const file = input?.files?.[0];
+  if (!file) return Promise.resolve(null);
+  if (file.size > 3 * 1024 * 1024) return Promise.reject(new Error('Datei ist grösser als 3 MB.'));
+  const mime = file.type || (file.name.toLowerCase().endsWith('.heic') ? 'image/heic' : '');
+  return alsBase64(file).then((daten) => ({ dateiname: file.name, mime, daten }));
+}
+const tageBis = (d) => Math.round((new Date(d + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+const fmtZeit = (iso) => new Date(iso).toLocaleString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const dateiUrl = (id) => `/api/host?action=datei&firma=${encodeURIComponent(aktiv)}&id=${encodeURIComponent(id)}`;
+const anhang = (a) => a ? `<a class="att" href="${dateiUrl(a.id)}" target="_blank" rel="noopener">📎 ${esc(a.dateiname || 'Anhang')}</a>` : '';
+
+// ─── Serverstatus ────────────────────────────────────────────────────
+async function ladeStatus() {
+  $('statusDetail').textContent = 'Wird geprüft …';
+  try {
+    const s = await api('/api/host?action=status');
+    const k = s.konfiguration;
+    const db = s.datenbank;
+    $('statusBar').hidden = false;
+    $('statusBar').innerHTML = `<span class="dot ${db.ok ? 'ok' : 'err'}">${db.ok ? 'System läuft' : 'Störung'}</span><span class="dot ${db.ok ? 'ok' : 'err'}">Datenbank${db.ok ? ' · ' + db.ms + ' ms' : ''}</span><span class="dot ${k.Mail ? 'ok' : 'warn'}">E-Mail</span>`;
+    const zeile = (t, ok, info = '') => `<div class="st-row"><span>${t}</span><span class="dot ${ok === true ? 'ok' : ok === 'warn' ? 'warn' : 'err'}">${info || (ok === true ? 'OK' : 'fehlt')}</span></div>`;
+    $('statusDetail').innerHTML =
+      zeile('Server (Vercel)', true, 'läuft · ' + esc(s.region)) +
+      zeile('Datenbank (Upstash)', db.ok, db.ok ? `${db.ms} ms · ${db.firmen} Firmen · ${db.schluessel} Einträge` : esc(db.fehler || 'nicht erreichbar')) +
+      zeile('Sitzungsschlüssel', k.SESSION_SECRET) +
+      zeile('Host-Passwort', k.HOST_PASSWORD) +
+      zeile('Import-Schlüssel', k.HOST_API_KEY) +
+      zeile('E-Mail-Benachrichtigung', k.Mail || 'warn', k.Mail ? 'an ' + esc(k.mailAn) : 'nicht eingerichtet') +
+      `<div class="note" style="margin-top:6px">Geprüft ${fmtZeit(s.zeit)}</div>`;
+  } catch (e) {
+    $('statusBar').hidden = false;
+    $('statusBar').innerHTML = '<span class="dot err">Server nicht erreichbar</span>';
+    $('statusDetail').textContent = e.message;
+  }
+}
+$('statusReload').onclick = ladeStatus;
+$('testMail').onclick = async () => {
+  try { await api('/api/host?action=test-mail', { method: 'POST', body: '{}' }); msg('statusMsg', 'Test-Mail versendet.', true); }
+  catch (e) { msg('statusMsg', e.message); }
+};
+setInterval(() => { if (!$('appView').hidden) ladeStatus(); }, 60000);
+
+// ─── Posteingang (alle Firmen) ───────────────────────────────────────
+const STATUS = ['neu', 'in Bearbeitung', 'pendent', 'erledigt'];
+const STATUS_CLS = { 'neu': 'p-blau', 'in Bearbeitung': 'p-gelb', 'pendent': '', 'erledigt': 'p-gruen' };
+async function ladeInbox() {
+  try {
+    const { anfragen } = await api('/api/host?action=anfragen-alle');
+    $('inbox').innerHTML = anfragen.map((a) =>
+      `<li data-s="${esc(a.firma)}" data-a="${esc(a.id)}"><b>${a.ungelesenHost ? '<span class="badge rot">neu</span> ' : ''}${esc(a.betreff)}</b><span>${esc(a.firmaName)} · <span class="pill ${STATUS_CLS[a.status]}">${esc(a.status)}</span> · ${fmtZeit(a.aktualisiert)}</span></li>`).join('')
+      || '<li class="note" style="cursor:default">Keine offenen Anfragen.</li>';
+    $('inbox').querySelectorAll('li[data-a]').forEach((li) => li.onclick = () => { offeneAnfrage = li.dataset.a; waehle(li.dataset.s); });
+  } catch { /* still */ }
+}
+
+// ─── Offene Rechnungen ───────────────────────────────────────────────
+async function ladeRechnungen() {
+  const { rechnungen } = await api(`/api/host?action=rechnungen&firma=${aktiv}`);
+  const offen = rechnungen.filter((r) => r.status !== 'bezahlt').sort((a, b) => a.faellig.localeCompare(b.faellig));
+  const bezahlt = rechnungen.filter((r) => r.status === 'bezahlt').sort((a, b) => (b.bezahltAm || '').localeCompare(a.bezahltAm || ''));
+  const summe = offen.reduce((s, r) => s + (r.betrag || 0), 0);
+  $('rInfo').textContent = `· ${offen.length} offen${offen.length ? ' · ' + chf.format(summe) : ''}${bezahlt.length ? ' · ' + bezahlt.length + ' bezahlt' : ''}`;
+  $('rListe').innerHTML = [...offen, ...bezahlt.slice(0, 10)].map((r) => {
+    const t = tageBis(r.faellig);
+    const due = r.status === 'bezahlt' ? `<span class="pill p-gruen">bezahlt ${r.bezahltAm ? fmtDatum(r.bezahltAm) : ''}</span>`
+      : t < 0 ? `<span class="pill p-rot">${-t} T. überfällig</span>` : t <= 7 ? `<span class="pill p-gelb">in ${t} T.</span>` : `<span class="pill">in ${t} T.</span>`;
+    return `<tr style="${r.status === 'bezahlt' ? 'opacity:.6' : ''}">
+      <td class="num">${fmtDatum(r.faellig)}<div>${due}</div></td>
+      <td><b>${esc(r.glaeubiger)}</b>${r.prioritaet === 'hoch' ? ' <span class="pill p-rot">hoch</span>' : r.prioritaet === 'tief' ? ' <span class="pill">tief</span>' : ''}
+        <div class="note">${esc([r.titel, r.referenz, r.notiz].filter(Boolean).join(' · '))}${r.von === 'firma' ? ' · von der Firma erfasst' : ''}</div>${anhang(r.anhang)}</td>
+      <td class="r num">${r.betrag != null ? chf.format(r.betrag) : ''}</td>
+      <td class="r" style="white-space:nowrap">
+        <select data-prio="${r.id}" class="btn sm" style="width:auto;padding:5px 8px">${['hoch', 'normal', 'tief'].map((p) => `<option ${p === r.prioritaet ? 'selected' : ''}>${p}</option>`).join('')}</select>
+        <button class="btn sm" data-st="${r.id}" data-v="${r.status === 'bezahlt' ? 'offen' : 'bezahlt'}">${r.status === 'bezahlt' ? 'Wieder offen' : 'Bezahlt'}</button>
+        <button class="btn danger sm" data-rdel="${r.id}">✕</button></td></tr>`;
+  }).join('') || '<tr><td class="note">Keine Rechnungen erfasst.</td></tr>';
+  const patch = async (body) => { await api('/api/host?action=rechnung', { method: 'PATCH', body: JSON.stringify({ firma: aktiv, ...body }) }); ladeRechnungen(); ladeFirmenLeise(); };
+  $('rListe').querySelectorAll('[data-st]').forEach((b) => b.onclick = () => patch({ id: b.dataset.st, status: b.dataset.v }));
+  $('rListe').querySelectorAll('[data-prio]').forEach((s) => s.onchange = () => patch({ id: s.dataset.prio, prioritaet: s.value }));
+  $('rListe').querySelectorAll('[data-rdel]').forEach((b) => b.onclick = async () => {
+    if (!confirm('Rechnung löschen?')) return;
+    await api(`/api/host?action=rechnung&firma=${aktiv}&id=${b.dataset.rdel}`, { method: 'DELETE' });
+    ladeRechnungen(); ladeFirmenLeise();
+  });
+}
+$('rForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target; const btn = f.querySelector('[type=submit]');
+  btn.disabled = true; msg('rMsg', '');
+  try {
+    const datei = await leseDatei(f.datei);
+    await api('/api/host?action=rechnung', { method: 'POST', body: JSON.stringify({
+      firma: aktiv, glaeubiger: f.glaeubiger.value, betrag: f.betrag.value, faellig: f.faellig.value, prioritaet: f.prioritaet.value,
+      titel: f.titel.value, referenz: f.referenz.value, notiz: f.notiz.value, datei,
+    }) });
+    f.reset(); msg('rMsg', 'Rechnung erfasst. Die Firma sieht sie sofort unter «Offene Rechnungen».', true);
+    ladeRechnungen(); ladeJahr(); ladeFirmenLeise();
+  } catch (err) { msg('rMsg', err.message); }
+  btn.disabled = false;
+};
+
+// ─── Anfragen ────────────────────────────────────────────────────────
+let offeneAnfrage = null;
+async function ladeAnfragen() {
+  const { anfragen } = await api(`/api/host?action=anfragen&firma=${aktiv}`);
+  const neu = anfragen.filter((a) => a.ungelesenHost).length;
+  $('aInfo').textContent = `· ${anfragen.filter((a) => a.status !== 'erledigt').length} offen${neu ? ' · ' + neu + ' neu' : ''}`;
+  $('aListe').innerHTML = anfragen.map((a) => {
+    const auf = offeneAnfrage === a.id;
+    return `<div class="anf ${a.ungelesenHost ? 'neu' : ''}">
+      <button class="anf-h" data-id="${a.id}"><span class="t"><b>${a.ungelesenHost ? '<span class="badge rot">neu</span> ' : ''}${esc(a.betreff)}</b><span>${a.nachrichten.length} Nachricht${a.nachrichten.length === 1 ? '' : 'en'} · ${fmtZeit(a.aktualisiert)}</span></span>
+        <span class="pill ${STATUS_CLS[a.status]}">${esc(a.status)}</span></button>
+      ${auf ? `<div class="thread">${a.nachrichten.map((n) => `<div class="mb ${n.von}"><div class="k">${n.von === 'host' ? 'Glatt Broker' : esc(n.name || 'Firma')} · ${fmtZeit(n.zeit)}</div>${n.text ? `<div class="x">${esc(n.text)}</div>` : ''}${anhang(n.anhang)}</div>`).join('')}
+        <form class="reply" data-id="${a.id}">
+          <textarea name="text" rows="3" placeholder="Antwort an die Firma (optional, wenn nur Status oder Anhang)"></textarea>
+          <div class="acts">
+            <select name="status">${STATUS.map((s) => `<option ${s === (a.status === 'neu' ? 'in Bearbeitung' : a.status) ? 'selected' : ''}>${s}</option>`).join('')}</select>
+            <input name="datei" type="file" accept=".pdf,image/*">
+            <button class="btn primary sm" type="submit">Senden / Status speichern</button><span class="msg"></span>
+          </div>
+        </form></div>` : ''}
+    </div>`;
+  }).join('') || '<p class="note">Noch keine Anfragen von dieser Firma.</p>';
+  $('aListe').querySelectorAll('.anf-h').forEach((b) => b.onclick = async () => {
+    offeneAnfrage = offeneAnfrage === b.dataset.id ? null : b.dataset.id;
+    const a = anfragen.find((x) => x.id === b.dataset.id);
+    if (offeneAnfrage && a.ungelesenHost) {
+      await api('/api/host?action=anfrage', { method: 'PATCH', body: JSON.stringify({ firma: aktiv, id: a.id, gelesen: true }) }).catch(() => {});
+      ladeFirmenLeise();
+    }
+    ladeAnfragen();
+  });
+  $('aListe').querySelectorAll('form.reply').forEach((f) => f.onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = f.querySelector('[type=submit]'); const m = f.querySelector('.msg');
+    btn.disabled = true; m.textContent = '';
+    try {
+      const datei = await leseDatei(f.datei);
+      if (f.text.value.trim() || datei) {
+        await api('/api/host?action=antwort', { method: 'POST', body: JSON.stringify({ firma: aktiv, id: f.dataset.id, text: f.text.value, status: f.status.value, datei }) });
+      } else {
+        await api('/api/host?action=anfrage', { method: 'PATCH', body: JSON.stringify({ firma: aktiv, id: f.dataset.id, status: f.status.value }) });
+      }
+      ladeAnfragen(); ladeJahr(); ladeFirmenLeise();
+    } catch (err) { m.textContent = err.message; m.className = 'msg err'; btn.disabled = false; }
+  });
+}
+// Liste links aktualisieren, ohne das Detail neu aufzubauen
+async function ladeFirmenLeise() {
+  const keep = aktiv; aktiv = null;
+  await ladeFirmen().catch(() => {});
+  aktiv = keep;
+  $('firmenListe').querySelectorAll('li[data-s]').forEach((li) => li.classList.toggle('on', li.dataset.s === aktiv));
+}
 
 $('firmaDel').onclick = async () => {
   const f = firmen.find((x) => x.slug === aktiv);

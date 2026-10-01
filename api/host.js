@@ -1,28 +1,38 @@
 // /api/host?action=… — Verwaltung der Firmenkonten (nur Host)
-//   GET    firmen                          Übersicht aller Firmen inkl. Benutzer und Jahre
+//   GET    datei      ?firma=&id=          Dokument ansehen (&download=1)
+//   GET    status                          Serverstatus (Datenbank, Konfiguration, Mail)
+//   GET    firmen                          Übersicht aller Firmen inkl. Logins, Jahre, offene Rechnungen, neue Anfragen
 //   POST   firma      {name, slug?}        Firma anlegen
-//   DELETE firma      ?slug=               Firma inkl. Benutzer und Daten löschen
-//   POST   benutzer   {firma, email, name, passwort}   Login anlegen / Passwort neu setzen
+//   DELETE firma      ?slug=               Firma inkl. allem löschen
+//   POST   benutzer   {firma, email, name, passwort}   Login (Benutzername oder E-Mail) anlegen / Passwort neu setzen
 //   DELETE benutzer   ?email=
-//   GET    buchungen  ?firma=&jahr=
-//   PUT    buchungen  {firma, jahr, buchungen[], modus: 'ersetzen'|'anfuegen', quelle?}
-//   DELETE buchungen  ?firma=&jahr=
-//   GET    belege     ?firma=&jahr=
-//   POST   beleg      {firma, datum, typ, kategorie, betrag, lieferant, titel, dateiname, mime, daten (Base64)}
-//   DELETE beleg      ?firma=&id=
+//   GET    buchungen  ?firma=&jahr=  ·  PUT buchungen {firma, jahr, buchungen[], modus, quelle?}  ·  DELETE ?firma=&jahr=
+//   GET    belege     ?firma=&jahr=  ·  POST beleg {firma, ordner, datum, typ, …, dateiname, mime, daten}  ·  DELETE beleg ?firma=&id=
+//   GET    rechnungen ?firma=        ·  POST rechnung {firma, …, datei?}  ·  PATCH rechnung {firma, id, …felder|status}  ·  DELETE rechnung ?firma=&id=
+//   GET    anfragen   ?firma=        ·  GET anfragen-alle  ·  POST antwort {firma, id, text, status?, datei?}  ·  PATCH anfrage {firma, id, status}
 import crypto from 'node:crypto';
 import {
   handler, HttpError, redis, pipeline, getJSON, key, requireHost,
-  slugify, normEmail, hashPassword, cleanJahr, cleanBuchung, cleanBelegMeta, BELEG_TYPEN, BELEG_MAX,
+  slugify, cleanLoginName, hashPassword, cleanJahr, cleanBuchung,
+  speichereDokument, sendeDatei, anhangInfo, cleanRechnung, ANFRAGE_STATUS, mailKonfiguriert, sendeMail, heute,
 } from './_lib.js';
 
-export default handler(async (req) => {
+export default handler(async (req, res) => {
   requireHost(req);
   const { action } = req.query;
   const m = req.method;
   const body = req.body || {};
 
+  if (action === 'status' && m === 'GET') return status(req);
+  if (action === 'datei' && m === 'GET') return sendeDatei(await mustFirma(req.query.firma), String(req.query.id || ''), req, res);
   if (action === 'firmen' && m === 'GET') return listFirmen();
+  if (action === 'anfragen-alle' && m === 'GET') return anfragenAlle();
+
+  if (action === 'test-mail' && m === 'POST') {
+    const ok = await sendeMail('[Firmenkonto] Testnachricht', 'Die E-Mail-Benachrichtigung des Host-Bereichs funktioniert.');
+    if (!ok) throw new HttpError(502, mailKonfiguriert() ? 'Versand fehlgeschlagen (Zugangsdaten prüfen).' : 'E-Mail ist noch nicht eingerichtet.');
+    return { ok: true };
+  }
 
   if (action === 'firma' && m === 'POST') {
     const name = String(body.name || '').trim().slice(0, 100);
@@ -42,7 +52,7 @@ export default handler(async (req) => {
       ...users.map((e) => ['DEL', key.user(e)]),
       ...jahre.map((j) => ['DEL', key.buch(slug, j), key.belege(slug, j)]),
       ...belegIds.map((id) => ['DEL', key.belegDatei(slug, id)]),
-      ['DEL', key.firma(slug), key.firmaUsers(slug), key.jahre(slug)],
+      ['DEL', key.firma(slug), key.firmaUsers(slug), key.jahre(slug), key.rechnungen(slug), key.anfragen(slug)],
       ['SREM', key.firmen(), slug],
     ]);
     return { ok: true };
@@ -50,40 +60,37 @@ export default handler(async (req) => {
 
   if (action === 'benutzer' && m === 'POST') {
     const slug = await mustFirma(body.firma);
-    const email = normEmail(body.email);
+    const login = cleanLoginName(body.email ?? body.benutzer);
     const pw = String(body.passwort || '');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpError(400, 'Ungültige E-Mail.');
-    if (pw.length < 10) throw new HttpError(400, 'Passwort muss mindestens 10 Zeichen haben.');
-    const existing = await getJSON(key.user(email));
-    if (existing && existing.firma !== slug) throw new HttpError(409, 'Diese E-Mail gehört schon zu einer anderen Firma.');
+    if (pw.length < 8) throw new HttpError(400, 'Passwort muss mindestens 8 Zeichen haben.');
+    const existing = await getJSON(key.user(login));
+    if (existing && existing.firma !== slug) throw new HttpError(409, 'Dieser Login gehört schon zu einer anderen Firma.');
     const user = {
-      email, firma: slug, name: String(body.name || existing?.name || '').slice(0, 80),
+      email: login, firma: slug, name: String(body.name || existing?.name || '').slice(0, 80),
       pw: hashPassword(pw), erstellt: existing?.erstellt || new Date().toISOString(),
     };
-    await pipeline([['SET', key.user(email), JSON.stringify(user)], ['SADD', key.firmaUsers(slug), email]]);
+    await pipeline([['SET', key.user(login), JSON.stringify(user)], ['SADD', key.firmaUsers(slug), login]]);
     return { ok: true };
   }
 
   if (action === 'benutzer' && m === 'DELETE') {
-    const email = normEmail(req.query.email);
-    const user = await getJSON(key.user(email));
-    if (!user) throw new HttpError(404, 'Benutzer nicht gefunden.');
-    await pipeline([['DEL', key.user(email)], ['SREM', key.firmaUsers(user.firma), email]]);
+    const login = String(req.query.email || '').trim().toLowerCase();
+    const user = await getJSON(key.user(login));
+    if (!user) throw new HttpError(404, 'Login nicht gefunden.');
+    await pipeline([['DEL', key.user(login)], ['SREM', key.firmaUsers(user.firma), login]]);
     return { ok: true };
   }
 
+  // ─── Buchhaltung ───────────────────────────────────────────────────
   if (action === 'buchungen') {
     const slug = await mustFirma(req.query.firma || body.firma);
     const jahr = cleanJahr(req.query.jahr || body.jahr);
-
     if (m === 'GET') return (await getJSON(key.buch(slug, jahr))) || { jahr, buchungen: [] };
-
     if (m === 'DELETE') {
-      const [, belege] = await pipeline([['DEL', key.buch(slug, jahr)], ['HLEN', key.belege(slug, jahr)]]);
-      if (!belege) await redis('SREM', key.jahre(slug), jahr);
+      const [, docs] = await pipeline([['DEL', key.buch(slug, jahr)], ['HLEN', key.belege(slug, jahr)]]);
+      if (!docs) await redis('SREM', key.jahre(slug), jahr);
       return { ok: true };
     }
-
     if (m === 'PUT') {
       if (!Array.isArray(body.buchungen)) throw new HttpError(400, 'buchungen[] fehlt.');
       const neu = body.buchungen.map(cleanBuchung).filter((b) => b && b.d.startsWith(String(jahr)));
@@ -95,35 +102,17 @@ export default handler(async (req) => {
     }
   }
 
+  // ─── Dokumente ─────────────────────────────────────────────────────
   if (action === 'belege' && m === 'GET') {
     const slug = await mustFirma(req.query.firma);
     const jahr = cleanJahr(req.query.jahr);
-    const h = (await redis('HVALS', key.belege(slug, jahr))) || [];
-    return { belege: h.map((x) => JSON.parse(x)).sort((a, b) => a.datum.localeCompare(b.datum)) };
+    return { belege: (await hvals(key.belege(slug, jahr))).map((d) => ({ ordner: 'Belege', ...d })).sort((a, b) => a.datum.localeCompare(b.datum)) };
   }
 
   if (action === 'beleg' && m === 'POST') {
     const slug = await mustFirma(body.firma);
-    const meta = cleanBelegMeta(body);
-    const mime = String(body.mime || '');
-    if (!BELEG_TYPEN[mime]) throw new HttpError(400, 'Dateityp nicht erlaubt (PDF, JPG, PNG, WEBP, HEIC, GIF).');
-    const daten = String(body.daten || '').replace(/^data:[^,]*,/, '');
-    const groesse = Math.floor(daten.length * 3 / 4);
-    if (!groesse) throw new HttpError(400, 'Datei fehlt.');
-    if (groesse > BELEG_MAX) throw new HttpError(413, 'Datei ist grösser als 3 MB.');
-    const jahr = Number(meta.datum.slice(0, 4));
-    const id = `${jahr}-${crypto.randomUUID().slice(0, 13)}`;
-    const doc = {
-      id, ...meta, mime, groesse,
-      dateiname: String(body.dateiname || '').slice(0, 120),
-      hochgeladen: new Date().toISOString(),
-    };
-    await pipeline([
-      ['SET', key.belegDatei(slug, id), daten],
-      ['HSET', key.belege(slug, jahr), id, JSON.stringify(doc)],
-      ['SADD', key.jahre(slug), jahr],
-    ]);
-    return { ok: true, id };
+    const doc = await speichereDokument(slug, body, { dateiname: body.dateiname, mime: body.mime, daten: body.daten }, 'host');
+    return { ok: true, id: doc.id };
   }
 
   if (action === 'beleg' && m === 'DELETE') {
@@ -134,8 +123,88 @@ export default handler(async (req) => {
     return { ok: true };
   }
 
+  // ─── Offene Rechnungen ─────────────────────────────────────────────
+  if (action === 'rechnungen' && m === 'GET') {
+    const slug = await mustFirma(req.query.firma);
+    return { rechnungen: await hvals(key.rechnungen(slug)) };
+  }
+
+  if (action === 'rechnung' && m === 'POST') {
+    const slug = await mustFirma(body.firma);
+    const r = cleanRechnung(body);
+    const doc = body.datei ? await speichereDokument(slug, {
+      datum: heute(), ordner: 'Rechnungen', typ: 'A', betrag: r.betrag, lieferant: r.glaeubiger, titel: r.titel || 'Rechnung',
+    }, body.datei, 'host') : null;
+    const id = 'r-' + crypto.randomUUID().slice(0, 12);
+    const rechnung = { id, ...r, status: 'offen', von: 'host', erfasstVon: 'Glatt Broker', erstellt: new Date().toISOString(), anhang: anhangInfo(doc) };
+    await redis('HSET', key.rechnungen(slug), id, JSON.stringify(rechnung));
+    return { ok: true, rechnung };
+  }
+
+  if (action === 'rechnung' && m === 'PATCH') {
+    const slug = await mustFirma(body.firma);
+    const r = await getHash(key.rechnungen(slug), body.id, 'Rechnung');
+    const neu = { ...r, ...cleanRechnung(body, r) };
+    if (body.status) {
+      neu.status = body.status === 'bezahlt' ? 'bezahlt' : 'offen';
+      neu.bezahltAm = neu.status === 'bezahlt' ? (r.bezahltAm || heute()) : null;
+      neu.bezahltVon = neu.status === 'bezahlt' ? (r.bezahltVon || 'Glatt Broker') : null;
+    }
+    await redis('HSET', key.rechnungen(slug), r.id, JSON.stringify(neu));
+    return { ok: true, rechnung: neu };
+  }
+
+  if (action === 'rechnung' && m === 'DELETE') {
+    const slug = await mustFirma(req.query.firma);
+    await redis('HDEL', key.rechnungen(slug), String(req.query.id || ''));
+    return { ok: true };
+  }
+
+  // ─── Anfragen ──────────────────────────────────────────────────────
+  if (action === 'anfragen' && m === 'GET') {
+    const slug = await mustFirma(req.query.firma);
+    return { anfragen: (await hvals(key.anfragen(slug))).sort((a, b) => b.aktualisiert.localeCompare(a.aktualisiert)) };
+  }
+
+  if (action === 'antwort' && m === 'POST') {
+    const slug = await mustFirma(body.firma);
+    const a = await getHash(key.anfragen(slug), body.id, 'Anfrage');
+    const text = String(body.text || '').trim().slice(0, 5000);
+    if (!text && !body.datei) throw new HttpError(400, 'Antwort oder Anhang fehlt.');
+    const doc = body.datei ? await speichereDokument(slug, { datum: heute(), ordner: 'Korrespondenz', titel: a.betreff }, body.datei, 'host') : null;
+    const jetzt = new Date().toISOString();
+    a.nachrichten.push({ von: 'host', name: 'Glatt Broker', text, zeit: jetzt, anhang: anhangInfo(doc) });
+    if (ANFRAGE_STATUS.includes(body.status)) a.status = body.status;
+    else if (a.status === 'neu') a.status = 'in Bearbeitung';
+    a.aktualisiert = jetzt; a.ungelesenFirma = true; a.ungelesenHost = false;
+    await redis('HSET', key.anfragen(slug), a.id, JSON.stringify(a));
+    return { ok: true, anfrage: a };
+  }
+
+  if (action === 'anfrage' && m === 'PATCH') {
+    const slug = await mustFirma(body.firma);
+    const a = await getHash(key.anfragen(slug), body.id, 'Anfrage');
+    if (body.status !== undefined) {
+      if (!ANFRAGE_STATUS.includes(body.status)) throw new HttpError(400, 'Unbekannter Status.');
+      if (a.status !== body.status) { a.status = body.status; a.ungelesenFirma = true; a.aktualisiert = new Date().toISOString(); }
+    }
+    if (body.gelesen) a.ungelesenHost = false;
+    await redis('HSET', key.anfragen(slug), a.id, JSON.stringify(a));
+    return { ok: true, anfrage: a };
+  }
+
   throw new HttpError(400, 'Unbekannte Aktion.');
 });
+
+async function hvals(k) {
+  return ((await redis('HVALS', k)) || []).map((x) => JSON.parse(x));
+}
+
+async function getHash(k, id, was) {
+  const raw = await redis('HGET', k, String(id || ''));
+  if (!raw) throw new HttpError(404, `${was} nicht gefunden.`);
+  return JSON.parse(raw);
+}
 
 async function mustFirma(slug) {
   slug = slugify(slug);
@@ -148,13 +217,59 @@ async function listFirmen() {
   if (!slugs.length) return { firmen: [] };
   const rows = await pipeline(slugs.flatMap((s) => [
     ['GET', key.firma(s)], ['SMEMBERS', key.firmaUsers(s)], ['SMEMBERS', key.jahre(s)],
+    ['HVALS', key.rechnungen(s)], ['HVALS', key.anfragen(s)],
   ]));
   const firmen = [];
+  const h = heute();
   for (let i = 0; i < slugs.length; i++) {
-    const f = rows[i * 3] ? JSON.parse(rows[i * 3]) : null;
+    const [f, users, jahre, rech, anf] = rows.slice(i * 5, i * 5 + 5);
     if (!f) continue;
-    firmen.push({ ...f, benutzer: rows[i * 3 + 1].sort(), jahre: rows[i * 3 + 2].map(Number).sort((a, b) => b - a) });
+    const offen = rech.map((x) => JSON.parse(x)).filter((r) => r.status !== 'bezahlt');
+    const anfragen = anf.map((x) => JSON.parse(x));
+    firmen.push({
+      ...JSON.parse(f), benutzer: users.sort(), jahre: jahre.map(Number).sort((a, b) => b - a),
+      offeneRechnungen: offen.length, ueberfaellig: offen.filter((r) => r.faellig < h).length,
+      anfragenNeu: anfragen.filter((a) => a.ungelesenHost).length,
+      anfragenOffen: anfragen.filter((a) => a.status !== 'erledigt').length,
+    });
   }
   firmen.sort((a, b) => a.name.localeCompare(b.name, 'de'));
   return { firmen };
+}
+
+async function anfragenAlle() {
+  const slugs = (await redis('SMEMBERS', key.firmen())) || [];
+  const rows = await pipeline(slugs.flatMap((s) => [['GET', key.firma(s)], ['HVALS', key.anfragen(s)]]));
+  const out = [];
+  for (let i = 0; i < slugs.length; i++) {
+    const f = rows[i * 2] ? JSON.parse(rows[i * 2]) : null;
+    if (!f) continue;
+    for (const a of rows[i * 2 + 1].map((x) => JSON.parse(x))) {
+      if (a.status === 'erledigt' && !a.ungelesenHost) continue;
+      out.push({ firma: f.slug, firmaName: f.name, id: a.id, betreff: a.betreff, status: a.status, aktualisiert: a.aktualisiert, ungelesenHost: a.ungelesenHost });
+    }
+  }
+  return { anfragen: out.sort((a, b) => (b.ungelesenHost - a.ungelesenHost) || b.aktualisiert.localeCompare(a.aktualisiert)) };
+}
+
+async function status(req) {
+  const env = (n) => Boolean(process.env[n]);
+  const out = {
+    zeit: new Date().toISOString(),
+    region: process.env.VERCEL_REGION || 'lokal',
+    konfiguration: {
+      SESSION_SECRET: env('SESSION_SECRET'), HOST_PASSWORD: env('HOST_PASSWORD'), HOST_API_KEY: env('HOST_API_KEY'),
+      Datenbank: env('KV_REST_API_URL') || env('UPSTASH_REDIS_REST_URL'),
+      Mail: mailKonfiguriert(), mailAn: process.env.MAIL_TO || 'online@glattbroker.ch',
+    },
+    datenbank: { ok: false },
+  };
+  try {
+    const t0 = Date.now();
+    const [pong, n, firmen] = await pipeline([['PING'], ['DBSIZE'], ['SCARD', key.firmen()]]);
+    out.datenbank = { ok: pong === 'PONG', ms: Date.now() - t0, schluessel: n, firmen };
+  } catch (e) {
+    out.datenbank = { ok: false, fehler: e.message };
+  }
+  return out;
 }
