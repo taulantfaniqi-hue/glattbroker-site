@@ -64,7 +64,7 @@ window.GB_API = window.GB_API || { endpoint: (location.hostname === 'localhost' 
     var h=E('header',{class:'appbar'});
     h.innerHTML =
       '<div class="appbar-inner">'+
-        '<a class="brand" href="index.html"><img class="brand-logo" src="assets/logo-app.png" alt="Glatt Broker AG"><span class="brand-tag">Online-Formulare</span></a>'+
+        '<a class="brand" href="index.html"><img class="brand-logo" src="assets/logo-app.png?v=2" alt="Glatt Broker AG"><span class="brand-tag">Online-Formulare</span></a>'+
         '<a class="back" href="index.html" style="margin-left:auto">‹ Alle Formulare</a>'+
         '<div class="cobroker" style="margin-left:18px">Partner<b>Baumassurance AG</b></div>'+
       '</div>';
