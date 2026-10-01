@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Firmenkonto · Glatt Broker AG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-display: swap; }
+  :root {
+    --font: "Mont", "Outfit", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936;
+    --card: #fff; --line: #E7E7E4; --muted: #6B6F76; --soft: #F2F2EF;
+    --pos: #1F9E89; --neg: #CC2936;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  a { color: inherit; }
+  .label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+  [hidden] { display: none !important; }
+
+  /* Kopfzeile */
+  header.top { position: sticky; top: 0; z-index: 10; background: rgba(250,250,250,.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .top-in { max-width: 1240px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand img { height: 40px; width: auto; }
+  .brand .tag { border-left: 1px solid var(--line); padding-left: 12px; }
+  .top-in .sp { flex: 1; }
+  .who { text-align: right; line-height: 1.25; }
+  .who b { display: block; font-weight: 600; font-size: 14px; }
+  .who span { font-size: 12px; color: var(--muted); }
+  .btn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 9px 16px; cursor: pointer; font-size: 14px; transition: border-color .15s, background .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn:hover { border-color: #cfcfca; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { background: #222; }
+
+  /* Login */
+  .login { min-height: calc(100vh - 60px); display: grid; place-items: center; padding: 32px 16px; }
+  .login-card { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 36px 32px; box-shadow: 0 20px 50px -30px rgba(0,0,0,.25); }
+  .login-card h1 { font-size: 30px; font-weight: 600; letter-spacing: -.03em; margin: 10px 0 6px; }
+  .login-card p.lead { color: var(--muted); font-size: 15px; line-height: 1.5; margin-bottom: 24px; }
+  .field { display: block; margin-bottom: 14px; }
+  .field span { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 15px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .field input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,10,10,.06); }
+  .login-card .btn.primary { width: 100%; justify-content: center; padding: 13px; font-size: 15px; margin-top: 6px; }
+  .msg { font-size: 14px; margin-top: 14px; color: var(--neg); min-height: 20px; }
+  .hint { margin-top: 18px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* Dashboard */
+  main.dash { max-width: 1240px; margin: 0 auto; padding: 28px 24px 64px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; margin-bottom: 22px; }
+  .head h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 600; letter-spacing: -.04em; line-height: 1; }
+  .head .sp { flex: 1; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  select { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 9px 34px 9px 14px; font-size: 14px; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230A0A0A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; min-width: 0; }
+  .kpi .v { font-size: clamp(22px, 2.4vw, 30px); font-weight: 600; letter-spacing: -.03em; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi .s { font-size: 13px; color: var(--muted); margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi.accent { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .kpi.accent .label, .kpi.accent .s { color: rgba(255,255,255,.62); }
+  .delta { font-weight: 600; }
+  .delta.up { color: var(--neg); } .delta.down { color: var(--pos); }
+  .kpi.accent .delta.up { color: #FF8A93; } .kpi.accent .delta.down { color: #6FE0CB; }
+
+  .grid { display: grid; grid-template-columns: 5fr 7fr; gap: 14px; margin-bottom: 14px; align-items: start; }
+  .grid.even { grid-template-columns: 1fr 1fr; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; min-width: 0; }
+  .card h2 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin-top: 4px; }
+  .card-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+
+  .donut-wrap { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 18px; align-items: center; }
+  .donut { position: relative; width: 170px; height: 170px; }
+  .donut .center { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; pointer-events: none; }
+  .donut .center b { display: block; font-size: 17px; font-weight: 600; letter-spacing: -.02em; }
+  .donut .center span { font-size: 11px; color: var(--muted); }
+  .cats { list-style: none; padding: 0; display: grid; gap: 1px; width: 100%; max-height: 340px; overflow: auto; }
+  .cats li { display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: center; padding: 7px 8px; border-radius: 10px; cursor: pointer; font-size: 14px; }
+  .cats li:hover, .cats li.on { background: var(--soft); }
+  .cats .dot { width: 10px; height: 10px; border-radius: 3px; }
+  .cats .n { min-width: 0; line-height: 1.25; }
+  .cats .a { text-align: right; white-space: nowrap; }
+  .cats .a small { color: var(--muted); margin-left: 6px; font-size: 12px; }
+
+  .chart-box { position: relative; height: 340px; }
+
+  .bars { display: grid; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; font-size: 14px; }
+  .bar-row .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-row .n small { color: var(--muted); margin-left: 6px; }
+  .bar-row .track { grid-column: 1 / -1; height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden; }
+  .bar-row .fill { height: 100%; border-radius: 99px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: 500; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  td { padding: 10px 8px; border-bottom: 1px solid var(--soft); vertical-align: top; }
+  td.r, th.r { text-align: right; white-space: nowrap; }
+  td .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 9px; border-radius: 99px; background: var(--soft); white-space: nowrap; }
+  .pill i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .search { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; font-size: 14px; min-width: 220px; outline: none; background: #fff; }
+  .search:focus { border-color: var(--ink); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--ink); color: #fff; border-radius: 99px; padding: 6px 12px; font-size: 13px; cursor: pointer; border: 0; }
+  .table-scroll { overflow-x: auto; }
+  .more { margin-top: 14px; text-align: center; }
+  .empty { text-align: center; padding: 70px 20px; }
+  .empty h2 { font-size: 24px; letter-spacing: -.02em; margin-bottom: 8px; }
+  .empty p { color: var(--muted); max-width: 460px; margin: 0 auto; line-height: 1.55; }
+  .foot { margin-top: 26px; font-size: 12.5px; color: var(--muted); text-align: center; }
+  .loading { display: grid; place-items: center; min-height: 60vh; color: var(--muted); }
+
+  .pos { color: var(--pos); }
+  .kpi.accent .v.neg-v { color: #FF8A93; }
+  .kpi.accent .v.pos-v { color: #6FE0CB; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+  .tabs button { background: none; border: 0; padding: 10px 14px; font-size: 15px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tabs button.on { color: var(--ink); border-bottom-color: var(--red); font-weight: 600; }
+  .tabs .count { font-family: var(--mono); font-size: 11px; background: var(--soft); border-radius: 99px; padding: 2px 7px; margin-left: 4px; color: var(--muted); }
+
+  /* Monatsübersicht */
+  .monat-tab th, .monat-tab td { white-space: nowrap; }
+  .monat-tab td:first-child { font-weight: 500; }
+  .monat-tab tr.total td { border-top: 2px solid var(--ink); border-bottom: 0; font-weight: 600; }
+  .monat-tab td.muted { color: #B5B8BD; }
+  .monat-tab th .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; vertical-align: 1px; }
+  .legend-line { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  .legend-line i { width: 16px; height: 0; border-top: 2px solid var(--pos); }
+
+  /* Belege */
+  .beleg-head { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .seg { display: inline-flex; background: var(--soft); border-radius: 999px; padding: 3px; }
+  .seg button { border: 0; background: none; border-radius: 999px; padding: 8px 14px; font-size: 14px; cursor: pointer; color: var(--muted); }
+  .seg button.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+  .seg button span { font-family: var(--mono); font-size: 11px; margin-left: 2px; }
+  .monat { margin-bottom: 14px; }
+  .monat-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; padding: 4px 4px 10px; }
+  .monat-h h3 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+  .monat-h .meta { font-size: 13px; color: var(--muted); }
+  .monat-h .sp { flex: 1; }
+  .beleg { display: grid; grid-template-columns: 74px 36px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--soft); }
+  .beleg:last-child { border-bottom: 0; }
+  .beleg .dt { font-size: 13px; color: var(--muted); }
+  .beleg .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-family: var(--mono); font-size: 10px; font-weight: 600; color: #fff; }
+  .beleg .ti { min-width: 0; }
+  .beleg .ti b { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .beleg .ti span { font-size: 12.5px; color: var(--muted); }
+  .beleg .be { text-align: right; white-space: nowrap; font-weight: 500; }
+  .beleg .ac { display: flex; gap: 6px; }
+  .beleg .ac a { padding: 7px 12px; font-size: 13px; }
+  .card.list { padding: 0; overflow: hidden; }
+
+  @media (max-width: 1100px) { .grid, .grid.even { grid-template-columns: 1fr; } }
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) {
+    .top-in { padding: 12px 16px; }
+    .brand .tag, .who span { display: none; }
+    main.dash { padding: 20px 16px 48px; }
+    .donut-wrap { grid-template-columns: 1fr; justify-items: center; }
+    .cats { width: 100%; max-height: none; }
+    .kpi { padding: 14px 16px; }
+    .search { min-width: 0; flex: 1; }
+    .hide-sm { display: none; }
+    .beleg { grid-template-columns: 36px minmax(0, 1fr) auto; padding: 12px; }
+    .beleg .dt { display: none; }
+    .beleg .ac { grid-column: 2 / -1; }
+    .beleg-head .search { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="index.html" title="Zur Website">
+      <img src="assets/logo-app.png" alt="Glatt Broker">
+      <span class="label tag">Firmenkonto</span>
+    </a>
+    <div class="sp"></div>
+    <div class="who" id="who" hidden><b id="whoFirma"></b><span id="whoMail"></span></div>
+    <button class="btn" id="logout" hidden>Abmelden</button>
+  </div>
+</header>
+
+<div class="loading" id="loading">Wird geladen …</div>
+
+<!-- Login -->
+<section class="login" id="loginView" hidden>
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="label">Firmenkunden · Login</div>
+    <h1>Ihr Firmenkonto</h1>
+    <p class="lead">Ihre Ausgaben auf einen Blick: wofür, wo und wie viel. Aufbereitet aus Ihrer Buchhaltung.</p>
+    <label class="field"><span>E-Mail</span><input type="email" name="email" autocomplete="username" required></label>
+    <label class="field"><span>Passwort</span><input type="password" name="passwort" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit">Anmelden</button>
+    <div class="msg" id="loginMsg" role="alert"></div>
+    <p class="hint">Noch keinen Zugang? Ihre Beraterin oder Ihr Berater bei Glatt Broker richtet ihn gerne ein: <a href="kontakt.html">Kontakt</a></p>
+  </form>
+</section>
+
+<!-- Dashboard -->
+<main class="dash" id="dashView" hidden>
+  <div class="head">
+    <div>
+      <div class="label" id="headLabel">Ausgabenübersicht</div>
+      <h1 id="headTitle">Ausgaben</h1>
+    </div>
+    <div class="sp"></div>
+    <div class="filters">
+      <select id="selJahr" aria-label="Jahr"></select>
+      <select id="selZeit" aria-label="Zeitraum"></select>
+    </div>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="uebersicht" class="on">Übersicht</button>
+    <button role="tab" data-tab="belege">Belege <span class="count" id="belegCount"></span></button>
+  </nav>
+
+  <div id="tabUebersicht">
+  <div id="emptyState" class="card empty" hidden>
+    <h2>Noch keine Daten für diesen Zeitraum</h2>
+    <p>Sobald wir Ihre Buchhaltungsdaten erhalten haben, erscheinen hier Einnahmen, Ausgaben und Sozialversicherungen nach Kategorie, Lieferant und Monat.</p>
+  </div>
+
+  <div id="content">
+    <div class="kpis">
+      <div class="kpi"><div class="label">Einnahmen</div><div class="v num pos" id="kEin"></div><div class="s" id="kEinS"></div></div>
+      <div class="kpi"><div class="label">Ausgaben</div><div class="v num" id="kAus"></div><div class="s" id="kAusS"></div></div>
+      <div class="kpi"><div class="label">davon Sozialversicherungen</div><div class="v num" id="kSoz"></div><div class="s" id="kSozS"></div></div>
+      <div class="kpi accent"><div class="label">Ergebnis</div><div class="v num" id="kErg"></div><div class="s" id="kErgS"></div></div>
+    </div>
+
+    <section class="card" style="margin-bottom:14px">
+      <div class="card-h"><div><div class="label">Monat für Monat</div><h2>Einnahmen, Ausgaben &amp; Sozialversicherungen</h2></div></div>
+      <div class="table-scroll"><table class="monat-tab" id="monatTable"></table></div>
+    </section>
+
+    <div class="grid even">
+      <section class="card">
+        <div class="card-h"><div><div class="label">Wofür</div><h2>Ausgaben nach Kategorie</h2></div></div>
+        <div class="donut-wrap">
+          <div class="donut"><canvas id="cDonut" width="170" height="170"></canvas><div class="center"><div><b class="num" id="donutCenter"></b><span id="donutSub">Total</span></div></div></div>
+          <ul class="cats" id="catList"></ul>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div><div class="label">Wann</div><h2>Einnahmen &amp; Ausgaben pro Monat</h2></div><span class="legend-line" id="einLegend" hidden><i></i>Einnahmen</span></div>
+        <div class="chart-box"><canvas id="cMonate"></canvas></div>
+      </section>
+    </div>
+
+    <div class="grid even">
+      <section class="card">
+        <div class="card-h"><div><div class="label">Wo</div><h2>Grösste Lieferanten &amp; Orte</h2></div></div>
+        <div class="bars" id="topLief"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div><div class="label">Vergleich</div><h2 id="vjTitle">Kategorien im Vorjahresvergleich</h2></div></div>
+        <div class="table-scroll"><table id="vjTable"></table></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-h">
+        <div><div class="label">Details</div><h2>Alle Buchungen</h2></div>
+        <div class="tools">
+          <button class="chip" id="catChip" hidden></button>
+          <input class="search" id="search" type="search" placeholder="Suchen: Lieferant, Text …">
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th class="label">Datum</th><th class="label">Lieferant / Text</th><th class="label hide-sm">Kategorie</th><th class="label r">Betrag</th></tr></thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+      <div class="more"><button class="btn" id="moreBtn" hidden>Weitere anzeigen</button></div>
+    </section>
+  </div>
+  </div>
+
+  <!-- Belege -->
+  <div id="tabBelege" hidden>
+    <div class="beleg-head">
+      <div class="seg" role="group" aria-label="Belegart">
+        <button data-art="A" class="on">Ausgaben <span id="segA"></span></button>
+        <button data-art="E">Einnahmen <span id="segE"></span></button>
+        <button data-art="">Alle <span id="segAll"></span></button>
+      </div>
+      <input class="search" id="belegSuche" type="search" placeholder="Beleg suchen …">
+    </div>
+    <div id="belegListe"></div>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script type="module">
+import { farbe, bereich } from './assets/buchhaltung.js';
+
+const $ = (id) => document.getElementById(id);
+const _chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', maximumFractionDigits: 0 });
+const chf = { format: (v) => (v < -0.5 ? '−' : '') + _chf.format(Math.abs(v)) };
+const chf2 = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', minimumFractionDigits: 2 });
+const MONATE = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+const MONATE_LANG = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtDatum = (d) => d.slice(8, 10) + '.' + d.slice(5, 7) + '.' + d.slice(0, 4);
+
+let state = { data: null, zeit: 'jahr', kat: null, suche: '', limit: 50, tab: 'uebersicht', belege: null, belegJahr: null, art: 'A', belegSuche: '' };
+let charts = {};
+
+async function api(url, opts = {}) {
+  const r = await fetch(url, { credentials: 'same-origin', ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error || 'Fehler ' + r.status); e.status = r.status; throw e; }
+  return j;
+}
+
+function show(view) {
+  $('loading').hidden = true;
+  $('loginView').hidden = view !== 'login';
+  $('dashView').hidden = view !== 'dash';
+  $('who').hidden = $('logout').hidden = view !== 'dash';
+}
+
+async function laden(jahr) {
+  try {
+    const data = await api('/api/firma' + (jahr ? '?jahr=' + jahr : ''));
+    state.data = data; state.kat = null; state.limit = 50;
+    $('whoFirma').textContent = data.firma.name;
+    $('whoMail').textContent = data.benutzer.email;
+    fuelleFilter();
+    show('dash');
+    render();
+  } catch (e) {
+    if (e.status === 401 || e.status === 403) show('login');
+    else { show('login'); $('loginMsg').textContent = e.message; }
+  }
+}
+
+$('loginForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const f = new FormData(ev.target);
+  $('loginMsg').textContent = '';
+  const btn = ev.target.querySelector('button');
+  btn.disabled = true;
+  try {
+    await api('/api/auth?action=login', { method: 'POST', body: JSON.stringify({ email: f.get('email'), passwort: f.get('passwort') }) });
+    ev.target.reset();
+    await laden();
+  } catch (e) { $('loginMsg').textContent = e.message; }
+  btn.disabled = false;
+});
+
+$('logout').addEventListener('click', async () => {
+  await api('/api/auth?action=logout', { method: 'POST', body: JSON.stringify({ kind: 'firma' }) }).catch(() => {});
+  location.reload();
+});
+
+function fuelleFilter() {
+  const d = state.data;
+  const jahre = d.jahre.length ? d.jahre : [d.jahr];
+  $('selJahr').innerHTML = jahre.map((j) => `<option value="${j}" ${j === d.jahr ? 'selected' : ''}>${j}</option>`).join('');
+  const opts = [['jahr', 'Ganzes Jahr'], ['q1', '1. Quartal'], ['q2', '2. Quartal'], ['q3', '3. Quartal'], ['q4', '4. Quartal'],
+    ...MONATE_LANG.map((m, i) => ['m' + (i + 1), m])];
+  $('selZeit').innerHTML = opts.map(([v, t]) => `<option value="${v}" ${v === state.zeit ? 'selected' : ''}>${t}</option>`).join('');
+}
+$('selJahr').addEventListener('change', (e) => laden(e.target.value));
+$('selZeit').addEventListener('change', (e) => { state.zeit = e.target.value; state.kat = null; state.limit = 50; render(); });
+
+// Monate (1–12) des gewählten Zeitraums
+function monate() {
+  const z = state.zeit;
+  if (z.startsWith('q')) { const q = +z[1]; return [q * 3 - 2, q * 3 - 1, q * 3]; }
+  if (z.startsWith('m')) return [+z.slice(1)];
+  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+}
+const imZeitraum = (list, ms) => (list || []).filter((b) => ms.includes(+b.d.slice(5, 7)));
+const summe = (list) => list.reduce((s, b) => s + b.b, 0);
+
+function proKat(list) {
+  const m = new Map();
+  for (const b of list) m.set(b.k, (m.get(b.k) || 0) + b.b);
+  return [...m.entries()].sort((a, b) => b[1] - a[1]);
+}
+
+// Veränderung zum Vorjahr; bei Einnahmen ist «mehr» gut (gutWennMehr)
+function delta(cur, prev, gutWennMehr = false) {
+  if (!prev) return '';
+  const p = (cur - prev) / prev * 100;
+  const mehr = p > 0.5, weniger = p < -0.5;
+  const cls = (mehr && !gutWennMehr) || (weniger && gutWennMehr) ? 'up' : (mehr || weniger) ? 'down' : '';
+  const ms = state.vergleichsMonate;
+  const span = ms && ms.length > 1 && ms.length < 12 ? ` (${MONATE[ms[0] - 1]}–${MONATE[ms[ms.length - 1] - 1]})` : '';
+  return `<span class="delta ${cls}">${p > 0 ? '+' : ''}${p.toFixed(0)}%</span> vs. Vorjahr${span}`;
+}
+
+function render() {
+  const d = state.data;
+  const alle = imZeitraum(d.buchungen, monate());
+  // Nur bis zum letzten Monat mit Daten (laufendes Jahr), damit Vergleich und Diagramm fair bleiben
+  const letzter = alle.length ? Math.max(...alle.map((b) => +b.d.slice(5, 7))) : 12;
+  const ms = monate().filter((m) => m <= letzter);
+  const aus = alle.filter((b) => b.typ !== 'E');
+  const ein = alle.filter((b) => b.typ === 'E');
+  const vj = d.vorjahr ? imZeitraum(d.vorjahr, ms) : null;
+  const vjAus = vj ? vj.filter((b) => b.typ !== 'E') : null;
+  const vjEin = vj ? vj.filter((b) => b.typ === 'E') : null;
+  state.vergleichsMonate = ms;
+
+  const zeitText = $('selZeit').selectedOptions[0]?.textContent || '';
+  $('headTitle').textContent = state.zeit === 'jahr' ? `Geschäftsjahr ${d.jahr}` : `${zeitText} ${d.jahr}`;
+  $('headLabel').textContent = d.firma.name;
+  $('belegCount').textContent = d.anzBelege || '';
+
+  const leer = aus.length === 0 && ein.length === 0;
+  $('emptyState').hidden = !leer;
+  $('content').hidden = leer;
+  $('foot').textContent = d.aktualisiert ? `Stand der Daten: ${new Date(d.aktualisiert).toLocaleDateString('de-CH')} · Aufbereitet durch Glatt Broker AG` : '';
+  if (state.tab === 'belege') renderBelege();
+  if (leer) return;
+
+  const total = summe(aus);
+  const totalEin = summe(ein);
+  const soz = summe(aus.filter((b) => bereich(b) === 'Sozialversicherungen'));
+  const lohn = summe(aus.filter((b) => bereich(b) === 'Personal'));
+  const kats = proKat(aus);
+  const anzMonate = ms.length || 1;
+
+  $('kEin').textContent = ein.length ? chf.format(totalEin) : '–';
+  $('kEinS').innerHTML = ein.length ? (vjEin && vjEin.length ? delta(totalEin, summe(vjEin), true) : `${ein.length} Eingänge`) : 'Keine Einnahmen erfasst';
+  $('kAus').textContent = chf.format(total);
+  $('kAusS').innerHTML = vjAus && vjAus.length ? delta(total, summe(vjAus)) : `Ø ${chf.format(total / anzMonate)} pro Monat`;
+  $('kSoz').textContent = chf.format(soz);
+  $('kSozS').textContent = soz
+    ? (lohn ? `${(soz / lohn * 100).toFixed(1)}% der Lohnsumme` : `${(soz / total * 100).toFixed(1)}% der Ausgaben`)
+    : 'AHV, BVG, UVG, KTG …';
+  const erg = totalEin - total;
+  $('kErg').textContent = ein.length ? chf.format(erg) : '–';
+  $('kErg').className = 'v num ' + (ein.length ? (erg >= 0 ? 'pos-v' : 'neg-v') : '');
+  $('kErgS').textContent = ein.length && totalEin ? `Marge ${(erg / totalEin * 100).toFixed(1)}%` : 'Einnahmen minus Ausgaben';
+
+  renderMonatTabelle(alle, ms);
+  renderDonut(kats, total);
+  renderMonate(aus, kats, ms, ein);
+  renderLieferanten(aus);
+  renderVergleich(kats, vjAus);
+  renderTabelle(alle);
+}
+
+function renderDonut(kats, total) {
+  $('donutCenter').textContent = chf.format(state.kat ? (kats.find((k) => k[0] === state.kat)?.[1] || 0) : total);
+  $('donutSub').textContent = state.kat || 'Total';
+  $('catList').innerHTML = kats.map(([k, v]) =>
+    `<li data-k="${esc(k)}" class="${state.kat === k ? 'on' : ''}"><span class="dot" style="background:${farbe(k)}"></span><span class="n">${esc(k)}</span><span class="a num">${chf.format(v)}<small>${(v / total * 100).toFixed(0)}%</small></span></li>`).join('');
+  $('catList').querySelectorAll('li').forEach((li) => li.onclick = () => waehleKat(li.dataset.k));
+
+  const cfg = {
+    labels: kats.map((k) => k[0]),
+    datasets: [{
+      data: kats.map((k) => k[1]),
+      backgroundColor: kats.map((k) => !state.kat || state.kat === k[0] ? farbe(k[0]) : farbe(k[0]) + '40'),
+      borderColor: '#fff', borderWidth: 2, hoverOffset: 4,
+    }],
+  };
+  if (charts.donut) { charts.donut.data = cfg; charts.donut.update(); return; }
+  charts.donut = new Chart($('cDonut'), {
+    type: 'doughnut', data: cfg,
+    options: {
+      cutout: '70%', responsive: false, animation: { duration: 400 },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ` ${c.label}: ${chf.format(c.raw)}` } } },
+      onClick: (_, els) => { if (els[0]) waehleKat(charts.donut.data.labels[els[0].index]); },
+    },
+  });
+}
+
+function renderMonate(aus, kats, ms, ein = []) {
+  // Top 6 Kategorien einzeln, Rest als «Übrige»
+  const top = kats.slice(0, 6).map((k) => k[0]);
+  const reihen = state.kat ? [state.kat] : [...top, ...(kats.length > 6 ? ['Übrige'] : [])];
+  const datasets = reihen.map((r) => ({
+    label: r,
+    data: ms.map((m) => summe(aus.filter((b) => +b.d.slice(5, 7) === m && (r === 'Übrige' ? !top.includes(b.k) : b.k === r)))),
+    backgroundColor: r === 'Übrige' ? '#D9DCE0' : farbe(r),
+    borderRadius: 4, borderSkipped: false, maxBarThickness: 42,
+  }));
+  if (ein.length && !state.kat) {
+    datasets.unshift({
+      type: 'line', label: 'Einnahmen', stack: 'einnahmen', order: -1,
+      data: ms.map((m) => summe(ein.filter((b) => +b.d.slice(5, 7) === m))),
+      borderColor: '#1F9E89', backgroundColor: '#1F9E89', borderWidth: 2.5, pointRadius: 3, tension: .3,
+    });
+  }
+  $('einLegend').hidden = true;
+  const cfg = { labels: ms.map((m) => MONATE[m - 1]), datasets };
+  if (charts.monate) { charts.monate.data = cfg; charts.monate.update(); return; }
+  charts.monate = new Chart($('cMonate'), {
+    type: 'bar', data: cfg,
+    options: {
+      maintainAspectRatio: false, animation: { duration: 400 },
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { family: 'Outfit' } } },
+        y: { stacked: true, border: { display: false }, grid: { color: '#EFEFEC' }, ticks: { font: { family: 'Outfit' }, callback: (v) => chf.format(v) } },
+      },
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, useBorderRadius: true, borderRadius: 2, font: { family: 'Outfit', size: 12 } } },
+        tooltip: { filter: (i) => i.raw > 0, callbacks: { label: (c) => ` ${c.dataset.label}: ${chf.format(c.raw)}`, footer: (items) => 'Ausgaben total: ' + chf.format(items.filter((i) => i.dataset.label !== 'Einnahmen').reduce((s, i) => s + i.raw, 0)) } },
+      },
+    },
+  });
+}
+
+function renderLieferanten(aus) {
+  const list = state.kat ? aus.filter((b) => b.k === state.kat) : aus;
+  const m = new Map();
+  for (const b of list) {
+    const n = (b.l || b.t || 'Ohne Angabe').trim();
+    const e = m.get(n) || { v: 0, n: 0, k: b.k };
+    e.v += b.b; e.n++; m.set(n, e);
+  }
+  const top = [...m.entries()].sort((a, b) => b[1].v - a[1].v).slice(0, 10);
+  const max = top[0]?.[1].v || 1;
+  $('topLief').innerHTML = top.map(([n, e]) =>
+    `<div class="bar-row"><span class="n">${esc(n)}<small>${e.n}×</small></span><span class="num">${chf.format(e.v)}</span>
+     <div class="track"><div class="fill" style="width:${(e.v / max * 100).toFixed(1)}%;background:${farbe(e.k)}"></div></div></div>`).join('')
+    || '<p class="hint">Keine Angaben.</p>';
+}
+
+function renderVergleich(kats, vjAus) {
+  const d = state.data;
+  if (!vjAus || !vjAus.length) {
+    $('vjTitle').textContent = 'Anteile nach Kategorie';
+    const total = kats.reduce((s, k) => s + k[1], 0);
+    $('vjTable').innerHTML = `<thead><tr><th class="label">Kategorie</th><th class="label r">Betrag</th><th class="label r">Anteil</th></tr></thead><tbody>` +
+      kats.map(([k, v]) => `<tr><td><span class="pill"><i style="background:${farbe(k)}"></i>${esc(k)}</span></td><td class="r num">${chf.format(v)}</td><td class="r num">${(v / total * 100).toFixed(1)}%</td></tr>`).join('') + '</tbody>';
+    return;
+  }
+  $('vjTitle').textContent = `Vergleich mit ${d.jahr - 1}`;
+  const vj = new Map(proKat(vjAus));
+  const namen = [...new Set([...kats.map((k) => k[0]), ...vj.keys()])];
+  const cur = new Map(kats);
+  $('vjTable').innerHTML = `<thead><tr><th class="label">Kategorie</th><th class="label r">${d.jahr}</th><th class="label r hide-sm">${d.jahr - 1}</th><th class="label r">Δ</th></tr></thead><tbody>` +
+    namen.sort((a, b) => (cur.get(b) || 0) - (cur.get(a) || 0)).map((k) => {
+      const a = cur.get(k) || 0, b = vj.get(k) || 0;
+      const p = b ? (a - b) / b * 100 : null;
+      const cls = p == null ? '' : p > 0.5 ? 'up' : p < -0.5 ? 'down' : '';
+      return `<tr><td><span class="pill"><i style="background:${farbe(k)}"></i>${esc(k)}</span></td><td class="r num">${chf.format(a)}</td><td class="r num hide-sm">${chf.format(b)}</td><td class="r num"><span class="delta ${cls}">${p == null ? 'neu' : (p > 0 ? '+' : '') + p.toFixed(0) + '%'}</span></td></tr>`;
+    }).join('') + '</tbody>';
+}
+
+function renderTabelle(alle) {
+  const q = state.suche.toLowerCase();
+  let list = alle.filter((b) => (!state.kat || b.k === state.kat) && (!q || (b.l + ' ' + b.t + ' ' + b.k).toLowerCase().includes(q)));
+  list = list.slice().sort((a, b) => b.d.localeCompare(a.d) || b.b - a.b);
+  $('catChip').hidden = !state.kat;
+  $('catChip').textContent = state.kat ? state.kat + '  ✕' : '';
+  $('txBody').innerHTML = list.slice(0, state.limit).map((b) =>
+    `<tr><td class="num">${fmtDatum(b.d)}</td><td>${esc(b.l || b.t || '–')}${b.l && b.t && !b.t.toLowerCase().includes(b.l.toLowerCase()) ? `<div class="sub">${esc(b.t)}</div>` : ''}</td>
+     <td class="hide-sm"><span class="pill"><i style="background:${b.typ === 'E' ? 'var(--pos)' : farbe(b.k)}"></i>${esc(b.k)}</span></td>
+     <td class="r num" style="${b.typ === 'E' ? 'color:var(--pos)' : ''}">${b.typ === 'E' ? '+' : ''}${chf2.format(b.b)}</td></tr>`).join('')
+    || '<tr><td colspan="4" class="hint">Keine Buchungen gefunden.</td></tr>';
+  $('moreBtn').hidden = list.length <= state.limit;
+  $('moreBtn').textContent = `Weitere anzeigen (${list.length - state.limit})`;
+}
+
+// Monat für Monat: Einnahmen | Personal | Sozialversicherungen | Betrieb | Steuern | Ausgaben | Ergebnis
+function renderMonatTabelle(alle, ms) {
+  const spalten = [
+    ['Einnahmen', 'Einnahmen', 'var(--pos)'],
+    ['Personal', 'Löhne', farbe('Personal & Löhne')],
+    ['Sozialversicherungen', 'Sozialvers.', farbe('Sozialversicherungen')],
+    ['Betrieb', 'Betriebsaufwand', '#8C6D46'],
+    ['Steuern', 'Steuern', farbe('Steuern')],
+  ];
+  const zelle = (v, cls = '') => `<td class="r num ${cls} ${v ? '' : 'muted'}">${v ? chf.format(v) : '–'}</td>`;
+  const tot = { aus: 0 };
+  spalten.forEach(([s]) => tot[s] = 0);
+  const zeilen = ms.map((m) => {
+    const im = alle.filter((b) => +b.d.slice(5, 7) === m);
+    const w = {};
+    spalten.forEach(([s]) => { w[s] = summe(im.filter((b) => bereich(b) === s)); tot[s] += w[s]; });
+    const aus = summe(im.filter((b) => b.typ !== 'E'));
+    tot.aus += aus;
+    const erg = w.Einnahmen - aus;
+    return `<tr><td>${MONATE_LANG[m - 1]}</td>${spalten.map(([s]) => zelle(w[s])).join('')}${zelle(aus)}
+      <td class="r num ${im.length ? (erg >= 0 ? 'pos' : '') : 'muted'}" style="${im.length && erg < 0 ? 'color:var(--neg)' : ''}">${im.length ? chf.format(erg) : '–'}</td></tr>`;
+  });
+  const ergT = tot.Einnahmen - tot.aus;
+  $('monatTable').innerHTML =
+    `<thead><tr><th class="label">Monat</th>${spalten.map(([, t, c]) => `<th class="label r"><span class="sw" style="background:${c}"></span>${t}</th>`).join('')}<th class="label r">Ausgaben total</th><th class="label r">Ergebnis</th></tr></thead>
+     <tbody>${zeilen.join('')}${ms.length > 1 ? `<tr class="total"><td>Total</td>${spalten.map(([s]) => zelle(tot[s])).join('')}${zelle(tot.aus)}<td class="r num" style="color:${ergT >= 0 ? 'var(--pos)' : 'var(--neg)'}">${chf.format(ergT)}</td></tr>` : ''}</tbody>`;
+}
+
+// ─── Tabs ────────────────────────────────────────────────────────────
+document.querySelectorAll('.tabs button').forEach((b) => b.onclick = () => {
+  state.tab = b.dataset.tab;
+  document.querySelectorAll('.tabs button').forEach((x) => x.classList.toggle('on', x === b));
+  $('tabUebersicht').hidden = state.tab !== 'uebersicht';
+  $('tabBelege').hidden = state.tab !== 'belege';
+  if (state.tab === 'belege') renderBelege();
+});
+
+// ─── Belege ──────────────────────────────────────────────────────────
+async function renderBelege() {
+  const jahr = state.data.jahr;
+  if (state.belegJahr !== jahr) {
+    $('belegListe').innerHTML = '<p class="hint" style="text-align:center;padding:40px">Belege werden geladen …</p>';
+    try {
+      state.belege = (await api('/api/firma?action=belege&jahr=' + jahr)).belege;
+      state.belegJahr = jahr;
+    } catch (e) { $('belegListe').innerHTML = `<p class="msg">${esc(e.message)}</p>`; return; }
+  }
+  const ms = monate();
+  const imZeit = state.belege.filter((b) => ms.includes(+b.datum.slice(5, 7)));
+  $('segA').textContent = imZeit.filter((b) => b.typ === 'A').length;
+  $('segE').textContent = imZeit.filter((b) => b.typ === 'E').length;
+  $('segAll').textContent = imZeit.length;
+
+  const q = state.belegSuche.toLowerCase();
+  const list = imZeit.filter((b) => (!state.art || b.typ === state.art) &&
+    (!q || [b.lieferant, b.titel, b.kategorie, b.dateiname].join(' ').toLowerCase().includes(q)));
+
+  if (!list.length) {
+    $('belegListe').innerHTML = `<div class="card empty"><h2>Keine Belege</h2><p>Für diesen Zeitraum sind ${state.art === 'E' ? 'keine Einnahmen-Belege' : state.art === 'A' ? 'keine Ausgaben-Belege' : 'keine Belege'} hinterlegt.</p></div>`;
+    return;
+  }
+
+  // chronologisch nach Monat gruppiert (Januar → Dezember), innerhalb nach Datum
+  const gruppen = new Map();
+  for (const b of list) {
+    const m = +b.datum.slice(5, 7);
+    if (!gruppen.has(m)) gruppen.set(m, []);
+    gruppen.get(m).push(b);
+  }
+  $('belegListe').innerHTML = [...gruppen.entries()].sort((a, b) => a[0] - b[0]).map(([m, bs]) => {
+    const sE = bs.filter((b) => b.typ === 'E').reduce((s, b) => s + (b.betrag || 0), 0);
+    const sA = bs.filter((b) => b.typ === 'A').reduce((s, b) => s + (b.betrag || 0), 0);
+    return `<section class="monat">
+      <div class="monat-h"><h3>${MONATE_LANG[m - 1]} ${state.data.jahr}</h3><span class="meta">${bs.length} Beleg${bs.length === 1 ? '' : 'e'}</span><span class="sp"></span>
+        ${sE ? `<span class="meta num pos">Einnahmen ${chf2.format(sE)}</span>` : ''}${sA ? `<span class="meta num">Ausgaben ${chf2.format(sA)}</span>` : ''}</div>
+      <div class="card list">${bs.map(belegZeile).join('')}</div>
+    </section>`;
+  }).join('');
+}
+
+function belegZeile(b) {
+  const ext = (b.mime.split('/')[1] || 'datei').replace('jpeg', 'jpg').toUpperCase().slice(0, 4);
+  const col = b.typ === 'E' ? 'var(--pos)' : (b.kategorie ? farbe(b.kategorie) : '#8C9096');
+  const url = '/api/firma?action=beleg&id=' + encodeURIComponent(b.id);
+  const titel = b.lieferant || b.titel || b.dateiname || 'Beleg';
+  const sub = [b.lieferant && b.titel ? b.titel : '', b.kategorie || (b.typ === 'E' ? 'Einnahme' : 'Ausgabe')].filter(Boolean).join(' · ');
+  return `<div class="beleg">
+    <span class="dt num">${fmtDatum(b.datum)}</span>
+    <span class="ic" style="background:${col}">${esc(ext)}</span>
+    <span class="ti"><b>${esc(titel)}</b><span>${esc(sub)}</span></span>
+    <span class="be num" style="${b.typ === 'E' ? 'color:var(--pos)' : ''}">${b.betrag != null ? (b.typ === 'E' ? '+' : '') + chf2.format(b.betrag) : ''}</span>
+    <span class="ac"><a class="btn" href="${url}" target="_blank" rel="noopener">Ansehen</a><a class="btn hide-sm" href="${url}&download=1">Laden</a></span>
+  </div>`;
+}
+
+document.querySelectorAll('.seg button').forEach((b) => b.onclick = () => {
+  state.art = b.dataset.art;
+  document.querySelectorAll('.seg button').forEach((x) => x.classList.toggle('on', x === b));
+  renderBelege();
+});
+let tb; $('belegSuche').addEventListener('input', (e) => { clearTimeout(tb); tb = setTimeout(() => { state.belegSuche = e.target.value; renderBelege(); }, 150); });
+
+function waehleKat(k) { state.kat = state.kat === k ? null : k; state.limit = 50; render(); }
+$('catChip').onclick = () => waehleKat(state.kat);
+$('moreBtn').onclick = () => { state.limit += 100; render(); };
+let t; $('search').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => { state.suche = e.target.value; state.limit = 50; render(); }, 150); });
+
+laden();
+</script>
+</body>
+</html>

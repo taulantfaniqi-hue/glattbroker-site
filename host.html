@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Host-Bereich · Glatt Broker AG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  @font-face { font-family: "Mont"; src: url("./assets/Mont-Regular.otf") format("opentype"); font-display: swap; }
+  :root {
+    --font: "Mont", "Outfit", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --ink: #0A0A0A; --bg: #FAFAFA; --red: #CC2936; --card: #fff; --line: #E7E7E4; --muted: #6B6F76; --soft: #F2F2EF; --pos: #1F9E89;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  .label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+  header.top { position: sticky; top: 0; z-index: 10; background: rgba(250,250,250,.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .top-in { max-width: 1240px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+  .brand img { height: 40px; width: auto; }
+  .brand .label { border-left: 1px solid var(--line); padding-left: 12px; color: var(--red); }
+  .sp { flex: 1; }
+  .btn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 9px 16px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .btn:hover { border-color: #cfcfca; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.danger { color: var(--red); }
+  .btn.sm { padding: 6px 11px; font-size: 13px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font-size: 14px; outline: none; }
+  input:focus, select:focus { border-color: var(--ink); }
+  label.f { display: block; }
+  label.f span { display: block; font-size: 12.5px; font-weight: 500; margin-bottom: 5px; }
+  .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); align-items: end; }
+  .msg { font-size: 13.5px; margin-top: 10px; min-height: 18px; }
+  .msg.err { color: var(--red); } .msg.ok { color: var(--pos); }
+
+  .login { min-height: calc(100vh - 60px); display: grid; place-items: center; padding: 24px 16px; }
+  .login form { width: 100%; max-width: 380px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 32px; }
+  .login h1 { font-size: 28px; letter-spacing: -.03em; font-weight: 600; margin: 8px 0 20px; }
+  .login .btn { width: 100%; justify-content: center; margin-top: 14px; padding: 12px; }
+
+  main.app { max-width: 1240px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; min-width: 0; }
+  .card + .card { margin-top: 14px; }
+  .card h2 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin: 4px 0 14px; }
+  .firmen { list-style: none; padding: 0; margin: 0 -8px 14px; display: grid; gap: 2px; }
+  .firmen li { padding: 10px 10px; border-radius: 10px; cursor: pointer; }
+  .firmen li:hover, .firmen li.on { background: var(--soft); }
+  .firmen li b { display: block; font-weight: 500; }
+  .firmen li span { font-size: 12px; color: var(--muted); }
+  .head { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .head h1 { font-size: 32px; letter-spacing: -.04em; font-weight: 600; line-height: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: 500; padding: 8px; border-bottom: 1px solid var(--line); }
+  td { padding: 9px 8px; border-bottom: 1px solid var(--soft); vertical-align: middle; }
+  td.r, th.r { text-align: right; }
+  .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--soft); }
+  .tag.e { background: #E3F5F1; color: #13705F; }
+  .drop { border: 1.5px dashed #CFCFCA; border-radius: 14px; padding: 22px; text-align: center; color: var(--muted); cursor: pointer; transition: background .15s, border-color .15s; }
+  .drop.over { background: var(--soft); border-color: var(--ink); }
+  .drop b { color: var(--ink); }
+  .preview { margin-top: 12px; font-size: 13.5px; }
+  .preview .cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .scroll { overflow-x: auto; }
+  .queue .item { display: grid; grid-template-columns: minmax(0, 1.4fr) 120px 110px minmax(0, 1.2fr) 110px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--soft); font-size: 13px; }
+  .queue .item .fn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .queue input, .queue select { padding: 7px 9px; font-size: 13px; }
+  .note { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  @media (max-width: 900px) {
+    main.app { grid-template-columns: 1fr; padding: 16px; }
+    .queue .item { grid-template-columns: 1fr 1fr; }
+    .queue .item .fn { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="index.html"><img src="assets/logo-app.png" alt="Glatt Broker"><span class="label">Host-Bereich</span></a>
+    <div class="sp"></div>
+    <a class="btn" href="firmenkonto.html" target="_blank">Firmenkonto-Login</a>
+    <button class="btn" id="logout" hidden>Abmelden</button>
+  </div>
+</header>
+
+<section class="login" id="loginView" hidden>
+  <form id="loginForm">
+    <div class="label">Glatt Broker · intern</div>
+    <h1>Host-Login</h1>
+    <label class="f"><span>Passwort</span><input type="password" name="passwort" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit">Anmelden</button>
+    <div class="msg err" id="loginMsg"></div>
+  </form>
+</section>
+
+<main class="app" id="appView" hidden>
+  <aside>
+    <div class="card">
+      <div class="label">Firmenkunden</div>
+      <h2>Firmen</h2>
+      <ul class="firmen" id="firmenListe"></ul>
+      <form id="firmaForm">
+        <label class="f"><span>Neue Firma</span><input name="name" placeholder="z.B. Muster AG" required></label>
+        <button class="btn primary sm" style="margin-top:8px" type="submit">Firma anlegen</button>
+        <div class="msg" id="firmaMsg"></div>
+      </form>
+    </div>
+  </aside>
+
+  <div id="detail">
+    <div class="card" id="keineFirma"><p class="note">Firma links auswählen oder neu anlegen.</p></div>
+
+    <div id="firmaDetail" hidden>
+      <div class="head">
+        <div><div class="label" id="fSlug"></div><h1 id="fName"></h1></div>
+        <div class="sp"></div>
+        <label class="f" style="width:120px"><span>Jahr</span><select id="selJahr"></select></label>
+      </div>
+
+      <!-- Logins -->
+      <div class="card">
+        <div class="label">Zugänge</div>
+        <h2>Logins für das Firmenkonto</h2>
+        <div class="scroll"><table><tbody id="userListe"></tbody></table></div>
+        <form id="userForm" style="margin-top:14px">
+          <div class="row">
+            <label class="f"><span>Name</span><input name="name" placeholder="Vorname Nachname"></label>
+            <label class="f"><span>E-Mail</span><input name="email" type="email" required></label>
+            <label class="f"><span>Passwort (min. 10 Zeichen)</span><input name="passwort" required minlength="10" autocomplete="new-password"></label>
+            <div style="display:flex;gap:6px"><button class="btn sm" type="button" id="pwGen">Generieren</button><button class="btn primary sm" type="submit">Speichern</button></div>
+          </div>
+          <div class="msg" id="userMsg"></div>
+          <p class="note">Gleiche E-Mail erneut speichern setzt das Passwort neu. Das Passwort wird nur verschlüsselt gespeichert; bitte direkt sicher an die Firma weitergeben.</p>
+        </form>
+      </div>
+
+      <!-- Buchhaltung -->
+      <div class="card">
+        <div class="label">Buchhaltung</div>
+        <h2>Buchungen <span id="buchInfo" class="note"></span></h2>
+        <div class="drop" id="csvDrop"><b>CSV hier ablegen</b> oder klicken<br><span class="note">Bank-Export, Bexio, Banana, Excel als CSV · Spalten: Datum, Betrag / Soll / Haben, Text, Lieferant, Konto, Kategorie</span></div>
+        <input type="file" id="csvFile" accept=".csv,.txt,text/csv" hidden>
+        <div class="preview" id="csvPreview" hidden></div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap" id="csvActions" hidden>
+          <select id="csvModus" style="width:auto"><option value="ersetzen">Jahr ersetzen</option><option value="anfuegen">An bestehende anfügen</option></select>
+          <button class="btn primary" id="csvSave">Speichern</button>
+          <button class="btn" id="csvCancel">Abbrechen</button>
+        </div>
+        <div class="msg" id="csvMsg"></div>
+        <div style="margin-top:10px"><button class="btn danger sm" id="buchDel">Buchungen dieses Jahres löschen</button></div>
+      </div>
+
+      <!-- Belege -->
+      <div class="card">
+        <div class="label">Belege</div>
+        <h2>Belege hochladen</h2>
+        <div class="drop" id="belegDrop"><b>PDF oder Fotos hier ablegen</b> oder klicken<br><span class="note">max. 3 MB pro Datei · PDF, JPG, PNG, WEBP, HEIC</span></div>
+        <input type="file" id="belegFile" accept=".pdf,image/*" multiple hidden>
+        <div class="queue" id="queue"></div>
+        <div style="display:flex;gap:8px;margin-top:12px" id="queueActions" hidden>
+          <button class="btn primary" id="queueSave">Alle hochladen</button>
+          <button class="btn" id="queueClear">Leeren</button>
+        </div>
+        <div class="msg" id="belegMsg"></div>
+        <h2 style="margin-top:22px">Hinterlegte Belege <span class="note" id="belegInfo"></span></h2>
+        <div class="scroll"><table><tbody id="belegListe"></tbody></table></div>
+      </div>
+
+      <div class="card">
+        <div class="label">Gefahrenzone</div>
+        <button class="btn danger" id="firmaDel" style="margin-top:8px">Firma inkl. Logins, Buchungen und Belege löschen</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+import { KATEGORIEN, EINNAHMEN, csvZuBuchungen, kategorisiere, farbe } from './assets/buchhaltung.js';
+
+const $ = (id) => document.getElementById(id);
+const chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', minimumFractionDigits: 2 });
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtDatum = (d) => d.slice(8, 10) + '.' + d.slice(5, 7) + '.' + d.slice(0, 4);
+const msg = (id, text, ok) => { $(id).textContent = text || ''; $(id).className = 'msg ' + (ok ? 'ok' : 'err'); };
+
+let firmen = [], aktiv = null, jahr = new Date().getFullYear(), csvDaten = null, queue = [];
+
+async function api(url, opts = {}) {
+  const r = await fetch(url, { credentials: 'same-origin', ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error || 'Fehler ' + r.status); e.status = r.status; throw e; }
+  return j;
+}
+
+function show(v) {
+  $('loginView').hidden = v !== 'login';
+  $('appView').hidden = v !== 'app';
+  $('logout').hidden = v !== 'app';
+}
+
+async function start() {
+  try { await api('/api/auth?action=me&kind=host'); show('app'); await ladeFirmen(); }
+  catch { show('login'); }
+}
+
+$('loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  msg('loginMsg', '');
+  try {
+    await api('/api/auth?action=host-login', { method: 'POST', body: JSON.stringify({ passwort: new FormData(e.target).get('passwort') }) });
+    e.target.reset(); show('app'); await ladeFirmen();
+  } catch (err) { msg('loginMsg', err.message); }
+};
+$('logout').onclick = async () => { await api('/api/auth?action=logout', { method: 'POST', body: JSON.stringify({ kind: 'host' }) }).catch(() => {}); location.reload(); };
+
+async function ladeFirmen() {
+  firmen = (await api('/api/host?action=firmen')).firmen;
+  $('firmenListe').innerHTML = firmen.map((f) =>
+    `<li data-s="${esc(f.slug)}" class="${aktiv === f.slug ? 'on' : ''}"><b>${esc(f.name)}</b><span>${f.benutzer.length} Login${f.benutzer.length === 1 ? '' : 's'} · ${f.jahre.length ? f.jahre.join(', ') : 'noch keine Daten'}</span></li>`).join('')
+    || '<li class="note" style="cursor:default">Noch keine Firmen.</li>';
+  $('firmenListe').querySelectorAll('li[data-s]').forEach((li) => li.onclick = () => waehle(li.dataset.s));
+  if (aktiv) renderFirma();
+}
+
+$('firmaForm').onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const r = await api('/api/host?action=firma', { method: 'POST', body: JSON.stringify({ name: new FormData(e.target).get('name') }) });
+    e.target.reset(); msg('firmaMsg', 'Angelegt.', true);
+    aktiv = r.slug; await ladeFirmen();
+  } catch (err) { msg('firmaMsg', err.message); }
+};
+
+function waehle(slug) { aktiv = slug; csvAbbrechen(); queue = []; renderQueue(); ladeFirmen(); }
+
+async function renderFirma() {
+  const f = firmen.find((x) => x.slug === aktiv);
+  if (!f) { aktiv = null; $('firmaDetail').hidden = true; $('keineFirma').hidden = false; return; }
+  $('keineFirma').hidden = true; $('firmaDetail').hidden = false;
+  $('fName').textContent = f.name; $('fSlug').textContent = f.slug;
+  const jahre = [...new Set([new Date().getFullYear(), new Date().getFullYear() - 1, ...f.jahre])].sort((a, b) => b - a);
+  if (!jahre.includes(jahr)) jahr = jahre[0];
+  $('selJahr').innerHTML = jahre.map((j) => `<option ${j === jahr ? 'selected' : ''}>${j}</option>`).join('');
+  $('userListe').innerHTML = f.benutzer.map((e) =>
+    `<tr><td>${esc(e)}</td><td class="r"><button class="btn danger sm" data-del="${esc(e)}">Entfernen</button></td></tr>`).join('')
+    || '<tr><td class="note">Noch kein Login.</td></tr>';
+  $('userListe').querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
+    if (!confirm(`Login ${b.dataset.del} entfernen?`)) return;
+    await api('/api/host?action=benutzer&email=' + encodeURIComponent(b.dataset.del), { method: 'DELETE' });
+    ladeFirmen();
+  });
+  ladeJahr();
+}
+$('selJahr').onchange = (e) => { jahr = +e.target.value; ladeJahr(); };
+
+async function ladeJahr() {
+  const [b, bl] = await Promise.all([
+    api(`/api/host?action=buchungen&firma=${aktiv}&jahr=${jahr}`),
+    api(`/api/host?action=belege&firma=${aktiv}&jahr=${jahr}`),
+  ]);
+  const n = b.buchungen.length;
+  const e = b.buchungen.filter((x) => x.typ === 'E').length;
+  $('buchInfo').textContent = n ? `· ${jahr}: ${n} Buchungen (${e} Einnahmen, ${n - e} Ausgaben)${b.aktualisiert ? ' · Stand ' + new Date(b.aktualisiert).toLocaleDateString('de-CH') : ''}` : `· ${jahr}: noch keine`;
+  $('belegInfo').textContent = `· ${jahr}: ${bl.belege.length}`;
+  $('belegListe').innerHTML = bl.belege.map((x) =>
+    `<tr><td class="num">${fmtDatum(x.datum)}</td><td><span class="tag ${x.typ === 'E' ? 'e' : ''}">${x.typ === 'E' ? 'Einnahme' : 'Ausgabe'}</span></td>
+     <td>${esc(x.lieferant || x.titel || x.dateiname)}<div class="note">${esc(x.kategorie)}</div></td>
+     <td class="r num">${x.betrag != null ? chf.format(x.betrag) : ''}</td>
+     <td class="r"><button class="btn danger sm" data-id="${esc(x.id)}">Löschen</button></td></tr>`).join('')
+    || '<tr><td class="note">Keine Belege für dieses Jahr.</td></tr>';
+  $('belegListe').querySelectorAll('[data-id]').forEach((btn) => btn.onclick = async () => {
+    if (!confirm('Beleg löschen?')) return;
+    await api(`/api/host?action=beleg&firma=${aktiv}&id=${encodeURIComponent(btn.dataset.id)}`, { method: 'DELETE' });
+    ladeJahr(); ladeFirmen();
+  });
+}
+
+// ─── Logins ──────────────────────────────────────────────────────────
+$('pwGen').onclick = () => {
+  const a = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const r = crypto.getRandomValues(new Uint32Array(14));
+  $('userForm').passwort.value = [...r].map((x) => a[x % a.length]).join('');
+};
+$('userForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  try {
+    await api('/api/host?action=benutzer', { method: 'POST', body: JSON.stringify({ firma: aktiv, name: f.get('name'), email: f.get('email'), passwort: f.get('passwort') }) });
+    msg('userMsg', `Login für ${f.get('email')} gespeichert.`, true);
+    e.target.reset(); ladeFirmen();
+  } catch (err) { msg('userMsg', err.message); }
+};
+
+// ─── CSV ─────────────────────────────────────────────────────────────
+function dropzone(zone, input, onFiles) {
+  zone.onclick = () => input.click();
+  input.onchange = () => { onFiles([...input.files]); input.value = ''; };
+  zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('over'); };
+  zone.ondragleave = () => zone.classList.remove('over');
+  zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('over'); onFiles([...e.dataTransfer.files]); };
+}
+
+async function leseText(file) {
+  const buf = await file.arrayBuffer();
+  const utf8 = new TextDecoder('utf-8').decode(buf);
+  return utf8.includes('�') ? new TextDecoder('windows-1252').decode(buf) : utf8;
+}
+
+dropzone($('csvDrop'), $('csvFile'), async (files) => {
+  const file = files[0]; if (!file) return;
+  const r = csvZuBuchungen(await leseText(file));
+  if (r.fehler) { msg('csvMsg', r.fehler); return; }
+  const imJahr = r.buchungen.filter((b) => b.d.startsWith(String(jahr)));
+  const andere = r.buchungen.length - imJahr.length;
+  csvDaten = { buchungen: imJahr, quelle: file.name };
+  const kat = new Map();
+  imJahr.forEach((b) => kat.set(b.k, (kat.get(b.k) || 0) + b.b));
+  $('csvPreview').innerHTML = `<b>${esc(file.name)}</b>: ${imJahr.length} Buchungen für ${jahr}` +
+    (andere ? ` <span class="note">(${andere} aus anderen Jahren werden übersprungen: Jahr oben wechseln und erneut laden)</span>` : '') +
+    `<div class="cats">${[...kat.entries()].sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="tag" style="border-left:4px solid ${farbe(k)}">${esc(k)} · ${chf.format(v)}</span>`).join('')}</div>`;
+  $('csvPreview').hidden = false; $('csvActions').hidden = !imJahr.length; msg('csvMsg', '');
+});
+function csvAbbrechen() { csvDaten = null; $('csvPreview').hidden = true; $('csvActions').hidden = true; }
+$('csvCancel').onclick = csvAbbrechen;
+$('csvSave').onclick = async () => {
+  if (!csvDaten) return;
+  $('csvSave').disabled = true;
+  try {
+    const r = await api('/api/host?action=buchungen', { method: 'PUT', body: JSON.stringify({ firma: aktiv, jahr, modus: $('csvModus').value, ...csvDaten }) });
+    msg('csvMsg', `${r.gespeichert} Buchungen gespeichert (total ${r.total}).`, true);
+    csvAbbrechen(); ladeFirmen();
+  } catch (err) { msg('csvMsg', err.message); }
+  $('csvSave').disabled = false;
+};
+$('buchDel').onclick = async () => {
+  if (!confirm(`Alle Buchungen ${jahr} dieser Firma löschen?`)) return;
+  await api(`/api/host?action=buchungen&firma=${aktiv}&jahr=${jahr}`, { method: 'DELETE' });
+  ladeFirmen();
+};
+
+// ─── Belege ──────────────────────────────────────────────────────────
+const katOptionen = (typ, sel) => (typ === 'E' ? EINNAHMEN : KATEGORIEN).map((k) => `<option ${k.name === sel ? 'selected' : ''}>${esc(k.name)}</option>`).join('');
+
+dropzone($('belegDrop'), $('belegFile'), (files) => {
+  for (const file of files) {
+    // Datum aus Dateiname (2026-03-14 / 14.03.2026), sonst Jahr der Auswahl
+    const m = file.name.match(/(\d{4})[-_.](\d{2})[-_.](\d{2})/) || file.name.match(/(\d{2})[-_.](\d{2})[-_.](\d{4})/);
+    const datum = m ? (m[1].length === 4 ? `${m[1]}-${m[2]}-${m[3]}` : `${m[3]}-${m[2]}-${m[1]}`) : `${jahr}-01-01`;
+    const name = file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
+    queue.push({ file, datum, typ: 'A', kategorie: kategorisiere({ text: name }), betrag: '', lieferant: name.slice(0, 60) });
+  }
+  renderQueue();
+});
+
+function renderQueue() {
+  $('queue').innerHTML = queue.map((q, i) => `<div class="item" data-i="${i}">
+    <span class="fn" title="${esc(q.file.name)}">${esc(q.file.name)} <span class="note">${(q.file.size / 1024).toFixed(0)} KB</span></span>
+    <input type="date" data-f="datum" value="${q.datum}">
+    <select data-f="typ"><option value="A" ${q.typ === 'A' ? 'selected' : ''}>Ausgabe</option><option value="E" ${q.typ === 'E' ? 'selected' : ''}>Einnahme</option></select>
+    <select data-f="kategorie">${katOptionen(q.typ, q.kategorie)}</select>
+    <input data-f="betrag" inputmode="decimal" placeholder="Betrag" value="${esc(q.betrag)}">
+    <input data-f="lieferant" placeholder="Lieferant / Kunde" value="${esc(q.lieferant)}">
+    <button class="btn sm" data-x>✕</button></div>`).join('');
+  $('queueActions').hidden = !queue.length;
+  $('queue').querySelectorAll('.item').forEach((el) => {
+    const q = queue[+el.dataset.i];
+    el.querySelectorAll('[data-f]').forEach((inp) => inp.onchange = () => {
+      q[inp.dataset.f] = inp.value;
+      if (inp.dataset.f === 'typ') { q.kategorie = q.typ === 'E' ? 'Umsatz' : 'Sonstiges'; renderQueue(); }
+    });
+    el.querySelector('[data-x]').onclick = () => { queue.splice(+el.dataset.i, 1); renderQueue(); };
+  });
+}
+$('queueClear').onclick = () => { queue = []; renderQueue(); };
+
+const alsBase64 = (file) => new Promise((ok, fail) => {
+  const r = new FileReader();
+  r.onload = () => ok(String(r.result).split(',')[1]);
+  r.onerror = fail;
+  r.readAsDataURL(file);
+});
+
+$('queueSave').onclick = async () => {
+  $('queueSave').disabled = true;
+  let ok = 0; const fehler = [];
+  for (const q of [...queue]) {
+    try {
+      if (q.file.size > 3 * 1024 * 1024) throw new Error('grösser als 3 MB');
+      const mime = q.file.type || (q.file.name.toLowerCase().endsWith('.heic') ? 'image/heic' : '');
+      await api('/api/host?action=beleg', { method: 'POST', body: JSON.stringify({
+        firma: aktiv, datum: q.datum, typ: q.typ, kategorie: q.kategorie, betrag: q.betrag.replace(/[^\d.,-]/g, '').replace(',', '.'),
+        lieferant: q.lieferant, dateiname: q.file.name, mime, daten: await alsBase64(q.file),
+      }) });
+      queue.splice(queue.indexOf(q), 1); ok++;
+    } catch (err) { fehler.push(`${q.file.name}: ${err.message}`); }
+  }
+  renderQueue();
+  msg('belegMsg', `${ok} Beleg${ok === 1 ? '' : 'e'} hochgeladen.` + (fehler.length ? ' Fehler: ' + fehler.join('; ') : ''), !fehler.length);
+  $('queueSave').disabled = false;
+  ladeJahr(); ladeFirmen();
+};
+
+$('firmaDel').onclick = async () => {
+  const f = firmen.find((x) => x.slug === aktiv);
+  if (prompt(`Zum Löschen den Firmennamen eingeben: ${f.name}`) !== f.name) return;
+  await api('/api/host?action=firma&slug=' + aktiv, { method: 'DELETE' });
+  aktiv = null; ladeFirmen(); renderFirma();
+};
+
+start();
+</script>
+</body>
+</html>

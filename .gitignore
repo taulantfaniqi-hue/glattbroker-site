@@ -52,3 +52,9 @@ formulare/dokumente/
 # MG-Portal: verschluesselte Personendaten — nur im privaten Repo mg-motor-vorsorge,
 # Deployment ausschliesslich ueber den Site-Upload auf glattbroker.ch
 mg/
+
+# Vercel / Import-Werkzeug
+.vercel/
+tools/.env.local
+
+.claude/

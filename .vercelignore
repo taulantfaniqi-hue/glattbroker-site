@@ -1,0 +1,13 @@
+# Nicht auf Vercel hochladen
+.git
+tools/
+_build/
+_old/
+_drop/
+mg/
+formulare/dokumente/
+.env*
+*.md
+*.bat
+*.ai
+.claude/
