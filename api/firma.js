@@ -13,7 +13,7 @@
 import crypto from 'node:crypto';
 import {
   handler, HttpError, getJSON, redis, pipeline, key, requireFirma, cleanJahr, sendeDatei,
-  speichereDokument, anhangInfo, cleanRechnung, sendeMail, heute,
+  speichereDokument, anhangInfo, cleanRechnung, sendeMail, heute, KATEGORIEN_NAMEN,
 } from './_lib.js';
 
 export default handler(async (req, res) => {
@@ -24,31 +24,46 @@ export default handler(async (req, res) => {
 
   if (req.method === 'GET' && action === 'beleg') return sendeDatei(slug, String(req.query.id || ''), req, res);
 
-  const firma = await getJSON(key.firma(slug));
-  if (!firma) throw new HttpError(403, 'Dieses Firmenkonto ist nicht mehr aktiv.');
-
   if (req.method === 'GET') {
-    if (action === 'rechnungen') return { rechnungen: await hvals(key.rechnungen(slug)) };
-    if (action === 'anfragen') return { anfragen: (await hvals(key.anfragen(slug))).sort((a, b) => b.aktualisiert.localeCompare(a.aktualisiert)) };
-
-    const jahre = ((await redis('SMEMBERS', key.jahre(slug))) || []).map(Number).sort((a, b) => b - a);
-    const jahr = req.query.jahr ? cleanJahr(req.query.jahr) : (jahre[0] || new Date().getFullYear());
+    // Möglichst wenige Datenbank-Runden: Firma + Grunddaten in einer Pipeline
+    if (action === 'rechnungen' || action === 'anfragen') {
+      const [f, werte] = await pipeline([['GET', key.firma(slug)], ['HVALS', action === 'rechnungen' ? key.rechnungen(slug) : key.anfragen(slug)]]);
+      if (!f) throw new HttpError(403, 'Dieses Firmenkonto ist nicht mehr aktiv.');
+      const liste = (werte || []).map((x) => JSON.parse(x));
+      return action === 'rechnungen' ? { rechnungen: liste } : { anfragen: liste.sort((a, b) => b.aktualisiert.localeCompare(a.aktualisiert)) };
+    }
 
     if (action === 'dokumente' || action === 'belege') {
-      const docs = (await hvals(key.belege(slug, jahr))).map((d) => ({ ordner: 'Belege', ...d }));
+      const jahrParam = req.query.jahr ? cleanJahr(req.query.jahr) : null;
+      const [f, jm, werte] = await pipeline([['GET', key.firma(slug)], ['SMEMBERS', key.jahre(slug)], ['HVALS', key.belege(slug, jahrParam || 0)]]);
+      if (!f) throw new HttpError(403, 'Dieses Firmenkonto ist nicht mehr aktiv.');
+      const jahre = (jm || []).map(Number).sort((a, b) => b - a);
+      const jahr = jahrParam || jahre[0] || new Date().getFullYear();
+      const roh = jahrParam ? werte : await redis('HVALS', key.belege(slug, jahr));
+      const docs = (roh || []).map((x) => ({ ordner: 'Belege', ...JSON.parse(x) }));
       docs.sort((a, b) => a.datum.localeCompare(b.datum) || a.hochgeladen.localeCompare(b.hochgeladen));
       return { jahr, jahre, dokumente: docs, belege: docs };
     }
 
-    const [cur, prev, anzDok, rech, anf] = await pipeline([
-      ['GET', key.buch(slug, jahr)],
-      ['GET', key.buch(slug, jahr - 1)],
-      ['HLEN', key.belege(slug, jahr)],
-      ['HVALS', key.rechnungen(slug)],
-      ['HVALS', key.anfragen(slug)],
+    const [f, jm, rech, anf] = await pipeline([
+      ['GET', key.firma(slug)], ['SMEMBERS', key.jahre(slug)], ['HVALS', key.rechnungen(slug)], ['HVALS', key.anfragen(slug)],
     ]);
-    const data = cur ? JSON.parse(cur) : null;
-    const vor = prev ? JSON.parse(prev) : null;
+    if (!f) throw new HttpError(403, 'Dieses Firmenkonto ist nicht mehr aktiv.');
+    const firma = JSON.parse(f);
+    const jahre = (jm || []).map(Number).sort((a, b) => b - a);
+    const jahr = req.query.jahr ? cleanJahr(req.query.jahr) : (jahre[0] || new Date().getFullYear());
+
+    // Zweite Runde: alle Buchungsjahre (für Vorjahr + unklare Buchungen) und Dokumentanzahl
+    const zuLaden = [...new Set([...jahre, jahr, jahr - 1])];
+    const runde2 = await pipeline([...zuLaden.map((j) => ['GET', key.buch(slug, j)]), ['HLEN', key.belege(slug, jahr)]]);
+    const buch = Object.fromEntries(zuLaden.map((j, i) => [j, runde2[i] ? JSON.parse(runde2[i]) : null]));
+    const anzDok = runde2.at(-1);
+    const data = buch[jahr];
+    const vor = buch[jahr - 1];
+    // Unklare Buchungen aller Jahre (für das Zuordnen-Fenster)
+    const unklar = [];
+    for (const j of jahre) (buch[j]?.buchungen || []).forEach((b, index) => { if (b.u) unklar.push({ jahr: j, index, ...b }); });
+    unklar.sort((a, b) => a.d.localeCompare(b.d));
     const offen = (rech || []).map((x) => JSON.parse(x)).filter((r) => r.status !== 'bezahlt');
     const anfragen = (anf || []).map((x) => JSON.parse(x));
     return {
@@ -62,9 +77,12 @@ export default handler(async (req, res) => {
       anzOffeneRechnungen: offen.length,
       anzUeberfaellig: offen.filter((r) => r.faellig < heute()).length,
       anzAnfragenUngelesen: anfragen.filter((a) => a.ungelesenFirma).length,
+      unklar,
     };
   }
 
+  const firma = await getJSON(key.firma(slug));
+  if (!firma) throw new HttpError(403, 'Dieses Firmenkonto ist nicht mehr aktiv.');
   if (req.method !== 'POST') throw new HttpError(405, 'Methode nicht erlaubt.');
   const wer = s.name || s.email;
 
@@ -94,6 +112,27 @@ export default handler(async (req, res) => {
     if (r.von !== 'firma') throw new HttpError(403, 'Diese Rechnung wurde von Glatt Broker erfasst und kann nur dort gelöscht werden.');
     await redis('HDEL', key.rechnungen(slug), r.id);
     return { ok: true };
+  }
+
+  // ─── Unklare Buchungen selbst zuordnen ─────────────────────────────
+  // {jahr, index, d, b, typ: 'E'|'A'|'P', k, notiz}
+  if (action === 'zuordnen') {
+    const jahr = cleanJahr(body.jahr);
+    const doc = await getJSON(key.buch(slug, jahr));
+    const x = doc?.buchungen?.[Number(body.index)];
+    if (!x || x.d !== body.d || Math.abs(x.b - Number(body.b)) > 0.005) throw new HttpError(409, 'Die Buchung wurde inzwischen geändert. Bitte Seite neu laden.');
+    const typ = ['E', 'A', 'P'].includes(body.typ) ? body.typ : null;
+    if (!typ) throw new HttpError(400, 'Bitte Einnahme, Ausgabe oder Privat wählen.');
+    const k = typ === 'P' ? 'Privat' : String(body.k || '');
+    if (!KATEGORIEN_NAMEN.includes(k)) throw new HttpError(400, 'Bitte eine Kategorie wählen.');
+    x.typ = typ; x.k = k;
+    const notiz = String(body.notiz || '').trim().slice(0, 300);
+    if (notiz) x.n = notiz;
+    delete x.u;
+    x.z = { von: wer, am: new Date().toISOString() };
+    doc.aktualisiert = new Date().toISOString();
+    await redis('SET', key.buch(slug, jahr), JSON.stringify(doc));
+    return { ok: true, buchung: x };
   }
 
   // ─── Anfragen ──────────────────────────────────────────────────────

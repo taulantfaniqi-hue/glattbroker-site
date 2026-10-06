@@ -28,12 +28,15 @@ export const EINNAHMEN = [
   { name: 'Sonstige Einnahmen',    farbe: '#63C7B2', emoji: '➕' },
 ];
 
-const FARBEN = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN].map((k) => [k.name, k.farbe]));
+// Privat: Bewegungen ohne Geschäftsbezug (z.B. Privateinlage), zählen nicht in Umsatz/Ausgaben
+export const PRIVAT = { name: 'Privat', farbe: '#9AA0A6', emoji: '👤' };
+
+const FARBEN = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN, PRIVAT].map((k) => [k.name, k.farbe]));
 const BEREICH = Object.fromEntries(KATEGORIEN.map((k) => [k.name, k.bereich]));
 export const farbe = (k) => FARBEN[k] || '#C3C8CE';
-const EMOJIS = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN].map((k) => [k.name, k.emoji]));
+const EMOJIS = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN, PRIVAT].map((k) => [k.name, k.emoji]));
 export const emoji = (k) => EMOJIS[k] || '🔹';
-export const bereich = (b) => (b.typ === 'E' ? 'Einnahmen' : BEREICH[b.k] || 'Betrieb');
+export const bereich = (b) => (b.typ === 'E' ? 'Einnahmen' : b.typ === 'P' ? 'Privat' : BEREICH[b.k] || 'Betrieb');
 
 // Stichworte → Kategorie (erste Übereinstimmung gewinnt, Reihenfolge zählt)
 const REGELN = [

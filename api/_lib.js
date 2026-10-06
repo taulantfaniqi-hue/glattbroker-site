@@ -346,11 +346,22 @@ export function cleanBuchung(x) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
   const b = Math.round(Math.abs(Number(x.b ?? x.betrag)) * 100) / 100;
   if (!Number.isFinite(b) || b === 0) return null;
-  const typ = (x.typ === 'E' || x.typ === 'einnahme') ? 'E' : 'A';
-  return {
+  // typ: E = Einnahme, A = Ausgabe, P = Privat (zählt nicht in Umsatz/Ausgaben)
+  const typ = (x.typ === 'E' || x.typ === 'einnahme') ? 'E' : (x.typ === 'P' || x.typ === 'privat') ? 'P' : 'A';
+  const out = {
     d, b, typ,
-    k: String(x.k || x.kategorie || 'Sonstiges').slice(0, 60),
+    k: String(x.k || x.kategorie || (typ === 'P' ? 'Privat' : 'Sonstiges')).slice(0, 60),
     l: String(x.l || x.lieferant || '').slice(0, 80),
     t: String(x.t || x.text || '').slice(0, 160),
   };
+  if (x.u) out.u = 1;                                          // unklar → Firma soll zuordnen
+  if (x.n) out.n = String(x.n).slice(0, 300);                  // Notiz (Hinweis von uns / Antwort der Firma)
+  if (x.z && typeof x.z === 'object') out.z = { von: String(x.z.von || '').slice(0, 80), am: String(x.z.am || '').slice(0, 30) };
+  return out;
 }
+
+export const KATEGORIEN_NAMEN = [
+  'Personal & Löhne', 'Sozialversicherungen', 'Miete & Raum', 'Material & Waren', 'Essen & Verpflegung', 'Fahrzeuge & Transport',
+  'Reisen & Spesen', 'Sachversicherungen', 'Energie & Unterhalt', 'Büro & Verwaltung', 'IT, Software & Telefon', 'Marketing & Werbung',
+  'Beratung & Treuhand', 'Bank & Finanzen', 'Abschreibungen', 'Sonstiges', 'Steuern', 'Umsatz', 'Sonstige Einnahmen', 'Privat',
+];

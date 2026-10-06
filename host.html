@@ -259,7 +259,7 @@
 </main>
 
 <script type="module">
-import { KATEGORIEN, EINNAHMEN, csvZuBuchungen, kategorisiere, farbe } from './assets/buchhaltung.js';
+import { KATEGORIEN, EINNAHMEN, csvZuBuchungen, kategorisiere, farbe } from './assets/buchhaltung.js?v=202610061546';
 
 const $ = (id) => document.getElementById(id);
 const chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', minimumFractionDigits: 2 });
@@ -345,7 +345,8 @@ async function ladeJahr() {
   ]);
   const n = b.buchungen.length;
   const e = b.buchungen.filter((x) => x.typ === 'E').length;
-  $('buchInfo').textContent = n ? `· ${jahr}: ${n} Buchungen (${e} Einnahmen, ${n - e} Ausgaben)${b.aktualisiert ? ' · Stand ' + new Date(b.aktualisiert).toLocaleDateString('de-CH') : ''}` : `· ${jahr}: noch keine`;
+  const offenZ = b.buchungen.filter((x) => x.u).length, zugeordnet = b.buchungen.filter((x) => x.z).length;
+  $('buchInfo').textContent = n ? `· ${jahr}: ${n} Buchungen (${e} Einnahmen, ${n - e} Ausgaben)${offenZ ? ' · 🧐 ' + offenZ + ' wartet auf Zuordnung' : ''}${zugeordnet ? ' · ✓ ' + zugeordnet + ' von der Firma zugeordnet' : ''}${b.aktualisiert ? ' · Stand ' + new Date(b.aktualisiert).toLocaleDateString('de-CH') : ''}` : `· ${jahr}: noch keine`;
   $('belegInfo').textContent = `· ${jahr}: ${bl.belege.length}`;
   $('belegListe').innerHTML = bl.belege.map((x) =>
     `<tr><td class="num">${fmtDatum(x.datum)}</td><td><span class="tag ${x.typ === 'E' && x.ordner === 'Belege' ? 'e' : ''}">${esc(x.ordner || 'Belege')}${x.ordner === 'Belege' ? (x.typ === 'E' ? ' · Einnahme' : ' · Ausgabe') : ''}</span></td>
