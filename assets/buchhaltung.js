@@ -3,34 +3,36 @@
 
 // Ausgaben-Kategorien. «bereich» fasst sie für die Monatsübersicht zusammen.
 export const KATEGORIEN = [
-  { name: 'Personal & Löhne',          farbe: '#2E5EAA', bereich: 'Personal' },
-  { name: 'Sozialversicherungen',      farbe: '#CC2936', bereich: 'Sozialversicherungen' },
-  { name: 'Miete & Raum',              farbe: '#7A4FB0', bereich: 'Betrieb' },
-  { name: 'Material & Waren',          farbe: '#5C940D', bereich: 'Betrieb' },
-  { name: 'Essen & Verpflegung',       farbe: '#E07A2F', bereich: 'Betrieb' },
-  { name: 'Fahrzeuge & Transport',     farbe: '#1F9E89', bereich: 'Betrieb' },
-  { name: 'Reisen & Spesen',           farbe: '#3BA3D9', bereich: 'Betrieb' },
-  { name: 'Sachversicherungen',        farbe: '#F06574', bereich: 'Betrieb' },
-  { name: 'Energie & Unterhalt',       farbe: '#D9A400', bereich: 'Betrieb' },
-  { name: 'Büro & Verwaltung',         farbe: '#8C6D46', bereich: 'Betrieb' },
-  { name: 'IT, Software & Telefon',    farbe: '#4C6EF5', bereich: 'Betrieb' },
-  { name: 'Marketing & Werbung',       farbe: '#D63384', bereich: 'Betrieb' },
-  { name: 'Beratung & Treuhand',       farbe: '#6F7F99', bereich: 'Betrieb' },
-  { name: 'Bank & Finanzen',           farbe: '#495057', bereich: 'Betrieb' },
-  { name: 'Abschreibungen',            farbe: '#9AA0A6', bereich: 'Betrieb' },
-  { name: 'Sonstiges',                 farbe: '#C3C8CE', bereich: 'Betrieb' },
-  { name: 'Steuern',                   farbe: '#A61E4D', bereich: 'Steuern' },
+  { name: 'Personal & Löhne',          farbe: '#2E5EAA', bereich: 'Personal', emoji: '👥' },
+  { name: 'Sozialversicherungen',      farbe: '#CC2936', bereich: 'Sozialversicherungen', emoji: '🛡️' },
+  { name: 'Miete & Raum',              farbe: '#7A4FB0', bereich: 'Betrieb', emoji: '🏠' },
+  { name: 'Material & Waren',          farbe: '#5C940D', bereich: 'Betrieb', emoji: '📦' },
+  { name: 'Essen & Verpflegung',       farbe: '#E07A2F', bereich: 'Betrieb', emoji: '🍽️' },
+  { name: 'Fahrzeuge & Transport',     farbe: '#1F9E89', bereich: 'Betrieb', emoji: '🚗' },
+  { name: 'Reisen & Spesen',           farbe: '#3BA3D9', bereich: 'Betrieb', emoji: '✈️' },
+  { name: 'Sachversicherungen',        farbe: '#F06574', bereich: 'Betrieb', emoji: '☂️' },
+  { name: 'Energie & Unterhalt',       farbe: '#D9A400', bereich: 'Betrieb', emoji: '⚡' },
+  { name: 'Büro & Verwaltung',         farbe: '#8C6D46', bereich: 'Betrieb', emoji: '🗂️' },
+  { name: 'IT, Software & Telefon',    farbe: '#4C6EF5', bereich: 'Betrieb', emoji: '💻' },
+  { name: 'Marketing & Werbung',       farbe: '#D63384', bereich: 'Betrieb', emoji: '📣' },
+  { name: 'Beratung & Treuhand',       farbe: '#6F7F99', bereich: 'Betrieb', emoji: '🤝' },
+  { name: 'Bank & Finanzen',           farbe: '#495057', bereich: 'Betrieb', emoji: '🏦' },
+  { name: 'Abschreibungen',            farbe: '#9AA0A6', bereich: 'Betrieb', emoji: '📉' },
+  { name: 'Sonstiges',                 farbe: '#C3C8CE', bereich: 'Betrieb', emoji: '🔹' },
+  { name: 'Steuern',                   farbe: '#A61E4D', bereich: 'Steuern', emoji: '🏛️' },
 ];
 
 // Einnahmen-Kategorien (typ 'E')
 export const EINNAHMEN = [
-  { name: 'Umsatz',                farbe: '#1F9E89' },
-  { name: 'Sonstige Einnahmen',    farbe: '#63C7B2' },
+  { name: 'Umsatz',                farbe: '#1F9E89', emoji: '💇' },
+  { name: 'Sonstige Einnahmen',    farbe: '#63C7B2', emoji: '➕' },
 ];
 
 const FARBEN = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN].map((k) => [k.name, k.farbe]));
 const BEREICH = Object.fromEntries(KATEGORIEN.map((k) => [k.name, k.bereich]));
 export const farbe = (k) => FARBEN[k] || '#C3C8CE';
+const EMOJIS = Object.fromEntries([...KATEGORIEN, ...EINNAHMEN].map((k) => [k.name, k.emoji]));
+export const emoji = (k) => EMOJIS[k] || '🔹';
 export const bereich = (b) => (b.typ === 'E' ? 'Einnahmen' : BEREICH[b.k] || 'Betrieb');
 
 // Stichworte → Kategorie (erste Übereinstimmung gewinnt, Reihenfolge zählt)

@@ -122,6 +122,7 @@
   .loading { display: grid; place-items: center; min-height: 60vh; color: var(--muted); }
 
   .pos { color: var(--pos); }
+  .note { font-size: 13px; color: var(--muted); }
   .kpi.accent .v.neg-v { color: #FF8A93; }
   .kpi.accent .v.pos-v { color: #6FE0CB; }
 
@@ -292,10 +293,10 @@
   </div>
 
   <nav class="tabs" role="tablist">
-    <button role="tab" data-tab="uebersicht" class="on">Übersicht</button>
-    <button role="tab" data-tab="rechnungen">Offene Rechnungen <span class="count" id="rechCount"></span></button>
-    <button role="tab" data-tab="dokumente">Dokumente <span class="count" id="belegCount"></span></button>
-    <button role="tab" data-tab="anfragen">Anfragen <span class="count" id="anfCount"></span></button>
+    <button role="tab" data-tab="uebersicht" class="on">📊 Übersicht</button>
+    <button role="tab" data-tab="rechnungen">🧾 Offene Rechnungen <span class="count" id="rechCount"></span></button>
+    <button role="tab" data-tab="dokumente">📁 Dokumente <span class="count" id="belegCount"></span></button>
+    <button role="tab" data-tab="anfragen">💬 Anfragen <span class="count" id="anfCount"></span></button>
   </nav>
 
   <div id="tabUebersicht">
@@ -306,45 +307,50 @@
 
   <div id="content">
     <div class="kpis">
-      <div class="kpi"><div class="label">Einnahmen</div><div class="v num pos" id="kEin"></div><div class="s" id="kEinS"></div></div>
-      <div class="kpi"><div class="label">Ausgaben</div><div class="v num" id="kAus"></div><div class="s" id="kAusS"></div></div>
-      <div class="kpi"><div class="label">davon Sozialversicherungen</div><div class="v num" id="kSoz"></div><div class="s" id="kSozS"></div></div>
-      <div class="kpi accent"><div class="label">Ergebnis</div><div class="v num" id="kErg"></div><div class="s" id="kErgS"></div></div>
+      <div class="kpi"><div class="label">💰 Einnahmen</div><div class="v num pos" id="kEin"></div><div class="s" id="kEinS"></div></div>
+      <div class="kpi"><div class="label">💸 Ausgaben</div><div class="v num" id="kAus"></div><div class="s" id="kAusS"></div></div>
+      <div class="kpi"><div class="label">🛡️ davon Sozialversicherungen</div><div class="v num" id="kSoz"></div><div class="s" id="kSozS"></div></div>
+      <div class="kpi accent"><div class="label">📈 Ergebnis</div><div class="v num" id="kErg"></div><div class="s" id="kErgS"></div></div>
     </div>
 
     <section class="card" style="margin-bottom:14px">
-      <div class="card-h"><div><div class="label">Monat für Monat</div><h2>Einnahmen, Ausgaben &amp; Sozialversicherungen</h2></div></div>
+      <div class="card-h"><div><div class="label">📅 Monat für Monat</div><h2>Einnahmen, Ausgaben &amp; Sozialversicherungen</h2></div></div>
       <div class="table-scroll"><table class="monat-tab" id="monatTable"></table></div>
+    </section>
+
+    <section class="card" id="leistCard" style="margin-bottom:14px" hidden>
+      <div class="card-h"><div><div class="label">💇 Einnahmen nach Leistung</div><h2>Wofür Ihre Kundschaft bezahlt</h2></div><span class="note num" id="leistInfo"></span></div>
+      <div class="bars" id="leistBars"></div>
     </section>
 
     <div class="grid even">
       <section class="card">
-        <div class="card-h"><div><div class="label">Wofür</div><h2>Ausgaben nach Kategorie</h2></div></div>
+        <div class="card-h"><div><div class="label">🧩 Wofür</div><h2>Ausgaben nach Kategorie</h2></div></div>
         <div class="donut-wrap">
           <div class="donut"><canvas id="cDonut" width="170" height="170"></canvas><div class="center"><div><b class="num" id="donutCenter"></b><span id="donutSub">Total</span></div></div></div>
           <ul class="cats" id="catList"></ul>
         </div>
       </section>
       <section class="card">
-        <div class="card-h"><div><div class="label">Wann</div><h2>Einnahmen &amp; Ausgaben pro Monat</h2></div><span class="legend-line" id="einLegend" hidden><i></i>Einnahmen</span></div>
+        <div class="card-h"><div><div class="label">📆 Wann</div><h2>Einnahmen &amp; Ausgaben pro Monat</h2></div><span class="legend-line" id="einLegend" hidden><i></i>Einnahmen</span></div>
         <div class="chart-box"><canvas id="cMonate"></canvas></div>
       </section>
     </div>
 
     <div class="grid even">
       <section class="card">
-        <div class="card-h"><div><div class="label">Wo</div><h2>Grösste Lieferanten &amp; Orte</h2></div></div>
+        <div class="card-h"><div><div class="label">📍 Wo</div><h2>Grösste Lieferanten &amp; Orte</h2></div></div>
         <div class="bars" id="topLief"></div>
       </section>
       <section class="card">
-        <div class="card-h"><div><div class="label">Vergleich</div><h2 id="vjTitle">Kategorien im Vorjahresvergleich</h2></div></div>
+        <div class="card-h"><div><div class="label">⚖️ Vergleich</div><h2 id="vjTitle">Kategorien im Vorjahresvergleich</h2></div></div>
         <div class="table-scroll"><table id="vjTable"></table></div>
       </section>
     </div>
 
     <section class="card">
       <div class="card-h">
-        <div><div class="label">Details</div><h2>Alle Buchungen</h2></div>
+        <div><div class="label">🔎 Details</div><h2>Alle Buchungen</h2></div>
         <div class="tools">
           <button class="chip" id="catChip" hidden></button>
           <input class="search" id="search" type="search" placeholder="Suchen: Lieferant, Text …">
@@ -421,7 +427,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script type="module">
-import { farbe, bereich } from './assets/buchhaltung.js';
+import { farbe, bereich, emoji } from './assets/buchhaltung.js';
 
 const $ = (id) => document.getElementById(id);
 const _chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', maximumFractionDigits: 0 });
@@ -571,6 +577,7 @@ function render() {
   $('kErgS').textContent = ein.length && totalEin ? `Marge ${(erg / totalEin * 100).toFixed(1)}%` : 'Einnahmen minus Ausgaben';
 
   renderMonatTabelle(alle, ms);
+  renderLeistungen(ein);
   renderDonut(kats, total);
   renderMonate(aus, kats, ms, ein);
   renderLieferanten(aus);
@@ -582,7 +589,7 @@ function renderDonut(kats, total) {
   $('donutCenter').textContent = chf.format(state.kat ? (kats.find((k) => k[0] === state.kat)?.[1] || 0) : total);
   $('donutSub').textContent = state.kat || 'Total';
   $('catList').innerHTML = kats.map(([k, v]) =>
-    `<li data-k="${esc(k)}" class="${state.kat === k ? 'on' : ''}"><span class="dot" style="background:${farbe(k)}"></span><span class="n">${esc(k)}</span><span class="a num">${chf.format(v)}<small>${(v / total * 100).toFixed(0)}%</small></span></li>`).join('');
+    `<li data-k="${esc(k)}" class="${state.kat === k ? 'on' : ''}"><span class="dot" style="background:${farbe(k)}"></span><span class="n">${emoji(k)} ${esc(k)}</span><span class="a num">${chf.format(v)}<small>${(v / total * 100).toFixed(0)}%</small></span></li>`).join('');
   $('catList').querySelectorAll('li').forEach((li) => li.onclick = () => waehleKat(li.dataset.k));
 
   const cfg = {
@@ -663,7 +670,7 @@ function renderVergleich(kats, vjAus) {
     $('vjTitle').textContent = 'Anteile nach Kategorie';
     const total = kats.reduce((s, k) => s + k[1], 0);
     $('vjTable').innerHTML = `<thead><tr><th class="label">Kategorie</th><th class="label r">Betrag</th><th class="label r">Anteil</th></tr></thead><tbody>` +
-      kats.map(([k, v]) => `<tr><td><span class="pill"><i style="background:${farbe(k)}"></i>${esc(k)}</span></td><td class="r num">${chf.format(v)}</td><td class="r num">${(v / total * 100).toFixed(1)}%</td></tr>`).join('') + '</tbody>';
+      kats.map(([k, v]) => `<tr><td><span class="pill">${emoji(k)} ${esc(k)}</span></td><td class="r num">${chf.format(v)}</td><td class="r num">${(v / total * 100).toFixed(1)}%</td></tr>`).join('') + '</tbody>';
     return;
   }
   $('vjTitle').textContent = `Vergleich mit ${d.jahr - 1}`;
@@ -675,7 +682,7 @@ function renderVergleich(kats, vjAus) {
       const a = cur.get(k) || 0, b = vj.get(k) || 0;
       const p = b ? (a - b) / b * 100 : null;
       const cls = p == null ? '' : p > 0.5 ? 'up' : p < -0.5 ? 'down' : '';
-      return `<tr><td><span class="pill"><i style="background:${farbe(k)}"></i>${esc(k)}</span></td><td class="r num">${chf.format(a)}</td><td class="r num hide-sm">${chf.format(b)}</td><td class="r num"><span class="delta ${cls}">${p == null ? 'neu' : (p > 0 ? '+' : '') + p.toFixed(0) + '%'}</span></td></tr>`;
+      return `<tr><td><span class="pill">${emoji(k)} ${esc(k)}</span></td><td class="r num">${chf.format(a)}</td><td class="r num hide-sm">${chf.format(b)}</td><td class="r num"><span class="delta ${cls}">${p == null ? 'neu' : (p > 0 ? '+' : '') + p.toFixed(0) + '%'}</span></td></tr>`;
     }).join('') + '</tbody>';
 }
 
@@ -687,21 +694,42 @@ function renderTabelle(alle) {
   $('catChip').textContent = state.kat ? state.kat + '  ✕' : '';
   $('txBody').innerHTML = list.slice(0, state.limit).map((b) =>
     `<tr><td class="num">${fmtDatum(b.d)}</td><td>${esc(b.l || b.t || '–')}${b.l && b.t && !b.t.toLowerCase().includes(b.l.toLowerCase()) ? `<div class="sub">${esc(b.t)}</div>` : ''}</td>
-     <td class="hide-sm"><span class="pill"><i style="background:${b.typ === 'E' ? 'var(--pos)' : farbe(b.k)}"></i>${esc(b.k)}</span></td>
+     <td class="hide-sm"><span class="pill">${emoji(b.k)} ${esc(b.k)}</span></td>
      <td class="r num" style="${b.typ === 'E' ? 'color:var(--pos)' : ''}">${b.typ === 'E' ? '+' : ''}${chf2.format(b.b)}</td></tr>`).join('')
     || '<tr><td colspan="4" class="hint">Keine Buchungen gefunden.</td></tr>';
   $('moreBtn').hidden = list.length <= state.limit;
   $('moreBtn').textContent = `Weitere anzeigen (${list.length - state.limit})`;
 }
 
+// Einnahmen nach Leistung (Zahlungszweck, z.B. Haarfarbe / Haarschnitt)
+const LEIST_EMOJI = [[/farb|color|balayage|strähn|straehn|blond|ton/i, '🎨'], [/schnitt|cut|schneid/i, '✂️'], [/föhn|foehn|styling|frisur|hochsteck/i, '💨'], [/pflege|kur|treatment|olaplex|keratin/i, '🧴'], [/gutschein/i, '🎁'], [/produkt|shampoo|verkauf/i, '🛍️']];
+const leistEmoji = (n) => (LEIST_EMOJI.find(([re]) => re.test(n)) || [, '💇'])[1];
+function renderLeistungen(ein) {
+  const m = new Map();
+  for (const b of ein) {
+    const roh = (b.t || '').replace(/^zahlungszweck:\s*/i, '').trim() || b.k || 'Ohne Angabe';
+    const n = roh.charAt(0).toUpperCase() + roh.slice(1).toLowerCase();
+    const e = m.get(n) || { v: 0, n: 0 }; e.v += b.b; e.n++; m.set(n, e);
+  }
+  const list = [...m.entries()].sort((a, b) => b[1].v - a[1].v);
+  $('leistCard').hidden = list.length < 2;
+  if (list.length < 2) return;
+  const total = list.reduce((s, [, e]) => s + e.v, 0);
+  const max = list[0][1].v;
+  $('leistInfo').textContent = `${ein.length} Zahlungen · Ø ${chf2.format(total / ein.length)}`;
+  $('leistBars').innerHTML = list.slice(0, 10).map(([n, e]) =>
+    `<div class="bar-row"><span class="n">${leistEmoji(n)} ${esc(n)}<small>${e.n}× · Ø ${chf.format(e.v / e.n)}</small></span><span class="num">${chf.format(e.v)} <small style="color:var(--muted)">${(e.v / total * 100).toFixed(0)}%</small></span>
+     <div class="track"><div class="fill" style="width:${(e.v / max * 100).toFixed(1)}%;background:var(--pos)"></div></div></div>`).join('');
+}
+
 // Monat für Monat: Einnahmen | Personal | Sozialversicherungen | Betrieb | Steuern | Ausgaben | Ergebnis
 function renderMonatTabelle(alle, ms) {
   const spalten = [
-    ['Einnahmen', 'Einnahmen', 'var(--pos)'],
-    ['Personal', 'Löhne', farbe('Personal & Löhne')],
-    ['Sozialversicherungen', 'Sozialvers.', farbe('Sozialversicherungen')],
-    ['Betrieb', 'Betriebsaufwand', '#8C6D46'],
-    ['Steuern', 'Steuern', farbe('Steuern')],
+    ['Einnahmen', '💰 Einnahmen', 'var(--pos)'],
+    ['Personal', '👥 Löhne', farbe('Personal & Löhne')],
+    ['Sozialversicherungen', '🛡️ Sozialvers.', farbe('Sozialversicherungen')],
+    ['Betrieb', '🏭 Betrieb', '#8C6D46'],
+    ['Steuern', '🏛️ Steuern', farbe('Steuern')],
   ];
   const zelle = (v, cls = '') => `<td class="r num ${cls} ${v ? '' : 'muted'}">${v ? chf.format(v) : '–'}</td>`;
   const tot = { aus: 0 };
@@ -718,7 +746,7 @@ function renderMonatTabelle(alle, ms) {
   });
   const ergT = tot.Einnahmen - tot.aus;
   $('monatTable').innerHTML =
-    `<thead><tr><th class="label">Monat</th>${spalten.map(([, t, c]) => `<th class="label r"><span class="sw" style="background:${c}"></span>${t}</th>`).join('')}<th class="label r">Ausgaben total</th><th class="label r">Ergebnis</th></tr></thead>
+    `<thead><tr><th class="label">Monat</th>${spalten.map(([, t, c]) => `<th class="label r">${t}</th>`).join('')}<th class="label r">Ausgaben total</th><th class="label r">Ergebnis</th></tr></thead>
      <tbody>${zeilen.join('')}${ms.length > 1 ? `<tr class="total"><td>Total</td>${spalten.map(([s]) => zelle(tot[s])).join('')}${zelle(tot.aus)}<td class="r num" style="color:${ergT >= 0 ? 'var(--pos)' : 'var(--neg)'}">${chf.format(ergT)}</td></tr>` : ''}</tbody>`;
 }
 
@@ -792,10 +820,10 @@ async function renderRechnungen() {
   const woche = offen.filter((r) => { const t = tageBis(r.faellig); return t >= 0 && t <= 7; });
   const naechste = offen.find((r) => tageBis(r.faellig) >= 0);
   $('rKpis').innerHTML = `
-    <div class="kpi accent"><div class="label">Offen total</div><div class="v num">${chf.format(summe)}</div><div class="s">${offen.length} Rechnung${offen.length === 1 ? '' : 'en'}</div></div>
-    <div class="kpi"><div class="label">Überfällig</div><div class="v num" style="${ueber.length ? 'color:var(--neg)' : ''}">${ueber.length}</div><div class="s num">${ueber.length ? chf.format(ueber.reduce((s, r) => s + (r.betrag || 0), 0)) : 'alles im grünen Bereich'}</div></div>
-    <div class="kpi"><div class="label">Fällig in 7 Tagen</div><div class="v num">${woche.length}</div><div class="s num">${woche.length ? chf.format(woche.reduce((s, r) => s + (r.betrag || 0), 0)) : '–'}</div></div>
-    <div class="kpi"><div class="label">Als Nächstes fällig</div><div class="v" style="font-size:20px">${naechste ? esc(naechste.glaeubiger) : '–'}</div><div class="s num">${naechste ? fmtDatum(naechste.faellig) + (naechste.betrag != null ? ' · ' + chf2.format(naechste.betrag) : '') : ''}</div></div>`;
+    <div class="kpi accent"><div class="label">🧾 Offen total</div><div class="v num">${chf.format(summe)}</div><div class="s">${offen.length} Rechnung${offen.length === 1 ? '' : 'en'}</div></div>
+    <div class="kpi"><div class="label">⏰ Überfällig</div><div class="v num" style="${ueber.length ? 'color:var(--neg)' : ''}">${ueber.length}</div><div class="s num">${ueber.length ? chf.format(ueber.reduce((s, r) => s + (r.betrag || 0), 0)) : 'alles im grünen Bereich'}</div></div>
+    <div class="kpi"><div class="label">📅 Fällig in 7 Tagen</div><div class="v num">${woche.length}</div><div class="s num">${woche.length ? chf.format(woche.reduce((s, r) => s + (r.betrag || 0), 0)) : '–'}</div></div>
+    <div class="kpi"><div class="label">➡️ Als Nächstes fällig</div><div class="v" style="font-size:20px">${naechste ? esc(naechste.glaeubiger) : '–'}</div><div class="s num">${naechste ? fmtDatum(naechste.faellig) + (naechste.betrag != null ? ' · ' + chf2.format(naechste.betrag) : '') : ''}</div></div>`;
 
   const list = state.rStatus === 'offen' ? offen : bezahlt;
   if (!list.length) {
@@ -852,7 +880,11 @@ $('rForm').onsubmit = async (e) => {
 };
 
 // ─── Dokumente ───────────────────────────────────────────────────────
-const ORDNER = ['Belege', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+// Ordner mit Buchhaltungsbelegen (Einnahmen/Ausgaben-Filter, Summen)
+const BUCH = ['Belege', 'Claude Buchhaltung'];
+const istBuch = (b) => BUCH.includes(b.ordner || 'Belege');
+const ORDNER_EMOJI = { '': '📁', 'Belege': '🧾', 'Claude Buchhaltung': '🤖', 'Rechnungen': '💳', 'Verträge': '📝', 'Lohn & Personal': '👥', 'Steuern': '🏛️', 'Versicherungen': '🛡️', 'Korrespondenz': '✉️', 'Sonstiges': '📎' };
+const ORDNER = ['Belege', 'Claude Buchhaltung', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
 state.ordner = '';
 async function renderBelege() {
   const jahr = state.data.jahr;
@@ -867,18 +899,18 @@ async function renderBelege() {
   const imZeit = state.belege.filter((b) => ms.includes(+b.datum.slice(5, 7)));
   const proOrdner = (o) => imZeit.filter((b) => (b.ordner || 'Belege') === o).length;
   $('ordnerChips').innerHTML = [['', 'Alle', imZeit.length], ...ORDNER.map((o) => [o, o, proOrdner(o)]).filter(([, , n]) => n)]
-    .map(([v, t, n]) => `<button class="${state.ordner === v ? 'on' : ''}" data-o="${esc(v)}">${esc(t)} <span>${n}</span></button>`).join('');
+    .map(([v, t, n]) => `<button class="${state.ordner === v ? 'on' : ''}" data-o="${esc(v)}">${ORDNER_EMOJI[v] || '📁'} ${esc(t)} <span>${n}</span></button>`).join('');
   $('ordnerChips').querySelectorAll('button').forEach((b) => b.onclick = () => { state.ordner = b.dataset.o; renderBelege(); });
 
   const imOrdner = imZeit.filter((b) => !state.ordner || (b.ordner || 'Belege') === state.ordner);
-  const mitArt = !state.ordner || state.ordner === 'Belege';
+  const mitArt = !state.ordner || BUCH.includes(state.ordner);
   $('artSeg').hidden = !mitArt;
   $('segA').textContent = imOrdner.filter((b) => b.typ === 'A').length;
   $('segE').textContent = imOrdner.filter((b) => b.typ === 'E').length;
   $('segAll').textContent = imOrdner.length;
 
   const q = state.belegSuche.toLowerCase();
-  const list = imOrdner.filter((b) => (!mitArt || !state.art || b.typ === state.art) &&
+  const list = imOrdner.filter((b) => (!mitArt || !state.art || (istBuch(b) && b.typ === state.art)) &&
     (!q || [b.lieferant, b.titel, b.kategorie, b.dateiname, b.ordner].join(' ').toLowerCase().includes(q)));
 
   if (!list.length) {
@@ -894,7 +926,7 @@ async function renderBelege() {
     gruppen.get(m).push(b);
   }
   $('belegListe').innerHTML = [...gruppen.entries()].sort((a, b) => a[0] - b[0]).map(([m, bs]) => {
-    const belege = bs.filter((b) => (b.ordner || 'Belege') === 'Belege');
+    const belege = bs.filter(istBuch);
     const sE = belege.filter((b) => b.typ === 'E').reduce((s, b) => s + (b.betrag || 0), 0);
     const sA = belege.filter((b) => b.typ === 'A').reduce((s, b) => s + (b.betrag || 0), 0);
     return `<section class="monat">
@@ -908,7 +940,7 @@ async function renderBelege() {
 function belegZeile(b) {
   const ext = (b.mime.split('/')[1] || 'datei').replace('jpeg', 'jpg').toUpperCase().slice(0, 4);
   const ordner = b.ordner || 'Belege';
-  const istBeleg = ordner === 'Belege';
+  const istBeleg = istBuch(b);
   const col = istBeleg ? (b.typ === 'E' ? 'var(--pos)' : (b.kategorie ? farbe(b.kategorie) : '#8C9096')) : '#3D4450';
   const url = dokUrl(b.id);
   const titel = b.lieferant || b.titel || b.dateiname || 'Dokument';

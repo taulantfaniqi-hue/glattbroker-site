@@ -214,7 +214,7 @@ export const BELEG_TYPEN = {
 export const BELEG_MAX = 3 * 1024 * 1024; // 3 MB pro Datei (Vercel-Limit 4.5 MB inkl. Base64)
 
 // Dokument-Ordner (Belege = Buchhaltung; Rechnungen/Anfragen-Anhänge landen automatisch im passenden Ordner)
-export const ORDNER = ['Belege', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+export const ORDNER = ['Belege', 'Claude Buchhaltung', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
 
 export const heute = () => new Date().toISOString().slice(0, 10);
 const betragOderNull = (v) => {
