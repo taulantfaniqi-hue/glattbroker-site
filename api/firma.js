@@ -67,7 +67,7 @@ export default handler(async (req, res) => {
     const offen = (rech || []).map((x) => JSON.parse(x)).filter((r) => r.status !== 'bezahlt');
     const anfragen = (anf || []).map((x) => JSON.parse(x));
     return {
-      firma: { name: firma.name },
+      firma: { name: firma.name, geschaeftsbeginn: firma.geschaeftsbeginn || null },
       filialen: filialenVon(firma),
       benutzer: { email: s.email, name: s.name },
       jahre, jahr,

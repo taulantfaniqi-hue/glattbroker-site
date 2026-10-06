@@ -44,6 +44,20 @@ export default handler(async (req, res) => {
     return { ok: true, slug };
   }
 
+  // Stammdaten der Firma ändern (Name, Geschäftsbeginn)
+  if (action === 'firma' && m === 'PATCH') {
+    const slug = await mustFirma(body.firma);
+    const firma = await getJSON(key.firma(slug));
+    if (body.name !== undefined) { const n = String(body.name).trim().slice(0, 100); if (n) firma.name = n; }
+    if (body.geschaeftsbeginn !== undefined) {
+      const g = String(body.geschaeftsbeginn || '').slice(0, 10);
+      if (g && !/^\d{4}-\d{2}-\d{2}$/.test(g)) throw new HttpError(400, 'Geschäftsbeginn als Datum angeben.');
+      if (g) firma.geschaeftsbeginn = g; else delete firma.geschaeftsbeginn;
+    }
+    await redis('SET', key.firma(slug), JSON.stringify(firma));
+    return { ok: true, firma };
+  }
+
   if (action === 'firma' && m === 'DELETE') {
     const slug = await mustFirma(req.query.slug);
     const [users, jahre] = await pipeline([['SMEMBERS', key.firmaUsers(slug)], ['SMEMBERS', key.jahre(slug)]]);

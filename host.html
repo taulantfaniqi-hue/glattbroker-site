@@ -166,6 +166,7 @@
     <div id="firmaDetail" hidden>
       <div class="head">
         <div><div class="label" id="fSlug"></div><h1 id="fName"></h1></div>
+        <label class="f" style="width:170px"><span>Geschäftsbeginn</span><input type="date" id="fStart"></label>
         <div class="sp"></div>
         <label class="f" style="width:120px"><span>Jahr</span><select id="selJahr"></select></label>
       </div>
@@ -336,7 +337,7 @@ async function renderFirma() {
   const f = firmen.find((x) => x.slug === aktiv);
   if (!f) { aktiv = null; $('firmaDetail').hidden = true; $('keineFirma').hidden = false; return; }
   $('keineFirma').hidden = true; $('firmaDetail').hidden = false;
-  $('fName').textContent = f.name; $('fSlug').textContent = f.slug;
+  $('fName').textContent = f.name; $('fSlug').textContent = f.slug; $('fStart').value = f.geschaeftsbeginn || '';
   const jahre = [...new Set([new Date().getFullYear(), new Date().getFullYear() - 1, ...f.jahre])].sort((a, b) => b - a);
   if (!jahre.includes(jahr)) jahr = jahre[0];
   $('selJahr').innerHTML = jahre.map((j) => `<option ${j === jahr ? 'selected' : ''}>${j}</option>`).join('');
@@ -352,6 +353,7 @@ async function renderFirma() {
   ladeJahr(); ladeRechnungen(); ladeAnfragen();
 }
 $('selJahr').onchange = (e) => { jahr = +e.target.value; ladeJahr(); };
+$('fStart').onchange = async (e) => { await api('/api/host?action=firma', { method: 'PATCH', body: JSON.stringify({ firma: aktiv, geschaeftsbeginn: e.target.value }) }).catch((err) => alert(err.message)); ladeFirmen(); };
 
 async function ladeJahr() {
   const [b, bl] = await Promise.all([
