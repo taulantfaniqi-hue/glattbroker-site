@@ -80,7 +80,10 @@
   ],
   "functions": {
     "api/*.js": {
-      "maxDuration": 15
+      "maxDuration": 15,
+      "regions": [
+        "fra1"
+      ]
     }
   },
   "regions": [
