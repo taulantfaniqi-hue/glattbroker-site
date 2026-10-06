@@ -74,13 +74,33 @@ const iso = (d) => { const [t, m, j] = d.split('.'); return `${j}-${m}-${t}`; };
 function parse(text, file) {
   const z = text.match(/Zeitraum:\s*(\d{2}\.\d{2}\.\d{4}),?\s*[\d:]+\s*-\s*(\d{2}\.\d{2}\.\d{4})/);
   if (!/TWINT/i.test(text) || !z) throw new Error('keine TWINT-Abrechnung');
-  const tot = text.match(/Total\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})/);
+  // Mehrere Abschnitte (z.B. QR-Sticker + QR-Code) haben je ein eigenes Total → alle zusammenzählen
+  const totals = [...text.matchAll(/^Total\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})/gm)];
+  const tot = totals.length ? [null, ...[1, 2, 3].map((i) => Math.round(totals.reduce((s, t) => s + zahl(t[i]), 0) * 100) / 100)] : null;
+  // Zeilenweise: Transaktionszeile beginnt mit «TT.MM.JJJJ / hh:mm»; umgebrochene Fortsetzungen
+  // (Rest der Transaktionsreferenz oder des Zahlungszwecks) werden an die vorherige Zeile gehängt.
   const tx = [];
-  const re = /(\d{2}\.\d{2}\.\d{4})\s*\/\s*(\d{2}:\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(\S+)\s+([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*(.*)/gi;
-  let m;
-  while ((m = re.exec(text))) {
-    tx.push({ datum: iso(m[1]), zeit: m[2], brutto: zahl(m[3]), gebuehr: zahl(m[4]), netto: zahl(m[5]), art: m[6], ref: m[7], zweck: m[8].replace(/^Zahlungszweck:\s*/i, '').trim() });
+  const kopf = /^(\d{2}\.\d{2}\.\d{4})\s*\/\s*(\d{2}:\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(-?[\d']+\.\d{2})\s+(\S+)\s+(.*)$/;
+  let akt = null;
+  const abschluss = () => {
+    if (!akt) return;
+    let rest = akt.rest.replace(/\s+/g, ' ').trim();
+    // Referenz-Bruchstücke (z.B. «7962d414-…-8539-» + «919ed5dc2452») zusammensetzen
+    rest = rest.replace(/^([0-9a-f-]+-)\s+(.*?)\s+([0-9a-f]{4,12})$/i, '$1$3 $2');
+    const r = rest.match(/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*(.*)$/i);
+    tx.push({ ...akt.basis, ref: r ? r[1] : `${akt.basis.datum}-${akt.basis.zeit}-${akt.basis.brutto}`, zweck: (r ? r[2] : rest).replace(/^Zahlungszweck:\s*/i, '').trim() });
+    akt = null;
+  };
+  for (const zeile of text.split('\n')) {
+    const z2 = zeile.trim();
+    const m = z2.match(kopf);
+    if (m) {
+      abschluss();
+      akt = { basis: { datum: iso(m[1]), zeit: m[2], brutto: zahl(m[3]), gebuehr: zahl(m[4]), netto: zahl(m[5]), art: m[6] }, rest: m[7] };
+    } else if (akt && /^(Total|Vielen Dank|Seite|\d+$)/i.test(z2)) abschluss();
+    else if (akt && z2 && !/^Datum \/ Zeit/i.test(z2)) akt.rest += ' ' + z2;
   }
+  abschluss();
   const summe = (k) => Math.round(tx.reduce((s, t) => s + t[k], 0) * 100) / 100;
   const r = {
     file, von: iso(z[1]), bis: iso(z[2]), tx,
@@ -123,6 +143,14 @@ const sum = (l, k) => Math.round(l.reduce((s, x) => s + x[k], 0) * 100) / 100;
 console.log(`\n${abrechnungen.length} TWINT-Abrechnungen (${abrechnungen[0]?.von} bis ${abrechnungen.at(-1)?.bis}), ${txListe.length} Zahlungen`);
 console.log(`Brutto CHF ${sum(abrechnungen, 'brutto').toFixed(2)} · Gebühren CHF ${sum(abrechnungen, 'gebuehren').toFixed(2)} · Netto CHF ${sum(abrechnungen, 'netto').toFixed(2)}`);
 for (const a of abrechnungen) if (a.warnung) console.log('⚠', path.basename(a.file), a.warnung);
+// Lücken: jeder Zeitraum beginnt dort, wo der vorherige endet
+const luecken = [];
+for (let i = 1; i < abrechnungen.length; i++) {
+  if (abrechnungen[i].von !== abrechnungen[i - 1].bis) luecken.push(`${abrechnungen[i - 1].bis} → ${abrechnungen[i].von}`);
+}
+console.log(luecken.length ? `⚠ Fehlende Zeiträume: ${luecken.join(' · ')}` : '✓ Keine Lücken zwischen den Abrechnungen');
+const ueberlapp = abrechnungen.filter((a, i) => i && a.von < abrechnungen[i - 1].bis);
+if (ueberlapp.length) console.log('⚠ Überlappende Zeiträume:', ueberlapp.map((a) => `${a.von}–${a.bis}`).join(', '));
 if (fremd.length) console.log('Nicht als TWINT-Abrechnung erkannt:', fremd.join('; '));
 if (opt.probe) process.exit(0);
 
