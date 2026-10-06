@@ -213,8 +213,19 @@ export const BELEG_TYPEN = {
 };
 export const BELEG_MAX = 3 * 1024 * 1024; // 3 MB pro Datei (Vercel-Limit 4.5 MB inkl. Base64)
 
-// Dokument-Ordner (Belege = Buchhaltung; Rechnungen/Anfragen-Anhänge landen automatisch im passenden Ordner)
-export const ORDNER = ['Belege', 'Claude Buchhaltung', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+// Dokument-Ordner: Buchhaltungsbereiche pro Firma (Filialen, Standard «Generelle Buchhaltung»)
+// plus feste Ordner. Rechnungen/Anfragen-Anhänge landen automatisch im passenden Ordner.
+export const STANDARD_BEREICH = 'Generelle Buchhaltung';
+export const ORDNER = ['Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+// Alte Ordnernamen → Standardbereich
+export const bereichVon = (ordner) => (!ordner || ordner === 'Belege' || ordner === 'Claude Buchhaltung') ? STANDARD_BEREICH : ordner;
+export const filialenVon = (firma) => (Array.isArray(firma?.filialen) && firma.filialen.length ? firma.filialen : [STANDARD_BEREICH]);
+export function cleanBereichName(n) {
+  const s = String(n || '').replace(/\s+/g, ' ').trim().slice(0, 50);
+  if (!s) throw new HttpError(400, 'Name des Bereichs fehlt.');
+  if (ORDNER.includes(s)) throw new HttpError(400, `«${s}» ist ein fester Ordner.`);
+  return s;
+}
 
 export const heute = () => new Date().toISOString().slice(0, 10);
 const betragOderNull = (v) => {
@@ -228,7 +239,7 @@ export function cleanBelegMeta(x) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new HttpError(400, 'Dokumentdatum fehlt (JJJJ-MM-TT).');
   return {
     datum: d,
-    ordner: ORDNER.includes(x.ordner) ? x.ordner : 'Belege',
+    ordner: bereichVon(String(x.ordner || '').trim().slice(0, 50)),
     typ: x.typ === 'E' || x.typ === 'einnahme' ? 'E' : 'A',
     kategorie: String(x.kategorie || '').slice(0, 60),
     betrag: betragOderNull(x.betrag),
@@ -354,6 +365,8 @@ export function cleanBuchung(x) {
     l: String(x.l || x.lieferant || '').slice(0, 80),
     t: String(x.t || x.text || '').slice(0, 160),
   };
+  const f = String(x.f || x.filiale || '').trim().slice(0, 50);
+  if (f && f !== STANDARD_BEREICH) out.f = f;                   // Buchhaltungsbereich / Filiale (leer = Standard)
   if (x.u) out.u = 1;                                          // unklar → Firma soll zuordnen
   if (x.n) out.n = String(x.n).slice(0, 300);                  // Notiz (Hinweis von uns / Antwort der Firma)
   if (x.z && typeof x.z === 'object') out.z = { von: String(x.z.von || '').slice(0, 80), am: String(x.z.am || '').slice(0, 30) };

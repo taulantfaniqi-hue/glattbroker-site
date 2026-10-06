@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Firmenkonto · Glatt Broker AG</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="modulepreload" href="assets/buchhaltung.js?v=202610061546" />
+<link rel="modulepreload" href="assets/buchhaltung.js?v=202610061557" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -326,6 +326,7 @@
     </div>
     <div class="sp"></div>
     <div class="filters">
+      <select id="selBereich" aria-label="Buchhaltungsbereich" hidden></select>
       <select id="selJahr" aria-label="Jahr"></select>
       <select id="selZeit" aria-label="Zeitraum"></select>
     </div>
@@ -476,7 +477,7 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script type="module">
-import { farbe, bereich, emoji, KATEGORIEN, EINNAHMEN } from './assets/buchhaltung.js?v=202610061546';
+import { farbe, bereich, emoji, leistung, KATEGORIEN, EINNAHMEN } from './assets/buchhaltung.js?v=202610061557';
 
 const $ = (id) => document.getElementById(id);
 const _chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', maximumFractionDigits: 0 });
@@ -487,7 +488,7 @@ const MONATE_LANG = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmtDatum = (d) => d.slice(8, 10) + '.' + d.slice(5, 7) + '.' + d.slice(0, 4);
 
-let state = { data: null, zeit: 'jahr', kat: null, suche: '', limit: 50, tab: 'uebersicht', belege: null, belegJahr: null, art: 'A', belegSuche: '' };
+let state = { data: null, zeit: 'jahr', kat: null, suche: '', limit: 50, tab: 'uebersicht', belege: null, belegJahr: null, art: '', belegSuche: '', bereich: '' };
 let charts = {};
 
 async function api(url, opts = {}) {
@@ -546,7 +547,12 @@ function fuelleFilter() {
   const opts = [['jahr', 'Ganzes Jahr'], ['q1', '1. Quartal'], ['q2', '2. Quartal'], ['q3', '3. Quartal'], ['q4', '4. Quartal'],
     ...MONATE_LANG.map((m, i) => ['m' + (i + 1), m])];
   $('selZeit').innerHTML = opts.map(([v, t]) => `<option value="${v}" ${v === state.zeit ? 'selected' : ''}>${t}</option>`).join('');
+  const fil = d.filialen || [STANDARD];
+  if (state.bereich && !fil.includes(state.bereich)) state.bereich = '';
+  $('selBereich').hidden = fil.length < 2;
+  $('selBereich').innerHTML = [['', '🏢 Alle Bereiche'], ...fil.map((x, i) => [x, (i ? '🏪 ' : '📒 ') + x])].map(([v, t]) => `<option value="${esc(v)}" ${v === state.bereich ? 'selected' : ''}>${esc(t)}</option>`).join('');
 }
+$('selBereich').addEventListener('change', (e) => { state.bereich = e.target.value; state.kat = null; state.limit = 50; render(); });
 $('selJahr').addEventListener('change', (e) => laden(e.target.value));
 $('selZeit').addEventListener('change', (e) => { state.zeit = e.target.value; state.kat = null; state.limit = 50; render(); });
 
@@ -557,7 +563,10 @@ function monate() {
   if (z.startsWith('m')) return [+z.slice(1)];
   return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 }
-const imZeitraum = (list, ms) => (list || []).filter((b) => ms.includes(+b.d.slice(5, 7)));
+// Buchhaltungsbereich / Filiale: Buchungen ohne «f» gehören zum Standardbereich
+const STANDARD = 'Generelle Buchhaltung';
+const imBereich = (b) => !state.bereich || (b.f || STANDARD) === state.bereich;
+const imZeitraum = (list, ms) => (list || []).filter((b) => ms.includes(+b.d.slice(5, 7)) && imBereich(b));
 const summe = (list) => list.reduce((s, b) => s + b.b, 0);
 
 function proKat(list) {
@@ -591,7 +600,7 @@ function render() {
   state.vergleichsMonate = ms;
 
   const zeitText = $('selZeit').selectedOptions[0]?.textContent || '';
-  $('headTitle').textContent = state.zeit === 'jahr' ? `Geschäftsjahr ${d.jahr}` : `${zeitText} ${d.jahr}`;
+  $('headTitle').textContent = (state.zeit === 'jahr' ? `Geschäftsjahr ${d.jahr}` : `${zeitText} ${d.jahr}`) + (state.bereich ? ' · ' + state.bereich : '');
   $('headLabel').textContent = d.firma.name;
   $('belegCount').textContent = d.anzBelege || '';
   $('rechCount').textContent = d.anzOffeneRechnungen ? d.anzOffeneRechnungen + (d.anzUeberfaellig ? ' · ' + d.anzUeberfaellig + ' überfällig' : '') : '';
@@ -751,27 +760,23 @@ function renderTabelle(alle) {
   $('moreBtn').textContent = `Weitere anzeigen (${list.length - state.limit})`;
 }
 
-// Einnahmen nach Leistung (Zahlungszweck, z.B. Haarfarbe / Haarschnitt)
-const LEIST_EMOJI = [[/farb|color|balayage|strähn|straehn|blond|ton/i, '🎨'], [/schnitt|cut|schneid/i, '✂️'], [/föhn|foehn|styling|frisur|hochsteck/i, '💨'], [/pflege|kur|treatment|olaplex|keratin/i, '🧴'], [/gutschein/i, '🎁'], [/produkt|shampoo|verkauf/i, '🛍️']];
-const leistEmoji = (n) => (LEIST_EMOJI.find(([re]) => re.test(n)) || [, '💇'])[1];
+// Einnahmen nach Leistung (Zahlungszweck → einheitliche Bezeichnung, z.B. «Haarschnitt»)
 function renderLeistungen(ein) {
   const m = new Map();
   for (const b of ein) {
-    const roh = (b.t || '').replace(/^zahlungszweck:\s*/i, '').trim() || b.k || 'Ohne Angabe';
-    const n = roh.charAt(0).toUpperCase() + roh.slice(1).toLowerCase();
-    const e = m.get(n) || { v: 0, n: 0 }; e.v += b.b; e.n++; m.set(n, e);
+    const l = leistung(b.t);
+    const e = m.get(l.name) || { ...l, v: 0, n: 0 }; e.v += b.b; e.n++; m.set(l.name, e);
   }
-  const list = [...m.entries()].sort((a, b) => b[1].v - a[1].v);
+  const list = [...m.values()].sort((a, b) => (a.name === 'Weitere Leistungen') - (b.name === 'Weitere Leistungen') || b.v - a.v);
   $('leistCard').hidden = list.length < 2;
   if (list.length < 2) return;
-  const total = list.reduce((s, [, e]) => s + e.v, 0);
-  const max = list[0][1].v;
+  const total = list.reduce((s, e) => s + e.v, 0);
+  const max = Math.max(...list.map((e) => e.v));
   $('leistInfo').textContent = `${ein.length} Zahlungen · Ø ${chf2.format(total / ein.length)}`;
-  $('leistBars').innerHTML = list.slice(0, 10).map(([n, e]) =>
-    `<div class="bar-row"><span class="n">${leistEmoji(n)} ${esc(n)}<small>${e.n}× · Ø ${chf.format(e.v / e.n)}</small></span><span class="num">${chf.format(e.v)} <small style="color:var(--muted)">${(e.v / total * 100).toFixed(0)}%</small></span>
+  $('leistBars').innerHTML = list.map((e) =>
+    `<div class="bar-row"><span class="n">${e.emoji} ${esc(e.name)}<small>${e.n}× · Ø ${chf.format(e.v / e.n)}</small></span><span class="num">${chf.format(e.v)} <small style="color:var(--muted)">${(e.v / total * 100).toFixed(0)}%</small></span>
      <div class="track"><div class="fill" style="width:${(e.v / max * 100).toFixed(1)}%;background:var(--pos)"></div></div></div>`).join('');
 }
-
 // Monat für Monat: Einnahmen | Personal | Sozialversicherungen | Betrieb | Steuern | Ausgaben | Ergebnis
 function renderMonatTabelle(alle, ms) {
   const spalten = [
@@ -930,11 +935,13 @@ $('rForm').onsubmit = async (e) => {
 };
 
 // ─── Dokumente ───────────────────────────────────────────────────────
-// Ordner mit Buchhaltungsbelegen (Einnahmen/Ausgaben-Filter, Summen)
-const BUCH = ['Belege', 'Claude Buchhaltung'];
-const istBuch = (b) => BUCH.includes(b.ordner || 'Belege');
-const ORDNER_EMOJI = { '': '📁', 'Belege': '🧾', 'Claude Buchhaltung': '🤖', 'Rechnungen': '💳', 'Verträge': '📝', 'Lohn & Personal': '👥', 'Steuern': '🏛️', 'Versicherungen': '🛡️', 'Korrespondenz': '✉️', 'Sonstiges': '📎' };
-const ORDNER = ['Belege', 'Claude Buchhaltung', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+// Buchhaltungsbereiche der Firma (z.B. «Generelle Buchhaltung», «Filiale Zürich») + feste Ordner
+const FEST = ['Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+const FEST_EMOJI = { '': '📁', 'Rechnungen': '💳', 'Verträge': '📝', 'Lohn & Personal': '👥', 'Steuern': '🏛️', 'Versicherungen': '🛡️', 'Korrespondenz': '✉️', 'Sonstiges': '📎' };
+const bereiche = () => state.data?.filialen || [STANDARD];
+const istBuch = (b) => !FEST.includes(b.ordner);
+const ordnerEmoji = (o) => FEST_EMOJI[o] || (bereiche().indexOf(o) > 0 ? '🏪' : '📒');
+const ORDNER_LISTE = () => [...bereiche(), ...FEST];
 state.ordner = '';
 async function renderBelege() {
   const jahr = state.data.jahr;
@@ -947,13 +954,13 @@ async function renderBelege() {
   }
   const ms = monate();
   const imZeit = state.belege.filter((b) => ms.includes(+b.datum.slice(5, 7)));
-  const proOrdner = (o) => imZeit.filter((b) => (b.ordner || 'Belege') === o).length;
-  $('ordnerChips').innerHTML = [['', 'Alle', imZeit.length], ...ORDNER.map((o) => [o, o, proOrdner(o)]).filter(([, , n]) => n)]
-    .map(([v, t, n]) => `<button class="${state.ordner === v ? 'on' : ''}" data-o="${esc(v)}">${ORDNER_EMOJI[v] || '📁'} ${esc(t)} <span>${n}</span></button>`).join('');
+  const proOrdner = (o) => imZeit.filter((b) => b.ordner === o).length;
+  $('ordnerChips').innerHTML = [['', 'Alle', imZeit.length], ...ORDNER_LISTE().map((o) => [o, o, proOrdner(o)]).filter(([o, , n]) => n || bereiche().includes(o))]
+    .map(([v, t, n]) => `<button class="${state.ordner === v ? 'on' : ''}" data-o="${esc(v)}">${ordnerEmoji(v)} ${esc(t)} <span>${n}</span></button>`).join('');
   $('ordnerChips').querySelectorAll('button').forEach((b) => b.onclick = () => { state.ordner = b.dataset.o; renderBelege(); });
 
-  const imOrdner = imZeit.filter((b) => !state.ordner || (b.ordner || 'Belege') === state.ordner);
-  const mitArt = !state.ordner || BUCH.includes(state.ordner);
+  const imOrdner = imZeit.filter((b) => !state.ordner || b.ordner === state.ordner);
+  const mitArt = !state.ordner || bereiche().includes(state.ordner);
   $('artSeg').hidden = !mitArt;
   $('segA').textContent = imOrdner.filter((b) => b.typ === 'A').length;
   $('segE').textContent = imOrdner.filter((b) => b.typ === 'E').length;
@@ -989,7 +996,7 @@ async function renderBelege() {
 
 function belegZeile(b) {
   const ext = (b.mime.split('/')[1] || 'datei').replace('jpeg', 'jpg').toUpperCase().slice(0, 4);
-  const ordner = b.ordner || 'Belege';
+  const ordner = b.ordner;
   const istBeleg = istBuch(b);
   const col = istBeleg ? (b.typ === 'E' ? 'var(--pos)' : (b.kategorie ? farbe(b.kategorie) : '#8C9096')) : '#3D4450';
   const url = dokUrl(b.id);

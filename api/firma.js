@@ -13,7 +13,7 @@
 import crypto from 'node:crypto';
 import {
   handler, HttpError, getJSON, redis, pipeline, key, requireFirma, cleanJahr, sendeDatei,
-  speichereDokument, anhangInfo, cleanRechnung, sendeMail, heute, KATEGORIEN_NAMEN,
+  speichereDokument, anhangInfo, cleanRechnung, sendeMail, heute, KATEGORIEN_NAMEN, bereichVon, filialenVon,
 } from './_lib.js';
 
 export default handler(async (req, res) => {
@@ -40,9 +40,9 @@ export default handler(async (req, res) => {
       const jahre = (jm || []).map(Number).sort((a, b) => b - a);
       const jahr = jahrParam || jahre[0] || new Date().getFullYear();
       const roh = jahrParam ? werte : await redis('HVALS', key.belege(slug, jahr));
-      const docs = (roh || []).map((x) => ({ ordner: 'Belege', ...JSON.parse(x) }));
+      const docs = (roh || []).map((x) => { const d = JSON.parse(x); return { ...d, ordner: bereichVon(d.ordner) }; });
       docs.sort((a, b) => a.datum.localeCompare(b.datum) || a.hochgeladen.localeCompare(b.hochgeladen));
-      return { jahr, jahre, dokumente: docs, belege: docs };
+      return { jahr, jahre, filialen: filialenVon(JSON.parse(f)), dokumente: docs, belege: docs };
     }
 
     const [f, jm, rech, anf] = await pipeline([
@@ -68,6 +68,7 @@ export default handler(async (req, res) => {
     const anfragen = (anf || []).map((x) => JSON.parse(x));
     return {
       firma: { name: firma.name },
+      filialen: filialenVon(firma),
       benutzer: { email: s.email, name: s.name },
       jahre, jahr,
       aktualisiert: data?.aktualisiert || null,

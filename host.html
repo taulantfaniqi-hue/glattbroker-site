@@ -187,6 +187,19 @@
         </form>
       </div>
 
+      <!-- Buchhaltungsbereiche -->
+      <div class="card">
+        <div class="label">Struktur</div>
+        <h2>Buchhaltungsbereiche / Filialen</h2>
+        <p class="note" style="margin:-6px 0 12px">Die Firma sieht diese Bereiche als Ordner unter «Dokumente» und kann in der Übersicht danach filtern (ab 2 Bereichen).</p>
+        <div id="bereichListe" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+        <form id="bereichForm" style="display:flex;gap:8px;margin-top:12px;max-width:460px">
+          <input name="name" placeholder="z.B. Filiale Zürich" required maxlength="50">
+          <button class="btn primary sm" type="submit">Hinzufügen</button>
+        </form>
+        <div class="msg" id="bereichMsg"></div>
+      </div>
+
       <!-- Offene Rechnungen -->
       <div class="card">
         <div class="label">Zahlungen</div>
@@ -225,7 +238,8 @@
         <input type="file" id="csvFile" accept=".csv,.txt,text/csv" hidden>
         <div class="preview" id="csvPreview" hidden></div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap" id="csvActions" hidden>
-          <select id="csvModus" style="width:auto"><option value="ersetzen">Jahr ersetzen</option><option value="anfuegen">An bestehende anfügen</option></select>
+          <select id="csvBereich" style="width:auto" title="Buchhaltungsbereich"></select>
+          <select id="csvModus" style="width:auto"><option value="ersetzen">Bereich im Jahr ersetzen</option><option value="anfuegen">An bestehende anfügen</option></select>
           <button class="btn primary" id="csvSave">Speichern</button>
           <button class="btn" id="csvCancel">Abbrechen</button>
         </div>
@@ -259,7 +273,7 @@
 </main>
 
 <script type="module">
-import { KATEGORIEN, EINNAHMEN, csvZuBuchungen, kategorisiere, farbe } from './assets/buchhaltung.js?v=202610061546';
+import { KATEGORIEN, EINNAHMEN, csvZuBuchungen, kategorisiere, farbe } from './assets/buchhaltung.js?v=202610061557';
 
 const $ = (id) => document.getElementById(id);
 const chf = new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF', minimumFractionDigits: 2 });
@@ -334,6 +348,7 @@ async function renderFirma() {
     await api('/api/host?action=benutzer&email=' + encodeURIComponent(b.dataset.del), { method: 'DELETE' });
     ladeFirmen();
   });
+  renderBereiche(f);
   ladeJahr(); ladeRechnungen(); ladeAnfragen();
 }
 $('selJahr').onchange = (e) => { jahr = +e.target.value; ladeJahr(); };
@@ -360,6 +375,30 @@ async function ladeJahr() {
     ladeJahr(); ladeFirmen();
   });
 }
+
+// ─── Buchhaltungsbereiche / Filialen ─────────────────────────────────
+function renderBereiche(f) {
+  const liste = f.filialen || [STANDARD];
+  $('csvBereich').innerHTML = liste.map((b) => `<option>${esc(b)}</option>`).join('');
+  $('bereichListe').innerHTML = liste.map((b, i) => `<span class="tag" style="display:inline-flex;gap:6px;align-items:center;padding:6px 10px;font-size:13.5px">${i ? '🏪' : '📒'} ${esc(b)}
+    <button class="btn sm" data-ren="${esc(b)}" title="Umbenennen" style="padding:2px 8px">✎</button>${liste.length > 1 ? `<button class="btn danger sm" data-del-b="${esc(b)}" title="Entfernen" style="padding:2px 8px">✕</button>` : ''}</span>`).join('');
+  $('bereichListe').querySelectorAll('[data-ren]').forEach((btn) => btn.onclick = async () => {
+    const neu = prompt('Neuer Name für «' + btn.dataset.ren + '»:', btn.dataset.ren);
+    if (!neu || neu === btn.dataset.ren) return;
+    try { await api('/api/host?action=filiale', { method: 'PATCH', body: JSON.stringify({ firma: aktiv, alt: btn.dataset.ren, neu }) }); msg('bereichMsg', 'Umbenannt, Dokumente und Buchungen wurden mitgenommen.', true); ladeFirmen(); }
+    catch (e) { msg('bereichMsg', e.message); }
+  });
+  $('bereichListe').querySelectorAll('[data-del-b]').forEach((btn) => btn.onclick = async () => {
+    if (!confirm('Bereich «' + btn.dataset.delB + '» entfernen?')) return;
+    try { await api(`/api/host?action=filiale&firma=${aktiv}&name=${encodeURIComponent(btn.dataset.delB)}`, { method: 'DELETE' }); msg('bereichMsg', 'Entfernt.', true); ladeFirmen(); }
+    catch (e) { msg('bereichMsg', e.message); }
+  });
+}
+$('bereichForm').onsubmit = async (e) => {
+  e.preventDefault();
+  try { await api('/api/host?action=filiale', { method: 'POST', body: JSON.stringify({ firma: aktiv, name: e.target.elements.name.value }) }); e.target.reset(); msg('bereichMsg', 'Bereich angelegt.', true); ladeFirmen(); }
+  catch (err) { msg('bereichMsg', err.message); }
+};
 
 // ─── Logins ──────────────────────────────────────────────────────────
 $('pwGen').onclick = () => {
@@ -412,7 +451,15 @@ $('csvSave').onclick = async () => {
   if (!csvDaten) return;
   $('csvSave').disabled = true;
   try {
-    const r = await api('/api/host?action=buchungen', { method: 'PUT', body: JSON.stringify({ firma: aktiv, jahr, modus: $('csvModus').value, ...csvDaten }) });
+    const bereich = $('csvBereich').value;
+    const neu = csvDaten.buchungen.map((b) => ({ ...b, f: bereich }));
+    let buchungen = neu, modus = $('csvModus').value;
+    if (modus === 'ersetzen') {
+      // nur den gewählten Bereich ersetzen, andere Bereiche behalten
+      const alt = (await api(`/api/host?action=buchungen&firma=${aktiv}&jahr=${jahr}`)).buchungen || [];
+      buchungen = [...alt.filter((b) => (b.f || STANDARD) !== bereich), ...neu];
+    }
+    const r = await api('/api/host?action=buchungen', { method: 'PUT', body: JSON.stringify({ firma: aktiv, jahr, modus, quelle: csvDaten.quelle, buchungen }) });
     msg('csvMsg', `${r.gespeichert} Buchungen gespeichert (total ${r.total}).`, true);
     csvAbbrechen(); ladeFirmen();
   } catch (err) { msg('csvMsg', err.message); }
@@ -441,7 +488,7 @@ dropzone($('belegDrop'), $('belegFile'), (files) => {
 function renderQueue() {
   $('queue').innerHTML = queue.map((q, i) => `<div class="item" data-i="${i}">
     <span class="fn" title="${esc(q.file.name)}">${esc(q.file.name)} <span class="note">${(q.file.size / 1024).toFixed(0)} KB</span></span>
-    <select data-f="ordner">${ORDNER.map((o) => `<option ${o === q.ordner ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>
+    <select data-f="ordner">${ordnerListe().map((o) => `<option ${o === q.ordner ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>
     <input type="date" data-f="datum" value="${q.datum}">
     <select data-f="typ"><option value="A" ${q.typ === 'A' ? 'selected' : ''}>Ausgabe</option><option value="E" ${q.typ === 'E' ? 'selected' : ''}>Einnahme</option></select>
     <select data-f="kategorie">${katOptionen(q.typ, q.kategorie)}</select>
@@ -488,7 +535,10 @@ $('queueSave').onclick = async () => {
 };
 
 // ─── Hilfen ──────────────────────────────────────────────────────────
-const ORDNER = ['Belege', 'Claude Buchhaltung', 'Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+const STANDARD = 'Generelle Buchhaltung';
+const FEST = ['Rechnungen', 'Verträge', 'Lohn & Personal', 'Steuern', 'Versicherungen', 'Korrespondenz', 'Sonstiges'];
+const bereiche = () => firmen.find((x) => x.slug === aktiv)?.filialen || [STANDARD];
+const ordnerListe = () => [...bereiche(), ...FEST];
 function ordnerRaten(name) {
   const s = name.toLowerCase();
   if (/rechnung|invoice|faktura|mahnung/.test(s)) return 'Rechnungen';
@@ -496,7 +546,7 @@ function ordnerRaten(name) {
   if (/lohn|salär|gehalt|ahv|bvg|suva|personal/.test(s)) return 'Lohn & Personal';
   if (/steuer|mwst|estv/.test(s)) return 'Steuern';
   if (/police|versicherung|prämie/.test(s)) return 'Versicherungen';
-  return 'Belege';
+  return bereiche()[0];
 }
 function leseDatei(input) {
   const file = input?.files?.[0];

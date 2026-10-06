@@ -2,11 +2,11 @@
 // TWINT-Abrechnungen (PDF) auslesen → Kundenordner sortieren + Firmenkonto befüllen.
 //
 //   node tools/twint-import.mjs --quelle <Ordner|ZIP|PDF …> --firma lumiere-hair \
-//        --kundenordner "C:\…\Kunden\Fleta Dinaj (Lumiere Hair)" [--ordner "Claude Buchhaltung"] [--nur-lokal] [--probe]
+//        --kundenordner "C:\…\Kunden\Fleta Dinaj (Lumiere Hair)" [--bereich "Filiale X"] [--nur-lokal] [--probe] [--zwecke]
 //
 // Pro Abrechnung:
 //   • Kopie im Kundenordner: <kundenordner>/<ordner>/<JJJJ-MM Monat>/<JJJJ-MM-TT> TWINT Abrechnung.pdf
-//   • Dokument im Firmenkonto (Ordner «Claude Buchhaltung», Einnahme, Datum = Ende des Zeitraums)
+//   • Dokument im Firmenkonto (Bereich, Standard «Generelle Buchhaltung», Einnahme, Datum = Ende des Zeitraums)
 //   • Buchungen: jede Zahlung als Einnahme «Umsatz» (Zahlungszweck als Text), Gebühren als Ausgabe «Bank & Finanzen»
 // Doppelte Dateien/Transaktionen werden über die Transaktionsreferenz erkannt.
 import fs from 'node:fs';
@@ -30,11 +30,11 @@ for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (!a.startsWith('--')) { opt.quelle.push(a); continue; }
   const k = a.slice(2);
-  if (['nur-lokal', 'probe'].includes(k)) opt[k] = true;
+  if (['nur-lokal', 'probe', 'zwecke'].includes(k)) opt[k] = true;
   else if (k === 'quelle') { while (argv[i + 1] && !argv[i + 1].startsWith('--')) opt.quelle.push(argv[++i]); }
   else opt[k] = argv[++i];
 }
-const ORDNER = opt.ordner || 'Claude Buchhaltung';
+const ORDNER = opt.ordner || opt.bereich || 'Generelle Buchhaltung';   // Buchhaltungsbereich / Filiale
 const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
 // ─── Quellen einsammeln (Ordner, ZIP, einzelne PDFs) ─────────────────
@@ -84,11 +84,16 @@ function parse(text, file) {
   let akt = null;
   const abschluss = () => {
     if (!akt) return;
-    let rest = akt.rest.replace(/\s+/g, ' ').trim();
-    // Referenz-Bruchstücke (z.B. «7962d414-…-8539-» + «919ed5dc2452») zusammensetzen
-    rest = rest.replace(/^([0-9a-f-]+-)\s+(.*?)\s+([0-9a-f]{4,12})$/i, '$1$3 $2');
-    const r = rest.match(/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*(.*)$/i);
-    tx.push({ ...akt.basis, ref: r ? r[1] : `${akt.basis.datum}-${akt.basis.zeit}-${akt.basis.brutto}`, zweck: (r ? r[2] : rest).replace(/^Zahlungszweck:\s*/i, '').trim() });
+    // Referenz kann umbrechen: «7962d414-…-8539-» steht in der Zeile, «919ed5dc2452» in der nächsten
+    // (vor oder nach dem Zahlungszweck). Bruchstück suchen, an die Referenz hängen und aus dem Text entfernen.
+    const tokens = akt.rest.replace(/\s+/g, ' ').trim().split(' ');
+    let ref = tokens.shift() || '';
+    const voll = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    for (let i = 0; i < tokens.length && !voll.test(ref); i++) {
+      if (/^[0-9a-f-]{2,36}$/i.test(tokens[i]) && voll.test(ref + tokens[i])) { ref += tokens[i]; tokens.splice(i, 1); break; }
+    }
+    const zweck = tokens.join(' ').replace(/^Zahlungszweck:\s*/i, '').replace(/\bZahlungszweck:\s*/gi, '').trim();
+    tx.push({ ...akt.basis, ref: voll.test(ref) ? ref : `${akt.basis.datum}-${akt.basis.zeit}-${akt.basis.brutto}`, zweck });
     akt = null;
   };
   for (const zeile of text.split('\n')) {
@@ -152,6 +157,11 @@ console.log(luecken.length ? `⚠ Fehlende Zeiträume: ${luecken.join(' · ')}` 
 const ueberlapp = abrechnungen.filter((a, i) => i && a.von < abrechnungen[i - 1].bis);
 if (ueberlapp.length) console.log('⚠ Überlappende Zeiträume:', ueberlapp.map((a) => `${a.von}–${a.bis}`).join(', '));
 if (fremd.length) console.log('Nicht als TWINT-Abrechnung erkannt:', fremd.join('; '));
+if (opt.zwecke) {
+  const z = new Map();
+  for (const t of txListe) { const k = t.zweck || '(leer)'; z.set(k, (z.get(k) || 0) + 1); }
+  [...z.entries()].sort((a, b) => b[1] - a[1]).forEach(([k, n]) => console.log(String(n).padStart(4), '×', k));
+}
 if (opt.probe) process.exit(0);
 
 // 1) Kundenordner
@@ -192,14 +202,14 @@ console.log(`✓ ${hoch} Dokumente hochgeladen (${abrechnungen.length - hoch} wa
 // 3) Buchungen: Zahlungen als Einnahmen, Gebühren als Ausgaben; bestehende TWINT-Buchungen des Jahres werden ersetzt
 for (const j of [...new Set(txListe.map((t) => t.datum.slice(0, 4)))]) {
   const alt = (await api(`action=buchungen&firma=${opt.firma}&jahr=${j}`)).buchungen || [];
-  const behalten = alt.filter((b) => b.l !== 'TWINT');
+  const behalten = alt.filter((b) => b.l !== 'TWINT' || (b.f || 'Generelle Buchhaltung') !== ORDNER);
   const neu = [];
   for (const t of txListe.filter((x) => x.datum.startsWith(j))) {
-    if (t.brutto >= 0) neu.push({ d: t.datum, b: t.brutto, typ: 'E', k: 'Umsatz', l: 'TWINT', t: t.zweck || 'TWINT-Zahlung' });
-    else neu.push({ d: t.datum, b: -t.brutto, typ: 'A', k: 'Sonstiges', l: 'TWINT', t: 'Rückerstattung ' + (t.zweck || '') });
+    if (t.brutto >= 0) neu.push({ d: t.datum, b: t.brutto, typ: 'E', k: 'Umsatz', l: 'TWINT', t: t.zweck || 'TWINT-Zahlung', f: ORDNER });
+    else neu.push({ d: t.datum, b: -t.brutto, typ: 'A', k: 'Sonstiges', l: 'TWINT', t: 'Rückerstattung ' + (t.zweck || ''), f: ORDNER });
   }
   for (const a of abrechnungen.filter((x) => x.bis.startsWith(j) && x.gebuehren)) {
-    neu.push({ d: a.bis, b: -a.gebuehren, typ: 'A', k: 'Bank & Finanzen', l: 'TWINT', t: `TWINT Gebühren ${a.von.slice(8, 10)}.${a.von.slice(5, 7)}.–${a.bis.slice(8, 10)}.${a.bis.slice(5, 7)}.` });
+    neu.push({ d: a.bis, b: -a.gebuehren, typ: 'A', k: 'Bank & Finanzen', l: 'TWINT', t: `TWINT Gebühren ${a.von.slice(8, 10)}.${a.von.slice(5, 7)}.–${a.bis.slice(8, 10)}.${a.bis.slice(5, 7)}.`, f: ORDNER });
   }
   const r = await api('action=buchungen', 'PUT', { firma: opt.firma, jahr: Number(j), modus: 'ersetzen', quelle: 'TWINT-Abrechnungen (WhatsApp)', buchungen: [...behalten, ...neu] });
   console.log(`✓ ${j}: ${neu.length} TWINT-Buchungen (total ${r.total})`);

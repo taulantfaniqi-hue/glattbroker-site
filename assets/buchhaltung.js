@@ -115,6 +115,26 @@ export function kategorisiere({ text = '', lieferant = '', konto = '', kategorie
   return 'Sonstiges';
 }
 
+// ─── Leistungen (Zahlungszweck → saubere Bezeichnung) ────────────────
+// Reihenfolge zählt: Kombinationen zuerst, dann einzelne Leistungen.
+const LEISTUNGEN = [
+  { name: 'Farbe & Schnitt', emoji: '🎨✂️', re: /(farb|faeb|färb|color).*(schnitt|cut)|(schnitt|cut).*(farb|faeb|färb|color)/ },
+  { name: 'Haarverlängerung / Extensions', emoji: '💁‍♀️', re: /verl[äa]nger|exten|extenshion/ },
+  { name: 'Balayage & Strähnen', emoji: '🌟', re: /balayage|m[eè]ch|meges|str[äa]hn|highlight/ },
+  { name: 'Herrenschnitt', emoji: '💈', re: /herren|m[äa]nner|barber|bart/ },
+  { name: 'Haarschnitt', emoji: '✂️', re: /schn[iy]t|schni|cut|schneid|hasrschnitt/ },
+  { name: 'Haarfarbe', emoji: '🎨', re: /farb|f[äa]rb|faeb|colou?r|t[öo]nung|ansatz/ },
+  { name: 'Föhnen & Styling', emoji: '💨', re: /f[öo]hn|styling|frisur|hochsteck|locken|gl[äa]tt/ },
+  { name: 'Pflege & Treatment', emoji: '🧴', re: /pflege|kur\b|treatment|olaplex|keratin|maske/ },
+  { name: 'Gutschein', emoji: '🎁', re: /gutschein|geschenk/ },
+  { name: 'Produkte', emoji: '🛍️', re: /produkt|shampoo|spray|verkauf/ },
+];
+export function leistung(text) {
+  const s = String(text || '').toLowerCase().replace(/^zahlungszweck:\s*/, '').replace(/\s+/g, ' ').trim();
+  if (s) for (const l of LEISTUNGEN) if (l.re.test(s)) return { name: l.name, emoji: l.emoji };
+  return { name: 'Weitere Leistungen', emoji: '✨' };
+}
+
 // ─── CSV ─────────────────────────────────────────────────────────────
 export function parseCSV(text) {
   text = text.replace(/^﻿/, '');

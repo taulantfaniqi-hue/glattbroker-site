@@ -14,7 +14,7 @@ import crypto from 'node:crypto';
 import {
   handler, HttpError, redis, pipeline, getJSON, key, requireHost,
   slugify, cleanLoginName, hashPassword, cleanJahr, cleanBuchung,
-  speichereDokument, sendeDatei, anhangInfo, cleanRechnung, ANFRAGE_STATUS, mailKonfiguriert, sendeMail, heute,
+  speichereDokument, sendeDatei, anhangInfo, cleanRechnung, bereichVon, filialenVon, cleanBereichName, cleanBelegMeta, STANDARD_BEREICH, ANFRAGE_STATUS, mailKonfiguriert, sendeMail, heute,
 } from './_lib.js';
 
 export default handler(async (req, res) => {
@@ -106,13 +106,52 @@ export default handler(async (req, res) => {
   if (action === 'belege' && m === 'GET') {
     const slug = await mustFirma(req.query.firma);
     const jahr = cleanJahr(req.query.jahr);
-    return { belege: (await hvals(key.belege(slug, jahr))).map((d) => ({ ordner: 'Belege', ...d })).sort((a, b) => a.datum.localeCompare(b.datum)) };
+    return { belege: (await hvals(key.belege(slug, jahr))).map((d) => ({ ...d, ordner: bereichVon(d.ordner) })).sort((a, b) => a.datum.localeCompare(b.datum)) };
   }
 
   if (action === 'beleg' && m === 'POST') {
     const slug = await mustFirma(body.firma);
     const doc = await speichereDokument(slug, body, { dateiname: body.dateiname, mime: body.mime, daten: body.daten }, 'host');
     return { ok: true, id: doc.id };
+  }
+
+  // Metadaten eines Dokuments ändern (z.B. in anderen Ordner/Bereich verschieben)
+  if (action === 'beleg' && m === 'PATCH') {
+    const slug = await mustFirma(body.firma);
+    const id = String(body.id || '');
+    const jahr = cleanJahr(id.slice(0, 4));
+    const raw = await redis('HGET', key.belege(slug, jahr), id);
+    if (!raw) throw new HttpError(404, 'Dokument nicht gefunden.');
+    const alt = JSON.parse(raw);
+    const neu = { ...alt, ...cleanBelegMeta({ ...alt, ...body, datum: alt.datum }) };
+    await redis('HSET', key.belege(slug, jahr), id, JSON.stringify(neu));
+    return { ok: true, dokument: neu };
+  }
+
+  // ─── Buchhaltungsbereiche / Filialen ───────────────────────────────
+  if (action === 'filiale') {
+    const slug = await mustFirma(body.firma || req.query.firma);
+    const firma = await getJSON(key.firma(slug));
+    const liste = filialenVon(firma);
+    if (m === 'POST') {
+      const name = cleanBereichName(body.name);
+      if (liste.includes(name)) throw new HttpError(409, 'Diesen Bereich gibt es schon.');
+      firma.filialen = [...liste, name];
+    } else if (m === 'PATCH') {
+      const alt = String(body.alt || ''); const neu = cleanBereichName(body.neu);
+      if (!liste.includes(alt)) throw new HttpError(404, 'Bereich nicht gefunden.');
+      if (liste.includes(neu)) throw new HttpError(409, 'Diesen Bereich gibt es schon.');
+      firma.filialen = liste.map((x) => (x === alt ? neu : x));
+      await bereichUmhaengen(slug, alt, neu);
+    } else if (m === 'DELETE') {
+      const name = String(req.query.name || '');
+      if (!liste.includes(name)) throw new HttpError(404, 'Bereich nicht gefunden.');
+      if (liste.length === 1) throw new HttpError(400, 'Mindestens ein Buchhaltungsbereich muss bleiben.');
+      if (await bereichBenutzt(slug, name)) throw new HttpError(409, 'Im Bereich liegen noch Dokumente oder Buchungen. Bitte zuerst verschieben oder umbenennen.');
+      firma.filialen = liste.filter((x) => x !== name);
+    } else throw new HttpError(405, 'Methode nicht erlaubt.');
+    await redis('SET', key.firma(slug), JSON.stringify(firma));
+    return { ok: true, filialen: firma.filialen };
   }
 
   if (action === 'beleg' && m === 'DELETE') {
@@ -212,6 +251,35 @@ async function mustFirma(slug) {
   return slug;
 }
 
+// Alle Dokumente/Buchungen eines Bereichs auf neuen Namen umhängen
+async function bereichUmhaengen(slug, alt, neu) {
+  const jahre = (await redis('SMEMBERS', key.jahre(slug))) || [];
+  for (const j of jahre) {
+    const [docs, buchRaw] = await pipeline([['HVALS', key.belege(slug, j)], ['GET', key.buch(slug, j)]]);
+    const cmds = [];
+    for (const d of (docs || []).map((x) => JSON.parse(x))) {
+      if (bereichVon(d.ordner) === alt) cmds.push(['HSET', key.belege(slug, j), d.id, JSON.stringify({ ...d, ordner: neu })]);
+    }
+    if (buchRaw) {
+      const doc = JSON.parse(buchRaw);
+      let n = 0;
+      doc.buchungen.forEach((b) => { if ((b.f || STANDARD_BEREICH) === alt) { if (neu === STANDARD_BEREICH) delete b.f; else b.f = neu; n++; } });
+      if (n) cmds.push(['SET', key.buch(slug, j), JSON.stringify(doc)]);
+    }
+    if (cmds.length) await pipeline(cmds);
+  }
+}
+
+async function bereichBenutzt(slug, name) {
+  const jahre = (await redis('SMEMBERS', key.jahre(slug))) || [];
+  for (const j of jahre) {
+    const [docs, buchRaw] = await pipeline([['HVALS', key.belege(slug, j)], ['GET', key.buch(slug, j)]]);
+    if ((docs || []).some((x) => bereichVon(JSON.parse(x).ordner) === name)) return true;
+    if (buchRaw && JSON.parse(buchRaw).buchungen.some((b) => (b.f || STANDARD_BEREICH) === name)) return true;
+  }
+  return false;
+}
+
 async function listFirmen() {
   const slugs = (await redis('SMEMBERS', key.firmen())) || [];
   if (!slugs.length) return { firmen: [] };
@@ -227,7 +295,7 @@ async function listFirmen() {
     const offen = rech.map((x) => JSON.parse(x)).filter((r) => r.status !== 'bezahlt');
     const anfragen = anf.map((x) => JSON.parse(x));
     firmen.push({
-      ...JSON.parse(f), benutzer: users.sort(), jahre: jahre.map(Number).sort((a, b) => b - a),
+      ...JSON.parse(f), filialen: filialenVon(JSON.parse(f)), benutzer: users.sort(), jahre: jahre.map(Number).sort((a, b) => b - a),
       offeneRechnungen: offen.length, ueberfaellig: offen.filter((r) => r.faellig < h).length,
       anfragenNeu: anfragen.filter((a) => a.ungelesenHost).length,
       anfragenOffen: anfragen.filter((a) => a.status !== 'erledigt').length,
